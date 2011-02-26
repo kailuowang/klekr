@@ -1,4 +1,6 @@
 Collectr::Application.routes.draw do
+  resources :fave_streams
+
   resources :pictures
 
   # The priority is based upon order of creation:
