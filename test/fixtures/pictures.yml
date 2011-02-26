@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  secret: MyString
+  title: MyString
+  ref_url: MyString
+  url: MyString
+
+two:
+  secret: MyString
+  title: MyString
+  ref_url: MyString
+  url: MyString

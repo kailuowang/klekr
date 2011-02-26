@@ -1,0 +1,9 @@
+.bundle
+db/*.sqlite3
+log/*.log
+tmp/**/*
+tmp/*.jpg
+.idea/workspace.xml
+.idea/tasks.xml
+config/flickr.yml
+.DS_Store
