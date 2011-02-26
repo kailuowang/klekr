@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110226060241) do
+ActiveRecord::Schema.define(:version => 20110226221309) do
 
   create_table "fave_streams", :force => true do |t|
     t.string   "user_id"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(:version => 20110226060241) do
     t.string   "url"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "date_upload"
   end
 
 end
