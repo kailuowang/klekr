@@ -1,5 +1,9 @@
 Collectr::Application.routes.draw do
-  resources :fave_streams
+  resources :fave_streams do
+    member do
+      get 'sync'
+    end
+  end
 
   resources :pictures
 

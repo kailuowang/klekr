@@ -25,7 +25,7 @@ describe FaveStream do
     it "should sync with date upload for pictures" do
       fav_stream = FaveStream.new(:user_id => 'a_user_id')
       @flickr_favorites.should_receive(:getList).
-              with(hash_including(extra: 'date_upload')).
+              with(hash_including(extras: 'date_upload')).
               and_return([])
 
       fav_stream.sync

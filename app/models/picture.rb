@@ -5,7 +5,7 @@ class Picture < ActiveRecord::Base
         ref_url: FlickRaw.url(pic_info),
         secret: pic_info.secret,
         title: pic_info.title,
-        date_upload: pic_info.date_upload
+        date_upload: pic_info.dateupload
      )
   end
 end

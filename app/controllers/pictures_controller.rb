@@ -10,6 +10,7 @@ class PicturesController < ApplicationController
     end
   end
 
+
   # GET /pictures/1
   # GET /pictures/1.xml
   def show
