@@ -5,7 +5,7 @@ class FaveStreamsController < ApplicationController
     @fave_streams = FaveStream.all
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html # index.html.haml
       format.xml  { render :xml => @fave_streams }
     end
   end
@@ -42,7 +42,7 @@ class FaveStreamsController < ApplicationController
     @fave_stream = FaveStream.find(params[:id])
     respond_to do |format|
       @fave_stream.sync
-      format.html { redirect_to(@fave_stream, :notice => 'Fave stream was successfully synced.') }
+      format.html { redirect_to(fave_streams_path, :notice => 'Fave stream was successfully synced.') }
       format.xml  { head :ok }
     end
   end

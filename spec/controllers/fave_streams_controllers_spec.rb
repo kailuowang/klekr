@@ -10,7 +10,7 @@ describe FaveStreamsController do
 
       fave_stream.should_receive(:sync)
       get 'sync', id: fave_stream.id
-      response.should redirect_to(action: 'show')
+      response.should redirect_to(action: 'index')
 
     end
   end
