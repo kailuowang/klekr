@@ -2,15 +2,13 @@
 %table
   %tr
     %th Title
-    %th Url
-    %th
+    %th Date of Upload
     %th
     %th
   - @pictures.each do |picture|
     %tr
       %td= link_to display_title(picture), picture.ref_url
-      %td= link_to 'Open', picture.url
+      %td= picture.date_upload
       %td= link_to 'Show', picture
-      %td= link_to 'Edit', edit_picture_path(picture)
       %td= link_to 'Destroy', picture, :confirm => 'Are you sure?', :method => :delete
 %br/

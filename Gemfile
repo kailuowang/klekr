@@ -8,6 +8,7 @@ gem 'rails', '3.0.3'
 gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'haml'
 gem 'flickraw'
+gem 'factory_girl_rails'
 
 group :test, :development do
   gem "rspec-rails", "~> 2.4"

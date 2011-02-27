@@ -2,15 +2,13 @@
   = notice
 
 %p
-  %b
-    Secret:
-    = @picture.secret
-%p
   %b Title:
-  = link_to @picture.title, @picture.ref_url
-%p
-  %img{:src => @picture.url}
+  = link_to display_title(@picture), @picture.ref_url
+.picture{:style => "width: 1280px; text-align: center"}
+  = link_to image_tag(@picture.url), picture_path(@picture.previous.id)
+  .link{style: 'text-align:center, width: 100%'}
+    = link_to 'Previous', picture_path(@picture.next.id)
+    |
+    = link_to 'Next', picture_path(@picture.previous.id)
 
-= link_to 'Edit', edit_picture_path(@picture)
-|
-= link_to 'Back', pictures_path
+= link_to 'All pictures', pictures_path

@@ -27,7 +27,7 @@ module Collectr
     end
 
     def download_pic(pic)
-      url = URI.parse( pic.respond_to?(:url_o) ? pic.url_o : FlickRaw.url_b(pic))
+      url = URI.parse( pic.respond_to?(:url_o) ? pic.url_o : FlickRaw.url_z(pic))
       Net::HTTP.start(url.host) do |http|
         resp = http.get(url.path)
         if (resp.code == '200')
