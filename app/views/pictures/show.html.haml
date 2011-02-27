@@ -7,13 +7,9 @@
     = @picture.secret
 %p
   %b Title:
-  = @picture.title
+  = link_to @picture.title, @picture.ref_url
 %p
-  %b Ref url:
-  = @picture.ref_url
-%p
-  %b Url:
-  = @picture.url
+  %img{:src => @picture.url}
 
 = link_to 'Edit', edit_picture_path(@picture)
 |
