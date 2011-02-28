@@ -1,0 +1,23 @@
+= form_for(@flickr_stream) do |f|
+  - if @flickr_stream.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(@flickr_stream.errors.count, "error")
+        prohibited this fave_stream from being saved:
+      %ul
+        - @flickr_stream.errors.full_messages.each do |msg|
+          %li= msg
+  .field
+    = f.label :user_id
+    %br
+    = f.text_field :user_id
+  .field
+    = f.label :type
+    %br
+    = f.select(:type, FlickrStream::TYPES, {:prompt => 'Select Stream Type'})
+  .field
+    = f.label :last_sync
+    %br
+    = f.datetime_select :last_sync
+  .actions
+    = f.submit

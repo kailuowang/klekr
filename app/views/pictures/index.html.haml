@@ -7,8 +7,8 @@
     %th
   - @pictures.each do |picture|
     %tr
-      %td= link_to display_title(picture), picture.ref_url
-      %td= picture.date_upload
+      %td= link_to display_title(picture), picture.url
+      %td= picture.date_upload.getlocal.to_s(:short)
       %td= link_to 'Show', picture
       %td= link_to 'Destroy', picture, :confirm => 'Are you sure?', :method => :delete
 %br/

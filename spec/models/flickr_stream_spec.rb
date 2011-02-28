@@ -7,8 +7,24 @@ describe FlickrStream do
     @flickr_stream_init_args = {:user_id => 'a_user_id'}
   end
 
+  describe "class" do
+    describe "#build" do
+      it "should create a FaveStream when arg['type'] is 'fave' " do
+        stream = FlickrStream.build(user_id: 'a_user_id', 'type' => 'fave')
+        stream.class.should == FaveStream
+        stream.user_id.should == 'a_user_id'
+      end
+      it "should create a UploadStream when arg['type'] is 'upload' " do
+        FlickrStream.build(user_id: 'a_user_id', 'type' => 'upload').class.should == UploadStream
+      end
+    end
+  end
+
   shared_examples_for "All FlickrStreams" do
     describe "#sync" do
+      before do
+        @flickr_module.stub!(@flickr_method).and_return([])
+      end
 
 
       it "should sync to get pictures from flickr" do
@@ -29,6 +45,11 @@ describe FlickrStream do
                 and_return([])
 
         @flickr_stream.sync
+      end
+
+      it "should update the last_sync date" do
+        @flickr_stream.sync
+        @flickr_stream.last_sync.should be_within(0.5).of(DateTime.now)
       end
 
     end

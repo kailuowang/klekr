@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110227031541) do
+ActiveRecord::Schema.define(:version => 20110228040558) do
 
   create_table "flickr_streams", :force => true do |t|
     t.string   "user_id"
@@ -21,13 +21,12 @@ ActiveRecord::Schema.define(:version => 20110227031541) do
   end
 
   create_table "pictures", :force => true do |t|
-    t.string   "secret"
     t.string   "title"
-    t.string   "ref_url"
-    t.string   "url"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "date_upload"
+    t.string   "url"
+    t.text     "pic_info_dump"
   end
 
 end

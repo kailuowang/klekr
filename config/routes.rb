@@ -1,5 +1,5 @@
 Collectr::Application.routes.draw do
-  resources :fave_streams do
+  resources :flickr_streams do
     member do
       get 'sync'
     end

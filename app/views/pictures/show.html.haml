@@ -3,12 +3,14 @@
 
 %p
   %b Title:
-  = link_to display_title(@picture), @picture.ref_url
+  = link_to display_title(@picture), @picture.url
 .picture{:style => "width: 1280px; text-align: center"}
-  = link_to image_tag(@picture.url), picture_path(@picture.previous.id)
+  = link_to image_tag(@picture.medium_url), next_picture_path(@picture)
   .link{style: 'text-align:center, width: 100%'}
-    = link_to 'Previous', picture_path(@picture.next.id)
+    = link_to 'Previous', picture_path(@picture.next.id) if @picture.next
     |
-    = link_to 'Next', picture_path(@picture.previous.id)
+    = link_to 'Next', next_picture_path(@picture)
 
-= link_to 'All pictures', pictures_path
+= link_to 'All Pictures', pictures_path
+|
+= link_to 'All Streams', flickr_streams_path

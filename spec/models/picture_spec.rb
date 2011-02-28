@@ -3,22 +3,18 @@ require 'spec_helper'
 describe Picture do
   describe "#create_from_pic_info" do
     it "should be able to create from flickr pic info" do
-      pic_info = mock(secret: 'pic1', title: 'title1', dateupload: '1297935005')
+      pic_info = Factory.next(:pic_info)
+      pic_info.stub!(:dateupload).and_return 1297935005
       FlickRaw.should_receive(:url_photopage).with(pic_info).and_return('http://flickr/photo/pic1')
-      FlickRaw.should_receive(:url_z).with(pic_info).and_return('http://flickr/photo/pic1_b.jpg')
       Picture.create_from_pic_info(pic_info)
       picture = Picture.all.first
-      picture.secret.should == 'pic1'
-      picture.title.should == 'title1'
-      picture.ref_url.should == 'http://flickr/photo/pic1'
-      picture.url.should == 'http://flickr/photo/pic1_b.jpg'
+      picture.url.should == 'http://flickr/photo/pic1'
       picture.date_upload.should == Time.at(1297935005).to_datetime
+      picture.pic_info.secret.should == pic_info.secret
     end
 
     it "should not create duplicate picture" do
-      pic_info = mock(secret: 'pic1', title: 'title1', dateupload: DateTime.new(2001,2,1))
-      FlickRaw.stub!(:url_photopage)
-      FlickRaw.stub!(:url_z)
+      pic_info = Factory.next(:pic_info)
       Picture.create_from_pic_info(pic_info)
       Picture.create_from_pic_info(pic_info)
       Picture.count.should == 1
@@ -42,6 +38,16 @@ describe Picture do
       picture1.next.should == picture2
     end
   end
+
+  describe "#medium_url" do
+    it "should return FlickRaw url_z" do
+      picture = Factory(:picture)
+      FlickRaw.should_receive(:url_z).with(picture.pic_info).and_return('http://flic.kr/a_pic_z.jpg')
+      picture.medium_url.should == 'http://flic.kr/a_pic_z.jpg'
+
+    end
+  end
+
 
 
 end
