@@ -1,4 +1,5 @@
 Collectr::Application.routes.draw do
+
   resources :flickr_streams, :only => [:index, :new, :create, :edit, :update, :destroy] do
     member do
       get 'sync'
@@ -6,6 +7,12 @@ Collectr::Application.routes.draw do
   end
 
   resources :pictures, :only => [:index, :show, :destroy]
+
+  resources :cookie_settings, :only => [] do
+    member do
+      put 'update'
+    end
+  end
 
 
   # The priority is based upon order of creation:

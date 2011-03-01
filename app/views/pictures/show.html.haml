@@ -1,7 +1,5 @@
-
-
-.picture{:style => "width: 1280px; text-align: center"}
-  = link_to image_tag(@picture.medium_url), next_picture_path(@picture)
+.picture{:style => "width: 1280px; text-align: center; padding-top: 20px"}
+  = link_to image_tag(@picture.flickr_url(picture_show_size)), next_picture_path(@picture)
   .link{style: 'text-align:center, width: 100%'}
     = link_to 'Previous', picture_path(@picture.next.id) if @picture.next
     |
@@ -16,6 +14,7 @@
       = link_to "#{flickr_stream.user.username}'s #{flickr_stream.type}", flickr_streams_path
       |
     = link_to 'All Pictures', pictures_path
+    = render 'cookie_settings/form'
 
   %p{:id => "notice"}
     = notice

@@ -29,7 +29,15 @@ class Picture < ActiveRecord::Base
     @pic_info ||= FlickRaw::Response.new *pic_info_dump
   end
 
-  def medium_url
-    FlickRaw.url_z(pic_info)
+
+  def flickr_url size
+    case size
+      when 'large'
+        FlickRaw.url_b(pic_info)
+      when 'medium'
+        FlickRaw.url_z(pic_info)
+      else
+        raise "unknown size #{size}"
+    end
   end
 end
