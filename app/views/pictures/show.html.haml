@@ -1,9 +1,5 @@
-%p{:id => "notice"}
-  = notice
 
-%p
-  %b Title:
-  = link_to display_title(@picture), @picture.url
+
 .picture{:style => "width: 1280px; text-align: center"}
   = link_to image_tag(@picture.medium_url), next_picture_path(@picture)
   .link{style: 'text-align:center, width: 100%'}
@@ -11,6 +7,16 @@
     |
     = link_to 'Next', next_picture_path(@picture)
 
-= link_to 'All Pictures', pictures_path
-|
-= link_to 'All Streams', flickr_streams_path
+  %p
+    %b Title:
+    = link_to display_title(@picture), @picture.url
+    |
+    from
+    - @picture.flickr_streams.each do |flickr_stream|
+      = link_to "#{flickr_stream.user.username}'s #{flickr_stream.type}", flickr_streams_path
+      |
+    = link_to 'All Pictures', pictures_path
+
+  %p{:id => "notice"}
+    = notice
+

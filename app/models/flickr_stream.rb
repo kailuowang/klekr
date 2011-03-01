@@ -6,8 +6,12 @@ class FlickrStream < ActiveRecord::Base
   validates_uniqueness_of :user_id, :scope => :type
   validates_presence_of :user_id
 
+  has_many :syncages
+
   class << self
     def build(params)
+      user = get_user_from_flickr(params[:user_id])
+      params[:username] = user.username
       case params['type']
         when 'fave'
           FaveStream.new(params)
@@ -26,14 +30,19 @@ class FlickrStream < ActiveRecord::Base
       end
       super
     end
+
+    def get_user_from_flickr user_id
+      flickr.people.getInfo(user_id: user_id)
+    end
   end
 
   def user
-    flickr.people.getInfo(user_id: user_id)
+    @user ||= FlickrStream.get_user_from_flickr(user_id)
   end
 
+
   def sync
-    sync_pictures_from_flickr
+    sync_pictures_from_flickr(self)
     update_attribute(:last_sync, DateTime.now)
   end
 end

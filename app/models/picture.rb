@@ -2,6 +2,10 @@ class Picture < ActiveRecord::Base
   scope :desc, order('date_upload DESC')
   scope :asc, order('date_upload ASC')
   serialize :pic_info_dump
+  has_many :syncages
+  has_many :flickr_streams, through: :syncages
+
+
 
   def self.create_from_pic_info(pic_info)
     url = FlickRaw.url_photopage(pic_info)
@@ -9,8 +13,8 @@ class Picture < ActiveRecord::Base
     picture.update_attributes!(
         title: pic_info.title,
         date_upload: Time.at(pic_info.dateupload.to_i).to_datetime,
-        pic_info_dump: pic_info.marshal_dump
-     )
+        pic_info_dump: pic_info.marshal_dump )
+    picture
   end
 
   def previous

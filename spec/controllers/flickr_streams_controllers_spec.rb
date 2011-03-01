@@ -17,8 +17,10 @@ describe FlickrStreamsController do
 
   describe "post create" do
     it "should create a FlickrStream" do
-      post 'create', flickr_stream: { user_id: 'a_user_id', type: 'upload' }
-      UploadStream.first.user_id.should == 'a_user_id'
+      params = { 'user_id' => 'a_user_id', 'type' => 'fave' }
+      FlickrStream.should_receive(:build).with(params).and_return(Factory(:fave_stream))
+      post 'create', flickr_stream: params
+      response.should redirect_to(action: 'index')
     end
   end
 end

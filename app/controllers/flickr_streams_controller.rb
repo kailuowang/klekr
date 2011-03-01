@@ -43,7 +43,7 @@ class FlickrStreamsController < ApplicationController
 
     respond_to do |format|
       if @flickr_stream.save
-        format.html { redirect_to(@flickr_stream, :notice => 'Fave stream was successfully created.') }
+        format.html { redirect_to( flickr_streams_path, :notice => 'Fave stream was successfully created.') }
         format.xml  { render :xml => @flickr_stream, :status => :created, :location => @flickr_stream }
       else
         format.html { render :action => "new" }
