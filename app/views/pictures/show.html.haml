@@ -2,9 +2,10 @@
   = javascript_include_tag 'slideshow.js'
 :javascript
   next3images = #{@next3pictures.to_json}
+  medium_url = '#{@picture.flickr_url('medium')}'
 
 .picture{:style => "width: 1280px; text-align: center; padding-top: 20px"}
-  = link_to image_tag(@picture.flickr_url(picture_show_size)), next_picture_path(@picture)
+  = link_to image_tag(@picture.flickr_url(picture_show_size), :id => 'picture'), next_picture_path(@picture)
   .link{style: 'text-align:center, width: 100%'}
     = link_to 'Previous', picture_path(@picture.next.id) if @picture.next
     |

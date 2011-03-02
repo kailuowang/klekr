@@ -15,9 +15,10 @@ class PicturesController < ApplicationController
   # GET /pictures/1.xml
   def show
     @picture = Picture.find(params[:id])
-    @next3pictures = [@picture.previous.flickr_url(picture_show_size),
-                      @picture.previous.previous.flickr_url(picture_show_size),
-                      @picture.previous.previous.previous.flickr_url(picture_show_size)]
+    @next3pictures = [@picture.previous, @picture.previous.previous, @picture.previous.previous.previous].map do |pic|
+      [pic.flickr_url('large'), pic.flickr_url('medium')]
+    end.flatten
+
     respond_to do |format|
       format.html # show.html.haml
       format.xml  { render :xml => @picture }
