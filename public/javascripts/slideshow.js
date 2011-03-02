@@ -1,7 +1,7 @@
 function preload(arrayOfImages) {
     $j(arrayOfImages).each(function() {
-        $j('<img/>')[0].src = this;
-
+        img = new Image()
+        img.src = this;
     });
 }
 

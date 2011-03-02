@@ -59,7 +59,7 @@ class FlickrStreamsController < ApplicationController
 
     respond_to do |format|
       if @flickr_stream.update_attributes(params[:flickr_stream])
-        format.html { redirect_to(@flickr_stream, :notice => 'Fave stream was successfully updated.') }
+        format.html { redirect_to(flickr_streams_path, :notice => 'Fave stream was successfully updated.') }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
