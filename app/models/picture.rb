@@ -21,6 +21,10 @@ class Picture < ActiveRecord::Base
     Picture.where('date_upload < ?', date_upload).desc.first
   end
 
+  def previous_pictures(n)
+    n > 0 && previous ? [previous] + previous.previous_pictures(n-1) : []
+  end
+
   def next
     Picture.where('date_upload > ?', date_upload).asc.first
   end
@@ -32,12 +36,20 @@ class Picture < ActiveRecord::Base
 
   def flickr_url size
     case size
-      when 'large'
+      when :large
         FlickRaw.url_b(pic_info)
-      when 'medium'
+      when :medium
         FlickRaw.url_z(pic_info)
       else
         raise "unknown size #{size}"
     end
+  end
+
+  def large_url
+    flickr_url(:large)
+  end
+
+  def medium_url
+    flickr_url(:medium)
   end
 end

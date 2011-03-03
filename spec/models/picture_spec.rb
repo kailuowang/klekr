@@ -23,31 +23,47 @@ describe Picture do
 
   describe "#previous" do
     it "should get the picture in the database that has the closest earlier date_upload" do
-      picture1 = Factory(:picture, date_upload: DateTime.new(2010, 1,3))
-      Factory(:picture, date_upload: DateTime.new(2010, 1,1))
-      picture2 = Factory(:picture, date_upload: DateTime.new(2010, 1,2))
+      picture1 = Factory(:picture, date_upload: DateTime.new(2010, 1, 3))
+      Factory(:picture, date_upload: DateTime.new(2010, 1, 1))
+      picture2 = Factory(:picture, date_upload: DateTime.new(2010, 1, 2))
       picture1.previous.should == picture2
+    end
+  end
+
+  describe "#previous_pictures" do
+    it "should return x number of previous pictures in the chain" do
+      picture3 = Factory(:picture, date_upload: DateTime.new(2010, 1, 3))
+      picture2 = Factory(:picture, date_upload: DateTime.new(2010, 1, 2))
+      picture1 = Factory(:picture, date_upload: DateTime.new(2010, 1, 1))
+      Factory(:picture, date_upload: DateTime.new(2000, 1, 1))
+      picture3.previous_pictures(2).should == [picture2, picture1]
     end
   end
 
   describe "#next" do
     it "should get the picture in the database that has the closest later date_upload" do
-      picture1 = Factory(:picture, date_upload: DateTime.new(2010, 1,1))
-      Factory(:picture, date_upload: DateTime.new(2010, 1,3))
-      picture2 = Factory(:picture, date_upload: DateTime.new(2010, 1,2))
+      picture1 = Factory(:picture, date_upload: DateTime.new(2010, 1, 1))
+      Factory(:picture, date_upload: DateTime.new(2010, 1, 3))
+      picture2 = Factory(:picture, date_upload: DateTime.new(2010, 1, 2))
       picture1.next.should == picture2
     end
   end
 
-  describe "#medium_url" do
-    it "should return FlickRaw url_z" do
+  describe "#flickr_url" do
+    it "should return FlickRaw url_z when size is :medium" do
       picture = Factory(:picture)
       FlickRaw.should_receive(:url_z).with(picture.pic_info).and_return('http://flic.kr/a_pic_z.jpg')
-      picture.medium_url.should == 'http://flic.kr/a_pic_z.jpg'
+      picture.flickr_url(:medium).should == 'http://flic.kr/a_pic_z.jpg'
+
+    end
+
+    it "should return FlickRaw url_b when size is :large" do
+      picture = Factory(:picture)
+      FlickRaw.should_receive(:url_b).with(picture.pic_info).and_return('http://flic.kr/a_pic_z.jpg')
+      picture.flickr_url(:large).should == 'http://flic.kr/a_pic_z.jpg'
 
     end
   end
-
 
 
 end

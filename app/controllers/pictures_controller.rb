@@ -15,8 +15,8 @@ class PicturesController < ApplicationController
   # GET /pictures/1.xml
   def show
     @picture = Picture.find(params[:id])
-    @next3pictures = [@picture.previous, @picture.previous.previous, @picture.previous.previous.previous].map do |pic|
-      [pic.flickr_url('large'), pic.flickr_url('medium')]
+    @pictures_to_cache = @picture.previous_pictures(5).map do |pic|
+      [pic.large_url, pic.medium_url]
     end.flatten
 
     respond_to do |format|

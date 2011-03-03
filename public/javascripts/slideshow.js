@@ -1,19 +1,24 @@
 function preload(arrayOfImages) {
-    $j(arrayOfImages).each(function() {
-        img = new Image();
-        img.src = this;
-    });
+  $(arrayOfImages).each(function() {
+    img = new Image();
+    img.src = this;
+  });
 }
 
 
+$(document).ready(function() {
+  $('#picture').load(function() {
+    pic = this;
+    emptyImage = pic.width == 500 && pic.height == 375;
+    imageTooHigh = pic.height > windowSize;
+    isMediumSize = pic.src == mediumUrl;
 
-$j(document).ready(function() {
-    pic = $j('#picture')[0];
-    if((pic.width == 500 && pic.height == 375) || pic.height > $j(window).height()){
-       pic.src = medium_url;
+    if ( ( emptyImage || imageTooHigh ) && !isMediumSize ) {
+      pic.src = mediumUrl;
     }
+  });
 
 
-    preload(next3images);
+  preload(next3images);
 
 });

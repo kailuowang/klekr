@@ -1,7 +1,7 @@
 = form_tag cookie_setting_path, method: :put do |f|
-  Picture Size:
-  = radio_button_tag  :picture_show_size, 'large', picture_show_size == 'large'
-  = label_tag :picture_show_size_large, 'Large'
-  = radio_button_tag :picture_show_size, 'medium', picture_show_size == 'medium'
-  = label_tag :picture_show_size_small, 'Medium'
+  Window Size:
+  = radio_button_tag  :window_size, 'large', window_size == :large
+  = label_tag :window_size_large, 'Large'
+  = radio_button_tag :window_size, 'medium', window_size == :medium
+  = label_tag :window_size_small, 'Medium'
   = submit_tag
