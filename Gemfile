@@ -9,10 +9,14 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'haml'
 gem 'flickraw'
 gem 'factory_girl_rails'
+gem "jquery-rails"
+
 
 group :test, :development do
   gem "rspec-rails", "~> 2.4"
 end
+
+
 
 # Use unicorn as the web server
 # gem 'unicorn'
