@@ -4,6 +4,10 @@ Collectr::Application.routes.draw do
     member do
       get 'sync'
     end
+    collection do
+       get 'sync_all'
+     end
+
   end
 
   resources :pictures, :only => [:index, :show, :destroy]

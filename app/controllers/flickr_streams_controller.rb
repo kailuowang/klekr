@@ -36,6 +36,15 @@ class FlickrStreamsController < ApplicationController
     end
   end
 
+  #Get /flickr_streams/sync_all
+  def sync_all
+    respond_to do |format|
+      FlickrStream.sync_all
+      format.html { redirect_to(flickr_streams_path, :notice => "All streams were successfully synced @#{DateTime.now.to_s(:short)}") }
+      format.xml  { head :ok }
+    end
+  end
+
   # POST /flickr_streams
   # POST /flickr_streams.xml
   def create

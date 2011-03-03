@@ -12,6 +12,7 @@ class FlickrStream < ActiveRecord::Base
     def build(params)
       user = get_user_from_flickr(params[:user_id])
       params[:username] = user.username
+      params[:user_url] = user.photosurl
       case params['type']
         when 'fave'
           FaveStream.new(params)
@@ -33,6 +34,10 @@ class FlickrStream < ActiveRecord::Base
 
     def get_user_from_flickr user_id
       flickr.people.getInfo(user_id: user_id)
+    end
+
+    def sync_all
+      all.each {|stream| stream.sync}
     end
   end
 
