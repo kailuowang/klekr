@@ -1,8 +1,8 @@
 class AddSyncages < ActiveRecord::Migration
   def self.up
     create_table :syncages do |t|
-      t.integer :picture_id
-      t.integer :flickr_stream_id
+      t.references :picture
+      t.references :flickr_stream, :polymorphic => true
 
       t.timestamps
     end
