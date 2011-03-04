@@ -1,5 +1,5 @@
 class FlickrStream < ActiveRecord::Base
-  extend Collectr::FlickrSyncor
+#  extend Collectr::FlickrSyncor
 
   TYPES = [:fave, :upload]
 
@@ -23,6 +23,20 @@ class FlickrStream < ActiveRecord::Base
       end
     end
 
+    def sync_uses(flickr_module, get_photo_method, related_time_field)
+      define_method(:sync) do
+        opts = {user_id: user_id, extras: 'date_upload', related_time_field => last_sync.to_i}
+        synced = 0
+        flickr_module.send(get_photo_method, opts).each do |pic_info|
+          picture = Picture.create_from_pic_info(pic_info)
+          Syncage.find_or_create(picture_id: picture.id, flickr_stream_id: id)
+          synced += 1
+        end
+        update_attribute(:last_sync, DateTime.now)
+        synced
+      end
+    end
+
     def inherited(child)
       child.instance_eval do
         def model_name
@@ -37,17 +51,17 @@ class FlickrStream < ActiveRecord::Base
     end
 
     def sync_all
-      all.each {|stream| stream.sync}
+      all.inject(0) {|total_synced, stream| total_synced + stream.sync }
     end
   end
+
 
   def user
     @user ||= FlickrStream.get_user_from_flickr(user_id)
   end
 
-
-  def sync
-    sync_pictures_from_flickr(self)
-    update_attribute(:last_sync, DateTime.now)
+  def to_s
+    username + "'s " + type
   end
+
 end

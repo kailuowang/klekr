@@ -30,8 +30,8 @@ class FlickrStreamsController < ApplicationController
   def sync
     @flickr_stream = FlickrStream.find(params[:id])
     respond_to do |format|
-      @flickr_stream.sync
-      format.html { redirect_to(flickr_streams_path, :notice => "Fave stream was successfully synced @#{DateTime.now.to_s(:short)}") }
+      synced = @flickr_stream.sync
+      format.html { redirect_to(flickr_streams_path, :notice => "#{synced} new pictures were synced from #{@flickr_stream} @#{DateTime.now.to_s(:short)} " ) }
       format.xml  { head :ok }
     end
   end
@@ -39,8 +39,8 @@ class FlickrStreamsController < ApplicationController
   #Get /flickr_streams/sync_all
   def sync_all
     respond_to do |format|
-      FlickrStream.sync_all
-      format.html { redirect_to(flickr_streams_path, :notice => "All streams were successfully synced @#{DateTime.now.to_s(:short)}") }
+      total_synced = FlickrStream.sync_all
+      format.html { redirect_to(flickr_streams_path, :notice => "#{total_synced} new pictures were synced from all my streams @#{DateTime.now.to_s(:short)} ") }
       format.xml  { head :ok }
     end
   end

@@ -14,10 +14,9 @@
   .field
     = f.label :type
     %br
-    = f.select(:type, FlickrStream::TYPES, {:prompt => 'Select Stream Type'})
-  .field
-    = f.label :last_sync
-    %br
-    = f.datetime_select :last_sync
+    - if(@flickr_stream.id.blank?)
+      = f.select(:type, FlickrStream::TYPES, {:prompt => 'Select Stream Type'})
+    - else
+      = @flickr_stream.type
   .actions
     = f.submit

@@ -18,9 +18,11 @@
     |
     from
     - @picture.flickr_streams.each do |flickr_stream|
-      = link_to "#{flickr_stream.username}'s #{flickr_stream.type}", flickr_streams_path
+      = link_to "#{flickr_stream.username}'s #{flickr_stream.type}", flickr_stream.stream_url
       |
-    = link_to 'Restart', slide_show_pictures_path
+    = link_to 'refresh', slide_show_pictures_path
+    |
+    = link_to 'My Streams', flickr_streams_path
     = render 'cookie_settings/form'
 
   %p{:id => "notice"}

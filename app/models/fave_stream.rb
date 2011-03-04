@@ -1,5 +1,8 @@
-
-require 'flickraw'
 class FaveStream < FlickrStream
-  sync_using 'flickr.favorites.getList'
+  sync_uses flickr.favorites, :getList, :min_fave_date
+
+  def stream_url
+    user_url + "favorites/?view=md"
+  end
+
 end

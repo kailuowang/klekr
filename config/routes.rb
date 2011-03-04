@@ -1,6 +1,6 @@
 Collectr::Application.routes.draw do
 
-  resources :flickr_streams, :only => [:index, :new, :create, :edit, :update, :destroy] do
+  resources :flickr_streams, :only => [:index, :new, :create, :destroy] do
     member do
       get 'sync'
     end
@@ -10,7 +10,7 @@ Collectr::Application.routes.draw do
 
   end
 
-  resources :pictures, :only => [:index, :show, :destroy] do
+  resources :pictures, :only => [:show, :destroy] do
     collection do
        get 'slide_show'
     end
