@@ -1,23 +1,25 @@
 require 'spec_helper'
 
 describe Picture do
-  describe "#create_from_pic_info" do
-    it "should be able to create from flickr pic info" do
-      pic_info = Factory.next(:pic_info)
-      pic_info.stub!(:dateupload).and_return 1297935005
-      FlickRaw.should_receive(:url_photopage).with(pic_info).and_return('http://flickr/photo/pic1')
-      Picture.create_from_pic_info(pic_info)
-      picture = Picture.all.first
-      picture.url.should == 'http://flickr/photo/pic1'
-      picture.date_upload.should == Time.at(1297935005).to_datetime
-      picture.pic_info.secret.should == pic_info.secret
-    end
+  describe "class" do
+    describe "#create_from_pic_info" do
+      it "should be able to create from flickr pic info" do
+        pic_info = Factory.next(:pic_info)
+        pic_info.stub!(:dateupload).and_return 1297935005
+        FlickRaw.should_receive(:url_photopage).with(pic_info).and_return('http://flickr/photo/pic1')
+        Picture.create_from_pic_info(pic_info)
+        picture = Picture.all.first
+        picture.url.should == 'http://flickr/photo/pic1'
+        picture.date_upload.should == Time.at(1297935005).to_datetime
+        picture.pic_info.secret.should == pic_info.secret
+      end
 
-    it "should not create duplicate picture" do
-      pic_info = Factory.next(:pic_info)
-      Picture.create_from_pic_info(pic_info)
-      Picture.create_from_pic_info(pic_info)
-      Picture.count.should == 1
+      it "should not create duplicate picture" do
+        pic_info = Factory.next(:pic_info)
+        Picture.create_from_pic_info(pic_info)
+        Picture.create_from_pic_info(pic_info)
+        Picture.count.should == 1
+      end
     end
   end
 
@@ -35,7 +37,7 @@ describe Picture do
       picture3 = Factory(:picture, date_upload: DateTime.new(2010, 1, 3))
       picture2 = Factory(:picture, date_upload: DateTime.new(2010, 1, 2))
       picture1 = Factory(:picture, date_upload: DateTime.new(2010, 1, 1))
-      Factory(:picture, date_upload: DateTime.new(2000, 1, 1))
+      picture0 = Factory(:picture, date_upload: DateTime.new(2000, 1, 1))
       picture3.previous_pictures(2).should == [picture2, picture1]
     end
   end
@@ -64,6 +66,7 @@ describe Picture do
 
     end
   end
+
 
 
 end

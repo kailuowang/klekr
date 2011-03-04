@@ -10,12 +10,17 @@ Collectr::Application.routes.draw do
 
   end
 
-  resources :pictures, :only => [:index, :show, :destroy]
+  resources :pictures, :only => [:index, :show, :destroy] do
+    collection do
+       get 'slide_show'
+    end
+  end
 
   resources :cookie_settings, :only => [] do
     member do
       put 'update'
     end
+
   end
 
 
@@ -67,8 +72,8 @@ Collectr::Application.routes.draw do
   #   end
 
   # You can have the root of your site routed with "root"
-  # just remember to delete public/index.html.
-  # root :to => "welcome#index"
+  #  just remember to delete public/index.html.
+  root :to => "pictures#slide_show"
 
   # See how all your routes lay out with "rake routes"
 

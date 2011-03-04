@@ -17,6 +17,7 @@ class Picture < ActiveRecord::Base
     picture
   end
 
+
   def previous
     Picture.where('date_upload < ?', date_upload).desc.first
   end

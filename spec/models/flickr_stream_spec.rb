@@ -5,7 +5,7 @@ describe FlickrStream do
 
   before do
     @flickr_stream_init_args = {:user_id => 'a_user_id'}
-    flickr.people.stub!(:getInfo).and_return(mock(username: 'a_username'))
+    flickr.people.stub!(:getInfo).and_return(mock(username: 'a_username', photosurl: 'http://flickr/a_usrname'))
   end
 
   describe "class" do

@@ -15,6 +15,8 @@ class PicturesController < ApplicationController
   # GET /pictures/1.xml
   def show
     @picture = Picture.find(params[:id])
+    @picture.update_attribute(:viewed, true) unless @picture.viewed?
+
     @pictures_to_cache = @picture.previous_pictures(5).map do |pic|
       [pic.large_url, pic.medium_url]
     end.flatten
@@ -37,4 +39,11 @@ class PicturesController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  #GET /slide_show_pictures
+  def slide_show
+    @picture = Picture.desc.find_by_viewed(false)
+    redirect_to @picture
+  end
+
 end

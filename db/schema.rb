@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110303055610) do
+ActiveRecord::Schema.define(:version => 20110303235140) do
 
   create_table "flickr_streams", :force => true do |t|
     t.string   "user_id"
@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(:version => 20110303055610) do
     t.datetime "date_upload"
     t.string   "url"
     t.text     "pic_info_dump"
+    t.boolean  "viewed",        :default => false
   end
 
   create_table "syncages", :force => true do |t|
