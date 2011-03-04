@@ -1,6 +1,10 @@
 class Picture < ActiveRecord::Base
   scope :desc, order('date_upload DESC')
   scope :asc, order('date_upload ASC')
+  scope :after, lambda {|pic| where('date_upload > ?', pic.date_upload)}
+  scope :before, lambda {|pic| where('date_upload < ?', pic.date_upload)}
+  scope :unviewed, where(viewed: false)
+
   serialize :pic_info_dump
   has_many :syncages
   has_many :flickr_streams, through: :syncages
@@ -19,15 +23,15 @@ class Picture < ActiveRecord::Base
 
 
   def previous
-    Picture.where('date_upload < ?', date_upload).desc.first
+    Picture.before(self).desc.first
   end
 
-  def previous_pictures(n)
-    n > 0 && previous ? [previous] + previous.previous_pictures(n-1) : []
+  def next_new_pictures(n)
+     Picture.desc.before(self).unviewed.limit(n)
   end
 
   def next
-    Picture.where('date_upload > ?', date_upload).asc.first
+    Picture.after(self).asc.first
   end
 
   def pic_info

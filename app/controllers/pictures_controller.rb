@@ -17,7 +17,7 @@ class PicturesController < ApplicationController
     @picture = Picture.find(params[:id])
     @picture.update_attribute(:viewed, true) unless @picture.viewed?
 
-    @pictures_to_cache = @picture.previous_pictures(5).map do |pic|
+    @pictures_to_cache = @picture.next_new_pictures(5).map do |pic|
       [pic.large_url, pic.medium_url]
     end.flatten
 

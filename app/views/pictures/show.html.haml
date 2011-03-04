@@ -20,7 +20,7 @@
     - @picture.flickr_streams.each do |flickr_stream|
       = link_to "#{flickr_stream.username}'s #{flickr_stream.type}", flickr_streams_path
       |
-    = link_to 'All Pictures', pictures_path
+    = link_to 'Restart', slide_show_pictures_path
     = render 'cookie_settings/form'
 
   %p{:id => "notice"}

@@ -32,13 +32,14 @@ describe Picture do
     end
   end
 
-  describe "#previous_pictures" do
-    it "should return x number of previous pictures in the chain" do
+  describe "#next_new_pictures" do
+    it "should return x number of unviewed pictures and return in a desc order" do
+      picture4 = Factory(:picture, date_upload: DateTime.new(2010, 1, 4))
       picture3 = Factory(:picture, date_upload: DateTime.new(2010, 1, 3))
-      picture2 = Factory(:picture, date_upload: DateTime.new(2010, 1, 2))
+      Factory(:picture, date_upload: DateTime.new(2010, 1, 2), :viewed => true)
       picture1 = Factory(:picture, date_upload: DateTime.new(2010, 1, 1))
-      picture0 = Factory(:picture, date_upload: DateTime.new(2000, 1, 1))
-      picture3.previous_pictures(2).should == [picture2, picture1]
+      Factory(:picture, date_upload: DateTime.new(2000, 1, 1))
+      picture4.next_new_pictures(2).should == [picture3, picture1]
     end
   end
 

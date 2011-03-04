@@ -7,3 +7,4 @@ tmp/*.jpg
 .idea/tasks.xml
 config/flickr.yml
 .DS_Store
+.idea/dataSources.ids
