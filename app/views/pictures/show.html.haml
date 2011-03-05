@@ -2,16 +2,18 @@
   = javascript_include_tag 'slideshow.js'
 :javascript
   next3images = #{@pictures_to_cache.to_json}
-  mediumUrl = '#{@picture.flickr_url(:medium)}'
+  largeUrl = '#{@picture.flickr_url(:large)}'
   windowSize = #{window_size_px}
 
 .picture{:style => "width: 1280px; text-align: center; padding-top: 20px"}
-  = link_to image_tag(@picture.flickr_url(:large), :id => 'picture'), next_picture_path(@picture)
-  .link{style: 'text-align:center, width: 100%'}
-    = link_to 'Previous', picture_path(@picture.next.id) if @picture.next
-    |
-    = link_to 'Next', next_picture_path(@picture)
-
+  = link_to image_tag(@picture.flickr_url(:medium), id: 'picture', style: 'display:none'), next_picture_path(@picture)
+  .link{style: 'text-align:center; width: 100%; padding: 20px;'}
+    %h2
+      = link_to 'Previous', picture_path(@picture.next.id) if @picture.next
+      |
+      = link_to 'Next', next_picture_path(@picture)
+      |
+      = link_to 'Fave it!', fave_picture_path(@picture), method: :put
   %p
     %b Title:
     = link_to display_title(@picture), @picture.url

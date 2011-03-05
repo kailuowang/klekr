@@ -24,6 +24,15 @@ describe Picture do
     end
   end
 
+  describe "#fave" do
+    it "should add the picture to fave" do
+      picture = Factory(:picture, date_upload: DateTime.new(2010, 1, 3))
+      flickr.favorites.should_receive(:add).with(photo_id: picture.pic_info.id)
+      picture.fave
+
+    end
+  end
+
   describe "#previous" do
     it "should get the picture in the database that has the closest earlier date_upload" do
       picture1 = Factory(:picture, date_upload: DateTime.new(2010, 1, 3))

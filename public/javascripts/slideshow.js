@@ -9,16 +9,22 @@ function preload(arrayOfImages) {
 $(document).ready(function() {
   $('#picture').load(function() {
     pic = this;
-    emptyImage = pic.width == 500 && pic.height == 375;
-    imageTooHigh = pic.height > windowSize;
-    isMediumSize = pic.src == mediumUrl;
+    image = $(pic);
+    isShowing = image.is(":visible");
+//    emptyImage = pic.width == 500 && pic.height == 375;
+    if(isShowing){return;}
 
-    if ( ( emptyImage || imageTooHigh ) && !isMediumSize ) {
-      pic.src = mediumUrl;
+    imageTooHigh = pic.height * 1.6 > windowSize;
+    isLargeSize = pic.src == largeUrl;
+
+    if ( !imageTooHigh  && !isLargeSize ) {
+      pic.src = largeUrl;
     }
+    image.show();
+    preload(next3images);
   });
 
 
-  preload(next3images);
+
 
 });

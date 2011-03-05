@@ -16,7 +16,10 @@ Collectr::Application.routes.draw do
 
   resources :pictures, :only => [:show, :destroy] do
     collection do
-       get 'slide_show'
+      get 'slide_show'
+    end
+    member do
+      put 'fave'
     end
   end
 

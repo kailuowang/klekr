@@ -35,6 +35,10 @@ class Picture < ActiveRecord::Base
     Picture.after(self).asc.first
   end
 
+  def fave
+    flickr.favorites.add(photo_id: pic_info.id)
+  end
+
   def pic_info
     @pic_info ||= FlickRaw::Response.new *pic_info_dump
   end
