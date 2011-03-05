@@ -14,6 +14,11 @@ $(document).ready(function() {
 //    emptyImage = pic.width == 500 && pic.height == 375;
     if(isShowing){return;}
 
+    if(image.width() == 0 && image.height() == 0)
+    {
+      image.src(image.src());
+      return;
+    }
     imageTooHigh = pic.height * 1.6 > windowSize;
     isLargeSize = pic.src == largeUrl;
 
