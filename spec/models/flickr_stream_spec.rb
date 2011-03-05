@@ -57,10 +57,9 @@ describe FlickrStream do
         Picture.count.should == 2
       end
 
-      it "should sync with date upload for pictures" do
+      it "should sync with owner_name and date_upload" do
         @flickr_module.should_receive(@flickr_method).
-            with(hash_including(extras: 'date_upload')).
-            and_return([])
+            with(hash_including(extras: 'date_upload, owner_name')).and_return([])
 
         @flickr_stream.sync
       end
@@ -101,6 +100,7 @@ describe FlickrStream do
         @flickr_module.should_receive(@flickr_method).with(hash_including(@related_date_field => last_sync.to_i)).and_return([])
         @flickr_stream.sync
       end
+
 
 
     end

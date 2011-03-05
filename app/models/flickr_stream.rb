@@ -24,11 +24,18 @@ class FlickrStream < ActiveRecord::Base
     end
 
     def sync_uses(flickr_module, get_photo_method, related_time_field)
+
+      define_method(:get_pictures_from_flickr) do |number_of_pics = 10, since = nil|
+        opts = {user_id: user_id, extras: 'date_upload, owner_name', per_page: number_of_pics }
+        opts[related_time_field] = since.to_i if since
+        flickr_module.send(get_photo_method, opts)
+      end
+
       define_method(:sync) do
-        opts = {user_id: user_id, extras: 'date_upload', related_time_field => last_sync.to_i}
         synced = 0
-        flickr_module.send(get_photo_method, opts).each do |pic_info|
+        get_pictures_from_flickr(100, last_sync).each do |pic_info|
           picture = Picture.create_from_pic_info(pic_info)
+          picture.save!
           Syncage.find_or_create(picture_id: picture.id, flickr_stream_id: id)
           synced += 1
         end

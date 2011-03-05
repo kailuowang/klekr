@@ -13,11 +13,12 @@ class Picture < ActiveRecord::Base
 
   def self.create_from_pic_info(pic_info)
     url = FlickRaw.url_photopage(pic_info)
-    picture =  Picture.find_or_create_by_url(url)
-    picture.update_attributes!(
-        title: pic_info.title,
-        date_upload: Time.at(pic_info.dateupload.to_i).to_datetime,
-        pic_info_dump: pic_info.marshal_dump )
+    picture =  Picture.find_by_url(url) || Picture.new
+    picture.url = url
+    picture.title = pic_info.title
+    picture.date_upload = Time.at(pic_info.dateupload.to_i).to_datetime
+    picture.owner_name = pic_info.ownername
+    picture.pic_info_dump = pic_info.marshal_dump
     picture
   end
 
@@ -45,6 +46,8 @@ class Picture < ActiveRecord::Base
         FlickRaw.url_b(pic_info)
       when :medium
         FlickRaw.url_z(pic_info)
+      when :small
+        FlickRaw.url_m(pic_info)
       else
         raise "unknown size #{size}"
     end
@@ -56,5 +59,9 @@ class Picture < ActiveRecord::Base
 
   def medium_url
     flickr_url(:medium)
+  end
+
+  def small_url
+    flickr_url(:small)
   end
 end

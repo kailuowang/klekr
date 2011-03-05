@@ -7,18 +7,19 @@ describe Picture do
         pic_info = Factory.next(:pic_info)
         pic_info.stub!(:dateupload).and_return 1297935005
         FlickRaw.should_receive(:url_photopage).with(pic_info).and_return('http://flickr/photo/pic1')
-        Picture.create_from_pic_info(pic_info)
-        picture = Picture.all.first
+        picture = Picture.create_from_pic_info(pic_info)
         picture.url.should == 'http://flickr/photo/pic1'
         picture.date_upload.should == Time.at(1297935005).to_datetime
+        picture.owner_name.should == pic_info.ownername
         picture.pic_info.secret.should == pic_info.secret
+
       end
 
       it "should not create duplicate picture" do
         pic_info = Factory.next(:pic_info)
-        Picture.create_from_pic_info(pic_info)
-        Picture.create_from_pic_info(pic_info)
-        Picture.count.should == 1
+        pic = Picture.create_from_pic_info(pic_info)
+        pic.save!
+        Picture.create_from_pic_info(pic_info).should == pic
       end
     end
   end

@@ -12,9 +12,9 @@ namespace :clean do
   end
 
   desc "clean flickr stream's last sync date"
-  task :sync_dates => :environment do
+  task :sync_dates, :days, :needs => :environment do |_, ags|
     FlickrStream.all.each do |stream|
-      stream.update_attribute(:last_sync, 1.month.ago)
+      stream.update_attribute(:last_sync, ags[:days].to_i.day.ago)
     end
   end
 end

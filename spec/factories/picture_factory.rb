@@ -4,5 +4,6 @@ Factory.define :picture, :class => Picture do |p|
   p.url FlickRaw.url_photopage(pic_info)
   p.pic_info_dump pic_info.marshal_dump
   p.date_upload  Time.at(pic_info.dateupload.to_i).to_datetime
+  p.owner_name 'Hillary Clinton'
   p.viewed false
 end

@@ -1,5 +1,9 @@
 Collectr::Application.routes.draw do
 
+  get "users_controller/show"
+
+  get "users_controller/subscribe"
+
   resources :flickr_streams, :only => [:index, :new, :create, :destroy] do
     member do
       get 'sync'
@@ -20,8 +24,14 @@ Collectr::Application.routes.draw do
     member do
       put 'update'
     end
-
   end
+
+  resources :users, :only => [:show] do
+    member do
+      put 'subscribe'
+    end
+  end
+
 
 
   # The priority is based upon order of creation:

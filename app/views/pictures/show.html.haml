@@ -16,6 +16,9 @@
     %b Title:
     = link_to display_title(@picture), @picture.url
     |
+    %b By:
+    = link_to @picture.owner_name, user_path(@picture.pic_info.owner)
+    |
     from
     - @picture.flickr_streams.each do |flickr_stream|
       = link_to "#{flickr_stream.username}'s #{flickr_stream.type}", flickr_stream.stream_url
