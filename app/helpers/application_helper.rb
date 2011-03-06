@@ -1,6 +1,6 @@
 module ApplicationHelper
   def window_size
-    cookies[:window_size].try(:to_sym)
+    cookies[:window_size].try(:to_sym) || :medium
   end
 
   def picture_tag picture, size

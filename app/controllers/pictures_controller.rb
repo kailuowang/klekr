@@ -6,16 +6,15 @@ class PicturesController < ApplicationController
   def show
     @picture = Picture.find(params[:id])
     @picture.update_attribute(:viewed, true) unless @picture.viewed?
-
-    @pictures_to_cache = @picture.next_new_pictures(5).map do |pic|
-      [pic.large_url, pic.medium_url]
-    end.flatten
+    @default_pic_url = window_size == :large ? @picture.large_url : @picture.medium_url
+    preload_pics_according_to_window_size
 
     respond_to do |format|
       format.html # show.html.haml
       format.xml  { render :xml => @picture }
     end
   end
+
 
 
   # DELETE /pictures/1
@@ -49,5 +48,25 @@ class PicturesController < ApplicationController
   #GET /pictures
   def index
     slide_show
+  end
+
+  private
+
+  def preload_pics_according_to_window_size
+    case window_size
+      when :large
+        preload_pics(:large, 6)
+        preload_pics(:medium, 2)
+      else
+        preload_pics(:medium, 10)
+        preload_pics(:large, 3)
+    end
+  end
+
+  def preload_pics size, num
+    @pictures_to_cache ||= []
+    @pictures_to_cache += @picture.next_new_pictures(num).map do |pic|
+      pic.flickr_url(size)
+    end
   end
 end

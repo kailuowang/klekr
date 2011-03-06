@@ -15,8 +15,6 @@ module PicturesHelper
         '1024'
       when :medium
         '750'
-      else
-        '750'
     end
   end
 end

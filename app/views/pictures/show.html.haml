@@ -8,7 +8,8 @@
   .spacer{style: 'width: 1280px;'}
     = image_tag('spacer.gif', width: '1280px')
   .center{style: 'position: absolute; top: 20px; left: 0px; width: 100%; text-align: center;'}
-    = link_to image_tag(@picture.flickr_url(:medium), id: 'picture', style: 'display:none'), next_picture_path(@picture)
+    = link_to image_tag(@default_pic_url, id: 'picture', style: 'display:none'), next_picture_path(@picture)
+    = image_tag('loading.gif', id: 'loading', style: 'padding: 40px')
     .text{:style => "width: 100%; text-align: center"}
       %h3{style: 'padding: 5px'}
         = link_to 'Fave it!', fave_picture_path(@picture), method: :put
@@ -29,7 +30,7 @@
         |
         = link_to 'My Subscriptions', flickr_streams_path
         |
-        = link_to 'Previous', picture_path(@picture.next), id: 'previous' if @picture.next
+        = link_to 'Back', :back, id: 'previous'
         |
         = link_to 'Next', next_picture_path(@picture), id: 'next'
         |

@@ -6,7 +6,15 @@ function preload(arrayOfImages) {
 }
 
 
+
+
 $(document).ready(function() {
+
+  function show(image){
+    $('#loading').hide();
+    image.show();
+  }
+
   $('#picture').load(function() {
     image = $(this);
     isShowing = image.is(":visible");
@@ -26,10 +34,17 @@ $(document).ready(function() {
 
     if ( !imageTooHigh  && !isLargeSize ){
       image.attr('src', largeUrl);
+      show(image);
+
+      image.load(function(){
+        preload(next3images);
+      });
+    }else{
+      show(image);
+      preload(next3images);
     }
 
-    image.show();
-    preload(next3images);
+
   });
 
 
