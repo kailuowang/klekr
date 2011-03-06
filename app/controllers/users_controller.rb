@@ -4,12 +4,12 @@ class UsersController < ApplicationController
     @user = flickr.people.getInfo(user_id: user_id)
     stream = UploadStream.new(:user_id => user_id)
 
-    @pictures = stream.get_pictures_from_flickr(4).map do |pic_info|
+    @pictures = stream.get_pictures_from_flickr(6).map do |pic_info|
       Picture.create_from_pic_info pic_info
     end
 
     fave_stream = FaveStream.new(:user_id => user_id)
-    @faves = fave_stream.get_pictures_from_flickr(4).map do |pic_info|
+    @faves = fave_stream.get_pictures_from_flickr(6).map do |pic_info|
       Picture.create_from_pic_info pic_info
     end
 

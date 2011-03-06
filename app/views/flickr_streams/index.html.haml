@@ -1,13 +1,13 @@
 .content
-  %h1 My Flickr Streams
+  %h1 My Subscriptions
 
   %p{:id => "notice"}
     = notice
 
   %p
-    = link_to 'New Flickr Stream', new_flickr_stream_path
+    = link_to 'New Subscription', new_flickr_stream_path
     |
-    = link_to 'Sync All Streams', sync_all_flickr_streams_path
+    = link_to 'Sync All Subscription', sync_all_flickr_streams_path
     |
     = link_to 'Slide Show', slide_show_pictures_path
 
@@ -16,15 +16,18 @@
   %table
     %tr
       %th Type
-      %th User
+      %th
+      %th Owner
       %th Last sync
       %th
       %th
       %th
     - @flickr_streams.each do |flickr_stream|
       %tr
-        %td= flickr_stream.type
-        %td= link_to flickr_stream.username, flickr_stream.stream_url
+        %td{style: 'text-align:right;'}
+          = link_to flickr_stream.type_display, flickr_stream.stream_url
+        %td of
+        %td= link_to flickr_stream.username, user_path(flickr_stream.user_id)
         %td= flickr_stream.last_sync ? flickr_stream.last_sync .getlocal.to_s(:short) : ''
         %td= link_to 'Sync', sync_flickr_stream_path(flickr_stream.id)
         %td= link_to 'Unsubscribe', flickr_stream, :confirm => 'Are you sure?', :method => :delete

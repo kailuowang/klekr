@@ -5,4 +5,7 @@ class FaveStream < FlickrStream
     user_url + "favorites/?view=md"
   end
 
+  def type_display
+    "Faves"
+  end
 end

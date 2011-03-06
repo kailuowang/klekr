@@ -6,4 +6,9 @@ class UploadStream < FlickrStream
     user_url
   end
 
+
+  def type_display
+    "Uploads"
+  end
+
 end

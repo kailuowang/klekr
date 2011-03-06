@@ -10,15 +10,9 @@
   .center{style: 'position: absolute; top: 20px; left: 0px; width: 100%; text-align: center;'}
     = link_to image_tag(@picture.flickr_url(:medium), id: 'picture', style: 'display:none'), next_picture_path(@picture)
     .text{:style => "width: 100%; text-align: center"}
-      .link{style: 'text-align:center; padding: 20px; width: 100%'}
-        %h2
-          = link_to 'Previous', picture_path(@picture.next), id: 'previous' if @picture.next
-          |
-          = link_to 'Next', next_picture_path(@picture), id: 'next'
-          |
-          = link_to 'Fave it!', fave_picture_path(@picture), method: :put
-
-      %p
+      %h3{style: 'padding: 5px'}
+        = link_to 'Fave it!', fave_picture_path(@picture), method: :put
+      %h4
         %b Title:
         = link_to display_title(@picture), @picture.url
         |
@@ -27,11 +21,18 @@
         |
         from
         - @picture.flickr_streams.each do |flickr_stream|
-          = link_to "#{flickr_stream.username}'s #{flickr_stream.type}", flickr_stream.stream_url
+          = link_to "#{flickr_stream.username}'s #{flickr_stream.type_display}", flickr_stream.stream_url
           |
-        = link_to 'refresh', slide_show_pictures_path
+
+      %p
+        = link_to 'Restart', slide_show_pictures_path
         |
         = link_to 'My Streams', flickr_streams_path
+        |
+        = link_to 'Previous', picture_path(@picture.next), id: 'previous' if @picture.next
+        |
+        = link_to 'Next', next_picture_path(@picture), id: 'next'
+        |
         = render 'cookie_settings/form'
       %p{:id => "notice"}
         = notice
