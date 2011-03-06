@@ -6,8 +6,6 @@ class UsersController < ApplicationController
     @fave_stream = FaveStream.find_by_user_id(@user.nsid)
     @upload_stream = UploadStream.find_by_user_id(@user.nsid)
 
-
-
     @pictures = (@upload_stream || UploadStream.new(:user_id => user_id)).
                   get_pictures_from_flickr(6).map do |pic_info|
       Picture.create_from_pic_info pic_info

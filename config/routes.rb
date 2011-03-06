@@ -14,7 +14,7 @@ Collectr::Application.routes.draw do
 
   end
 
-  resources :pictures, :only => [:show, :destroy] do
+  resources :pictures, :only => [:show, :destroy, :index] do
     collection do
       get 'slide_show'
     end

@@ -40,10 +40,14 @@ class PicturesController < ApplicationController
     end
   end
 
-  #GET /slide_show_pictures
+  #GET /pictures/slide_show
   def slide_show
     @picture = Picture.desc.find_by_viewed(false)
     redirect_to @picture
   end
 
+  #GET /pictures
+  def index
+    slide_show
+  end
 end
