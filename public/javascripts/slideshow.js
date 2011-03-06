@@ -8,28 +8,37 @@ function preload(arrayOfImages) {
 
 $(document).ready(function() {
   $('#picture').load(function() {
-    pic = this;
-    image = $(pic);
+    image = $(this);
     isShowing = image.is(":visible");
-//    emptyImage = pic.width == 500 && pic.height == 375;
+
     if(isShowing){return;}
 
     if(image.width() == 0 && image.height() == 0)
     {
-      image.src(image.src());
+      image.attr('src', image.attr('src') + new Date().getTime() );
       return;
     }
-    imageTooHigh = pic.height * 1.6 > windowSize;
-    isLargeSize = pic.src == largeUrl;
+    imageTooHigh = image.height() * 1.6 > windowSize;
 
-    if ( !imageTooHigh  && !isLargeSize ) {
-      pic.src = largeUrl;
+
+    isLargeSize = image.attr('src') == largeUrl;
+
+
+    if ( !imageTooHigh  && !isLargeSize ){
+      image.attr('src', largeUrl);
     }
+
     image.show();
     preload(next3images);
   });
 
 
+  $('#right').click(function(){
+      window.location = $('#next').attr('href')
+  });
 
+  $('#left').click(function(){
+      window.location = $('#previous').attr('href')
+  });
 
 });

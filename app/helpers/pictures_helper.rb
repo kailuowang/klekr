@@ -8,6 +8,7 @@ module PicturesHelper
     next_pic ? picture_path(next_pic) : slide_show_pictures_path
   end
 
+
   def window_size_px
     case window_size
       when :large
