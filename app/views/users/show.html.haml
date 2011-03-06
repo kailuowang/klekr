@@ -2,11 +2,14 @@
   %h1=link_to @user.username, @user.photosurl
   =@user.realname
   %br
+  %p
+    =link_to 'Back to User Search', users_path
   %br
   #upload{style: 'float:left'}
     %h3=link_to 'uploads', @user.photosurl
-    - if UploadStream.find_by_user_id(@user.nsid)
+    - if @upload_stream
       subscribed
+      =link_to 'Unsubscribe from it', @upload_stream, :confirm => 'Are you sure?', :method => :delete
     - else
       = link_to 'subscribe!', subscribe_user_path(id: @user.nsid, type: 'upload'), method: :put
     %p
@@ -14,10 +17,11 @@
         = picture_tag pic, :small
   #faves{style: 'float:left'}
     %h3=link_to 'faves', @user.photosurl + "favorites"
-    - if FaveStream.find_by_user_id(@user.nsid)
+    - if @fave_stream
       subscribed
+      =link_to 'Unsubscribe from it', @fave_stream, :confirm => 'Are you sure?', :method => :delete
     - else
-      = link_to 'subscribe!', subscribe_user_path(id: @user.nsid, type: 'fave'), method: :put
+      = link_to 'Subscribe!', subscribe_user_path(id: @user.nsid, type: 'fave'), method: :put
     %p
       - @faves.each do |pic|
         = picture_tag pic, :small
