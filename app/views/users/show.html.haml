@@ -1,6 +1,7 @@
 .content{style: 'width:100%'}
   %h1=link_to @user.username, @user.photosurl
-  =@user.realname
+  - if @user.respond_to?(:realname)
+    =@user.realname
   %br
   %p
     =link_to 'Back to User Search', users_path
