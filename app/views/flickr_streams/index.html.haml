@@ -15,6 +15,10 @@
 
   - if @number_of_new_pics > 0
     %h4="#{@number_of_new_pics} New Photos!"
+
+  .import
+    = render :partial => 'flickr_streams/import'
+
   %table
     %tr
       %th Type

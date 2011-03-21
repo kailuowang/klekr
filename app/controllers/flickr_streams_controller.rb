@@ -8,8 +8,11 @@ class FlickrStreamsController < ApplicationController
     respond_to do |format|
       format.html # index.html.haml
       format.xml  { render :xml => @flickr_streams }
+      format.yaml  { render :text => @flickr_streams.map(&:attributes).to_yaml, :content_type => 'text/yaml' }
     end
   end
+
+
 
   # GET /flickr_streams/new
   # GET /flickr_streams/new.xml
@@ -33,6 +36,15 @@ class FlickrStreamsController < ApplicationController
     respond_to do |format|
       synced = @flickr_stream.sync
       format.html { redirect_to(flickr_streams_path, :notice => "#{synced} new pictures were synced from #{@flickr_stream} @#{DateTime.now.to_s(:short)} " ) }
+      format.xml  { head :ok }
+    end
+  end
+
+  #POST /flickr_streams/import
+  def import
+    num_of_imports = FlickrStream.import( YAML.load( params[:streams_yaml].read ))
+    respond_to do |format|
+      format.html { redirect_to(flickr_streams_path, :notice => "#{num_of_imports} subscriptions have been imported") }
       format.xml  { head :ok }
     end
   end

@@ -382,3 +382,14 @@ a:hover {
 #footer a {
 	color: #847F7E;
 }
+
+.import div {
+   padding: 20px 0 25px 0;
+}
+
+input[type="file"]{
+  background: #303030;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #6F6F6F;
+}

@@ -9,8 +9,9 @@ Collectr::Application.routes.draw do
       get 'sync'
     end
     collection do
-       get 'sync_all'
-     end
+      get 'sync_all'
+      post 'import'
+    end
 
   end
 

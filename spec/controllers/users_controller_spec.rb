@@ -10,4 +10,8 @@ describe UsersController do
     it "should be successful"
   end
 
+  describe "GET 'search'" do
+    it "should be successful"
+  end
+
 end

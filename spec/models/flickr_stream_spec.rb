@@ -11,17 +11,17 @@ describe FlickrStream do
   describe "class" do
     describe "#build" do
       it "should create a FaveStream when arg['type'] is 'fave' " do
-        stream = FlickrStream.build(user_id: 'a_user_id', 'type' => 'fave')
+        stream = FlickrStream.build(user_id: 'a_user_id', 'type' => 'FaveStream')
         stream.class.should == FaveStream
         stream.user_id.should == 'a_user_id'
       end
 
-      it "should create a UploadStream when arg['type'] is 'upload' " do
-        FlickrStream.build(user_id: 'a_user_id', 'type' => 'upload').class.should == UploadStream
+      it "should create a UploadStream when arg['type'] is 'UploadStream' " do
+        FlickrStream.build(user_id: 'a_user_id', 'type' => 'UploadStream').class.should == UploadStream
       end
 
       it "should store the username" do
-        stream = FlickrStream.build(user_id: 'a_user_id', 'type' => 'fave')
+        stream = FlickrStream.build(user_id: 'a_user_id', 'type' => 'FaveStream')
         stream.save!
         FlickrStream.first.username.should == 'a_username'
       end
@@ -35,6 +35,25 @@ describe FlickrStream do
         stream2.stub!(:sync).and_return 2
         FlickrStream.stub!(:all).and_return [stream1, stream2]
         FlickrStream.sync_all.should == 3
+      end
+    end
+
+    describe "#import" do
+      it "should import from the array of attributes hashes" do
+        import_data = [{'user_id' => 'a_user_id', 'type' => 'FaveStream'}]
+        FlickrStream.import(import_data)
+        stream = FlickrStream.all.first
+        stream.class.should == FaveStream
+        stream.user_id.should == 'a_user_id'
+      end
+
+      it "should not reimport if the stream is already subscribed" do
+
+        stream_args = {'user_id' => 'a_user_id', 'type' => 'FaveStream'}
+        FlickrStream.build(stream_args).save!
+        p FlickrStream.all.first
+        FlickrStream.import( [stream_args])
+        FlickrStream.count.should == 1
       end
     end
   end
