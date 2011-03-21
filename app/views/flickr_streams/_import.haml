@@ -1,4 +1,6 @@
 = form_tag import_flickr_streams_path, method: :post, multipart: true do |f|
-  = label_tag :streams_yaml, 'Import subscription from yaml file'
+  = label_tag :streams_yaml, 'Import subscription from a Yaml file'
   = file_field_tag "streams_yaml"
   = submit_tag "Import Streams"
+
+= link_to 'Export Subscriptions to a Yaml file', flickr_streams_path+".yaml"
