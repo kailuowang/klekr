@@ -120,8 +120,27 @@ describe FlickrStream do
         @flickr_stream.sync
       end
 
+      it "should update num_of_picture for the current monthly score" do
+        @flickr_module.stub!(@flickr_method).and_return([Factory.next(:pic_info),Factory.next(:pic_info)])
+        @flickr_stream.sync
+        MonthlyScore.by_month_stream(Date.today, @flickr_stream).first.num_of_pics.should == 2
+      end
+    end
 
+    describe "#add_score" do
+      it "should ensure that a monthly score for related date is created for the stream" do
+        @flickr_stream.add_score(Date.new(2010,10,2 ))
+        @flickr_stream.monthly_scores.count.should == 1
+        @flickr_stream.monthly_scores[0].year.should == 2010
+        @flickr_stream.monthly_scores[0].month.should == 10
+      end
 
+      it "should add score to the current monthly score" do
+        @flickr_stream.add_score(Date.today)
+        @flickr_stream.monthly_scores[0].score.should == 1
+        @flickr_stream.add_score(Date.today)
+        @flickr_stream.reload.monthly_scores[0].score.should == 2
+      end
     end
   end
 

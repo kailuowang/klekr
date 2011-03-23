@@ -29,8 +29,16 @@ describe Picture do
       picture = Factory(:picture, date_upload: DateTime.new(2010, 1, 3))
       flickr.favorites.should_receive(:add).with(photo_id: picture.pic_info.id)
       picture.fave
-
     end
+
+    it "should add score to the streams it comes from" do
+      picture = Factory(:picture)
+      picture.synced_by(Factory(:fave_stream))
+      flickr.favorites.stub!(:add)
+      picture.flickr_streams[0].should_receive(:add_score).with(picture.created_at)
+      picture.fave
+    end
+
   end
 
   describe "#previous" do

@@ -22,6 +22,16 @@ class Picture < ActiveRecord::Base
     picture
   end
 
+  def self.create_from_sync(pic_info, stream)
+    picture = Picture.create_from_pic_info(pic_info)
+    picture.save!
+    picture.synced_by(stream)
+  end
+
+  def synced_by(stream)
+    Syncage.find_or_create(picture_id: id, flickr_stream_id: stream.id)
+  end
+
 
   def previous
     Picture.before(self).desc.first
@@ -37,6 +47,7 @@ class Picture < ActiveRecord::Base
 
   def fave
     flickr.favorites.add(photo_id: pic_info.id)
+    flickr_streams.each {|stream| stream.add_score(created_at ) }
   end
 
   def pic_info

@@ -1,5 +1,4 @@
 class FlickrStream < ActiveRecord::Base
-#  extend Collectr::FlickrSyncor
 
   TYPES = ['FaveStream', 'UploadStream']
 
@@ -7,6 +6,8 @@ class FlickrStream < ActiveRecord::Base
   validates_presence_of :user_id
 
   has_many :syncages
+  has_many :pictures, through: :syncages
+  has_many :monthly_scores
 
   class << self
     def build(params)
@@ -58,18 +59,24 @@ class FlickrStream < ActiveRecord::Base
       define_method(:sync) do
         synced = 0
         get_pictures_from_flickr(100, last_sync).each do |pic_info|
-          picture = Picture.create_from_pic_info(pic_info)
-          picture.save!
-          Syncage.find_or_create(picture_id: picture.id, flickr_stream_id: id)
+          Picture.create_from_sync(pic_info, self)
           synced += 1
         end
         update_attribute(:last_sync, DateTime.now)
+        score_for(Date.today).add_num_of_pics(synced)
         synced
       end
     end
-
   end
 
+  def add_score(source_date)
+    score_for(source_date).add 1
+  end
+
+  def score_for(date)
+    MonthlyScore.by_month_stream(date, self).first ||
+      monthly_scores.create!(month: date.month, year: date.year)
+  end
 
   def user
     @user ||= FlickrStream.get_user_from_flickr(user_id)
@@ -78,6 +85,5 @@ class FlickrStream < ActiveRecord::Base
   def to_s
     username + "'s " + type
   end
-
 
 end
