@@ -50,23 +50,24 @@ class FlickrStream < ActiveRecord::Base
 
     protected
     def sync_uses(flickr_module, get_photo_method, related_time_field)
-      define_method(:get_pictures_from_flickr) do |number_of_pics = 10, since = nil|
-        opts = {user_id: user_id, extras: 'date_upload, owner_name', per_page: number_of_pics }
+      define_method(:get_pictures_from_flickr) do |per_page = 10, since = nil, page_number = 1|
+        opts = {user_id: user_id, extras: 'date_upload, owner_name', per_page: per_page }
         opts[related_time_field] = since.to_i if since
+        opts[:page] = page_number if page_number > 1
         flickr_module.send(get_photo_method, opts)
       end
-
-      define_method(:sync) do
-        synced = 0
-        get_pictures_from_flickr(100, last_sync).each do |pic_info|
-          Picture.create_from_sync(pic_info, self)
-          synced += 1
-        end
-        update_attribute(:last_sync, DateTime.now)
-        score_for(Date.today).add_num_of_pics(synced)
-        synced
-      end
     end
+  end
+
+  def sync
+    photos_synced = 0
+    get_pic_up_to_last_sync.each do |pic_info|
+      Picture.create_from_sync(pic_info, self)
+      photos_synced += 1
+    end
+    update_attribute(:last_sync, DateTime.now)
+    score_for(Date.today).add_num_of_pics(photos_synced)
+    photos_synced
   end
 
   def add_score(source_date)
@@ -90,6 +91,12 @@ class FlickrStream < ActiveRecord::Base
   end
 
   private
+
+  def get_pic_up_to_last_sync(page = 1)
+    result =  get_pictures_from_flickr(100, last_sync || 1.month.ago, page)
+    result += get_pic_up_to_last_sync(page + 1) unless result.empty?
+    result
+  end
 
   def score_for(date)
     MonthlyScore.by_month_stream(date, self).first ||

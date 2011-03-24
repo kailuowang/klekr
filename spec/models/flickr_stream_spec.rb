@@ -82,6 +82,20 @@ describe FlickrStream do
         @flickr_stream.sync
       end
 
+      it "should sync up to howmany pages it takes to get to the last sync date of the pictures" do
+        @flickr_module.should_receive(@flickr_method).and_return([Factory.next(:pic_info)])
+        @flickr_module.should_receive(@flickr_method).
+            with(hash_including(page: 2)).and_return([Factory.next(:pic_info)])
+        @flickr_module.should_receive(@flickr_method).
+            with(hash_including(page: 3)).and_return([])
+        @flickr_module.should_not_receive(@flickr_method).with(hash_including(page: 4))
+
+
+        @flickr_stream.sync
+      end
+
+
+
       it "should update the last_sync date" do
         @flickr_stream.sync
         @flickr_stream.last_sync.should be_within(0.5).of(DateTime.now)
@@ -104,9 +118,10 @@ describe FlickrStream do
 
       it "should create one picture with multiple linked flickr_streams if the picture get synced by muitiple flickr_stream" do
         a_pic_info = Factory.next(:pic_info)
-        @flickr_module.stub!(@flickr_method).and_return([a_pic_info])
+        @flickr_module.should_receive(@flickr_method).and_return([a_pic_info])
         flickr_stream2 = @flickr_stream.class.create!(user_id: 'another_user')
         @flickr_stream.sync
+        @flickr_module.should_receive(@flickr_method).and_return([a_pic_info])
         flickr_stream2.sync
         Picture.count.should == 1
         Picture.first.flickr_streams.should == [@flickr_stream, flickr_stream2]
@@ -119,8 +134,14 @@ describe FlickrStream do
         @flickr_stream.sync
       end
 
+      it "should only sync photos faved upto the 1 month ago if it's the first time sync" do
+        @flickr_stream.last_sync = nil
+        @flickr_module.should_receive(@flickr_method).with(hash_including(@related_date_field => 1.month.ago.to_i)).and_return([])
+        @flickr_stream.sync
+      end
+
       it "should update num_of_picture for the current monthly score" do
-        @flickr_module.stub!(@flickr_method).and_return([Factory.next(:pic_info),Factory.next(:pic_info)])
+        @flickr_module.should_receive(@flickr_method).and_return([Factory.next(:pic_info),Factory.next(:pic_info)])
         @flickr_stream.sync
         MonthlyScore.by_month_stream(Date.today, @flickr_stream).first.num_of_pics.should == 2
       end
