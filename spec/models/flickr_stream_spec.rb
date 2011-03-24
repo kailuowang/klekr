@@ -51,7 +51,6 @@ describe FlickrStream do
 
         stream_args = {'user_id' => 'a_user_id', 'type' => 'FaveStream'}
         FlickrStream.build(stream_args).save!
-        p FlickrStream.all.first
         FlickrStream.import( [stream_args])
         FlickrStream.count.should == 1
       end

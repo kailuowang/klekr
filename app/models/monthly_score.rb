@@ -10,4 +10,17 @@ class MonthlyScore < ActiveRecord::Base
   def add_num_of_pics to_add
     update_attribute( :num_of_pics, num_of_pics  + to_add )
   end
+
+  def weight
+    months_from_now = months_from(Date.today)
+    months_from_now > 2 ? 1 / Math.log2(months_from_now) : 1
+  end
+
+  private
+
+
+  def months_from(date)
+    date.month - month + (date.year - year ) * 12
+  end
+
 end
