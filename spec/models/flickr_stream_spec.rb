@@ -141,6 +141,17 @@ describe FlickrStream do
         @flickr_stream.reload.monthly_scores[0].score.should == 2
       end
     end
+
+    describe "#rating" do
+      it "should use weighted monthly score" do
+        @flickr_stream.add_score(Date.today)
+        @flickr_stream.score_for(Date.today).update_attribute(:num_of_pics, 2)
+        @flickr_stream.add_score(4.month.ago)
+        @flickr_stream.score_for(4.month.ago).update_attribute(:num_of_pics, 5)
+        @flickr_stream.reload
+        @flickr_stream.rating.should be_close(0.4, 0.01) #( 0.5 + (0.2 * 0.5) ) / 1.5
+      end
+    end
   end
 
   describe FaveStream do

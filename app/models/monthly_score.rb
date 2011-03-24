@@ -16,6 +16,10 @@ class MonthlyScore < ActiveRecord::Base
     months_from_now > 2 ? 1 / Math.log2(months_from_now) : 1
   end
 
+  def weighted_rating
+    (score * weight).to_f / num_of_pics
+  end
+
   private
 
 

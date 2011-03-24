@@ -73,10 +73,6 @@ class FlickrStream < ActiveRecord::Base
     score_for(source_date).add 1
   end
 
-  def score_for(date)
-    MonthlyScore.by_month_stream(date, self).first ||
-      monthly_scores.create!(month: date.month, year: date.year)
-  end
 
   def user
     @user ||= FlickrStream.get_user_from_flickr(user_id)
@@ -85,5 +81,20 @@ class FlickrStream < ActiveRecord::Base
   def to_s
     username + "'s " + type
   end
+
+  def rating
+    return 0 if monthly_scores.blank?
+    total_weighted_monthly_rating = monthly_scores.inject(0) { |wr, ms| wr + ms.weighted_rating }
+    total_weight = monthly_scores.inject(0) { |w, ms| w + ms.weight }
+    total_weighted_monthly_rating / total_weight
+  end
+
+  private
+
+  def score_for(date)
+    MonthlyScore.by_month_stream(date, self).first ||
+      monthly_scores.create!(month: date.month, year: date.year)
+  end
+
 
 end
