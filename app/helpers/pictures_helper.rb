@@ -8,6 +8,11 @@ module PicturesHelper
     next_pic ? picture_path(next_pic) : slide_show_pictures_path
   end
 
+  def previous_picture_path(pic)
+    previous = pic.next
+    previous ? picture_path(previous) : slide_show_pictures_path
+  end
+
 
   def window_size_px
     case window_size

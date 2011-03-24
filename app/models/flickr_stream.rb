@@ -54,7 +54,12 @@ class FlickrStream < ActiveRecord::Base
         opts = {user_id: user_id, extras: 'date_upload, owner_name', per_page: per_page }
         opts[related_time_field] = since.to_i if since
         opts[:page] = page_number if page_number > 1
-        flickr_module.send(get_photo_method, opts)
+        begin
+          flickr_module.send(get_photo_method, opts)
+        rescue FlickRaw::FailedResponse => e
+          Rails.logger.error("failed sync photo from flickr" + e.code.to_s + "\n" + e.msg)
+          []
+        end
       end
     end
   end
@@ -93,7 +98,7 @@ class FlickrStream < ActiveRecord::Base
   private
 
   def get_pic_up_to_last_sync(page = 1)
-    result =  get_pictures_from_flickr(100, last_sync || 1.month.ago, page)
+    result =  get_pictures_from_flickr(100, last_sync || 1.month.ago, page).to_a
     result += get_pic_up_to_last_sync(page + 1) unless result.empty?
     result
   end
@@ -102,6 +107,5 @@ class FlickrStream < ActiveRecord::Base
     MonthlyScore.by_month_stream(date, self).first ||
       monthly_scores.create!(month: date.month, year: date.year)
   end
-
 
 end
