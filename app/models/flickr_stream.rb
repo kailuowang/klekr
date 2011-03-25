@@ -91,9 +91,22 @@ class FlickrStream < ActiveRecord::Base
   def rating
     return 0 if monthly_scores.blank?
     total_weighted_monthly_rating = monthly_scores.inject(0) { |wr, ms| wr + ms.weighted_rating }
+
     total_weight = monthly_scores.inject(0) { |w, ms| w + ms.weight }
+
     total_weighted_monthly_rating / total_weight
   end
+
+  def score_for(date)
+    MonthlyScore.by_month_stream(date, self).first ||
+      monthly_scores.create!(month: date.month, year: date.year)
+  end
+
+  def num_of_pics_this_month
+    MonthlyScore.by_month_stream(Date.today, self).first.try(:num_of_pics).to_i
+  end
+
+
 
   private
 
@@ -103,9 +116,5 @@ class FlickrStream < ActiveRecord::Base
     result
   end
 
-  def score_for(date)
-    MonthlyScore.by_month_stream(date, self).first ||
-      monthly_scores.create!(month: date.month, year: date.year)
-  end
 
 end

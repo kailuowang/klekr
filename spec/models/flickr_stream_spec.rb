@@ -156,17 +156,17 @@ describe FlickrStream do
       end
 
       it "should add score to the current monthly score" do
-        @flickr_stream.add_score(Date.today)
+        @flickr_stream.add_score(1.month.ago)
         @flickr_stream.monthly_scores[0].score.should == 1
-        @flickr_stream.add_score(Date.today)
+        @flickr_stream.add_score(1.month.ago)
         @flickr_stream.reload.monthly_scores[0].score.should == 2
       end
     end
 
     describe "#rating" do
       it "should use weighted monthly score" do
-        @flickr_stream.add_score(Date.today)
-        @flickr_stream.score_for(Date.today).update_attribute(:num_of_pics, 2)
+        @flickr_stream.add_score(1.month.ago)
+        @flickr_stream.score_for(1.month.ago).update_attribute(:num_of_pics, 2)
         @flickr_stream.add_score(4.month.ago)
         @flickr_stream.score_for(4.month.ago).update_attribute(:num_of_pics, 5)
         @flickr_stream.reload

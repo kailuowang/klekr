@@ -14,7 +14,7 @@
       subscribed
       =link_to 'Unsubscribe from it', @upload_stream, :confirm => 'Are you sure?', :method => :delete
     - else
-      = link_to 'subscribe!', subscribe_user_path(id: @user.nsid, type: 'upload'), method: :put
+      = link_to 'subscribe!', subscribe_user_path(id: @user.nsid, type: 'UploadStream'), method: :put
     %p
       - @pictures.each do |pic|
         = picture_tag pic, :small
@@ -24,7 +24,7 @@
       subscribed
       =link_to 'Unsubscribe from it', @fave_stream, :confirm => 'Are you sure?', :method => :delete
     - else
-      = link_to 'Subscribe!', subscribe_user_path(id: @user.nsid, type: 'fave'), method: :put
+      = link_to 'Subscribe!', subscribe_user_path(id: @user.nsid, type: 'FaveStream'), method: :put
     %p
       - @faves.each do |pic|
         = picture_tag pic, :small

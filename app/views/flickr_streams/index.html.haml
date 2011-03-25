@@ -25,6 +25,8 @@
       %th Type
       %th
       %th Owner
+      %th Rating
+      %th # of pics this month
       %th Last sync
       %th
       %th
@@ -35,6 +37,8 @@
           = link_to flickr_stream.type_display, flickr_stream.stream_url
         %td of
         %td= link_to flickr_stream.username, user_path(flickr_stream.user_id)
+        %td= rating_display(flickr_stream)
+        %td= flickr_stream.num_of_pics_this_month
         %td= flickr_stream.last_sync ? flickr_stream.last_sync .getlocal.to_s(:short) : ''
         %td= link_to 'Sync', sync_flickr_stream_path(flickr_stream.id)
         %td= link_to 'Unsubscribe', flickr_stream, :confirm => 'Are you sure?', :method => :delete

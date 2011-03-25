@@ -2,7 +2,7 @@ class FlickrStreamsController < ApplicationController
   # GET /flickr_streams
   # GET /flickr_streams.xml
   def index
-    @flickr_streams = FlickrStream.order('id desc').all
+    @flickr_streams = FlickrStream.order('id desc')
     @number_of_new_pics = Picture.unviewed.count
 
     respond_to do |format|

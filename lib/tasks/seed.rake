@@ -9,6 +9,15 @@ namespace :seed do
     seed_stream('upload')
   end
 
+  task :monthly_scores => :environment do
+    FlickrStream.all.each do |stream|
+      score = stream.score_for(Date.today)
+      if(score.num_of_pics == 0)
+        score.add_num_of_pics(stream.syncages.size)
+      end
+    end
+  end
+
   def seed_stream(type)
     info = File.read("data/#{type}.xml")
     user_ids = info.scan(/=\d+@N\d\d/).map{|s|s.gsub(/=/,'')}.uniq
