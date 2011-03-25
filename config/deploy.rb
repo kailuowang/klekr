@@ -29,6 +29,7 @@ namespace :deploy do
   set :app_path, '/app/collectr'
   task :simple, :roles => :app do
 
+    run_in_app "git checkout ."
     run_in_app "git pull"
     run_in_app "bundle install"
     rake "db:migrate"
