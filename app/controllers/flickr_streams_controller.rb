@@ -2,7 +2,7 @@ class FlickrStreamsController < ApplicationController
   # GET /flickr_streams
   # GET /flickr_streams.xml
   def index
-    @flickr_streams = FlickrStream.order('id desc')
+    @flickr_streams = FlickrStream.paginate :page => params[:page], :order => 'created_at DESC'
     @number_of_new_pics = Picture.unviewed.count
 
     respond_to do |format|

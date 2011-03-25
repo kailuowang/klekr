@@ -8,6 +8,8 @@ class FlickrStream < ActiveRecord::Base
   has_many :syncages
   has_many :pictures, through: :syncages
   has_many :monthly_scores
+  cattr_reader :per_page
+  @@per_page = 30
 
   class << self
     def build(params)

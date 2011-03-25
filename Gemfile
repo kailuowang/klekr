@@ -10,7 +10,7 @@ gem 'flickraw'
 
 gem "jquery-rails"
 gem 'capistrano'
-
+gem 'will_paginate', "3.0.pre"
 
 group :test, :development do
   gem 'sqlite3-ruby', :require => 'sqlite3'

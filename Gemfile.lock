@@ -111,6 +111,7 @@ GEM
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.24)
+    will_paginate (3.0.pre)
 
 PLATFORMS
   ruby
@@ -125,3 +126,4 @@ DEPENDENCIES
   rails (= 3.0.3)
   rspec-rails (~> 2.4)
   sqlite3-ruby
+  will_paginate (= 3.0.pre)
