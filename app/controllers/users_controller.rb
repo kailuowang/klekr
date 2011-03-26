@@ -25,7 +25,8 @@ class UsersController < ApplicationController
     respond_to do |format|
       stream = FlickrStream.build(user_id: params[:id], 'type' => params[:type])
       stream.save
-      format.html { redirect_to(flickr_streams_path, :notice => "Successfully Subscribed to #{stream.username}'s #{stream.type}" ) }
+      format.html { redirect_to(user_path(id: params[:id]),
+                                :notice => "Successfully Subscribed to #{stream.username}'s #{stream.type}" ) }
       format.xml  { head :ok }
     end
   end

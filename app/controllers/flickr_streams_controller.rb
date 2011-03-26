@@ -100,7 +100,7 @@ class FlickrStreamsController < ApplicationController
     @flickr_stream.destroy
 
     respond_to do |format|
-      format.html { redirect_to(flickr_streams_url) }
+      format.html { redirect_to :back }
       format.xml  { head :ok }
     end
   end
