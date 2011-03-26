@@ -1,8 +1,10 @@
 Collectr::Application.routes.draw do
 
-  get "users_controller/show"
-
-  get "users_controller/subscribe"
+  resource :authentications, :only => [:show] do
+    member do
+      post 'login'
+    end
+  end
 
   resources :flickr_streams, :only => [:index, :new, :create, :destroy] do
     member do
@@ -35,7 +37,7 @@ Collectr::Application.routes.draw do
       put 'subscribe'
     end
     collection do
-      put 'search'
+      post 'search'
     end
   end
 

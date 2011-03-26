@@ -1,0 +1,7 @@
+%p{:id => "notice"}
+  = notice
+
+= form_tag login_authentications_path, method: :post do |f|
+  = label_tag :password, 'Enter Password'
+  = password_field_tag :password
+  = submit_tag "Login!"

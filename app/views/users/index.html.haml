@@ -3,7 +3,7 @@
   %p{:id => "notice"}
     = notice
 
-  = form_tag(search_users_path, method: :put) do |f|
+  = form_tag(search_users_path, method: :post) do |f|
     .field
       = label_tag :keyword, 'Search by user id, username or Email'
       = text_field_tag :keyword

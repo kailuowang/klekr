@@ -22,7 +22,7 @@
         |
         from
         - @picture.flickr_streams.each do |flickr_stream|
-          = link_to "#{flickr_stream.username}'s #{flickr_stream.type_display}", flickr_stream.stream_url
+          = link_to "#{flickr_stream.username}'s #{flickr_stream.type_display}", user_path(flickr_stream.user_id)
           |
 
       %p

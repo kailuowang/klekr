@@ -1,4 +1,7 @@
 class UsersController < ApplicationController
+
+  before_filter :login_required
+
   def show
     user_id = params[:id]
     @user = flickr.people.getInfo(user_id: user_id)

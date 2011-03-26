@@ -1,4 +1,7 @@
 class FlickrStreamsController < ApplicationController
+
+  before_filter :login_required
+
   # GET /flickr_streams
   # GET /flickr_streams.xml
   def index
