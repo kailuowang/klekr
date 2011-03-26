@@ -2,9 +2,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   def login_required
-    if session[:user]
-      return true
-    end
+    return true unless Settings.authentication
+    return true if session[:user]
+
     flash[:warning]='Please login to continue'
     session[:return_to]= request.path
     redirect_to authentications_path
