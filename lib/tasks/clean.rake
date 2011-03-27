@@ -24,7 +24,7 @@ namespace :clean do
   end
 
   desc "reset stream_rating for all unviewed pictures"
-  task :reset_picture_ratings => :environment do
+  task :picture_ratings => :environment do
     Picture.reset_stream_ratings
   end
 
