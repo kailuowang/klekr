@@ -32,7 +32,9 @@ class Picture < ActiveRecord::Base
 
   def self.reset_stream_ratings
     unviewed.each do |picture|
-      picture.update_attribute(:stream_rating, picture.flickr_streams.sum(&:rating))
+      total_rating = picture.flickr_streams.inject(0){|sum, stream| sum + stream.rating}
+      p total_rating
+      picture.update_attribute(:stream_rating, total_rating)
     end
   end
 
