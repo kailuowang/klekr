@@ -43,7 +43,13 @@ class PicturesController < ApplicationController
   #GET /pictures/slide_show
   def slide_show
     @picture = Picture.desc.find_by_viewed(false)
-    redirect_to @picture
+
+    if @picture
+      redirect_to @picture
+    else
+      redirect_to flickr_streams_path, notice: "You have no unviewed pictures, please sync your subscriptions from here."
+    end
+
   end
 
   #GET /pictures

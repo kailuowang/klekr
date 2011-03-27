@@ -2,8 +2,8 @@
 namespace :clean do
   desc "clean synced pictures"
   task :pictures => :environment do
-    Syncage.destroy_all
-    Picture.destroy_all
+    Syncage.delete_all
+    Picture.delete_all
   end
 
   desc "clean all flickr stream"
@@ -17,4 +17,5 @@ namespace :clean do
       stream.update_attribute(:last_sync, ags[:days].to_i.days.ago)
     end
   end
+
 end

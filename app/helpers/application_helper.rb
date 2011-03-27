@@ -7,4 +7,11 @@ module ApplicationHelper
     path = picture.new_record? ? picture.url : picture_path(picture)
     link_to image_tag(picture.flickr_url(size)), path
   end
+
+
+  def rating_display flickr_stream
+    rating = flickr_stream.rating
+    "%0.2f" % rating if rating > 0
+  end
+
 end

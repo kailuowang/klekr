@@ -98,13 +98,9 @@ class FlickrStream < ActiveRecord::Base
     username + "'s " + type
   end
 
+
   def rating
-    return 0 if monthly_scores.blank?
-    total_weighted_monthly_rating = monthly_scores.inject(0) { |wr, ms| wr + ms.weighted_rating }
-
-    total_weight = monthly_scores.inject(0) { |w, ms| w + ms.weight }
-
-    total_weighted_monthly_rating / total_weight
+    @rating ||= calculate_rating()
   end
 
   def score_for(date)
@@ -119,6 +115,15 @@ class FlickrStream < ActiveRecord::Base
 
 
   private
+
+  def calculate_rating
+    return 0 if monthly_scores.blank?
+    total_weighted_monthly_rating = monthly_scores.inject(0) { |wr, ms| wr + ms.weighted_rating }
+
+    total_weight = monthly_scores.inject(0) { |w, ms| w + ms.weight }
+
+    total_weighted_monthly_rating / total_weight
+  end
 
   def adjust_rating adjustment
     monthly_scores[0..1].each(&adjustment)

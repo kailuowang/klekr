@@ -1,6 +1,6 @@
 class Picture < ActiveRecord::Base
-  scope :desc, order('date_upload DESC')
-  scope :asc, order('date_upload ASC')
+  scope :desc, order('stream_rating DESC, date_upload DESC')
+  scope :asc, order('stream_rating ASC, date_upload ASC')
   scope :after, lambda {|pic| where('date_upload > ?', pic.date_upload)}
   scope :before, lambda {|pic| where('date_upload < ?', pic.date_upload)}
   scope :unviewed, where(viewed: false)
@@ -31,9 +31,13 @@ class Picture < ActiveRecord::Base
   end
 
   def synced_by(stream)
-    syned =  syncages.find(:first, conditions: {flickr_stream_id: stream.id}).present?
-    syncages.create(flickr_stream_id: stream.id) unless syned
-    !syned
+    synced =  syncages.find(:first, conditions: {flickr_stream_id: stream.id}).present?
+    unless synced
+      syncages.create(flickr_stream_id: stream.id)
+      update_attribute(:stream_rating, stream.rating + stream_rating.to_f)
+    end
+
+    !synced
   end
 
   def previous

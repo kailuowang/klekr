@@ -53,6 +53,13 @@ describe Picture do
       picture.synced_by(stream)
       picture.synced_by(stream).should be_false
     end
+    it "should add the stream's ratings to the stream_rating if it not synced with the stream before" do
+      picture = Factory(:picture)
+      stream = Factory(:fave_stream)
+      stream.stub!(:rating).and_return(0.2)
+      picture.synced_by(stream)
+      picture.stream_rating.should == 0.2
+    end
   end
 
   describe "#previous" do
