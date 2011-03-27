@@ -26,6 +26,7 @@ $(document).ready(function() {
       image.attr('src', image.attr('src') + new Date().getTime() );
       return;
     }
+
     imageTooHigh = image.height() * 1.6 > windowSize;
 
 
@@ -53,7 +54,7 @@ $(document).ready(function() {
   });
 
   $('#left').click(function(){
-      window.location = $('#previous').attr('href')
+     history.back()
   });
 
 });
