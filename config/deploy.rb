@@ -42,7 +42,7 @@ namespace :deploy do
   end
 
   def rake task
-    run_in_app "rake #{task} RAILS_ENV=production"
+    run_in_app "RAILS_ENV=production rake #{task}"
   end
 
   def run_in_app cmd
