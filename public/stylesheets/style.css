@@ -384,7 +384,7 @@ a:hover {
 }
 
 .import div {
-   padding: 20px 0 25px 0;
+   padding: 20px 0;
 }
 
 input[type="file"]{
@@ -392,4 +392,14 @@ input[type="file"]{
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	color: #6F6F6F;
+}
+
+.pic_small {
+  margin: 10px;
+  vertical-align: middle;
+  text-align: center;
+  float: left;
+  width: 244px;
+  height: 244px;
+  line-height: 244px;
 }

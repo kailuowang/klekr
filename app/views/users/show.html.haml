@@ -20,7 +20,8 @@
       = link_to 'subscribe!', subscribe_user_path(id: @user.nsid, type: 'UploadStream'), method: :put
     %p
       - @pictures.each do |pic|
-        = picture_tag pic, :small
+        .pic_small
+          = picture_tag pic, :small
   #faves{style: 'float:left'}
     %h3=link_to 'faves', @user.photosurl + "favorites"
     - if @fave_stream
@@ -30,6 +31,7 @@
       = link_to 'Subscribe!', subscribe_user_path(id: @user.nsid, type: 'FaveStream'), method: :put
     %p
       - @faves.each do |pic|
-        = picture_tag pic, :small
+        .pic_small
+          = picture_tag pic, :small
   %p{:id => "notice"}
     = notice
