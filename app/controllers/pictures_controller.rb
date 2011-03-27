@@ -6,7 +6,7 @@ class PicturesController < ApplicationController
   # GET /pictures/1.xml
   def show
     @picture = Picture.find(params[:id])
-    @picture.update_attribute(:viewed, true) unless @picture.viewed?
+    @picture.get_viewed
     @default_pic_url = window_size == :large ? @picture.large_url : @picture.medium_url
     preload_pics_according_to_window_size
 

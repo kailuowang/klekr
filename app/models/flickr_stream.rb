@@ -51,6 +51,7 @@ class FlickrStream < ActiveRecord::Base
       count
     end
 
+
     protected
     def sync_uses(flickr_module, get_photo_method, related_time_field)
       define_method(:get_pictures_from_flickr) do |per_page = 10, since = nil, page_number = 1|
@@ -67,6 +68,7 @@ class FlickrStream < ActiveRecord::Base
     end
   end
 
+
   def sync(up_to = last_sync || 1.month.ago, max_num = nil)
     photos_synced = 0
     get_pic_up_to(up_to, max_num).each do |pic_info|
@@ -74,8 +76,12 @@ class FlickrStream < ActiveRecord::Base
       photos_synced += 1 if newly_synced
     end
     update_attribute(:last_sync, DateTime.now)
-    score_for(Date.today).add_num_of_pics(photos_synced)
     photos_synced
+  end
+
+
+  def picture_viewed
+    score_for(Date.today).add_num_of_pics
   end
 
   def add_score(source_date, to_add = 1)
@@ -107,12 +113,6 @@ class FlickrStream < ActiveRecord::Base
     MonthlyScore.by_month_stream(date, self).first ||
       monthly_scores.create!(month: date.month, year: date.year)
   end
-
-  def num_of_pics_this_month
-    MonthlyScore.by_month_stream(Date.today, self).first.try(:num_of_pics).to_i
-  end
-
-
 
   private
 

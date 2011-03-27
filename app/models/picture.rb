@@ -30,15 +30,30 @@ class Picture < ActiveRecord::Base
     picture.synced_by(stream)
   end
 
+  def self.reset_stream_ratings
+    unviewed.each do |picture|
+      picture.update_attribute(:stream_rating, picture.flickr_streams.sum(&:rating))
+    end
+  end
+
+  def get_viewed
+    unless viewed?
+      update_attribute(:viewed, true)
+      flickr_streams.each(&:picture_viewed)
+    end
+  end
+
   def synced_by(stream)
-    synced =  syncages.find(:first, conditions: {flickr_stream_id: stream.id}).present?
+    synced =  syncages.find( :first, conditions: { flickr_stream_id: stream.id } ).present?
     unless synced
-      syncages.create(flickr_stream_id: stream.id)
-      update_attribute(:stream_rating, stream.rating + stream_rating.to_f)
+      syncages.create( flickr_stream_id: stream.id )
+      update_attribute( :stream_rating, stream.rating + stream_rating.to_f )
     end
 
     !synced
   end
+
+
 
   def previous
     Picture.before(self).desc.first

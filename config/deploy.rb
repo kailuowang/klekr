@@ -34,12 +34,13 @@ namespace :deploy do
     run_in_app "bundle install"
     rake "db:migrate"
     run_in_app "#{try_sudo} touch tmp/restart.txt"
+    deploy.post_deploy
   end
 
   task :post_deploy, :roles => :app do
-    rake "clean:pictures"
-    rake "clean:sync_dates[30]"
+    rake ENV['POST_DEPLOY'] if ENV['POST_DEPLOY']
   end
+
   def rake task
     run_in_app "rake #{task} RAILS_ENV=production"
   end

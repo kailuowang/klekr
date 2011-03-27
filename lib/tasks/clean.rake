@@ -18,4 +18,14 @@ namespace :clean do
     end
   end
 
+  desc "clean all ratings"
+  task :ratings => :environment do
+    MonthlyScore.delete_all
+  end
+
+  desc "reset stream_rating for all unviewed pictures"
+  task :reset_picture_ratings => :environment do
+    Picture.reset_stream_ratings
+  end
+
 end

@@ -31,7 +31,15 @@ describe MonthlyScore do
       ms.bump
       ms.rating.should == 0.2
     end
+
+    it "should increase rating by 0.2 when there no num of pics" do
+      ms = Factory(:monthly_score)
+      ms.bump
+      ms.rating.should == 0.2
+    end
   end
+
+
 
   describe "#trash" do
     it "should decrease rating by 0.2 when there is num of pics" do

@@ -124,14 +124,6 @@ describe FlickrStream do
         Syncage.count.should == 1
       end
 
-      it "should not add to the monthly score's num of pics when syncing the same picture" do
-        a_pic_info = Factory.next(:pic_info)
-        @flickr_module.should_receive(@flickr_method).twice.and_return([a_pic_info])
-        @flickr_stream.sync(nil, 2)
-        @flickr_stream.sync(nil, 2)
-        @flickr_stream.monthly_scores[0].num_of_pics.should == 1
-
-      end
 
       it "should create one picture with multiple linked flickr_streams if the picture get synced by muitiple flickr_stream" do
         a_pic_info = Factory.next(:pic_info)
@@ -157,11 +149,6 @@ describe FlickrStream do
         @flickr_stream.sync
       end
 
-      it "should update num_of_picture for the current monthly score" do
-        @flickr_module.should_receive(@flickr_method).and_return([Factory.next(:pic_info),Factory.next(:pic_info)])
-        @flickr_stream.sync
-        MonthlyScore.by_month_stream(Date.today, @flickr_stream).first.num_of_pics.should == 2
-      end
     end
 
     describe "#add_score" do

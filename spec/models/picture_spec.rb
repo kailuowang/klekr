@@ -62,6 +62,35 @@ describe Picture do
     end
   end
 
+  describe "#get_viewed" do
+    it "should update viewed as true" do
+      picture = Factory(:picture)
+      picture.get_viewed
+      picture.should be_viewed
+    end
+
+    it "should update all streams's current month num_of_pics if it's viewed the first time" do
+      picture = Factory(:picture, date_upload: 2.months.ago)
+      stream = Factory(:fave_stream)
+      picture.synced_by(stream)
+
+      picture.get_viewed
+      stream.score_for(Date.today).num_of_pics.should == 1
+
+    end
+
+    it "should not increas all streams's current month num_of_pics when viewed multiple times " do
+      picture = Factory(:picture)
+      stream = Factory(:fave_stream)
+      picture.synced_by(stream)
+
+      picture.get_viewed
+      picture.get_viewed
+      stream.score_for(Date.today).num_of_pics.should == 1
+
+    end
+  end
+
   describe "#previous" do
     it "should get the picture in the database that has the closest earlier date_upload" do
       picture1 = Factory(:picture, date_upload: DateTime.new(2010, 1, 3))

@@ -11,7 +11,11 @@ module ApplicationHelper
 
   def rating_display flickr_stream
     rating = flickr_stream.rating
-    "%0.2f" % rating if rating > 0
+    format_float(rating) if rating > 0
+  end
+
+  def format_float f
+    "%0.2f" % f
   end
 
 end
