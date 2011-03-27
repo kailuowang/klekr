@@ -7,12 +7,16 @@
     =link_to 'Back to User Search', users_path
     |
     =link_to 'Back to Slide Show', pictures_path
+    |
+    =link_to 'Back to My Subscription', flickr_streams_path
   %br
   #upload{style: 'float:left'}
     %h3=link_to 'uploads', @user.photosurl
     - if @upload_stream
       subscribed
       =link_to 'Unsubscribe from it', @upload_stream, :confirm => 'Are you sure?', :method => :delete
+      |
+      =link_to 'Get Pictures!', sync_flickr_stream_path(id: @upload_stream.id, num_of_pics: 100)
     - else
       = link_to 'subscribe!', subscribe_user_path(id: @user.nsid, type: 'UploadStream'), method: :put
     %p
@@ -23,8 +27,13 @@
     - if @fave_stream
       subscribed
       =link_to 'Unsubscribe from it', @fave_stream, :confirm => 'Are you sure?', :method => :delete
+      |
+      =link_to 'Get Pictures!', sync_flickr_stream_path(id: @fave_stream.id, num_of_pics: 100)
+
     - else
       = link_to 'Subscribe!', subscribe_user_path(id: @user.nsid, type: 'FaveStream'), method: :put
     %p
       - @faves.each do |pic|
         = picture_tag pic, :small
+  %p{:id => "notice"}
+    = notice

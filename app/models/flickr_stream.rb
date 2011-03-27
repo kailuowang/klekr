@@ -1,6 +1,7 @@
 class FlickrStream < ActiveRecord::Base
 
   TYPES = ['FaveStream', 'UploadStream']
+  PER_PAGE = 20
 
   validates_uniqueness_of :user_id, :scope => :type
   validates_presence_of :user_id
@@ -66,11 +67,11 @@ class FlickrStream < ActiveRecord::Base
     end
   end
 
-  def sync
+  def sync(up_to = last_sync || 1.month.ago, max_num = nil)
     photos_synced = 0
-    get_pic_up_to_last_sync.each do |pic_info|
-      Picture.create_from_sync(pic_info, self)
-      photos_synced += 1
+    get_pic_up_to(up_to, max_num).each do |pic_info|
+      newly_synced = Picture.create_from_sync(pic_info, self)
+      photos_synced += 1 if newly_synced
     end
     update_attribute(:last_sync, DateTime.now)
     score_for(Date.today).add_num_of_pics(photos_synced)
@@ -112,9 +113,13 @@ class FlickrStream < ActiveRecord::Base
 
   private
 
-  def get_pic_up_to_last_sync(page = 1)
-    result =  get_pictures_from_flickr(100, last_sync || 1.month.ago, page).to_a
-    result += get_pic_up_to_last_sync(page + 1) unless result.empty?
+  def get_pic_up_to(up_to, max = nil, page = 1 )
+    up_to = nil unless max.nil?
+    result =  get_pictures_from_flickr(PER_PAGE, up_to, page).to_a
+    retrieved_max_num_of_pics = max && PER_PAGE * page >= max
+    unless(retrieved_max_num_of_pics || result.empty?)
+      result += get_pic_up_to(up_to,  max, page + 1)
+    end
     result
   end
 

@@ -4,6 +4,7 @@ module ApplicationHelper
   end
 
   def picture_tag picture, size
-    link_to image_tag(picture.flickr_url(size)), picture.url
+    path = picture.new_record? ? picture.url : picture_path(picture)
+    link_to image_tag(picture.flickr_url(size)), path
   end
 end

@@ -94,7 +94,15 @@ describe FlickrStream do
         @flickr_stream.sync
       end
 
+      it "should sync up to how many pages it takes to get max_num_of pictures" do
+        @flickr_module.should_receive(@flickr_method).and_return([Factory.next(:pic_info)]*FlickrStream::PER_PAGE)
+        @flickr_module.should_receive(@flickr_method).
+            with(hash_including(page: 2)).and_return([Factory.next(:pic_info)]*FlickrStream::PER_PAGE)
+        @flickr_module.should_not_receive(@flickr_method).with(hash_including(page: 3))
 
+
+        @flickr_stream.sync(nil, 2*FlickrStream::PER_PAGE )
+      end
 
       it "should update the last_sync date" do
         @flickr_stream.sync
@@ -114,6 +122,15 @@ describe FlickrStream do
         @flickr_stream.sync
         @flickr_stream.sync
         Syncage.count.should == 1
+      end
+
+      it "should not add to the monthly score's num of pics when syncing the same picture" do
+        a_pic_info = Factory.next(:pic_info)
+        @flickr_module.should_receive(@flickr_method).twice.and_return([a_pic_info])
+        @flickr_stream.sync(nil, 2)
+        @flickr_stream.sync(nil, 2)
+        @flickr_stream.monthly_scores[0].num_of_pics.should == 1
+
       end
 
       it "should create one picture with multiple linked flickr_streams if the picture get synced by muitiple flickr_stream" do
@@ -170,7 +187,7 @@ describe FlickrStream do
         @flickr_stream.add_score(4.month.ago)
         @flickr_stream.score_for(4.month.ago).update_attribute(:num_of_pics, 5)
         @flickr_stream.reload
-        @flickr_stream.rating.should be_close(0.4, 0.01) #( 0.5 + (0.2 * 0.5) ) / 1.5
+        @flickr_stream.rating.should be_within(0.01).of(0.4) #( 0.5 + (0.2 * 0.5) ) / 1.5
       end
     end
   end

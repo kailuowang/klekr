@@ -18,6 +18,7 @@ describe PicturesController do
 
       response.should redirect_to pic2
     end
+
   end
 
   describe "GET show" do
@@ -28,5 +29,6 @@ describe PicturesController do
       pic.reload
       pic.should be_viewed
     end
+
   end
 end

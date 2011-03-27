@@ -37,8 +37,8 @@ class FlickrStreamsController < ApplicationController
   def sync
     @flickr_stream = FlickrStream.find(params[:id])
     respond_to do |format|
-      synced = @flickr_stream.sync
-      format.html { redirect_to(flickr_streams_path, :notice => "#{synced} new pictures were synced from #{@flickr_stream} @#{DateTime.now.to_s(:short)} " ) }
+      synced = @flickr_stream.sync(@flickr_stream.last_sync, params[:num_of_pics].try(:to_i))
+      format.html { redirect_to(:back, :notice => "#{synced} new pictures were synced from #{@flickr_stream} @#{DateTime.now.to_s(:short)} " ) }
       format.xml  { head :ok }
     end
   end

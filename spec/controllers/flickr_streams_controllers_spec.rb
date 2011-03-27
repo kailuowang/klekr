@@ -9,8 +9,9 @@ describe FlickrStreamsController do
       FlickrStream.stub!(:find).with(fave_stream.id).and_return(fave_stream)
 
       fave_stream.should_receive(:sync)
+      request.env["HTTP_REFERER"] = 'http://google.com'
       get 'sync', id: fave_stream.id
-      response.should redirect_to(action: 'index')
+      response.should redirect_to(:back)
 
     end
   end

@@ -11,7 +11,7 @@ class Picture < ActiveRecord::Base
 
 
 
-  def self.create_from_pic_info(pic_info)
+  def self.find_or_initialize_from_pic_info(pic_info)
     url = FlickRaw.url_photopage(pic_info)
     picture =  Picture.find_by_url(url) || Picture.new
     picture.url = url
@@ -22,16 +22,19 @@ class Picture < ActiveRecord::Base
     picture
   end
 
+
+
   def self.create_from_sync(pic_info, stream)
-    picture = Picture.create_from_pic_info(pic_info)
+    picture = Picture.find_or_initialize_from_pic_info(pic_info)
     picture.save!
     picture.synced_by(stream)
   end
 
   def synced_by(stream)
-    Syncage.find_or_create(picture_id: id, flickr_stream_id: stream.id)
+    syned =  syncages.find(:first, conditions: {flickr_stream_id: stream.id}).present?
+    syncages.create(flickr_stream_id: stream.id) unless syned
+    !syned
   end
-
 
   def previous
     Picture.before(self).desc.first
@@ -48,9 +51,9 @@ class Picture < ActiveRecord::Base
   def fave
     begin
       flickr.favorites.add(photo_id: pic_info.id)
-      flickr_streams.each {|stream| stream.add_score(created_at ) }
     rescue FlickRaw::FailedResponse
     end
+    flickr_streams.each {|stream| stream.add_score(created_at ) }
   end
 
   def pic_info

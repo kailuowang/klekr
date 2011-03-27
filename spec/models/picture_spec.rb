@@ -2,12 +2,12 @@ require 'spec_helper'
 
 describe Picture do
   describe "class" do
-    describe "#create_from_pic_info" do
+    describe "#find_or_initialize_from_pic_info" do
       it "should be able to create from flickr pic info" do
         pic_info = Factory.next(:pic_info)
         pic_info.stub!(:dateupload).and_return 1297935005
         FlickRaw.should_receive(:url_photopage).with(pic_info).and_return('http://flickr/photo/pic1')
-        picture = Picture.create_from_pic_info(pic_info)
+        picture = Picture.find_or_initialize_from_pic_info(pic_info)
         picture.url.should == 'http://flickr/photo/pic1'
         picture.date_upload.should == Time.at(1297935005).to_datetime
         picture.owner_name.should == pic_info.ownername
@@ -17,11 +17,12 @@ describe Picture do
 
       it "should not create duplicate picture" do
         pic_info = Factory.next(:pic_info)
-        pic = Picture.create_from_pic_info(pic_info)
+        pic = Picture.find_or_initialize_from_pic_info(pic_info)
         pic.save!
-        Picture.create_from_pic_info(pic_info).should == pic
+        Picture.find_or_initialize_from_pic_info(pic_info).should == pic
       end
     end
+
   end
 
   describe "#fave" do
@@ -39,6 +40,19 @@ describe Picture do
       picture.fave
     end
 
+  end
+
+  describe "#synced_by" do
+    it "should return true if the photo is newly synced" do
+      picture = Factory(:picture)
+      picture.synced_by(Factory(:fave_stream)).should be_true
+    end
+    it "should return false if the photo is already synced but synced again" do
+      picture = Factory(:picture)
+      stream = Factory(:fave_stream)
+      picture.synced_by(stream)
+      picture.synced_by(stream).should be_false
+    end
   end
 
   describe "#previous" do
