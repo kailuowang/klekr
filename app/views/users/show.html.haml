@@ -14,9 +14,8 @@
     %h3=link_to 'uploads', @user.photosurl
     - if @upload_stream
       subscribed
-      =link_to 'Unsubscribe from it', @upload_stream, :confirm => 'Are you sure?', :method => :delete
       |
-      =link_to 'Get Pictures!', sync_flickr_stream_path(id: @upload_stream.id, num_of_pics: 100)
+      = render(partial: '/flickr_streams/stream_operations', locals: {stream: @upload_stream})
     - else
       = link_to 'subscribe!', subscribe_user_path(id: @user.nsid, type: 'UploadStream'), method: :put
     %p
@@ -26,10 +25,7 @@
     %h3=link_to 'faves', @user.photosurl + "favorites"
     - if @fave_stream
       subscribed
-      =link_to 'Unsubscribe from it', @fave_stream, :confirm => 'Are you sure?', :method => :delete
-      |
-      =link_to 'Get Pictures!', sync_flickr_stream_path(id: @fave_stream.id, num_of_pics: 100)
-
+      = render(partial: '/flickr_streams/stream_operations', locals: {stream: @fave_stream})
     - else
       = link_to 'Subscribe!', subscribe_user_path(id: @user.nsid, type: 'FaveStream'), method: :put
     %p

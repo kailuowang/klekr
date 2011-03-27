@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110326164354) do
+ActiveRecord::Schema.define(:version => 20110327033018) do
 
   create_table "flickr_streams", :force => true do |t|
     t.string   "user_id"
@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(:version => 20110326164354) do
   create_table "monthly_scores", :force => true do |t|
     t.integer  "month"
     t.integer  "year"
-    t.integer  "score",              :default => 0
+    t.float    "score",              :default => 0.0
     t.integer  "num_of_pics",        :default => 0
     t.integer  "flickr_stream_id"
     t.string   "flickr_stream_type"

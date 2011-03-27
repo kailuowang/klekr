@@ -36,7 +36,7 @@ describe Picture do
       picture = Factory(:picture)
       picture.synced_by(Factory(:fave_stream))
       flickr.favorites.stub!(:add)
-      picture.flickr_streams[0].should_receive(:add_score).with(picture.created_at)
+      picture.flickr_streams[0].should_receive(:add_score).with(picture.created_at, 0.3)
       picture.fave
     end
 

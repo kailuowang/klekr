@@ -9,7 +9,9 @@ Collectr::Application.routes.draw do
   resources :flickr_streams, :only => [:index, :new, :create, :destroy] do
     member do
       get 'sync'
+      put 'adjust_rating'
     end
+
     collection do
       get 'sync_all'
       post 'import'

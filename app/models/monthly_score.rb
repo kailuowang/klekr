@@ -24,13 +24,28 @@ class MonthlyScore < ActiveRecord::Base
 
   def weighted_rating
     return 0 if num_of_pics == 0
-    (score * weight).to_f / num_of_pics
+    rating * weight
   end
+
+  def bump
+    add(num_of_pics.to_f / 5)
+  end
+
+  def trash
+    add( - num_of_pics.to_f / 5)
+    update_attribute(:score, 0) if score < 0
+  end
+
 
   private
 
   def months_from(date)
     date.month - month + (date.year - year ) * 12
+  end
+
+  def rating
+    result = score.to_f / num_of_pics
+    result > 1 ? 1 : result
   end
 
   def days_in_month(year, month)

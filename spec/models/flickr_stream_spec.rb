@@ -190,6 +190,24 @@ describe FlickrStream do
         @flickr_stream.rating.should be_within(0.01).of(0.4) #( 0.5 + (0.2 * 0.5) ) / 1.5
       end
     end
+
+    describe "#bump_rating" do
+      it "should bump rating in the most recent two month with ratings" do
+        @flickr_stream.score_for(Date.today).should_receive(:bump)
+        @flickr_stream.score_for(1.month.ago).should_receive(:bump)
+        @flickr_stream.bump_rating
+      end
+    end
+
+    describe "#monthly_scores" do
+      it "should order by month from recent to old" do
+        @flickr_stream.score_for(Date.new(2000, 4, 1))
+        @flickr_stream.score_for(Date.new(2001, 3, 1))
+        @flickr_stream.score_for(Date.new(2000, 5, 1))
+        @flickr_stream.reload.monthly_scores.map(&:month).should == [3,5,4]
+      end
+
+    end
   end
 
   describe FaveStream do

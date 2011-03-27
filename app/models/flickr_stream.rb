@@ -8,7 +8,7 @@ class FlickrStream < ActiveRecord::Base
 
   has_many :syncages
   has_many :pictures, through: :syncages
-  has_many :monthly_scores
+  has_many :monthly_scores, order: 'year desc, month desc'
   cattr_reader :per_page
   @@per_page = 30
 
@@ -78,10 +78,17 @@ class FlickrStream < ActiveRecord::Base
     photos_synced
   end
 
-  def add_score(source_date)
-    score_for(source_date).add 1
+  def add_score(source_date, to_add = 1)
+    score_for(source_date).add(to_add)
   end
 
+  def bump_rating
+    adjust_rating(:bump)
+  end
+
+  def trash_rating
+    adjust_rating(:trash)
+  end
 
   def user
     @user ||= FlickrStream.get_user_from_flickr(user_id)
@@ -112,6 +119,10 @@ class FlickrStream < ActiveRecord::Base
 
 
   private
+
+  def adjust_rating adjustment
+    monthly_scores[0..1].each(&adjustment)
+  end
 
   def get_pic_up_to(up_to, max = nil, page = 1 )
     up_to = nil unless max.nil?

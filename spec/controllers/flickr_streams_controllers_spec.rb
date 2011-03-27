@@ -24,4 +24,14 @@ describe FlickrStreamsController do
       response.should redirect_to(action: 'index')
     end
   end
+
+  describe "put adjust_rating" do
+    it "should bump rating when adjustment is up" do
+      fave_stream = Factory(:fave_stream)
+      FlickrStream.stub!(:find).with(fave_stream.id).and_return(fave_stream)
+      request.env["HTTP_REFERER"] = ''
+      fave_stream.should_receive(:bump_rating)
+      put 'adjust_rating', id: fave_stream.id, adjustment: 'up'
+    end
+  end
 end

@@ -43,6 +43,16 @@ class FlickrStreamsController < ApplicationController
     end
   end
 
+  #PUT /flickr_stream/1/bump_rating
+  def adjust_rating
+    @flickr_stream = FlickrStream.find(params[:id])
+    respond_to do |format|
+      params[:adjustment] == 'up' ? @flickr_stream.bump_rating : @flickr_stream.trash_rating
+      format.html { redirect_to(:back) }
+      format.xml  { head :ok }
+    end
+  end
+
   #POST /flickr_streams/import
   def import
     num_of_imports = FlickrStream.import( YAML.load( params[:streams_yaml].read ))

@@ -1,0 +1,11 @@
+.h4
+  Rating:
+  = stream.rating
+  (
+  =link_to '+ Bump Rating', adjust_rating_flickr_stream_path(id: stream.id, adjustment: 'up'), method: :put
+  |
+  =link_to ' - Trash Rating', adjust_rating_flickr_stream_path(id: stream.id, adjustment: 'down'), method: :put
+  )
+=link_to 'Unsubscribe', stream, :confirm => 'Are you sure?', :method => :delete
+|
+=link_to 'Get Some Pictures!', sync_flickr_stream_path(id: stream.id, num_of_pics: 100)

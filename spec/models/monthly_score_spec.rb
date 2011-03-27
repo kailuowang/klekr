@@ -13,14 +13,49 @@ describe MonthlyScore do
     end
 
     it "should be partial for the current month" do
-      Date.stub!(:today).and_return(Date.new(2011, 4 , 15))
+      Date.stub!(:today).and_return(Date.new(2011, 4, 15))
       MonthlyScore.new(month: Date.today.month, year: Date.today.year).weight.should == 0.5
     end
   end
 
   describe "#weighted_rating" do
     it 'should return 0 if there is no pics for that month' do
-     MonthlyScore.new(month: 4, year: 2011).weighted_rating.should == 0
+      MonthlyScore.new(month: 4, year: 2011).weighted_rating.should == 0
+    end
+  end
+
+  describe "#bump" do
+    it "should increase rating by 0.2 when there is num of pics" do
+      ms = Factory(:monthly_score)
+      ms.add_num_of_pics(10)
+      ms.bump
+      ms.rating.should == 0.2
+    end
+  end
+
+  describe "#trash" do
+    it "should decrease rating by 0.2 when there is num of pics" do
+      ms = Factory(:monthly_score)
+      ms.add_num_of_pics(10)
+      ms.add(6)
+      ms.trash
+      ms.rating.should == 0.4
+    end
+
+    it "should not decrease rating to less than 0" do
+      ms = Factory(:monthly_score)
+      ms.add_num_of_pics(10)
+      ms.trash
+      ms.rating.should == 0
+    end
+  end
+
+  describe "#rating" do
+    it 'should never exeed 1 even if score added more than num of pics' do
+      ms = Factory(:monthly_score)
+      ms.add_num_of_pics(10)
+      ms.add(11)
+      ms.rating.should == 1
     end
   end
 
