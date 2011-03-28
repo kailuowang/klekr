@@ -3,6 +3,7 @@
 :javascript
   next3images = #{@pictures_to_cache.to_json}
   largeUrl = '#{@picture.flickr_url(:large)}'
+  mediumUrl = '#{@picture.flickr_url(:medium)}'
   windowSize = #{window_size_px}
 #slide{style: 'width:90%; text-align: center;'}
   .spacer{style: 'width: 1280px;'}

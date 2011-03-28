@@ -12,7 +12,14 @@ $(document).ready(function() {
 
   function show(image){
     $('#loading').hide();
+    ensure_display(image);
     image.show();
+  }
+
+  function ensure_display(image){
+    if(image.height() <= 500 && image.width() <= 373 && image.attr('src') == largeUrl) {
+      image.attr('src', mediumUrl)
+    }
   }
 
   $('#picture').load(function() {
