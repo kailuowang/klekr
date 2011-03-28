@@ -17,7 +17,7 @@ $(document).ready(function() {
   }
 
   function ensure_display(image){
-    if(image.height() <= 500 && image.width() <= 373 && image.attr('src') == largeUrl) {
+    if(image.height() <= 400 && image.width() <= 550 && image.attr('src') === largeUrl) {
       image.attr('src', mediumUrl)
     }
   }
@@ -37,7 +37,7 @@ $(document).ready(function() {
     imageTooHigh = image.height() * 1.6 > windowSize;
 
 
-    isLargeSize = image.attr('src') == largeUrl;
+    isLargeSize = image.attr('src') === largeUrl;
 
 
     if ( !imageTooHigh  && !isLargeSize ){
