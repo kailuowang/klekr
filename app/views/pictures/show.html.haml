@@ -13,7 +13,7 @@
     = image_tag('loading.gif', id: 'loading', style: 'padding: 40px')
     .text{:style => "width: 100%; text-align: center"}
       %h3{style: 'padding: 5px'}
-        = link_to 'Fave it!', fave_picture_path(@picture), method: :put
+        = link_to 'Fave it!', fave_picture_path(@picture), method: :put, id: 'fave'
       %h4
         %b Title:
         = link_to display_title(@picture), @picture.url

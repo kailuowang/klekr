@@ -55,13 +55,20 @@ $(document).ready(function() {
 
   });
 
+  var next = function(){
+    window.location = $('#next').attr('href');
+  };
 
-  $('#right').click(function(){
-      window.location = $('#next').attr('href')
-  });
+  $('#right').click(next);
 
   $('#left').click(function(){
      history.back()
+  });
+
+
+  $(document).bind('keydown', 'space', next);
+  $(document).bind('keydown', 'f', function(){
+      $('#fave').click();
   });
 
 });
