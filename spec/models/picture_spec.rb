@@ -138,7 +138,7 @@ describe Picture do
     it "should return FlickRaw url_z when size is :medium" do
       picture = Factory(:picture)
       FlickRaw.should_receive(:url_z).with(picture.pic_info).and_return('http://flic.kr/a_pic_z.jpg')
-      picture.flickr_url(:medium).should == 'http://flic.kr/a_pic_z.jpg'
+      picture.flickr_url(:medium).should == 'http://flic.kr/a_pic_z.jpg?zz=1'
 
     end
 

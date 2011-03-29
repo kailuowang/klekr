@@ -87,7 +87,7 @@ class Picture < ActiveRecord::Base
       when :large
         FlickRaw.url_b(pic_info)
       when :medium
-        FlickRaw.url_z(pic_info)
+        FlickRaw.url_z(pic_info) + "?zz=1"
       when :small
         FlickRaw.url_m(pic_info)
       else
