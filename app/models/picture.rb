@@ -56,12 +56,8 @@ class Picture < ActiveRecord::Base
     !synced
   end
 
-  def previous
-    Picture.before(self).desc.first
-  end
-
   def next_new_pictures(n)
-     Picture.desc.before(self).unviewed.limit(n)
+     Picture.desc.unviewed.limit(n)
   end
 
   def next

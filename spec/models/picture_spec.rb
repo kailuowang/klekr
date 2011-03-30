@@ -104,34 +104,31 @@ describe Picture do
     end
   end
 
-  describe "#previous" do
-    it "should get the picture in the database that has the closest earlier date_upload" do
-      picture1 = Factory(:picture, date_upload: DateTime.new(2010, 1, 3))
-      Factory(:picture, date_upload: DateTime.new(2010, 1, 1))
-      picture2 = Factory(:picture, date_upload: DateTime.new(2010, 1, 2))
-      picture1.previous.should == picture2
-    end
-  end
 
   describe "#next_new_pictures" do
     it "should return x number of unviewed pictures and return in a desc order" do
-      picture4 = Factory(:picture, date_upload: DateTime.new(2010, 1, 4))
+      picture4 = Factory(:picture, date_upload: DateTime.new(2010, 1, 4), viewed: true)
       picture3 = Factory(:picture, date_upload: DateTime.new(2010, 1, 3))
       Factory(:picture, date_upload: DateTime.new(2010, 1, 2), :viewed => true)
       picture1 = Factory(:picture, date_upload: DateTime.new(2010, 1, 1))
       Factory(:picture, date_upload: DateTime.new(2000, 1, 1))
-      picture4.next_new_pictures(2).should == [picture3, picture1]
+      picture4.next_new_pictures(2).map(&:id).should == [picture3.id, picture1.id]
+    end
+
+    it "should return x number of unviewed pictures with highest rating" do
+      Factory(:picture, stream_rating: 2)
+      pic_with_higher_rating = Factory(:picture, stream_rating: 3)
+      Factory(:picture).next_new_pictures(1)[0].id.should == pic_with_higher_rating.id
+    end
+
+    it "should return x number of unviewed pictures with latest date" do
+      Factory(:picture, stream_rating: 2, date_upload: 1.month.ago)
+      later_pic = Factory(:picture, stream_rating: 2, date_upload: 1.day.ago)
+      Factory(:picture).next_new_pictures(1)[0].id.should == later_pic.id
+
     end
   end
 
-  describe "#next" do
-    it "should get the picture in the database that has the closest later date_upload" do
-      picture1 = Factory(:picture, date_upload: DateTime.new(2010, 1, 1))
-      Factory(:picture, date_upload: DateTime.new(2010, 1, 3))
-      picture2 = Factory(:picture, date_upload: DateTime.new(2010, 1, 2))
-      picture1.next.should == picture2
-    end
-  end
 
   describe "#flickr_url" do
     it "should return FlickRaw url_z when size is :medium" do
