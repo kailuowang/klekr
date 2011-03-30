@@ -96,6 +96,22 @@ class FlickrStream < ActiveRecord::Base
     adjust_rating(:trash)
   end
 
+  def star_rating
+    if rating < 0.01
+      0
+    elsif rating < 0.05
+      1
+    elsif rating < 0.1
+      2
+    elsif rating < 0.2
+      3
+    elsif rating < 0.4
+      4
+    else
+      5
+    end
+  end
+
   def user
     @user ||= FlickrStream.get_user_from_flickr(user_id)
   end

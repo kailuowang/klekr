@@ -27,7 +27,7 @@
           |
         |
         %b Guess of Interestingness:
-        = format_float(@picture.stream_rating)
+        = @picture.stream_rating.to_i
 
       %p
         = link_to 'Restart', slide_show_pictures_path

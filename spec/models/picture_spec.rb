@@ -28,12 +28,12 @@ describe Picture do
         picture = Factory(:picture)
         stream = Factory(:fave_stream)
         stream.score_for(Date.today).add(1)
-        stream.score_for(Date.today).add_num_of_pics(2)
+        stream.score_for(Date.today).add_num_of_pics(100)
         picture.synced_by(stream)
-        picture.stream_rating.should == 0.5
-        stream.score_for(Date.today).add(1)
+        picture.stream_rating.should == 1
+        stream.score_for(Date.today).add(60)
         Picture.reset_stream_ratings
-        picture.reload.stream_rating.should == 1
+        picture.reload.stream_rating.should == 5
       end
     end
 
@@ -70,7 +70,7 @@ describe Picture do
     it "should add the stream's ratings to the stream_rating if it not synced with the stream before" do
       picture = Factory(:picture)
       stream = Factory(:fave_stream)
-      stream.stub!(:rating).and_return(0.2)
+      stream.stub!(:star_rating).and_return(0.2)
       picture.synced_by(stream)
       picture.stream_rating.should == 0.2
     end
@@ -101,7 +101,6 @@ describe Picture do
       picture.get_viewed
       picture.get_viewed
       stream.score_for(Date.today).num_of_pics.should == 1
-
     end
   end
 
@@ -146,10 +145,7 @@ describe Picture do
       picture = Factory(:picture)
       FlickRaw.should_receive(:url_b).with(picture.pic_info).and_return('http://flic.kr/a_pic_z.jpg')
       picture.flickr_url(:large).should == 'http://flic.kr/a_pic_z.jpg'
-
     end
   end
-
-
 
 end

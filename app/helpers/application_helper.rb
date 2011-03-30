@@ -10,8 +10,7 @@ module ApplicationHelper
 
 
   def rating_display flickr_stream
-    rating = flickr_stream.rating
-    format_float(rating)
+    "#{flickr_stream.star_rating}/5"
   end
 
   def format_float f
