@@ -6,7 +6,6 @@ class PicturesController < ApplicationController
   # GET /pictures/1.xml
   def show
     @picture = Picture.find(params[:id])
-    @picture.get_viewed
     @default_pic_url = window_size == :large ? @picture.large_url : @picture.medium_url
     preload_pics_according_to_window_size
 
@@ -50,6 +49,15 @@ class PicturesController < ApplicationController
       redirect_to flickr_streams_path, notice: "You have no unviewed pictures, please sync your subscriptions from here."
     end
 
+  end
+
+  #GET /pictures/1/next
+  def next
+    pic = Picture.find(params[:id])
+    pic.get_viewed
+    next_pic = pic.next_new_pictures(1).first
+
+    redirect_to(next_pic || slide_show_pictures_path)
   end
 
   #GET /pictures

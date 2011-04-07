@@ -25,6 +25,7 @@ Collectr::Application.routes.draw do
     end
     member do
       put 'fave'
+      get 'next'
     end
   end
 

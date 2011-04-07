@@ -125,7 +125,10 @@ describe Picture do
       Factory(:picture, stream_rating: 2, date_upload: 1.month.ago)
       later_pic = Factory(:picture, stream_rating: 2, date_upload: 1.day.ago)
       Factory(:picture).next_new_pictures(1)[0].id.should == later_pic.id
+    end
 
+    it "should not include the picture itself" do
+      Factory(:picture).next_new_pictures(1).should be_empty
     end
   end
 

@@ -57,7 +57,7 @@ class Picture < ActiveRecord::Base
   end
 
   def next_new_pictures(n)
-     Picture.desc.unviewed.limit(n)
+    Picture.desc.unviewed.limit(n) - [self]
   end
 
   def next
