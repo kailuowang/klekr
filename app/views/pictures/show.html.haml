@@ -7,14 +7,14 @@
   windowSize = #{window_size_px}
 #slide{style: 'width:90%; text-align: center;'}
   .spacer{style: 'width: 1280px;'}
-    = image_tag('spacer.gif', width: '1280px')
+    = image_tag('spacer.gif', width: '1280px', height: '875px')
   .center{style: 'position: absolute; top: 20px; left: 0px; width: 100%; text-align: center;'}
     = link_to image_tag(@default_pic_url, id: 'picture', style: 'display:none'), next_picture_path(@picture)
     = image_tag('loading.gif', id: 'loading', style: 'padding: 40px')
     .text{:style => "width: 100%; text-align: center"}
       %h3{style: 'padding: 5px'}
         = link_to 'Fave it!', fave_picture_path(@picture), method: :put, id: 'fave'
-      %h4
+      %h5
         %b Title:
         = link_to display_title(@picture), @picture.url
         |

@@ -407,3 +407,9 @@ input[type="file"]{
   height: 244px;
   line-height: 244px;
 }
+
+#copyright {
+  width: 100%;
+  text-align: center;
+
+}
