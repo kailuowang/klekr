@@ -16,8 +16,8 @@ body {
   width:100%;
 }
 
-h1, h2, h3 {
-	margin: 0;
+h1, h2, h3, h4 {
+	margin: 3px;
 	padding: 0;
 	text-transform: uppercase;
 	font-family: Impact, Arial, Helvetica, sans-serif;
@@ -35,6 +35,10 @@ h2 {
 
 h3 {
 	font-size: 1.6em;
+}
+
+h4 {
+	font-size: 1.3em;
 }
 
 p, ul, ol {

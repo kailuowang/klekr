@@ -26,7 +26,7 @@ class UsersController < ApplicationController
       stream = FlickrStream.build(user_id: params[:id], 'type' => params[:type])
       stream.save
       format.html { redirect_to(user_path(id: params[:id]),
-                                :notice => "Successfully Subscribed to #{stream.username}'s #{stream.type}" ) }
+                                :notice => "Starting to collect #{stream.username}'s #{stream.type}" ) }
       format.xml  { head :ok }
     end
   end
