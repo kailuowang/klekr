@@ -29,11 +29,13 @@ namespace :deploy do
   set :app_path, '/app/collectr'
   task :simple, :roles => :app do
     system "git push"
+    run_in_app "script/delayed_job stop"
     run_in_app "git checkout ."
     run_in_app "git pull"
     run_in_app "bundle install"
     rake "db:migrate"
     run_in_app "#{try_sudo} touch tmp/restart.txt"
+    run_in_app "script/delayed_job start"
     deploy.post_deploy
   end
 
@@ -42,11 +44,11 @@ namespace :deploy do
   end
 
   def rake task
-    run_in_app "RAILS_ENV=production rake #{task}"
+    run_in_app "rake #{task}"
   end
 
   def run_in_app cmd
-    run "cd #{app_path} && #{cmd}"
+    run "cd #{app_path} && RAILS_ENV=production #{cmd}"
   end
 
 end

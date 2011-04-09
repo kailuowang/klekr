@@ -65,8 +65,8 @@ class FlickrStreamsController < ApplicationController
   #Get /flickr_streams/sync_all
   def sync_all
     respond_to do |format|
-      total_synced = FlickrStream.sync_all
-      format.html { redirect_to(flickr_streams_path, :notice => "#{total_synced} new pictures were synced from all my streams @#{DateTime.now.to_s(:short)} ") }
+      FlickrStream.delay.sync_all
+      format.html { redirect_to(flickr_streams_path, :notice => "All collections are scheduled to be refreshed shortly") }
       format.xml  { head :ok }
     end
   end
