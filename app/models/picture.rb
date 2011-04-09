@@ -65,11 +65,17 @@ class Picture < ActiveRecord::Base
   end
 
   def fave
+    return if faved?
     begin
       flickr.favorites.add(photo_id: pic_info.id)
+      update_attribute(:rating, 1)
+      flickr_streams.each {|stream| stream.add_score(created_at, 0.3) }
     rescue FlickRaw::FailedResponse
     end
-    flickr_streams.each {|stream| stream.add_score(created_at, 0.3) }
+  end
+
+  def faved?
+    rating > 0
   end
 
   def pic_info

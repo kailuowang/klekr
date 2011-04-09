@@ -54,6 +54,26 @@ describe Picture do
       picture.fave
     end
 
+    it "should set rating to 1 when successfully added" do
+      picture = Factory(:picture)
+      flickr.favorites.stub!(:add)
+      picture.fave
+      picture.rating.should == 1
+    end
+
+    it "should only try fave it if its not faved already" do
+      flickr.favorites.should_not_receive(:add)
+      Factory(:picture, rating: 1).fave
+    end
+  end
+
+  describe "#faved?" do
+    it "should return true if rating is larger than 0" do
+      Factory(:picture, rating: 1).should be_faved
+    end
+    it "should return false if rating is 0" do
+      Factory(:picture, rating: 0).should_not be_faved
+    end
   end
 
   describe "#synced_by" do
