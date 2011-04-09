@@ -12,6 +12,7 @@ gem "jquery-rails"
 gem 'capistrano'
 gem 'will_paginate', "3.0.pre"
 gem "rails_config"
+gem 'delayed_job'
 
 group :test, :development do
   gem 'sqlite3-ruby', :require => 'sqlite3'
