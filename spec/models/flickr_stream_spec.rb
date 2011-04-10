@@ -65,6 +65,7 @@ describe FlickrStream do
         FlickrStream.least_viewed.should == stream
 
       end
+
       it "should return the stream which is viewed less than other stream" do
         stream = Factory(:fave_stream)
         stream2 = Factory(:fave_stream)
@@ -74,6 +75,34 @@ describe FlickrStream do
         Factory(:picture, viewed: true).synced_by(stream2)
         FlickrStream.least_viewed.should == stream
       end
+
+      it "should be able to change according to the flickstream viewed count" do
+        stream = Factory(:fave_stream)
+        stream2 = Factory(:fave_stream)
+
+        pic1a = Factory(:picture, viewed: true)
+        pic1b = Factory(:picture, viewed: false)
+        pic1c = Factory(:picture, viewed: false)
+        pic2a = Factory(:picture, viewed: true)
+        pic2b = Factory(:picture, viewed: true)
+        pic2c = Factory(:picture, viewed: false)
+
+        pic1a.synced_by(stream)
+        pic1b.synced_by(stream)
+        pic1c.synced_by(stream)
+        pic2a.synced_by(stream2)
+        pic2b.synced_by(stream2)
+        pic2c.synced_by(stream2)
+
+        FlickrStream.least_viewed.should == stream
+
+        pic1b.get_viewed
+        pic1c.get_viewed
+
+        FlickrStream.least_viewed.should == stream2
+
+      end
+
     end
   end
 
