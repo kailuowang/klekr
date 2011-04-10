@@ -432,3 +432,33 @@ input[type="file"]{
   margin: 10px;
 }
 
+.center{
+  width: 100%;
+  text-align: center;
+}
+
+table{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#myCollections{
+  margin: 20px;
+}
+
+#streamsTable{
+  margin: 20px auto;
+  width: 800px;
+}
+
+.fleft{
+  float: left;
+}
+
+.fright{
+  float: right;
+}
+
+.clearFloat{
+  clear: both;
+}

@@ -1,46 +1,51 @@
-.content
-  %h1 My Subscriptions
+.center
+  #myCollections
+    %h1 My Collections
 
-  %p{:id => "notice"}
-    = notice
+    %p{:id => "notice"}
+      = notice
 
-  %p
-    = link_to 'New Subscription', new_flickr_stream_path
-    |
-    = link_to 'Sync All Subscriptions', sync_all_flickr_streams_path
-    |
-    = link_to 'Slide Show', slide_show_pictures_path
-    |
-    = link_to 'Search for a flickr user', users_path
+    %p
+      = link_to 'New Collection', new_flickr_stream_path
+      |
+      = link_to 'Refresh All Collections', sync_all_flickr_streams_path
+      |
+      = link_to 'Slide Show', slide_show_pictures_path
+      |
+      = link_to 'Search for a flickr user', users_path
 
 
-  - if @number_of_new_pics > 0
-    %h4="#{@number_of_new_pics} New Photos!"
+    - if @number_of_new_pics > 0
+      %h4="#{@number_of_new_pics} New Photos!"
 
-  .import
-    = render :partial => 'flickr_streams/import'
+    #streamsTable
+      %table{style: 'border: solid 1px; width: 100%'}
+        %tr
+          %th Type
+          %th
+          %th{style: 'text-align:left;'} Owner
+          %th Rating
+          %th{style: 'text-align:right;'} # of Pics
+          %th Last Sync
+          %th
+          %th
+          %th
+        - @flickr_streams.each do |flickr_stream|
+          %tr
+            %td{style: 'text-align:right;'}
+              = link_to flickr_stream.type_display, flickr_stream.stream_url
+            %td of
+            %td{style: 'text-align:left;'}= link_to flickr_stream.username, user_path(flickr_stream.user_id)
+            %td= rating_display(flickr_stream)
+            %td{style: 'text-align:right;'}= flickr_stream.pictures.size
+            %td= flickr_stream.last_sync ? flickr_stream.last_sync .getlocal.to_s(:short) : ''
+            %td= link_to 'Sync', sync_flickr_stream_path(flickr_stream.id)
+            %td= link_to 'Stop Collecting', flickr_stream, :confirm => 'Are you sure?', :method => :delete
+      .fleft
+        = will_paginate @flickr_streams
+      .fright
+        = page_entries_info @flickr_streams, entry_name: 'collection'
+      .clearFloat
 
-  %table{style: 'border: solid 1px;'}
-    %tr
-      %th Type
-      %th
-      %th Owner
-      %th Rating
-      %th # of Pics
-      %th Last Sync
-      %th
-      %th
-      %th
-    - @flickr_streams.each do |flickr_stream|
-      %tr
-        %td{style: 'text-align:right;'}
-          = link_to flickr_stream.type_display, flickr_stream.stream_url
-        %td of
-        %td= link_to flickr_stream.username, user_path(flickr_stream.user_id)
-        %td= rating_display(flickr_stream)
-        %td{style: 'text-align:center;'}= flickr_stream.pictures.size
-        %td= flickr_stream.last_sync ? flickr_stream.last_sync .getlocal.to_s(:short) : ''
-        %td= link_to 'Sync', sync_flickr_stream_path(flickr_stream.id)
-        %td= link_to 'Stop Collecting', flickr_stream, :confirm => 'Are you sure?', :method => :delete
-  = will_paginate @flickr_streams
-  = page_entries_info @flickr_streams
+    .import
+      = render :partial => 'flickr_streams/import'
