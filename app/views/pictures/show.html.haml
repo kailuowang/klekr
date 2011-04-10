@@ -11,8 +11,8 @@
   .center{style: 'position: absolute; top: 20px; left: 0px; width: 100%; text-align: center;'}
     = image_tag(@default_pic_url, id: 'picture', style: 'display:none')
     = image_tag('loading.gif', id: 'loading', style: 'padding: 40px')
-    .text{:style => "width: 100%; text-align: center"}
-      %h3{style: 'padding: 5px'}
+    #slideShowCaption
+      %h3{style: 'margin: 8px'}
         - if(@picture.faved?)
           Faved
         - else
@@ -28,32 +28,35 @@
         - @picture.flickr_streams.each do |flickr_stream|
           = link_to "#{flickr_stream.username}'s #{flickr_stream.type_display}", user_path(flickr_stream.user_id)
           |
-        %b Guess of Interestingness:
-        = @picture.stream_rating.to_i
-        - if @hidden_treasure
-          (might be a hidden treasure)
+      %h5
 
-
-      %p
         - if @hidden_treasure
-          = link_to 'Normal Browse', slide_show_pictures_path
-          |
+          Discovering Hidden Treasures!
+          (
+          = link_to 'back to normal mode', slide_show_pictures_path
+          )
         - else
+          %b Guess of Personal Interestingness:
+          = @picture.stream_rating.to_i
+
+      %h5
+        - unless @hidden_treasure
           = link_to 'Discover Hidden Treasure',  next_picture_path(@picture, hidden_treasure: true)
           |
-        = link_to 'My Subscriptions', flickr_streams_path
-        |
-        = link_to 'Next', next_picture_path(@picture, hidden_treasure: params[:hidden_treasure]), id: 'next'
-        |
+        = link_to 'Back to My Collections', flickr_streams_path
+
+        = link_to 'Next', next_picture_path(@picture, hidden_treasure: params[:hidden_treasure]), id: 'next', style: 'display: none'
+
+      #windowSizeSetting
         = render 'cookie_settings/form'
       %p{:id => "notice"}
         = notice
       = render(partial: 'general/copyright')
 
-  #left{style: 'position: absolute; top: 0px; left: 0px; width: 30%; height: 750px; vertical-align: middle; '}
-    %h2{style: 'line-height:750px; text-align:left; padding-left: 5px;'}
+  #left{style: 'position: absolute; top: 0px; left: 0px; width: 15%; height: 750px; vertical-align: middle; '}
+    %h2{style: 'line-height:750px; text-align:left; padding-left: 5px; cursor: pointer'}
       <
-  #right{style: 'position: absolute; top: 0px; right: 0px; width: 30%; height: 750px; vertical-align: middle;'}
-    %h2{style: 'line-height:750px; text-align:right; padding-right: 5px;'}
+  #right{style: 'position: absolute; top: 0px; right: 0px; width: 15%; height: 750px; vertical-align: middle;'}
+    %h2{style: 'line-height:750px; text-align:right; padding-right: 5px; cursor: pointer'}
       >
 
