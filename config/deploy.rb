@@ -32,15 +32,11 @@ namespace :deploy do
 end
 
 namespace :deploy do
-  set :app_path, '/app/collectr'
   task :simple, :roles => :app do
     set :app_path, '/app/collectr'
     set :current_path, app_path
     set :release_path, app_path
 
-
-
-    system "git push"
     run_in_app "git checkout ."
     run_in_app "git pull"
     run_in_app "bundle install"
