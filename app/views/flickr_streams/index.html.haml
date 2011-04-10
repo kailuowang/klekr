@@ -1,6 +1,9 @@
 .center
   #myCollections
-    %h1 My Collections
+
+    %h1
+      My Collections
+      = link_to 'Show Pictures!', slide_show_pictures_path
 
     %p{:id => "notice"}
       = notice
