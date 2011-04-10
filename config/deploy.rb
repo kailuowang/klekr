@@ -34,13 +34,20 @@ end
 namespace :deploy do
   set :app_path, '/app/collectr'
   task :simple, :roles => :app do
+    set :app_path, '/app/collectr'
+    set :current_path, app_path
+    set :release_path, app_path
+
+
 
     system "git push"
-    whenever.clear_crontab
-    run_in_app "#{rails_env} script/delayed_job stop"
     run_in_app "git checkout ."
     run_in_app "git pull"
     run_in_app "bundle install"
+
+    whenever.clear_crontab
+    run_in_app "#{rails_env} script/delayed_job stop"
+
     rake "db:migrate"
     whenever.update_crontab
     run_in_app "#{try_sudo} touch tmp/restart.txt"
