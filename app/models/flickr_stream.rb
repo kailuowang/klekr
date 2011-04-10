@@ -9,6 +9,7 @@ class FlickrStream < ActiveRecord::Base
   has_many :syncages
   has_many :pictures, through: :syncages
   has_many :monthly_scores, order: 'year desc, month desc'
+
   cattr_reader :per_page
   @@per_page = 30
 
@@ -51,6 +52,19 @@ class FlickrStream < ActiveRecord::Base
       count
     end
 
+    def least_viewed
+      unviewed || get_least_viewed
+
+    end
+
+    def unviewed
+      joins(:pictures).where(pictures: {viewed: false}).limit(1)[0]
+    end
+
+    def get_least_viewed
+      ids = Syncage.select( 'flickr_stream_id, count(picture_id) as viewed_pic ').joins(:picture).where(pictures: {viewed: true}).group(:flickr_stream_id).order('viewed_pic DESC')
+      FlickrStream.find(ids[0].flickr_stream_id)
+    end
 
     protected
     def sync_uses(flickr_module, get_photo_method, related_time_field)

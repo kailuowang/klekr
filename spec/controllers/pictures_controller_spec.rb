@@ -54,5 +54,20 @@ describe PicturesController do
 
       response.should redirect_to slide_show_pictures_path
     end
+
+    it "should redirect to the hidden treasure if the hidden_treaure is in parameter" do
+      Factory( :picture)
+      pic2 = Factory( :picture)
+      pic = Factory( :picture)
+
+      Picture.stub!(:find).with(pic.id).and_return(pic)
+      Picture.stub!(:find).with(pic2.id).and_return(pic2)
+      pic.stub!(:guess_hidden_treasure).and_return(pic2)
+      get 'next', :id => pic.id, :hidden_treasure => true
+
+      response.should redirect_to picture_path(id: pic2.id, hidden_treasure: true)
+    end
+
+
   end
 end

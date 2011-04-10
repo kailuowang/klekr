@@ -55,6 +55,26 @@ describe FlickrStream do
         FlickrStream.count.should == 1
       end
     end
+
+    describe "#least_viewed" do
+      it "should return the stream which is not viewed at all" do
+        stream = Factory(:fave_stream)
+        stream2 = Factory(:fave_stream)
+        Factory(:picture, viewed: false).synced_by(stream)
+        Factory(:picture, viewed: true).synced_by(stream2)
+        FlickrStream.least_viewed.should == stream
+
+      end
+      it "should return the stream which is viewed less than other stream" do
+        stream = Factory(:fave_stream)
+        stream2 = Factory(:fave_stream)
+        Factory(:picture, viewed: false).synced_by(stream)
+        Factory(:picture, viewed: true).synced_by(stream)
+        Factory(:picture, viewed: true).synced_by(stream2)
+        Factory(:picture, viewed: true).synced_by(stream2)
+        FlickrStream.least_viewed.should == stream
+      end
+    end
   end
 
   shared_examples_for "All FlickrStreams" do

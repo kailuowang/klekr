@@ -8,7 +8,7 @@ class PicturesController < ApplicationController
     @picture = Picture.find(params[:id])
     @default_pic_url = window_size == :large ? @picture.large_url : @picture.medium_url
     preload_pics_according_to_window_size
-
+    @hidden_treasure = params[:hidden_treasure].present?
     respond_to do |format|
       format.html # show.html.haml
       format.xml  { render :xml => @picture }
@@ -55,9 +55,10 @@ class PicturesController < ApplicationController
   def next
     pic = Picture.find(params[:id])
     pic.get_viewed
-    next_pic = pic.next_new_pictures(1).first
 
-    redirect_to(next_pic || slide_show_pictures_path)
+    next_pic = params[:hidden_treasure].present? ? pic.guess_hidden_treasure : pic.next_new_pictures(1).first
+    path = next_pic ? picture_path(id: next_pic.id, hidden_treasure: params[:hidden_treasure]) : slide_show_pictures_path
+    redirect_to( path )
   end
 
   #GET /pictures

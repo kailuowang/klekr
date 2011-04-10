@@ -4,7 +4,7 @@ class Picture < ActiveRecord::Base
   scope :after, lambda {|pic| where('date_upload > ?', pic.date_upload)}
   scope :before, lambda {|pic| where('date_upload < ?', pic.date_upload)}
   scope :unviewed, where(viewed: false)
-
+  scope :from, lambda {|stream| joins(:syncages).where(syncages: { flickr_stream_id: stream.id }) }
   serialize :pic_info_dump
   has_many :syncages
   has_many :flickr_streams, through: :syncages
@@ -106,5 +106,9 @@ class Picture < ActiveRecord::Base
 
   def small_url
     flickr_url(:small)
+  end
+
+  def guess_hidden_treasure
+    Picture.from(FlickrStream.least_viewed).desc.unviewed.limit(1)[0]
   end
 end

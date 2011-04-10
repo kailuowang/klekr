@@ -37,6 +37,15 @@ describe Picture do
       end
     end
 
+    describe "#from" do
+      it "should return the list of pictures from that stream" do
+        picture = Factory(:picture)
+        Factory(:picture)
+        stream = Factory(:fave_stream)
+        picture.synced_by(stream)
+        Picture.from(stream).map(&:id).should == [picture.id]
+      end
+    end
   end
 
   describe "#fave" do
@@ -124,7 +133,6 @@ describe Picture do
     end
   end
 
-
   describe "#next_new_pictures" do
     it "should return x number of unviewed pictures and return in a desc order" do
       picture4 = Factory(:picture, date_upload: DateTime.new(2010, 1, 4), viewed: true)
@@ -152,7 +160,6 @@ describe Picture do
     end
   end
 
-
   describe "#flickr_url" do
     it "should return FlickRaw url_z when size is :medium" do
       picture = Factory(:picture)
@@ -166,6 +173,20 @@ describe Picture do
       FlickRaw.should_receive(:url_b).with(picture.pic_info).and_return('http://flic.kr/a_pic_z.jpg')
       picture.flickr_url(:large).should == 'http://flic.kr/a_pic_z.jpg'
     end
+  end
+
+  describe "#guess_hidden_treasure" do
+    it "should return the latest un-viewed pic from the stream least viewed" do
+      stream = Factory(:fave_stream)
+      Factory(:picture, viewed: true).synced_by(stream)
+      Factory(:picture, date_upload: 1.day.ago).synced_by(stream)
+      pic = Factory(:picture, date_upload: Date.today)
+      pic.synced_by(stream)
+
+      FlickrStream.should_receive(:least_viewed).and_return(stream)
+      Factory(:picture).guess_hidden_treasure.id.should == pic.id
+    end
+
   end
 
 end
