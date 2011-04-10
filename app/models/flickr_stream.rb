@@ -110,6 +110,13 @@ class FlickrStream < ActiveRecord::Base
     adjust_rating(:trash)
   end
 
+  def destroy
+    pictures.includes(:syncages).each do |pic|
+      pic.destroy unless pic.syncages.size > 1
+    end
+    super
+  end
+
   def star_rating
     if rating < 0.01
       0

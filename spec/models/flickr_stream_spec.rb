@@ -264,7 +264,6 @@ describe FlickrStream do
 
     end
 
-
     describe "#bump_rating" do
       it "should bump rating in the most recent two month with ratings" do
         @flickr_stream.score_for(Date.today).should_receive(:bump)
@@ -279,6 +278,26 @@ describe FlickrStream do
         @flickr_stream.score_for(Date.new(2001, 3, 1))
         @flickr_stream.score_for(Date.new(2000, 5, 1))
         @flickr_stream.reload.monthly_scores.map(&:month).should == [3,5,4]
+      end
+
+    end
+
+    describe "#destroy" do
+      it "should remove pictures from the stream" do
+        pic = Factory(:picture)
+        stream = Factory(:fave_stream)
+        pic.synced_by(stream)
+        stream.destroy
+        Picture.find_by_id(pic.id).should be_nil
+      end
+
+      it "should not remove pictures that is also from other stream" do
+        pic = Factory(:picture)
+        stream = Factory(:fave_stream)
+        pic.synced_by(stream)
+        pic.synced_by(Factory(:fave_stream))
+        stream.destroy
+        Picture.find(pic.id).should be_present
       end
 
     end
