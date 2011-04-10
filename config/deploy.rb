@@ -1,6 +1,8 @@
 default_run_options[:pty] = true
 
 require 'bundler/capistrano'
+set :whenever_command, "bundle exec whenever"
+require "whenever/capistrano"
 
 set :application, "collectr"
 set :repository, "git@github.com:kailuowang/collectr.git"
@@ -8,7 +10,11 @@ set :user, "ec2-user"
 set :scm, :git
 set :deploy_to, '/apps/'
 set :ec2_server, 'collectr.kailuowang.com'
-set :rails_env, 'RAILS_ENV=production'
+
+set :environment, 'production'
+
+set :rails_env, "RAILS_ENV=#{environment}"
+
 role :web, ec2_server                          # Your HTTP server, Apache/etc
 role :app, ec2_server                          # This may be the same as your `Web` server
 role :db,  ec2_server, :primary => true # This is where Rails migrations will run
@@ -28,12 +34,15 @@ end
 namespace :deploy do
   set :app_path, '/app/collectr'
   task :simple, :roles => :app do
+
     system "git push"
+    whenever.clear_crontab
     run_in_app "#{rails_env} script/delayed_job stop"
     run_in_app "git checkout ."
     run_in_app "git pull"
     run_in_app "bundle install"
     rake "db:migrate"
+    whenever.update_crontab
     run_in_app "#{try_sudo} touch tmp/restart.txt"
     run_in_app "#{rails_env} script/delayed_job start"
     deploy.post_deploy
