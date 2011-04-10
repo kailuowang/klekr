@@ -78,6 +78,12 @@
     </requirement>
     <requirement>
       <requirement>
+        <dependency name="whenever" version="0" bound="GREATER_OR_EQUAL" git="false" path="false" doRequire="false" />
+      </requirement>
+      <source from="Gemfile" />
+    </requirement>
+    <requirement>
+      <requirement>
         <dependency name="will_paginate" version="3.0.pre" bound="EQUAL" git="false" path="false" doRequire="true" />
       </requirement>
       <source from="Gemfile" />

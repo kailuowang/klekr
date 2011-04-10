@@ -13,6 +13,8 @@ gem 'capistrano'
 gem 'will_paginate', "3.0.pre"
 gem "rails_config"
 gem 'delayed_job'
+gem 'whenever', :require => false
+
 
 group :test, :development do
   gem 'sqlite3-ruby', :require => 'sqlite3'

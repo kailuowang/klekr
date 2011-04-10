@@ -1,6 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    aaronh-chronic (0.3.9)
     abstract (1.0.0)
     actionmailer (3.0.3)
       actionpack (= 3.0.3)
@@ -117,6 +118,9 @@ GEM
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.24)
+    whenever (0.6.7)
+      aaronh-chronic (>= 0.3.9)
+      activesupport (>= 2.3.4)
     will_paginate (3.0.pre)
 
 PLATFORMS
@@ -134,4 +138,5 @@ DEPENDENCIES
   rails_config
   rspec-rails (~> 2.4)
   sqlite3-ruby
+  whenever
   will_paginate (= 3.0.pre)

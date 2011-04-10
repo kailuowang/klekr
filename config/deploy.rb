@@ -8,7 +8,7 @@ set :user, "ec2-user"
 set :scm, :git
 set :deploy_to, '/apps/'
 set :ec2_server, 'collectr.kailuowang.com'
-
+set :rails_env, 'RAILS_ENV=production'
 role :web, ec2_server                          # Your HTTP server, Apache/etc
 role :app, ec2_server                          # This may be the same as your `Web` server
 role :db,  ec2_server, :primary => true # This is where Rails migrations will run
@@ -29,13 +29,13 @@ namespace :deploy do
   set :app_path, '/app/collectr'
   task :simple, :roles => :app do
     system "git push"
-    run_in_app "script/delayed_job stop"
+    run_in_app "#{rails_env} script/delayed_job stop"
     run_in_app "git checkout ."
     run_in_app "git pull"
     run_in_app "bundle install"
     rake "db:migrate"
     run_in_app "#{try_sudo} touch tmp/restart.txt"
-    run_in_app "script/delayed_job start"
+    run_in_app "#{rails_env} script/delayed_job start"
     deploy.post_deploy
   end
 
@@ -44,11 +44,11 @@ namespace :deploy do
   end
 
   def rake task
-    run_in_app "rake #{task}"
+    run_in_app "#{rails_env} rake #{task}"
   end
 
   def run_in_app cmd
-    run "cd #{app_path} && RAILS_ENV=production #{cmd}"
+    run "cd #{app_path} && #{cmd}"
   end
 
 end
