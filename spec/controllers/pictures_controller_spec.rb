@@ -52,7 +52,7 @@ describe PicturesController do
       pic = Factory( :picture, date_upload: 1.hour.ago )
       get 'next', :id => pic.id
 
-      response.should redirect_to slide_show_pictures_path
+      response.should redirect_to flickr_streams_path
     end
 
     it "should redirect to the hidden treasure if the hidden_treaure is in parameter" do

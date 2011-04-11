@@ -122,6 +122,12 @@ describe FlickrStream do
 
       end
 
+      it "should not return the stream without any unviewed picture" do
+        stream = Factory(:fave_stream)
+        Factory(:picture).synced_by(stream).get_viewed
+        FlickrStream.least_viewed.should be_nil
+      end
+
     end
   end
 

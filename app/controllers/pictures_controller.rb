@@ -57,9 +57,21 @@ class PicturesController < ApplicationController
     pic.get_viewed
 
     hidden_treasure = params[:hidden_treasure].present?
-    next_pic = hidden_treasure ? pic.guess_hidden_treasure : pic.next_new_pictures(1).first
-    path = next_pic ? picture_path(id: next_pic.id, hidden_treasure: params[:hidden_treasure]) : slide_show_pictures_path
-    redirect_to( path, notice: hidden_treasure && !next_pic ? "No hidden treasure found back to normal mode" : "" )
+    if(hidden_treasure)
+      next_pic = pic.guess_hidden_treasure
+      if next_pic
+        redirect_to picture_path(id: next_pic.id, hidden_treasure: params[:hidden_treasure])
+      else
+        redirect_to(slide_show_pictures_path, notice: "No hidden treasure found back to normal mode")
+      end
+    else
+      next_pic = pic.next_new_pictures(1).first
+      if next_pic
+        redirect_to picture_path(id: next_pic.id)
+      else
+        redirect_to flickr_streams_path, notice: "No new photos"
+      end
+    end
   end
 
   #GET /pictures
