@@ -77,13 +77,6 @@ class FlickrStream < ActiveRecord::Base
 
     private
     def get_least_viewed
-      <<-SQL
-      SELECT  monthly_scores.flickr_stream_id, sum(monthly_scores.num_of_pics) as pics_viewed FROM `monthly_scores`
-      WHERE ( exists ( SELECT * FROM pictures INNER JOIN syncages ON pictures.id = syncages.picture_id WHERE syncages.flickr_stream_id = monthly_scores.flickr_stream_id and pictures.viewed = 'f' )
-            ) GROUP BY monthly_scores.flickr_stream_id ORDER BY pics_viewed ASC LIMIT 1;
-
-      SQL
-
       result = MonthlyScore.select('monthly_scores.flickr_stream_id, sum(num_of_pics) as pics_viewed').
               where(%{ exists ( SELECT * FROM pictures INNER JOIN syncages ON pictures.id = syncages.picture_id WHERE syncages.flickr_stream_id = monthly_scores.flickr_stream_id and pictures.viewed = 'f' ) }).
               group('monthly_scores.flickr_stream_id').
