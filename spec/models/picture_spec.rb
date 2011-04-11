@@ -86,16 +86,6 @@ describe Picture do
   end
 
   describe "#synced_by" do
-    it "should return true if the photo is newly synced" do
-      picture = Factory(:picture)
-      picture.synced_by(Factory(:fave_stream)).should be_true
-    end
-    it "should return false if the photo is already synced but synced again" do
-      picture = Factory(:picture)
-      stream = Factory(:fave_stream)
-      picture.synced_by(stream)
-      picture.synced_by(stream).should be_false
-    end
     it "should add the stream's ratings to the stream_rating if it not synced with the stream before" do
       picture = Factory(:picture)
       stream = Factory(:fave_stream)
@@ -182,7 +172,10 @@ describe Picture do
 
       pic = Factory(:picture)
       pic.synced_by(stream)
-      Factory(:picture, viewed: true).synced_by(stream)
+      pic2 = Factory(:picture)
+      pic2.synced_by(stream)
+      pic2.get_viewed
+
 
       Factory(:picture).guess_hidden_treasure.id.should == pic.id
     end

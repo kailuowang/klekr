@@ -54,16 +54,10 @@ class FlickrStream < ActiveRecord::Base
 
     def least_viewed
       unviewed || get_least_viewed
-
     end
 
     def unviewed
-      joins(:pictures).where(pictures: {viewed: false}).limit(1)[0]
-    end
-
-    def get_least_viewed
-      ids = Syncage.select( 'flickr_stream_id, count(picture_id) as viewed_pic ').joins(:picture).where(pictures: {viewed: true}).group(:flickr_stream_id).order('viewed_pic DESC')
-      FlickrStream.find(ids[0].flickr_stream_id)
+      where("not exists (select * from monthly_scores where flickr_stream_id = flickr_streams.id) and exists (select * from syncages where flickr_stream_id = flickr_streams.id)").limit(1)[0]
     end
 
     protected
@@ -80,8 +74,13 @@ class FlickrStream < ActiveRecord::Base
         end
       end
     end
-  end
 
+    private
+    def get_least_viewed
+      result = MonthlyScore.select( 'flickr_stream_id, sum(num_of_pics) as pics_viewed').group(:flickr_stream_id).order('pics_viewed ASC').limit(1)[0]
+      FlickrStream.find(result.flickr_stream_id)
+    end
+  end
 
   def sync(up_to = last_sync || 1.month.ago, max_num = nil)
     photos_synced = 0

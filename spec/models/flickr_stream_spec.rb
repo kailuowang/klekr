@@ -56,23 +56,43 @@ describe FlickrStream do
       end
     end
 
+
+    describe "#unviewed" do
+      it "should return the stream which is not viewed at all" do
+        stream = Factory(:fave_stream)
+        Factory(:picture).synced_by(stream)
+        FlickrStream.unviewed.should == stream
+      end
+
+      it "should not return the stream which is viewed once" do
+        stream = Factory(:fave_stream)
+        Factory(:picture).synced_by(stream)
+        Factory(:picture).synced_by(stream).get_viewed
+        FlickrStream.unviewed.should be_nil
+      end
+
+      it "should not return stream with no pictures at all" do
+        Factory(:fave_stream)
+        FlickrStream.unviewed.should be_nil
+      end
+    end
+
     describe "#least_viewed" do
       it "should return the stream which is not viewed at all" do
         stream = Factory(:fave_stream)
         stream2 = Factory(:fave_stream)
-        Factory(:picture, viewed: false).synced_by(stream)
-        Factory(:picture, viewed: true).synced_by(stream2)
+        Factory(:picture).synced_by(stream)
+        Factory(:picture).synced_by(stream2).get_viewed
         FlickrStream.least_viewed.should == stream
-
       end
 
       it "should return the stream which is viewed less than other stream" do
         stream = Factory(:fave_stream)
         stream2 = Factory(:fave_stream)
-        Factory(:picture, viewed: false).synced_by(stream)
-        Factory(:picture, viewed: true).synced_by(stream)
-        Factory(:picture, viewed: true).synced_by(stream2)
-        Factory(:picture, viewed: true).synced_by(stream2)
+        Factory(:picture).synced_by(stream)
+        Factory(:picture).synced_by(stream).get_viewed
+        Factory(:picture).synced_by(stream2).get_viewed
+        Factory(:picture).synced_by(stream2).get_viewed
         FlickrStream.least_viewed.should == stream
       end
 
@@ -80,19 +100,13 @@ describe FlickrStream do
         stream = Factory(:fave_stream)
         stream2 = Factory(:fave_stream)
 
-        pic1a = Factory(:picture, viewed: true)
-        pic1b = Factory(:picture, viewed: false)
-        pic1c = Factory(:picture, viewed: false)
-        pic2a = Factory(:picture, viewed: true)
-        pic2b = Factory(:picture, viewed: true)
-        pic2c = Factory(:picture, viewed: false)
-
-        pic1a.synced_by(stream)
-        pic1b.synced_by(stream)
-        pic1c.synced_by(stream)
-        pic2a.synced_by(stream2)
-        pic2b.synced_by(stream2)
-        pic2c.synced_by(stream2)
+        Factory(:picture).synced_by(stream).get_viewed
+        pic1b = Factory(:picture).synced_by(stream)
+        pic1c = Factory(:picture).synced_by(stream)
+        Factory(:picture).synced_by(stream)
+        Factory(:picture).synced_by(stream2).get_viewed
+        Factory(:picture).synced_by(stream2).get_viewed
+        Factory(:picture).synced_by(stream2)
 
         FlickrStream.least_viewed.should == stream
 
@@ -301,6 +315,7 @@ describe FlickrStream do
       end
 
     end
+
   end
 
   describe FaveStream do

@@ -22,12 +22,12 @@ class Picture < ActiveRecord::Base
     picture
   end
 
-
-
   def self.create_from_sync(pic_info, stream)
     picture = Picture.find_or_initialize_from_pic_info(pic_info)
     picture.save!
-    picture.synced_by(stream)
+    synced =  Syncage.where(flickr_stream_id: stream.id, picture_id: picture.id).present?
+    picture.synced_by(stream) unless synced
+    !synced
   end
 
   def self.reset_stream_ratings
@@ -44,16 +44,13 @@ class Picture < ActiveRecord::Base
       update_attribute(:viewed, true)
       flickr_streams.each(&:picture_viewed)
     end
+    self
   end
 
   def synced_by(stream)
-    synced =  syncages.find( :first, conditions: { flickr_stream_id: stream.id } ).present?
-    unless synced
-      syncages.create( flickr_stream_id: stream.id )
-      update_attribute( :stream_rating, stream.star_rating + (stream_rating || 0 ) )
-    end
-
-    !synced
+    syncages.create( flickr_stream_id: stream.id )
+    update_attribute( :stream_rating, stream.star_rating + (stream_rating || 0 ) )
+    self
   end
 
   def next_new_pictures(n)
