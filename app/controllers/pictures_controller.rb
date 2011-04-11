@@ -56,9 +56,10 @@ class PicturesController < ApplicationController
     pic = Picture.find(params[:id])
     pic.get_viewed
 
-    next_pic = params[:hidden_treasure].present? ? pic.guess_hidden_treasure : pic.next_new_pictures(1).first
+    hidden_treasure = params[:hidden_treasure].present?
+    next_pic = hidden_treasure ? pic.guess_hidden_treasure : pic.next_new_pictures(1).first
     path = next_pic ? picture_path(id: next_pic.id, hidden_treasure: params[:hidden_treasure]) : slide_show_pictures_path
-    redirect_to( path )
+    redirect_to( path, notice: hidden_treasure && !next_pic ? "No hidden treasure found back to normal mode" : "" )
   end
 
   #GET /pictures

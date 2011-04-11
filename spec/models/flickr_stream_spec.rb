@@ -75,6 +75,11 @@ describe FlickrStream do
         Factory(:fave_stream)
         FlickrStream.unviewed.should be_nil
       end
+
+      it "should not return stream with no pictures at all" do
+        Factory(:fave_stream)
+        FlickrStream.unviewed.should be_nil
+      end
     end
 
     describe "#least_viewed" do
