@@ -10,7 +10,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110409145418) do
+ActiveRecord::Schema.define(:version => 20110413020417) do
+
+  create_table "collectors", :force => true do |t|
+    t.string   "user_id"
+    t.string   "auth_token"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -35,7 +42,10 @@ ActiveRecord::Schema.define(:version => 20110409145418) do
     t.string   "type"
     t.string   "username"
     t.string   "user_url"
+    t.integer  "collector_id"
   end
+
+  add_index "flickr_streams", ["collector_id"], :name => "index_flickr_streams_on_collector_id"
 
   create_table "monthly_scores", :force => true do |t|
     t.integer  "month"
@@ -59,8 +69,10 @@ ActiveRecord::Schema.define(:version => 20110409145418) do
     t.string   "owner_name"
     t.float    "stream_rating"
     t.integer  "rating",        :default => 0
+    t.integer  "collector_id"
   end
 
+  add_index "pictures", ["collector_id"], :name => "index_pictures_on_collector_id"
   add_index "pictures", ["date_upload"], :name => "index_pictures_on_date_upload"
   add_index "pictures", ["url"], :name => "index_pictures_on_url"
 

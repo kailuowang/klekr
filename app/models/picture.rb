@@ -3,31 +3,36 @@ class Picture < ActiveRecord::Base
   scope :asc, order('stream_rating ASC, date_upload ASC')
   scope :after, lambda {|pic| where('date_upload > ?', pic.date_upload)}
   scope :before, lambda {|pic| where('date_upload < ?', pic.date_upload)}
+  scope :new_pictures, lambda {|n| desc.unviewed.limit(n)}
+  scope :collected_by, lambda {|collector| where(collector_id: collector) if collector }
   scope :unviewed, where(viewed: false)
   scope :from, lambda {|stream| joins(:syncages).where(syncages: { flickr_stream_id: stream.id }) }
   serialize :pic_info_dump
   has_many :syncages
   has_many :flickr_streams, through: :syncages
+  belongs_to :collector
 
 
-
-  def self.find_or_initialize_from_pic_info(pic_info)
+  def self.find_or_initialize_from_pic_info(pic_info, collector = nil)
     url = FlickRaw.url_photopage(pic_info)
-    picture =  Picture.find_by_url(url) || Picture.new
+    picture = Picture.collected_by(collector).where(url: url).first
+
+    picture ||=  Picture.new
     picture.url = url
     picture.title = pic_info.title
     picture.date_upload = Time.at(pic_info.dateupload.to_i).to_datetime
     picture.owner_name = pic_info.ownername
     picture.pic_info_dump = pic_info.marshal_dump
+    picture.collector = collector
     picture
   end
 
   def self.create_from_sync(pic_info, stream)
-    picture = Picture.find_or_initialize_from_pic_info(pic_info)
+    picture = Picture.find_or_initialize_from_pic_info(pic_info, stream.collector)
     picture.save!
     synced =  Syncage.where(flickr_stream_id: stream.id, picture_id: picture.id).present?
     picture.synced_by(stream) unless synced
-    !synced
+    return picture, !synced
   end
 
   def self.reset_stream_ratings
@@ -54,7 +59,9 @@ class Picture < ActiveRecord::Base
   end
 
   def next_new_pictures(n)
-    Picture.desc.unviewed.limit(n) - [self]
+    scope = Picture.new_pictures(n)
+    scope = scope.where(collector_id: collector) if collector
+    scope - [self]
   end
 
   def next

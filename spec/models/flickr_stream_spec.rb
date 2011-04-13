@@ -128,6 +128,21 @@ describe FlickrStream do
         FlickrStream.least_viewed.should be_nil
       end
 
+      it "should not return viewed stream of a collector different from the one passed in" do
+        stream = Factory(:fave_stream, collector: Factory(:collector))
+        Factory(:picture).synced_by(stream)
+        Factory(:picture).synced_by(stream).get_viewed
+
+        FlickrStream.least_viewed(Factory(:collector)).should be_nil
+      end
+
+      it "should not return unviewed stream of a collector different from the one passed in" do
+        stream = Factory(:fave_stream, collector: Factory(:collector))
+        Factory(:picture).synced_by(stream)
+
+        FlickrStream.least_viewed(Factory(:collector)).should be_nil
+      end
+
     end
   end
 
@@ -198,7 +213,6 @@ describe FlickrStream do
         Syncage.count.should == 1
       end
 
-
       it "should create one picture with multiple linked flickr_streams if the picture get synced by muitiple flickr_stream" do
         a_pic_info = Factory.next(:pic_info)
         @flickr_module.should_receive(@flickr_method).and_return([a_pic_info])
@@ -222,6 +236,18 @@ describe FlickrStream do
         @flickr_module.should_receive(@flickr_method).with(hash_including(@related_date_field => 1.month.ago.to_i)).and_return([])
         @flickr_stream.sync
       end
+
+      it "should add the picture synced to the collector this stream belongs to" do
+        a_pic_info =  Factory.next(:pic_info)
+        @flickr_module.should_receive(@flickr_method).and_return([a_pic_info])
+        collector = Factory(:collector)
+        collector.flickr_streams << @flickr_stream
+        @flickr_stream.sync
+
+        collector.pictures.size.should == 1
+      end
+
+
 
     end
 
@@ -339,6 +365,27 @@ describe FlickrStream do
 
     it_should_behave_like 'All FlickrStreams'
 
+  end
+
+  describe "FaveStream#Sync" do
+     it "should create a new picture if the pic from flickr is already synced by a stream of another collector" do
+        a_pic_info =  Factory.next(:pic_info)
+
+        stream1 = Factory(:fave_stream, collector: Factory(:collector))
+        stream1.stub(:get_pic_up_to).and_return([a_pic_info])
+        stream1.sync
+        Picture.count.should == 1
+
+        collector = Factory(:collector)
+        stream2 = Factory(:fave_stream, collector: collector)
+        stream2.stub(:get_pic_up_to).and_return([a_pic_info])
+
+        stream2.sync
+
+        Picture.count.should == 2
+        collector.reload.pictures.size.should == 1
+
+      end
   end
 
   describe UploadStream do

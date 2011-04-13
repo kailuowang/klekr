@@ -15,11 +15,18 @@ describe Picture do
 
       end
 
-      it "should not create duplicate picture" do
+      it "should not create duplicate picture for the same collector" do
+        collector = Factory(:collector)
         pic_info = Factory.next(:pic_info)
-        pic = Picture.find_or_initialize_from_pic_info(pic_info)
+        pic = Picture.find_or_initialize_from_pic_info(pic_info, collector)
         pic.save!
-        Picture.find_or_initialize_from_pic_info(pic_info).should == pic
+        Picture.find_or_initialize_from_pic_info(pic_info, collector).should == pic
+      end
+      it "should create duplicate picture for different collectors" do
+        pic_info = Factory.next(:pic_info)
+        pic = Picture.find_or_initialize_from_pic_info(pic_info, Factory(:collector))
+        pic.save!
+        Picture.find_or_initialize_from_pic_info(pic_info, Factory(:collector)).should_not == pic
       end
     end
 
@@ -44,6 +51,18 @@ describe Picture do
         stream = Factory(:fave_stream)
         picture.synced_by(stream)
         Picture.from(stream).map(&:id).should == [picture.id]
+      end
+    end
+
+    describe "#collected_by" do
+      it "should return pictures collected by the collector" do
+        collector = Factory(:collector)
+        pic = Factory(:picture, collector: collector)
+        Picture.collected_by(collector).should == [pic]
+      end
+      it "should not return pictures collected by the collector" do
+        Factory(:picture, collector: Factory(:collector))
+        Picture.collected_by(Factory(:collector)).should be_empty
       end
     end
   end
@@ -147,6 +166,17 @@ describe Picture do
 
     it "should not include the picture itself" do
       Factory(:picture).next_new_pictures(1).should be_empty
+    end
+
+    it "should return pictures by the collector" do
+      collector = Factory(:collector)
+      pic = Factory(:picture, :collector => collector)
+      Factory(:picture, :collector => collector).next_new_pictures(1).should == [pic]
+    end
+
+    it "should not return pictures by a different collector" do
+      Factory(:picture)
+      Factory(:picture, collector: Factory(:collector)).next_new_pictures(1).should be_empty
     end
   end
 

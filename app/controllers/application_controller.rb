@@ -20,4 +20,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def current_collector
+
+  end
 end

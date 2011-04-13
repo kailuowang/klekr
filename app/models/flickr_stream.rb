@@ -5,7 +5,7 @@ class FlickrStream < ActiveRecord::Base
 
   validates_uniqueness_of :user_id, :scope => :type
   validates_presence_of :user_id
-
+  belongs_to :collector
   has_many :syncages
   has_many :pictures, through: :syncages
   has_many :monthly_scores, order: 'year desc, month desc'
@@ -52,12 +52,14 @@ class FlickrStream < ActiveRecord::Base
       count
     end
 
-    def least_viewed
-      unviewed || get_least_viewed
+    def least_viewed(collector = nil)
+      unviewed(collector) || get_least_viewed(collector)
     end
 
-    def unviewed
-      where("not exists (select * from monthly_scores where flickr_stream_id = flickr_streams.id) and exists (select * from syncages where flickr_stream_id = flickr_streams.id)").limit(1)[0]
+    def unviewed(collector = nil)
+      scope = where("not exists (select * from monthly_scores where flickr_stream_id = flickr_streams.id) and exists (select * from syncages where flickr_stream_id = flickr_streams.id)").limit(1)
+      scope = scope.where(collector_id: collector) if collector
+      scope[0]
     end
 
     protected
@@ -76,12 +78,14 @@ class FlickrStream < ActiveRecord::Base
     end
 
     private
-    def get_least_viewed
-      result = MonthlyScore.select('monthly_scores.flickr_stream_id, sum(num_of_pics) as pics_viewed').
+    def get_least_viewed(collector)
+      scope = MonthlyScore.select('monthly_scores.flickr_stream_id, sum(num_of_pics) as pics_viewed').
               where(%{ exists ( SELECT * FROM pictures INNER JOIN syncages ON pictures.id = syncages.picture_id WHERE syncages.flickr_stream_id = monthly_scores.flickr_stream_id and pictures.viewed = 'f' ) }).
               group('monthly_scores.flickr_stream_id').
               order('pics_viewed ASC').
-              limit(1)[0]
+              limit(1)
+      scope = scope.joins(:flickr_stream).where(flickr_streams: {collector_id: collector}) if collector
+      result = scope[0]
       return nil unless result
       FlickrStream.find(result.flickr_stream_id)
     end
@@ -90,8 +94,10 @@ class FlickrStream < ActiveRecord::Base
   def sync(up_to = last_sync || 1.month.ago, max_num = nil)
     photos_synced = 0
     get_pic_up_to(up_to, max_num).each do |pic_info|
-      newly_synced = Picture.create_from_sync(pic_info, self)
-      photos_synced += 1 if newly_synced
+      _, newly_synced = Picture.create_from_sync(pic_info, self)
+      if newly_synced
+        photos_synced += 1
+      end
     end
     update_attribute(:last_sync, DateTime.now)
     photos_synced

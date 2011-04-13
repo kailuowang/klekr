@@ -23,7 +23,7 @@ class UsersController < ApplicationController
 
   def subscribe
     respond_to do |format|
-      stream = FlickrStream.build(user_id: params[:id], 'type' => params[:type])
+      stream = FlickrStream.build(user_id: params[:id], collector: current_collector, 'type' => params[:type])
       stream.save
       format.html { redirect_to(user_path(id: params[:id]),
                                 :notice => "Starting to collect #{stream.username}'s #{stream.type}" ) }
