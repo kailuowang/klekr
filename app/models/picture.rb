@@ -59,9 +59,7 @@ class Picture < ActiveRecord::Base
   end
 
   def next_new_pictures(n)
-    scope = Picture.new_pictures(n)
-    scope = scope.where(collector_id: collector) if collector
-    scope - [self]
+    Picture.new_pictures(n).collected_by(collector) - [self]
   end
 
   def next

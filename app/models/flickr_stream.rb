@@ -6,6 +6,7 @@ class FlickrStream < ActiveRecord::Base
   validates_uniqueness_of :user_id, :scope => :type
   validates_presence_of :user_id
   belongs_to :collector
+  scope :collected_by, lambda {|collector| where(collector_id: collector) if collector }
   has_many :syncages
   has_many :pictures, through: :syncages
   has_many :monthly_scores, order: 'year desc, month desc'
@@ -57,9 +58,7 @@ class FlickrStream < ActiveRecord::Base
     end
 
     def unviewed(collector = nil)
-      scope = where("not exists (select * from monthly_scores where flickr_stream_id = flickr_streams.id) and exists (select * from syncages where flickr_stream_id = flickr_streams.id)").limit(1)
-      scope = scope.where(collector_id: collector) if collector
-      scope[0]
+      collected_by(collector).where("not exists (select * from monthly_scores where flickr_stream_id = flickr_streams.id) and exists (select * from syncages where flickr_stream_id = flickr_streams.id)").limit(1)[0]
     end
 
     protected
