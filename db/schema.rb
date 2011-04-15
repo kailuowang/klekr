@@ -14,10 +14,14 @@ ActiveRecord::Schema.define(:version => 20110413020417) do
 
   create_table "collectors", :force => true do |t|
     t.string   "user_id"
+    t.string   "user_name"
+    t.string   "full_name"
     t.string   "auth_token"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "collectors", ["user_id"], :name => "index_collectors_on_user_id", :unique => true
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0

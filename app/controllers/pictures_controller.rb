@@ -7,8 +7,8 @@ class PicturesController < ApplicationController
   def show
     @picture = Picture.find(params[:id])
     @default_pic_url = window_size == :large ? @picture.large_url : @picture.medium_url
-    preload_pics_according_to_window_size
     @hidden_treasure = params[:hidden_treasure].present?
+    preload_pics_according_to_window_size unless @hidden_treasure
     respond_to do |format|
       format.html # show.html.haml
       format.xml  { render :xml => @picture }

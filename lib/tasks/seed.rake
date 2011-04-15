@@ -18,6 +18,16 @@ namespace :seed do
     end
   end
 
+  task :dev_collector => :environment do
+    return if Collector.find_by_user_id(Collectr::FLICKR_USER_ID)
+    collector = Collector.create(user_id:    Collectr::FLICKR_USER_ID,
+                                 user_name: Collectr::FLICKR_AUTH.user.username,
+                                 full_name: Collectr::FLICKR_AUTH.user.fullname,
+                                 auth_token: Collectr::FLICKR_AUTH.token)
+    Picture.update_all("collector_id = #{collector.id}", :collector_id => nil)
+    FlickrStream.update_all("collector_id = #{collector.id}", :collector_id => nil)
+  end
+
   def seed_stream(type)
     info = File.read("data/#{type}.xml")
     user_ids = info.scan(/=\d+@N\d\d/).map{|s|s.gsub(/=/,'')}.uniq
@@ -28,4 +38,5 @@ namespace :seed do
     end
 
   end
+
 end

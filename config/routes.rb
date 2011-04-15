@@ -1,8 +1,8 @@
 Collectr::Application.routes.draw do
 
-  resource :authentications, :only => [:show] do
+  resource :authentications, :only => [] do
     member do
-      post 'login'
+      get 'validate'
     end
   end
 

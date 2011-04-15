@@ -1,17 +1,11 @@
 class AuthenticationsController < ApplicationController
-  #POST
-  def login
-    if(params[:password] == 'alf')
-      session[:user] = 'alf'
-      redirect_to_stored
-    else
-      redirect_to authentications_path, notice: 'Incorrect Password!'
-    end
+
+  #GET validate
+  def validate
+    auth = flickr.auth.getToken(frob: params[:frob])
+    collector = ::Collector.find_or_create_by_auth(auth)
+    session[:collector_id] = collector.id
+    redirect_to_stored
   end
-
-  def show
-
-  end
-
 
 end

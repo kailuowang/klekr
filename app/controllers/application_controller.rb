@@ -3,17 +3,16 @@ class ApplicationController < ActionController::Base
 
   def login_required
     return true unless Settings.authentication
-    return true if session[:user]
-
-    flash[:warning]='Please login to continue'
+    return true if session[:collector_id]
     session[:return_to]= request.path
-    redirect_to authentications_path
+
+    redirect_to FlickRaw.auth_url :perms => 'write'
     false
   end
 
-   def redirect_to_stored
+  def redirect_to_stored
     if return_to = session[:return_to]
-      session[:return_to]=nil
+      session[:return_to] = nil
       redirect_to(return_to)
     else
       redirect_to('/')
@@ -21,6 +20,10 @@ class ApplicationController < ActionController::Base
   end
 
   def current_collector
-
+    if Settings.authentication
+      Collector.find_by_id(session[:collector_id])
+    else
+      Collector.find_by_user_id(Collectr::FLICKR_USER_ID)
+    end
   end
 end
