@@ -20,10 +20,11 @@ class ApplicationController < ActionController::Base
   end
 
   def current_collector
-    if Settings.authentication
-      Collector.find_by_id(session[:collector_id])
-    else
-      Collector.find_by_user_id(Collectr::FLICKR_USER_ID)
-    end
+    Thread.current[:current_collector] ||=
+      if session[:collector_id]
+        ::Collector.find_by_id(session[:collector_id])
+      elsif !Settings.authentication
+        ::Collecgitor.find_by_user_id(Collectr::FLICKR_USER_ID)
+      end
   end
 end
