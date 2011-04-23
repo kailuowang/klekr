@@ -2,8 +2,16 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   def login_required
-    return true unless Settings.authentication
-    return true if session[:collector_id]
+
+    unless Settings.authentication
+      current_collector = ::Collector.find_by_user_id(Collectr::FLICKR_USER_ID)
+      return true
+    end
+
+    if session[:collector_id]
+      current_collector = ::Collector.find_by_id(session[:collector_id])
+    end
+
     session[:return_to]= request.path
 
     redirect_to FlickRaw.auth_url :perms => 'write'
@@ -20,11 +28,11 @@ class ApplicationController < ActionController::Base
   end
 
   def current_collector
-    Thread.current[:current_collector] ||=
-      if session[:collector_id]
-        ::Collector.find_by_id(session[:collector_id])
-      elsif !Settings.authentication
-        ::Collecgitor.find_by_user_id(Collectr::FLICKR_USER_ID)
-      end
+    Thread.current[:current_collector]
+  end
+
+  def current_collector= collector
+    session[:collector_id] = collector.try(:id)
+    Thread.current[:current_collector] = collector
   end
 end

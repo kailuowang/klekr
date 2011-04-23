@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  include Collectr::Flickr
 
   before_filter :login_required
 
