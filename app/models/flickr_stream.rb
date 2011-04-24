@@ -5,7 +5,7 @@ class FlickrStream < ActiveRecord::Base
   TYPES = ['FaveStream', 'UploadStream']
   PER_PAGE = 20
 
-  validates_uniqueness_of :user_id, :scope => :type
+  validates_uniqueness_of :user_id, :scope => [:collector_id, :type]
   validates_presence_of :user_id
   belongs_to :collector
   scope :collected_by, lambda {|collector| where(collector_id: collector) if collector }
@@ -40,15 +40,16 @@ class FlickrStream < ActiveRecord::Base
       flickr(collector).people.getInfo(user_id: user_id)
     end
 
-    def sync_all
-      all.inject(0) {|total_synced, stream| total_synced + stream.sync }
+    def sync_all(collector = nil)
+      streams_to_sync = collector ? collected_by(collector) : all
+      streams_to_sync.inject(0) {|total_synced, stream| total_synced + stream.sync }
     end
 
-    def import(data)
+    def import(data, collector)
       count = 0
       data.map(&:to_options).each do |entry|
-        unless where(user_id: entry[:user_id], type: entry[:type]).count > 0
-          build(entry).save!
+        unless where(user_id: entry[:user_id], type: entry[:type], collector_id: collector.id).count > 0
+          build(entry.merge(collector_id: collector.id)).save!
           count += 1
         end
       end
@@ -166,16 +167,27 @@ class FlickrStream < ActiveRecord::Base
   private
 
   def calculate_rating
-    return 0 if monthly_scores.blank?
-    total_weighted_monthly_rating = monthly_scores.inject(0) { |wr, ms| wr + ms.weighted_rating }
 
-    total_weight = monthly_scores.inject(0) { |w, ms| w + ms.weight }
+    return 0 if monthly_scores.blank?
+
+    total_weighted_monthly_rating = 0
+
+    monthly_scores.all.each { |ms|
+      total_weighted_monthly_rating += ms.weighted_rating
+    }
+
+    total_weight = monthly_scores.all.inject(0) { |w, ms| w + ms.weight }
 
     total_weighted_monthly_rating / total_weight
   end
 
   def adjust_rating adjustment
-    monthly_scores[0..1].each(&adjustment)
+    old_rating = star_rating
+    score_for(Date.today)
+    while(star_rating == old_rating)
+      @rating = nil
+      monthly_scores.all.each(&adjustment)
+    end
   end
 
   def get_pic_up_to(up_to, max = 200, page = 1 )

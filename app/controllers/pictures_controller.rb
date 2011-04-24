@@ -41,7 +41,7 @@ class PicturesController < ApplicationController
 
   #GET /pictures/slide_show
   def slide_show
-    @picture = Picture.desc.find_by_viewed(false)
+    @picture = Picture.desc.collected_by(current_collector).unviewed.first
 
     if @picture
       redirect_to @picture

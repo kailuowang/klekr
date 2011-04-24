@@ -7,7 +7,7 @@ class Picture < ActiveRecord::Base
   scope :new_pictures, lambda {|n| desc.unviewed.limit(n)}
   scope :collected_by, lambda {|collector| where(collector_id: collector) if collector }
   scope :unviewed, where(viewed: false)
-  scope :from, lambda {|stream| joins(:syncages).where(syncages: { flickr_stream_id: stream.id }) }
+  scope :syned_from, lambda {|stream| joins(:syncages).where(syncages: { flickr_stream_id: stream.id }) }
   serialize :pic_info_dump
   has_many :syncages
   has_many :flickr_streams, through: :syncages
@@ -112,6 +112,6 @@ class Picture < ActiveRecord::Base
   end
 
   def guess_hidden_treasure
-    Picture.from(FlickrStream.least_viewed).desc.unviewed.limit(1)[0]
+    Picture.syned_from(FlickrStream.least_viewed).desc.unviewed.limit(1)[0]
   end
 end

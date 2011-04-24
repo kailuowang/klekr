@@ -35,5 +35,6 @@ class ApplicationController < ActionController::Base
   def current_collector= collector
     session[:collector_id] = collector.try(:id)
     Thread.current[:current_collector] = collector
+    @current_collector = collector
   end
 end

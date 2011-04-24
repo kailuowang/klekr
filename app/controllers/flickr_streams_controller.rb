@@ -5,8 +5,9 @@ class FlickrStreamsController < ApplicationController
   # GET /flickr_streams
   # GET /flickr_streams.xml
   def index
-    @flickr_streams = FlickrStream.paginate :page => params[:page], :order => 'created_at DESC'
-    @number_of_new_pics = Picture.unviewed.count
+    @flickr_streams = FlickrStream.paginate( :page => params[:page], :order => 'created_at DESC',
+                                             conditions: {collector_id: current_collector.id} )
+    @number_of_new_pics = Picture.unviewed.collected_by(current_collector).count
 
     respond_to do |format|
       format.html # index.html.haml
@@ -15,18 +16,6 @@ class FlickrStreamsController < ApplicationController
     end
   end
 
-
-
-  # GET /flickr_streams/new
-  # GET /flickr_streams/new.xml
-  def new
-    @flickr_stream = FlickrStream.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @flickr_stream }
-    end
-  end
 
   # GET /flickr_streams/1/edit
   def edit
@@ -55,7 +44,7 @@ class FlickrStreamsController < ApplicationController
 
   #POST /flickr_streams/import
   def import
-    num_of_imports = FlickrStream.import( YAML.load( params[:streams_yaml].read ))
+    num_of_imports = FlickrStream.import( YAML.load( params[:streams_yaml].read ), current_collector)
     respond_to do |format|
       format.html { redirect_to(flickr_streams_path, :notice => "#{num_of_imports} subscriptions have been imported") }
       format.xml  { head :ok }
@@ -65,43 +54,12 @@ class FlickrStreamsController < ApplicationController
   #Get /flickr_streams/sync_all
   def sync_all
     respond_to do |format|
-      FlickrStream.delay.sync_all
+      FlickrStream.delay.sync_all(current_collector)
       format.html { redirect_to(flickr_streams_path, :notice => "All collections are scheduled to be refreshed shortly") }
       format.xml  { head :ok }
     end
   end
 
-  # POST /flickr_streams
-  # POST /flickr_streams.xml
-  def create
-    @flickr_stream = FlickrStream.build(params[:flickr_stream])
-
-    respond_to do |format|
-      if @flickr_stream.save
-        format.html { redirect_to( flickr_streams_path, :notice => 'Fave stream was successfully created.') }
-        format.xml  { render :xml => @flickr_stream, :status => :created, :location => @flickr_stream }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @flickr_stream.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
-
-  # PUT /flickr_streams/1
-  # PUT /flickr_streams/1.xml
-  def update
-    @flickr_stream = FlickrStream.find(params[:id])
-
-    respond_to do |format|
-      if @flickr_stream.update_attributes(params[:flickr_stream])
-        format.html { redirect_to(flickr_streams_path, :notice => 'Fave stream was successfully updated.') }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @flickr_stream.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
 
   # DELETE /flickr_streams/1
   # DELETE /flickr_streams/1.xml

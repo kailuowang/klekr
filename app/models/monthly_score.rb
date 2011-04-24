@@ -29,12 +29,12 @@ class MonthlyScore < ActiveRecord::Base
 
   def bump
     ensure_num_of_pics
-    add(num_of_pics.to_f / 5)
+    add(num_of_pics.to_f / 25)
   end
 
   def trash
     ensure_num_of_pics
-    add( - num_of_pics.to_f / 5)
+    add( - num_of_pics.to_f / 25)
     update_attribute(:score, 0) if score < 0
   end
 

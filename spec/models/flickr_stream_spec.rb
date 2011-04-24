@@ -40,23 +40,48 @@ describe FlickrStream do
         FlickrStream.stub!(:all).and_return [stream1, stream2]
         FlickrStream.sync_all.should == 3
       end
+
+      it "should sync all streams fromt the collector if the collector is given" do
+        collector = Factory(:collector)
+        stream = Factory(:fave_stream, :user_id => Factory.next(:user_id), collector: collector)
+        stream.stub!(:sync).and_return 1
+        Factory(:fave_stream, :user_id => Factory.next(:user_id))
+        FlickrStream.should_receive(:collected_by).with(collector).and_return([stream])
+        FlickrStream.sync_all(collector)
+
+      end
     end
 
     describe "#import" do
       it "should import from the array of attributes hashes" do
         import_data = [{'user_id' => 'a_user_id', 'type' => 'FaveStream'}]
-        FlickrStream.import(import_data)
+        FlickrStream.import(import_data, Factory(:collector))
         stream = FlickrStream.all.first
         stream.class.should == FaveStream
         stream.user_id.should == 'a_user_id'
       end
 
-      it "should not reimport if the stream is already subscribed" do
-
-        stream_args = {'user_id' => 'a_user_id', 'type' => 'FaveStream'}
+      it "should not reimport if the stream is already subscribed by the same collector" do
+        collector = Factory(:collector)
+        stream_args = {'user_id' => 'a_user_id', 'type' => 'FaveStream', collector: collector}
         FlickrStream.build(stream_args).save!
-        FlickrStream.import( [stream_args])
+        FlickrStream.import( [stream_args], collector)
         FlickrStream.count.should == 1
+      end
+
+      it "should still import if the stream is subscribed by another collector" do
+        stream_args = {'user_id' => 'a_user_id', 'type' => 'FaveStream', collector: Factory(:collector)}
+        FlickrStream.build(stream_args).save!
+        FlickrStream.import( [stream_args], Factory(:collector))
+        FlickrStream.count.should == 2
+      end
+
+      it "should import the streams for the collector passed in" do
+        collector = Factory(:collector)
+        a_different_collector_id = collector.id + 1000
+        import_data = [{'collector_id' => a_different_collector_id, 'user_id' => 'a_user_id', 'type' => 'FaveStream'}]
+        FlickrStream.import(import_data, collector)
+        FlickrStream.first.collector.should == collector
       end
     end
 
@@ -326,9 +351,11 @@ describe FlickrStream do
 
     describe "#bump_rating" do
       it "should bump rating in the most recent two month with ratings" do
-        @flickr_stream.score_for(Date.today).should_receive(:bump)
-        @flickr_stream.score_for(1.month.ago).should_receive(:bump)
+        @flickr_stream.star_rating.should == 0
         @flickr_stream.bump_rating
+        @flickr_stream.star_rating.should == 1
+        @flickr_stream.bump_rating
+        @flickr_stream.star_rating.should == 2
       end
     end
 

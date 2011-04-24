@@ -25,29 +25,28 @@ describe MonthlyScore do
   end
 
   describe "#bump" do
-    it "should increase rating by 0.2 when there is num of pics" do
+    it "should increase rating when there is num of pics" do
       ms = Factory(:monthly_score)
       ms.add_num_of_pics(10)
       ms.bump
-      ms.rating.should == 0.2
+      ms.rating.should > 0
     end
 
-    it "should increase rating by 0.2 when there no num of pics" do
+    it "should increase rating when there no num of pics" do
       ms = Factory(:monthly_score)
       ms.bump
-      ms.rating.should == 0.2
+      ms.rating.should > 0
     end
   end
 
 
-
   describe "#trash" do
-    it "should decrease rating by 0.2 when there is num of pics" do
+    it "should decrease rating when there is num of pics" do
       ms = Factory(:monthly_score)
       ms.add_num_of_pics(10)
       ms.add(6)
       ms.trash
-      ms.rating.should == 0.4
+      ms.rating.should < 0.6
     end
 
     it "should not decrease rating to less than 0" do

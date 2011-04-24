@@ -44,13 +44,13 @@ describe Picture do
       end
     end
 
-    describe "#from" do
+    describe "#syned_from" do
       it "should return the list of pictures from that stream" do
         picture = Factory(:picture)
         Factory(:picture)
         stream = Factory(:fave_stream)
         picture.synced_by(stream)
-        Picture.from(stream).map(&:id).should == [picture.id]
+        Picture.syned_from(stream).map(&:id).should == [picture.id]
       end
     end
 
