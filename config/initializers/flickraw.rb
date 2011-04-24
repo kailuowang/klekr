@@ -4,9 +4,13 @@ module Collectr
 
   FlickRaw.api_key        = flickr_config['api_key']
   FlickRaw.shared_secret  = flickr_config['shared_secret']
+
   if(flickr_config['auth_token'].present?)
-    auth   = flickr.auth.checkToken :auth_token => flickr_config['auth_token']
-    FLICKR_AUTH = auth
-    FLICKR_USER_ID = auth.user.nsid
+    begin
+      flickr.auth.checkToken :auth_token => flickr_config['auth_token']
+    rescue
+      Rails.logger.error("failed to validate the auth token stored in the flickr.yml")
+    end
   end
+  FlickrUserId = flickr_config['user_id']
 end

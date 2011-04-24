@@ -16,7 +16,7 @@ describe AuthenticationsController do
         user_id = Factory.next(:user_id)
         auth = create_mock_auth(user_id)
 
-        flickr.auth.should_receive(:getToken).with(frob: 'a_fake_frob').and_return(auth)
+        stub_flickr(controller, :auth).should_receive(:getToken).with(frob: 'a_fake_frob').and_return(auth)
 
         get "validate", :frob => 'a_fake_frob'
         collector = Collector.find_by_user_id(user_id)
@@ -29,7 +29,7 @@ describe AuthenticationsController do
         user_id = Factory.next(:user_id)
         auth = create_mock_auth(user_id)
 
-        flickr.auth.should_receive(:getToken).with(frob: 'a_fake_frob').and_return(auth)
+        stub_flickr(controller, :auth).should_receive(:getToken).with(frob: 'a_fake_frob').and_return(auth)
 
         get "validate", :frob => 'a_fake_frob'
         session[:collector_id].should == Collector.find_by_user_id(user_id).id
@@ -39,7 +39,7 @@ describe AuthenticationsController do
         collector = Factory(:collector)
         auth = create_mock_auth(collector.user_id)
 
-        flickr.auth.should_receive(:getToken).with(frob: 'a_fake_frob').and_return(auth)
+        stub_flickr(controller, :auth).should_receive(:getToken).with(frob: 'a_fake_frob').and_return(auth)
 
         get "validate", :frob => 'a_fake_frob'
         session[:collector_id].should == collector.id
@@ -48,7 +48,7 @@ describe AuthenticationsController do
 
       it "should make sure the current collector get stored in Thread.current" do
         collector = Factory(:collector)
-        flickr.auth.stub!(:getToken).and_return(create_mock_auth(collector.user_id))
+        stub_flickr(controller, :auth).stub!(:getToken).and_return(create_mock_auth(collector.user_id))
 
         get "validate", :frob => 'a_fake_frob'
         Thread.current[:current_collector].should == collector

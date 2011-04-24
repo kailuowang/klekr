@@ -2,6 +2,7 @@ defaults: &defaults
   api_key: YOUR_API_KEY
   shared_secret: YOUR_SHARED_SECRET
   auth_token: #(set api_key and shared_secret first and use rake authenticate to get your auth token)
+  user_id: #set the user id with which the test is going to run
 
 development:
   <<: *defaults

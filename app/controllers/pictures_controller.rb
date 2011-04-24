@@ -1,7 +1,7 @@
 class PicturesController < ApplicationController
   include ApplicationHelper
 
-  before_filter :login_required
+  before_filter :authenticate
    # GET /pictures/1
   # GET /pictures/1.xml
   def show

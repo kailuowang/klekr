@@ -1,5 +1,6 @@
 class FaveStream < FlickrStream
-  sync_uses flickr.favorites, :getList, :min_fave_date
+  include Collectr::Flickr
+  sync_uses :favorites, :getList, :min_fave_date
 
   def stream_url
     user_url + "favorites/?view=md"

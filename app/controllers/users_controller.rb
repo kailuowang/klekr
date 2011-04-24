@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   include Collectr::Flickr
 
-  before_filter :login_required
+  before_filter :authenticate
 
   def show
     user_id = params[:id]
@@ -10,12 +10,12 @@ class UsersController < ApplicationController
     @fave_stream = FaveStream.find_by_user_id(@user.nsid)
     @upload_stream = UploadStream.find_by_user_id(@user.nsid)
 
-    @pictures = (@upload_stream || UploadStream.new(:user_id => user_id)).
+    @pictures = (@upload_stream || UploadStream.new(user_id: user_id, collector: current_collector)).
                   get_pictures_from_flickr(12).map do |pic_info|
       Picture.find_or_initialize_from_pic_info pic_info
     end
 
-    @faves = (@fave_stream || FaveStream.new(:user_id => user_id)).
+    @faves = (@fave_stream || FaveStream.new(user_id: user_id, collector: current_collector)).
                   get_pictures_from_flickr(12).map do |pic_info|
       Picture.find_or_initialize_from_pic_info pic_info
     end

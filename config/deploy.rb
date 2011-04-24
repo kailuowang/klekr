@@ -39,7 +39,7 @@ namespace :deploy do
 
     run_in_app "git checkout ."
     run_in_app "git pull"
-    run_in_app "bundle install"
+    run_in_app "bundle install --without=test"
 
     whenever.clear_crontab
     run_in_app "#{rails_env} script/delayed_job stop"

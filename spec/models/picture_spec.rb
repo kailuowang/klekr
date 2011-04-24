@@ -70,28 +70,29 @@ describe Picture do
   describe "#fave" do
     it "should add the picture to fave" do
       picture = Factory(:picture, date_upload: DateTime.new(2010, 1, 3))
-      flickr.favorites.should_receive(:add).with(photo_id: picture.pic_info.id)
+      stub_flickr(picture, :favorites).should_receive(:add).with(photo_id: picture.pic_info.id)
       picture.fave
     end
 
     it "should add score to the streams it comes from" do
       picture = Factory(:picture)
       picture.synced_by(Factory(:fave_stream))
-      flickr.favorites.stub!(:add)
+      stub_flickr(picture, :favorites).stub!(:add)
       picture.flickr_streams[0].should_receive(:add_score).with(picture.created_at, 0.3)
       picture.fave
     end
 
     it "should set rating to 1 when successfully added" do
       picture = Factory(:picture)
-      flickr.favorites.stub!(:add)
+      stub_flickr(picture, :favorites).stub!(:add)
       picture.fave
       picture.rating.should == 1
     end
 
     it "should only try fave it if its not faved already" do
-      flickr.favorites.should_not_receive(:add)
-      Factory(:picture, rating: 1).fave
+      picture = Factory(:picture, rating: 1)
+      stub_flickr(picture, :favorites).should_not_receive(:add)
+      picture.fave
     end
   end
 

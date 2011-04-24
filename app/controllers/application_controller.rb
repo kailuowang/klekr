@@ -1,15 +1,16 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
-  def login_required
+  def authenticate
 
     unless Settings.authentication
-      current_collector = ::Collector.find_by_user_id(Collectr::FLICKR_USER_ID)
+      self.current_collector = ::Collector.find_by_user_id(Collectr::FlickrUserId)
       return true
     end
 
     if session[:collector_id]
-      current_collector = ::Collector.find_by_id(session[:collector_id])
+      self.current_collector = ::Collector.find_by_id(session[:collector_id])
+      return true
     end
 
     session[:return_to]= request.path

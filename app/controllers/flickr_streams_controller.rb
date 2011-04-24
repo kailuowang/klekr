@@ -1,6 +1,6 @@
 class FlickrStreamsController < ApplicationController
 
-  before_filter :login_required
+  before_filter :authenticate
 
   # GET /flickr_streams
   # GET /flickr_streams.xml

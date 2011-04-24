@@ -1,4 +1,6 @@
 class FlickrStream < ActiveRecord::Base
+  include Collectr::Flickr
+  extend Collectr::Flickr
 
   TYPES = ['FaveStream', 'UploadStream']
   PER_PAGE = 20
@@ -18,7 +20,7 @@ class FlickrStream < ActiveRecord::Base
     def build(params)
       params = params.to_options
       unless params[:username] && params[:user_url]
-        user = get_user_from_flickr(params[:user_id])
+        user = get_user_from_flickr(params[:user_id], params[:collector])
         params[:username] = user.username
         params[:user_url] = user.photosurl
       end
@@ -34,8 +36,8 @@ class FlickrStream < ActiveRecord::Base
       super
     end
 
-    def get_user_from_flickr user_id
-      flickr.people.getInfo(user_id: user_id)
+    def get_user_from_flickr user_id, collector
+      flickr(collector).people.getInfo(user_id: user_id)
     end
 
     def sync_all
@@ -68,7 +70,7 @@ class FlickrStream < ActiveRecord::Base
         opts[related_time_field] = since.to_i if since
         opts[:page] = page_number if page_number > 1
         begin
-          flickr_module.send(get_photo_method, opts)
+          flickr.send(flickr_module).send(get_photo_method, opts)
         rescue FlickRaw::FailedResponse => e
           Rails.logger.error("failed sync photo from flickr" + e.code.to_s + "\n" + e.msg)
           []
@@ -89,6 +91,7 @@ class FlickrStream < ActiveRecord::Base
       FlickrStream.find(result.flickr_stream_id)
     end
   end
+
 
   def sync(up_to = last_sync || 1.month.ago, max_num = nil)
     photos_synced = 0
@@ -143,7 +146,7 @@ class FlickrStream < ActiveRecord::Base
   end
 
   def user
-    @user ||= FlickrStream.get_user_from_flickr(user_id)
+    @user ||= FlickrStream.get_user_from_flickr(user_id, collector)
   end
 
   def to_s
@@ -175,9 +178,11 @@ class FlickrStream < ActiveRecord::Base
     monthly_scores[0..1].each(&adjustment)
   end
 
-  def get_pic_up_to(up_to, max = nil, page = 1 )
+  def get_pic_up_to(up_to, max = 200, page = 1 )
     up_to = nil unless max.nil?
+
     result =  get_pictures_from_flickr(PER_PAGE, up_to, page).to_a
+
     retrieved_max_num_of_pics = max && PER_PAGE * page >= max
     unless(retrieved_max_num_of_pics || result.empty?)
       result += get_pic_up_to(up_to,  max, page + 1)

@@ -19,7 +19,8 @@ gem 'whenever', :require => false
 group :test, :development do
   gem 'sqlite3-ruby', :require => 'sqlite3'
   gem "rspec-rails", "~> 2.4"
-  gem 'factory_girl_rails'
+  gem 'factory_girl'
+  gem 'spork', '~> 0.9.0.rc3'
 end
 
 group :production do

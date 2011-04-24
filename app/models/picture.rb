@@ -1,4 +1,5 @@
 class Picture < ActiveRecord::Base
+  include Collectr::Flickr
   scope :desc, order('stream_rating DESC, date_upload DESC')
   scope :asc, order('stream_rating ASC, date_upload ASC')
   scope :after, lambda {|pic| where('date_upload > ?', pic.date_upload)}

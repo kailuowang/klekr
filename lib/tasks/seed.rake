@@ -19,11 +19,13 @@ namespace :seed do
   end
 
   task :dev_collector => :environment do
-    unless Collector.find_by_user_id(Collectr::FLICKR_USER_ID)
-      collector = Collector.create(user_id: Collectr::FLICKR_USER_ID,
-                                   user_name: Collectr::FLICKR_AUTH.user.username,
-                                   full_name: Collectr::FLICKR_AUTH.user.fullname,
-                                   auth_token: Collectr::FLICKR_AUTH.token)
+    user_id = flickr.test.login.user_id
+    unless Collector.find_by_user_id(user_id)
+      auth = flickr.auth
+      collector = Collector.create(user_id: user_id,
+                                   user_name: auth.user.username,
+                                   full_name: auth.user.fullname,
+                                   auth_token: auth.token)
       Picture.update_all("collector_id = #{collector.id}", :collector_id => nil)
       FlickrStream.update_all("collector_id = #{collector.id}", :collector_id => nil)
     end

@@ -1,7 +1,7 @@
 module Collectr::Flickr
-  @flickr
-  def flickr
-    current_collector = Thread.current[:current_collector]
-    @flickr ||= FlickRaw::Flickr.new(current_collector.auth_token)
+  def flickr(for_collector = nil)
+    for_collector ||= respond_to?(:collector) ? collector : Thread.current[:current_collector]
+
+    @flickr ||= FlickRaw::Flickr.new(for_collector.auth_token)
   end
 end

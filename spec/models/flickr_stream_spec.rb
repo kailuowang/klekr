@@ -4,11 +4,15 @@ require 'flickraw'
 describe FlickrStream do
 
   before do
-    @flickr_stream_init_args = {:user_id => 'a_user_id'}
-    flickr.people.stub!(:getInfo).and_return(mock(username: 'a_username', photosurl: 'http://flickr/a_usrname'))
+    @flickr_stream_init_args = {:user_id => 'a_user_id', collector: Factory(:collector)}
   end
 
   describe "class" do
+
+    before do
+      stub_flickr(FlickrStream, :people).stub!(:getInfo).and_return(mock(username: 'a_username', photosurl: 'http://flickr/a_usrname'))
+    end
+
     describe "#build" do
       it "should create a FaveStream when arg['type'] is 'fave' " do
         stream = FlickrStream.build(user_id: 'a_user_id', 'type' => 'FaveStream')
@@ -149,6 +153,7 @@ describe FlickrStream do
   shared_examples_for "All FlickrStreams" do
     describe "#sync" do
       before do
+        @flickr_module = stub_flickr(@flickr_stream, @flickr_module_name)
         @flickr_module.stub!(@flickr_method).and_return([])
       end
 
@@ -213,13 +218,18 @@ describe FlickrStream do
         Syncage.count.should == 1
       end
 
-      it "should create one picture with multiple linked flickr_streams if the picture get synced by muitiple flickr_stream" do
+      it "should create one picture with multiple linked flickr_streams if the picture get synced by muitiple flickr_streams(from the same collector)" do
         a_pic_info = Factory.next(:pic_info)
+        flickr_stream2 = @flickr_stream.class.create!(user_id: 'another_user', collector: @flickr_stream.collector)
+
         @flickr_module.should_receive(@flickr_method).and_return([a_pic_info])
-        flickr_stream2 = @flickr_stream.class.create!(user_id: 'another_user')
+        @flickr_module.should_receive(@flickr_method).and_return([])
+        flickr_module2 = stub_flickr(flickr_stream2, @flickr_module_name)
+        flickr_module2.should_receive(@flickr_method).and_return([a_pic_info])
+        flickr_module2.should_receive(@flickr_method).and_return([])
         @flickr_stream.sync
-        @flickr_module.should_receive(@flickr_method).and_return([a_pic_info])
         flickr_stream2.sync
+
         Picture.count.should == 1
         Picture.first.flickr_streams.should == [@flickr_stream, flickr_stream2]
       end
@@ -240,11 +250,10 @@ describe FlickrStream do
       it "should add the picture synced to the collector this stream belongs to" do
         a_pic_info =  Factory.next(:pic_info)
         @flickr_module.should_receive(@flickr_method).and_return([a_pic_info])
-        collector = Factory(:collector)
-        collector.flickr_streams << @flickr_stream
+
         @flickr_stream.sync
 
-        collector.pictures.size.should == 1
+        @flickr_stream.collector.pictures.size.should == 1
       end
 
 
@@ -353,12 +362,21 @@ describe FlickrStream do
 
     end
 
+    describe "#flickr" do
+      it "should be using the auth_token as the collector" do
+        collector = Factory(:collector, auth_token: 'a_token')
+        @flickr_stream.collector = collector
+        FlickRaw::Flickr.should_receive(:new).with('a_token').and_return(:a_fake_flickr)
+        @flickr_stream.flickr.should == :a_fake_flickr
+      end
+    end
+
   end
 
   describe FaveStream do
     before do
       @flickr_stream = FaveStream.create(@flickr_stream_init_args)
-      @flickr_module = flickr.favorites
+      @flickr_module_name = :favorites
       @flickr_method = :getList
       @related_date_field = :min_fave_date
     end
@@ -391,7 +409,7 @@ describe FlickrStream do
   describe UploadStream do
     before do
       @flickr_stream = UploadStream.create(@flickr_stream_init_args)
-      @flickr_module = flickr.people
+      @flickr_module_name = :people
       @flickr_method = :getPhotos
       @related_date_field = :min_upload_date
 

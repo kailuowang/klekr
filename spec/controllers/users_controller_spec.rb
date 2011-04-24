@@ -9,7 +9,7 @@ describe UsersController do
   describe "GET 'subscribe'" do
     it "should set the current collector as the stream's collector" do
       user_info = Factory.next(:user_info)
-      flickr.people.stub!(:getInfo).and_return(user_info)
+      stub_flickr(FlickrStream, :people).stub!(:getInfo).and_return(user_info)
       collector = Factory(:collector)
       controller.stub!(:current_collector).and_return(collector)
       get 'subscribe', id: 'a_user_id', type: 'FaveStream'
