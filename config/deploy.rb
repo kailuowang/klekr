@@ -32,11 +32,12 @@ namespace :deploy do
 end
 
 namespace :deploy do
-  task :simple, :roles => :app do
-    set :app_path, '/app/collectr'
-    set :current_path, app_path
-    set :release_path, app_path
+  set :app_path, '/app/collectr'
+  set :current_path, app_path
+  set :release_path, app_path
 
+
+  task :simple, :roles => :app do
     run_in_app "git checkout ."
     run_in_app "git pull"
     run_in_app "bundle install --without=test"
@@ -52,11 +53,11 @@ namespace :deploy do
   end
 
   task :post_deploy, :roles => :app do
-    rake ENV['POST_DEPLOY'] if ENV['POST_DEPLOY']
+    rake ENV['POST_DEPLOY'] if ENV['POST_DEPLOY'] && !ENV['POST_DEPLOY'].empty?
   end
 
   def rake task
-    run_in_app "#{rails_env} rake #{task}"
+    run_in_app "#{rails_env} rake #{task} --trace"
   end
 
   def run_in_app cmd
