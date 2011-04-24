@@ -1,4 +1,3 @@
-
 namespace :clean do
   desc "clean synced pictures"
   task :pictures => :environment do
@@ -26,6 +25,13 @@ namespace :clean do
   desc "re-calculate personal interestingness for all unviewed pictures"
   task :picture_ratings => :environment do
     Picture.reset_stream_ratings
+  end
+
+  desc "collector info"
+  task :collectors => :environment do
+    Picture.update_all("collector_id = NULL")
+    FlickrStream.update_all("collector_id = NULL")
+    Collector.delete_all
   end
 
 end
