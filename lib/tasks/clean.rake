@@ -23,7 +23,7 @@ namespace :clean do
     MonthlyScore.delete_all
   end
 
-  desc "reset stream_rating for all unviewed pictures"
+  desc "re-calculate personal interestingness for all unviewed pictures"
   task :picture_ratings => :environment do
     Picture.reset_stream_ratings
   end

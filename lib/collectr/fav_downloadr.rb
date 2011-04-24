@@ -9,7 +9,7 @@ module Collectr
       @logger = Rails.logger
     end
 
-    def download
+    def download_faves
       (0..70).each do |page|
         faves = flickr.favorites.getList(user_id: @user_id, per_page: 100, page: page, extras: 'url_o')
         @logger.info("downloading page ##{page}")

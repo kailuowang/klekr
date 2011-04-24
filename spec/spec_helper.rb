@@ -12,7 +12,7 @@ end
 Spork.each_run do
   # This code will be run each time you run your specs.
   Factory.definition_file_paths = [
-      File.join(Rails.root, 'spec', 'factories')
+    File.join(Rails.root, 'spec', 'factories')
   ]
   Factory.find_definitions
 

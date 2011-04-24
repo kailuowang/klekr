@@ -31,9 +31,9 @@ class Picture < ActiveRecord::Base
   def self.create_from_sync(pic_info, stream)
     picture = Picture.find_or_initialize_from_pic_info(pic_info, stream.collector)
     picture.save!
-    synced =  Syncage.where(flickr_stream_id: stream.id, picture_id: picture.id).present?
-    picture.synced_by(stream) unless synced
-    return picture, !synced
+    already_synced =  Syncage.where(flickr_stream_id: stream.id, picture_id: picture.id).present?
+    picture.synced_by(stream) unless already_synced
+    return picture, !already_synced
   end
 
   def self.reset_stream_ratings

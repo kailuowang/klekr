@@ -1,4 +1,4 @@
-desc "get authentication token"
+desc "get authentication token for development purpose"
 task :authenticate => :environment do
   require 'flickraw'
 
@@ -12,7 +12,7 @@ task :authenticate => :environment do
   begin
     auth = flickr.auth.getToken :frob => frob
     login = flickr.test.login
-    puts "You are now authenticated as #{login.username} with token #{auth.token}"
+    puts "You are now authenticated as #{login.username} with token '#{auth.token}', paste the token into your flickr.yml"
   rescue FlickRaw::FailedResponse => e
     puts "Authentication failed : #{e.msg}"
   end
