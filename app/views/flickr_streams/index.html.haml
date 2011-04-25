@@ -2,7 +2,8 @@
   #myCollections
 
     %h1
-      My Collections
+      = @current_collector.user_name
+      's Collections
       = link_to 'Show Pictures!', slide_show_pictures_path
 
     %p{:id => "notice"}
