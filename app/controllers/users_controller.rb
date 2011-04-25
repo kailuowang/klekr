@@ -7,18 +7,12 @@ class UsersController < ApplicationController
     user_id = params[:id]
     @user = flickr.people.getInfo(user_id: user_id)
 
-    @fave_stream = FaveStream.find_by_user_id(@user.nsid)
-    @upload_stream = UploadStream.find_by_user_id(@user.nsid)
+    @fave_stream = FaveStream.of_user(@user.nsid).collected_by(current_collector).first
+    @upload_stream = UploadStream.of_user(@user.nsid).collected_by(current_collector).first
 
-    @pictures = (@upload_stream || UploadStream.new(user_id: user_id, collector: current_collector)).
-                  get_pictures_from_flickr(12).map do |pic_info|
-      Picture.find_or_initialize_from_pic_info pic_info
-    end
+    @pictures = upload_pictures(user_id)
 
-    @faves = (@fave_stream || FaveStream.new(user_id: user_id, collector: current_collector)).
-                  get_pictures_from_flickr(12).map do |pic_info|
-      Picture.find_or_initialize_from_pic_info pic_info
-    end
+    @faves = fave_pictures(user_id)
 
   end
 
@@ -72,5 +66,20 @@ class UsersController < ApplicationController
   end
 
 
+  private
+
+  def upload_pictures(user_id)
+    get_pictures_from( @upload_stream || UploadStream.new(user_id: user_id, collector: current_collector))
+  end
+
+  def fave_pictures(user_id)
+    get_pictures_from(@fave_stream || FaveStream.new(user_id: user_id, collector: current_collector))
+  end
+
+  def get_pictures_from(stream)
+    stream.get_pictures_from_flickr(12).map do |pic_info|
+        Picture.find_or_initialize_from_pic_info pic_info
+      end
+  end
 
 end

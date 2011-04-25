@@ -9,6 +9,7 @@ class FlickrStream < ActiveRecord::Base
   validates_presence_of :user_id
   belongs_to :collector
   scope :collected_by, lambda {|collector| where(collector_id: collector) if collector }
+  scope :of_user, lambda {|user_id| where(user_id: user_id)}
   has_many :syncages
   has_many :pictures, through: :syncages
   has_many :monthly_scores, order: 'year desc, month desc'
