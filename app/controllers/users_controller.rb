@@ -78,7 +78,7 @@ class UsersController < ApplicationController
 
   def get_pictures_from(stream)
     stream.get_pictures_from_flickr(12).map do |pic_info|
-        Picture.find_or_initialize_from_pic_info pic_info
+        Picture.find_or_initialize_from_pic_info(pic_info, current_collector)
       end
   end
 
