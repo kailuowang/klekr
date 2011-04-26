@@ -428,7 +428,7 @@ input[type="file"]{
 }
 
 #windowSizeSetting {
-  margin: 10px;
+  margin-bottom: 10px;
 }
 
 .center{
@@ -464,4 +464,11 @@ table{
 
 #redirectAuthentication{
   padding-top: 50px
+}
+
+.block{
+  display: block;
+}
+.inline{
+  display: inline;
 }

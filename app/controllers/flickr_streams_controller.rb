@@ -12,7 +12,7 @@ class FlickrStreamsController < ApplicationController
     respond_to do |format|
       format.html # index.html.haml
       format.xml  { render :xml => @flickr_streams }
-      format.yaml  { render :text => @flickr_streams.map(&:attributes).to_yaml, :content_type => 'text/yaml' }
+      format.yaml  { render :text => FlickrStream.collected_by(current_collector).map(&:attributes).to_yaml, :content_type => 'text/yaml' }
     end
   end
 
