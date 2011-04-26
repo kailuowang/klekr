@@ -9,4 +9,9 @@ class AuthenticationsController < ApplicationController
     redirect_to_stored
   end
 
+  #Get
+  def show
+    @auth_url = FlickRaw.auth_url(perms: 'write')
+  end
+
 end

@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
 
     session[:return_to]= request.path
 
-    redirect_to FlickRaw.auth_url :perms => 'write'
+    redirect_to authentications_path
     false
   end
 

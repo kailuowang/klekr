@@ -1,7 +1,22 @@
-%p{:id => "notice"}
-  = notice
+- content_for(:head) do
+  %meta{ 'HTTP-EQUIV' => "REFRESH", :content => "5; url=#{@auth_url}"}
+  = javascript_include_tag 'authentication.js'
+.center
+  #redirectAuthentication
+    %h2
+      Welcome to Collectr!
+  #redirectAuthentication
+    %h3
+      Redirecting to flickr.com to login in
+      %span#countdown
+        5
+      secs.
+    %div{style: 'padding-top:5px'}
+      %h5{style:  'text-transform: none;'}
+        Click
+        = link_to 'here', @auth_url
+        if you are not redirected promptly
+  #redirectAuthentication
+    %h5
+      Collectr requires flickr.com login and permission to Fave pictures
 
-= form_tag login_authentications_path, method: :post do |f|
-  = label_tag :password, 'Enter Password'
-  = password_field_tag :password
-  = submit_tag "Login!"

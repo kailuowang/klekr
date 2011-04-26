@@ -1,6 +1,6 @@
 Collectr::Application.routes.draw do
 
-  resource :authentications, :only => [] do
+  resource :authentications, :only => [:show] do
     member do
       get 'validate'
     end
