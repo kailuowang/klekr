@@ -33,20 +33,22 @@
         - @picture.flickr_streams.each do |flickr_stream|
           = link_to "#{flickr_stream.username}'s #{flickr_stream.type_display}", user_path(flickr_stream.user_id)
           |
+
+      %h5.inline
         - if @hidden_treasure
           Discovering Hidden Treasures!
           (
           = link_to 'back to normal mode', slide_show_pictures_path
           )
         - else
-          %b Guess of Personal Interestingness:
-          = @picture.stream_rating.to_i
-      %h4
-        - unless @hidden_treasure
-          = link_to 'Discover Hidden Treasures',  next_picture_path(@picture, hidden_treasure: true)
-      #windowSizeSetting.inline
+          %b
+            Personal Interestingness:
+            = @picture.stream_rating.to_i
+
+      - unless @hidden_treasure
+        = link_to 'Discover Hidden Treasures',  next_picture_path(@picture, hidden_treasure: true)
+      #windowSizeSetting
         = render 'cookie_settings/form'
-      .inline
         Key shortcuts: "space" to the next picture, "f" to fave it.
       -if notice
         %p#notice= notice
