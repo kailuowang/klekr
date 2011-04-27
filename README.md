@@ -12,7 +12,7 @@ more powerful and personalized way.
 What's the vison of Collectr?
 ----------------------------------
 
-To achieve what flickr exploer failed to achieve - an easy and free way to see more interesting pictures every day.
+To achieve what flickr explore failed to achieve - an easy and free way to see more interesting pictures every day.
 
 
 Why use Collectr?
