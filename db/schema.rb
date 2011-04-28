@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110413020417) do
+ActiveRecord::Schema.define(:version => 20110428011151) do
 
   create_table "collectors", :force => true do |t|
     t.string   "user_id"
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(:version => 20110413020417) do
 
   add_index "pictures", ["collector_id"], :name => "index_pictures_on_collector_id"
   add_index "pictures", ["date_upload"], :name => "index_pictures_on_date_upload"
+  add_index "pictures", ["stream_rating"], :name => "index_pictures_on_stream_rating"
   add_index "pictures", ["url"], :name => "index_pictures_on_url"
 
   create_table "syncages", :force => true do |t|
