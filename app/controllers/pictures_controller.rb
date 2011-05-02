@@ -35,7 +35,7 @@ class PicturesController < ApplicationController
     @picture.fave
     respond_to do |format|
       format.html { redirect_to(:back, notice: "Faved!") }
-      format.xml  { head :ok }
+      format.js  { head :ok }
     end
   end
 

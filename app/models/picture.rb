@@ -74,6 +74,7 @@ class Picture < ActiveRecord::Base
       update_attribute(:rating, 1)
       flickr_streams.each {|stream| stream.add_score(created_at, 0.3) }
     rescue FlickRaw::FailedResponse
+      Rails.logger.error('picture already faved!')
     end
   end
 

@@ -21,7 +21,9 @@
         - if(@picture.faved?)
           Faved
         - else
-          = link_to 'Fave it!', fave_picture_path(@picture), method: :put, id: 'fave'
+          = image_tag('loading.gif', id: 'faveWaiting', style: 'display:none')
+          = link_to 'Fave it!', fave_picture_path(@picture), method: :put, id: 'fave', remote: true
+          %span{id: 'favedText', style: 'display:none'} Faved
       %h5
         %b Title:
         = link_to display_title(@picture), @picture.url

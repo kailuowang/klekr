@@ -23,8 +23,8 @@ $(document).ready(function() {
   }
 
   $('#picture').load(function() {
-    image = $(this);
-    isShowing = image.is(":visible");
+    var image = $(this);
+    var isShowing = image.is(":visible");
 
     if(isShowing){return;}
 
@@ -34,10 +34,10 @@ $(document).ready(function() {
       return;
     }
 
-    imageTooHigh = image.height() * 1.6 > windowSize;
+    var imageTooHigh = image.height() * 1.6 > windowSize;
 
 
-    isLargeSize = image.attr('src') === largeUrl;
+    var isLargeSize = image.attr('src') === largeUrl;
 
 
     if ( !imageTooHigh  && !isLargeSize ){
@@ -65,6 +65,16 @@ $(document).ready(function() {
      history.back()
   });
 
+  $('#fave').click(function(){
+    $('#faveWaiting').show();
+    $('#fave').hide();
+  });
+
+  $('#fave').bind("ajax:success", function(){
+    $('#fave').hide();
+    $('#faveWaiting').hide();
+    $('#favedText').show();
+  });
 
   $(document).bind('keydown', 'space', next);
   $(document).bind('keydown', 'f', function(){
