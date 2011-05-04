@@ -59,11 +59,13 @@ $(document).ready(function() {
     window.location = $('#next').attr('href');
   };
 
+  var back = function(){
+    history.back()
+  };
+
   $('#right').click(next);
 
-  $('#left').click(function(){
-     history.back()
-  });
+  $('#left').click(back);
 
   $('#fave').click(function(){
     $('#faveWaiting').show();
@@ -78,6 +80,7 @@ $(document).ready(function() {
 
   $(document).bind('keydown', 'space', next);
   $(document).bind('keydown', 'n', next);
+  $(document).bind('keydown', 'b', back);
   $(document).bind('keydown', 'f', function(){
       $('#fave').click();
   });
