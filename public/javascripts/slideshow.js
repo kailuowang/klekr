@@ -77,6 +77,7 @@ $(document).ready(function() {
   });
 
   $(document).bind('keydown', 'space', next);
+  $(document).bind('keydown', 'n', next);
   $(document).bind('keydown', 'f', function(){
       $('#fave').click();
   });
