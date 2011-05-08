@@ -32,6 +32,7 @@ class PicturesController < ApplicationController
   #PUT /pictures/1/fave
   def fave
     @picture = Picture.find(params[:id])
+    @picture.get_viewed
     @picture.fave
     respond_to do |format|
       format.html { redirect_to(:back, notice: "Faved!") }

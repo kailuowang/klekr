@@ -25,7 +25,7 @@ describe PicturesController do
       Factory( :picture, date_upload:  3.hour.ago , :viewed => true, collector: collector)
       pic2 = Factory( :picture, date_upload:  2.hour.ago, collector: collector )
       pic = Factory( :picture, date_upload: 1.hour.ago, :viewed => true, collector: collector )
-      get 'show', :id => pic.id
+      get 'show', id: pic.id
       get 'slide_show'
 
       response.should redirect_to pic2
@@ -37,7 +37,7 @@ describe PicturesController do
     it "should not change viewed? flag when showing the picture" do
       Factory( :picture, date_upload:  2.hour.ago )
       pic = Factory( :picture, date_upload: 1.hour.ago )
-      get 'show', :id => pic.id
+      get 'show', id: pic.id
       pic.reload
       pic.should_not be_viewed
     end
@@ -47,7 +47,7 @@ describe PicturesController do
     it "should redirect to the next new picture when there is one" do
       pic = Factory( :picture, date_upload: 1.hour.ago )
       pic2 = Factory( :picture, date_upload:  2.hour.ago )
-      get 'next', :id => pic.id
+      get 'next', id: pic.id
 
       response.should redirect_to pic2
     end
@@ -55,14 +55,14 @@ describe PicturesController do
     it "should set the pic next from as viewed" do
       pic = Factory( :picture, date_upload: 1.hour.ago )
 
-      get 'next', :id => pic.id
+      get 'next', id: pic.id
       pic.reload
       pic.should be_viewed
     end
 
     it "should redirect to the slide_show picture when there is no next one" do
       pic = Factory( :picture, date_upload: 1.hour.ago )
-      get 'next', :id => pic.id
+      get 'next', id: pic.id
 
       response.should redirect_to flickr_streams_path
     end
@@ -75,11 +75,30 @@ describe PicturesController do
       Picture.stub!(:find).with(pic.id).and_return(pic)
       Picture.stub!(:find).with(pic2.id).and_return(pic2)
       pic.stub!(:guess_hidden_treasure).and_return(pic2)
-      get 'next', :id => pic.id, :hidden_treasure => true
+      get 'next', id: pic.id, :hidden_treasure => true
 
       response.should redirect_to picture_path(id: pic2.id, hidden_treasure: true)
     end
 
+    describe "PUT fave" do
+      before do
+        request.env["HTTP_REFERER"] = "some_url"
+      end
+      it "should mark the picture as faved" do
+        pic = Factory(:picture)
+        Picture.stub!(:find).with(pic.id).and_return(pic)
+        pic.should_receive(:fave)
+        put 'fave', id: pic.id
+      end
+
+      it "should mark the picture as viewed" do
+        pic = Factory(:picture)
+        Picture.stub!(:find).with(pic.id).and_return(pic)
+        pic.should_receive(:get_viewed)
+        pic.stub!(:fave)
+        put 'fave', id: pic.id
+      end
+    end
 
   end
 end

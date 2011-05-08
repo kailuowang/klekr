@@ -17,9 +17,10 @@ class UsersController < ApplicationController
   end
 
   def subscribe
+    stream = FlickrStream.build(user_id: params[:id], collector: current_collector, 'type' => params[:type])
+    stream.save
+    sync_new_stream(stream)
     respond_to do |format|
-      stream = FlickrStream.build(user_id: params[:id], collector: current_collector, 'type' => params[:type])
-      stream.save
       format.html { redirect_to(user_path(id: params[:id]),
                                 :notice => "Starting to collect #{stream.username}'s #{stream.type}" ) }
       format.xml  { head :ok }
@@ -80,6 +81,10 @@ class UsersController < ApplicationController
     stream.get_pictures_from_flickr(12).map do |pic_info|
         Picture.find_or_initialize_from_pic_info(pic_info, current_collector)
       end
+  end
+
+  def sync_new_stream(stream)
+    stream.sync(nil, 20)
   end
 
 end
