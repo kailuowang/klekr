@@ -10,6 +10,10 @@ set :output, "/app/collectr/log/cron.log"
 every 1.hour do
   rake 'sync:all_streams'
 end
+
+every 1.day, :at => '2:30 am' do
+  rake 'sync:picture_ratings'
+end
 #
 # every 2.hours do
 #   command "/usr/bin/some_great_command"

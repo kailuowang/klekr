@@ -4,5 +4,11 @@ namespace :sync do
     num_of_pic_synced = FlickrStream.sync_all
     Rails.logger.info("All stream synced. #{num_of_pic_synced} pictures were collected" )
   end
+
+  desc "refresh personal insterestingness for unviewed picture"
+  task :picture_ratings => :environment do
+    Picture.reset_stream_ratings
+    Rails.logger.info("All unviewed picture's stream ratings refreshed." )
+  end
 end
 
