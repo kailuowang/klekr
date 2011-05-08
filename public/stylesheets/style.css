@@ -472,3 +472,7 @@ table{
 .inline{
   display: inline;
 }
+
+#countdown{
+  color: #D93544;
+}
