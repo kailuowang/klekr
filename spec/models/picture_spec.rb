@@ -34,13 +34,12 @@ describe Picture do
       it "should reset all pictures settings to the new ratings of the flickrstream they come from" do
         picture = Factory(:picture)
         stream = Factory(:fave_stream)
-        stream.score_for(Date.today).add(1)
-        stream.score_for(Date.today).add_num_of_pics(100)
+        stream.score_for(Date.today).bump
         picture.synced_by(stream)
         picture.stream_rating.should == 1
-        stream.score_for(Date.today).add(60)
+        stream.score_for(Date.today).bump
         Picture.reset_stream_ratings
-        picture.reload.stream_rating.should == 5
+        picture.reload.stream_rating.should == 2
       end
     end
 
