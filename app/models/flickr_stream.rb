@@ -109,7 +109,7 @@ class FlickrStream < ActiveRecord::Base
 
 
   def picture_viewed
-    score_for(Date.today).add_num_of_pics
+    score_for(Date.today).add_num_of_pics_viewed
   end
 
   def add_score(source_date, to_add = 1)

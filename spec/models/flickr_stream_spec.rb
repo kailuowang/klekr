@@ -315,7 +315,7 @@ describe FlickrStream do
     describe "#star_rating" do
 
       before do
-        @flickr_stream.score_for(1.month.ago).add_num_of_pics(100)
+        @flickr_stream.score_for(1.month.ago).add_num_of_pics_viewed(100)
       end
 
       it "should be 0 for rating 0 - 0.01" do

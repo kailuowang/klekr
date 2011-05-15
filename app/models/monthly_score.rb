@@ -7,7 +7,7 @@ class MonthlyScore < ActiveRecord::Base
     update_attribute( :score, score + to_add )
   end
 
-  def add_num_of_pics to_add = 1
+  def add_num_of_pics_viewed to_add = 1
     update_attribute( :num_of_pics, num_of_pics  + to_add )
   end
 
@@ -42,7 +42,7 @@ class MonthlyScore < ActiveRecord::Base
   private
 
   def ensure_num_of_pics
-    add_num_of_pics if num_of_pics == 0
+    add_num_of_pics_viewed if num_of_pics == 0
   end
 
   def months_from(date)
