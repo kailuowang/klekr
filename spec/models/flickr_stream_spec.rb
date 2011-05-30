@@ -318,16 +318,11 @@ describe FlickrStream do
         @flickr_stream.score_for(1.month.ago).add_num_of_pics_viewed(100)
       end
 
-      it "should be 0 for rating 0 - 0.01" do
-        @flickr_stream.star_rating.should == 0
-      end
-
-      it "should be 1 for rating 0.01 - 0.05" do
-        @flickr_stream.add_score(1.month.ago, 1)
+      it "should be 1 for rating 0 - 0.05" do
         @flickr_stream.star_rating.should == 1
       end
 
-      it "should be 2 for rating 0.05 - 0.1" do
+      it "should be 2 for rating 0.05 - 0.10" do
         @flickr_stream.add_score(1.month.ago, 5)
         @flickr_stream.star_rating.should == 2
       end
@@ -337,25 +332,26 @@ describe FlickrStream do
         @flickr_stream.star_rating.should == 3
       end
 
-      it "should be 4 for rating 0.2 - 0.4 " do
+      it "should be 4 for rating 0.2 - 0.3" do
         @flickr_stream.add_score(1.month.ago, 20)
         @flickr_stream.star_rating.should == 4
       end
 
-      it "should be 4 for rating larger than 0.4 " do
-        @flickr_stream.add_score(1.month.ago, 40)
+      it "should be 5 for rating > 0.3 " do
+        @flickr_stream.add_score(1.month.ago, 34)
         @flickr_stream.star_rating.should == 5
       end
+
 
     end
 
     describe "#bump_rating" do
       it "should bump rating in the most recent two month with ratings" do
-        @flickr_stream.star_rating.should == 0
-        @flickr_stream.bump_rating
         @flickr_stream.star_rating.should == 1
         @flickr_stream.bump_rating
         @flickr_stream.star_rating.should == 2
+        @flickr_stream.bump_rating
+        @flickr_stream.star_rating.should == 3
       end
     end
 
