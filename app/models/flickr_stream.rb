@@ -94,6 +94,12 @@ class FlickrStream < ActiveRecord::Base
     end
   end
 
+  def get_pictures(num)
+    get_pictures_from_flickr(num).map do |pic_info|
+      Picture.find_or_initialize_from_pic_info(pic_info, collector)
+    end
+  end
+
 
   def sync(up_to = last_sync || 1.month.ago, max_num = nil)
     photos_synced = 0

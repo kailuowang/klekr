@@ -342,7 +342,6 @@ describe FlickrStream do
         @flickr_stream.star_rating.should == 5
       end
 
-
     end
 
     describe "#bump_rating" do
@@ -362,7 +361,6 @@ describe FlickrStream do
         @flickr_stream.score_for(Date.new(2000, 5, 1))
         @flickr_stream.reload.monthly_scores.map(&:month).should == [3,5,4]
       end
-
     end
 
     describe "#destroy" do

@@ -47,10 +47,20 @@ describe UsersController do
       @collector.flickr_streams.size.should == 1
     end
 
-    it "should get 20 pictures " do
+    it "should get pictures to show " do
       stream = Factory(:fave_stream)
       FlickrStream.stub!(:build).and_return(stream)
-      stream.should_receive(:sync).with(nil, 20)
+      stream.should_receive(:sync).with(nil, 12)
+      get 'subscribe', id: 'a_user_id', type: 'FaveStream'
+    end
+
+    it "should set newly synced pictures as viewed" do
+      stream = Factory(:fave_stream)
+      FlickrStream.stub!(:build).and_return(stream)
+      stream.should_receive(:sync).with(nil, 12)
+      mock_pictures = (1..12).map{ |_| mock(:picture) }
+      stream.should_receive(:pictures).and_return mock_pictures
+      mock_pictures.each { |pic| pic.should_receive(:get_viewed)}
       get 'subscribe', id: 'a_user_id', type: 'FaveStream'
     end
 

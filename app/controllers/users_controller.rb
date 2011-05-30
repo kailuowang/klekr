@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  NUM_OF_PIX_TO_SHOW = 12
   include Collectr::Flickr
 
   before_filter :authenticate
@@ -78,13 +79,12 @@ class UsersController < ApplicationController
   end
 
   def get_pictures_from(stream)
-    stream.get_pictures_from_flickr(12).map do |pic_info|
-        Picture.find_or_initialize_from_pic_info(pic_info, current_collector)
-      end
+    stream.get_pictures(NUM_OF_PIX_TO_SHOW)
   end
 
   def sync_new_stream(stream)
-    stream.sync(nil, 20)
+    stream.sync(nil, NUM_OF_PIX_TO_SHOW)
+    stream.pictures.each(&:get_viewed)
   end
 
 end
