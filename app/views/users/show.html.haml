@@ -1,3 +1,6 @@
+- content_for(:head) do
+  = javascript_include_tag 'user.js'
+
 .content{style: 'width:100%'}
   %h1=link_to @user.username, @user.photosurl
   - if @user.respond_to?(:realname)
@@ -6,7 +9,7 @@
   %p
     =link_to 'Back to User Search', users_path
     |
-    =link_to 'Back to Slide Show', pictures_path
+    =link_to 'Back to (S)lide Show', pictures_path, id: 'slide'
     |
     =link_to 'Back to My Collections', flickr_streams_path
   %br

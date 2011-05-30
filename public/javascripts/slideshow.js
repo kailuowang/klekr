@@ -56,7 +56,11 @@ $(document).ready(function() {
   });
 
   var next = function(){
-    window.location = $('#next').attr('href');
+    go_link($('#next'));
+  };
+
+  var go_link = function(link){
+    window.location = link.attr('href');
   };
 
   var back = function(){
@@ -83,6 +87,9 @@ $(document).ready(function() {
   $(document).bind('keydown', 'b', back);
   $(document).bind('keydown', 'f', function(){
       $('#fave').click();
+  });
+  $(document).bind('keydown', 'o', function(){
+      go_link($('#owner'));
   });
 
 });
