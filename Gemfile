@@ -25,7 +25,6 @@ end
 
 group :production do
   gem 'mysql2'
-  gem 'db2s3'
 end
 
 # Use unicorn as the web server

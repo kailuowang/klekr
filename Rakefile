@@ -3,6 +3,5 @@
 
 require File.expand_path('../config/application', __FILE__)
 require 'rake'
-require 'db2s3/tasks'
 
 Collectr::Application.load_tasks
