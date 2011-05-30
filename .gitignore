@@ -9,3 +9,4 @@ config/flickr.yml
 .DS_Store
 .idea/dataSources.ids
 db/development.sqlite3-journal
+db/bkp

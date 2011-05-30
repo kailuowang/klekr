@@ -31,6 +31,7 @@ namespace :deploy do
    end
 end
 
+
 namespace :deploy do
   set :app_path, '/app/collectr'
   set :current_path, app_path
@@ -38,6 +39,8 @@ namespace :deploy do
 
 
   task :simple, :roles => :app do
+    _, bkp_path = db_backup_dir_and_path()
+    deploy.db_backup unless File.exist?(bkp_path)
     run_in_app "git checkout ."
     run_in_app "git pull"
     run_in_app "bundle install --without=test"
@@ -50,10 +53,31 @@ namespace :deploy do
     run_in_app "#{try_sudo} touch tmp/restart.txt"
     run_in_app "#{rails_env} script/delayed_job start"
     deploy.post_deploy
+
   end
 
   task :post_deploy, :roles => :app do
     rake ENV['POST_DEPLOY'] if ENV['POST_DEPLOY'] && !ENV['POST_DEPLOY'].empty?
+  end
+
+  task :db_backup, :roles => :app do
+   backup_db_to_local
+  end
+
+  def backup_db_to_local
+    bkp_dir, bkp_path = db_backup_dir_and_path()
+
+    run_in_app "mkdir -p #{bkp_dir}"
+    run_in_app "mysqldump collectr -u root > #{bkp_path}"
+    system "mkdir -p #{bkp_dir}"
+    download "#{app_path}/#{bkp_path}", bkp_path,  via: :scp
+  end
+
+  def db_backup_dir_and_path
+    file_name = "collectr-db-backup-#{Date.today.to_s}.sql"
+    bkp_dir = "db/bkp"
+    bkp_path = "#{bkp_dir}/#{file_name}"
+    return bkp_dir, bkp_path
   end
 
   def rake task
