@@ -42,6 +42,16 @@ class FlickrStreamsController < ApplicationController
     end
   end
 
+  #PUT /flickr_stream/1/mark_all_as_read
+  def mark_all_as_read
+    @flickr_stream = FlickrStream.find(params[:id])
+    respond_to do |format|
+      @flickr_stream.mark_all_as_read
+      format.html { redirect_to(:back) }
+      format.js  { head :ok }
+    end
+  end
+
   #POST /flickr_streams/import
   def import
     num_of_imports = FlickrStream.import( YAML.load( params[:streams_yaml].read ), current_collector)

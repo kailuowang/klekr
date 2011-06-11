@@ -392,6 +392,15 @@ describe FlickrStream do
       end
     end
 
+    describe "mark_all_as_read" do
+      it "should mark all unviewed pictures as viewed" do
+        pic = Factory(:picture)
+        pic.synced_by(@flickr_stream)
+        @flickr_stream.mark_all_as_read
+        pic.reload.should be_viewed
+      end
+    end
+
   end
 
   describe FaveStream do

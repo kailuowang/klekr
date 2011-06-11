@@ -10,6 +10,7 @@ Collectr::Application.routes.draw do
     member do
       get 'sync'
       put 'adjust_rating'
+      put 'mark_all_as_read'
     end
 
     collection do

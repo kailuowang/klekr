@@ -169,6 +169,10 @@ class FlickrStream < ActiveRecord::Base
       monthly_scores.create!(month: date.month, year: date.year)
   end
 
+  def mark_all_as_read
+    pictures.unviewed.each { |pic| pic.update_attribute(:viewed, true)}
+  end
+
   private
 
   def calculate_rating
