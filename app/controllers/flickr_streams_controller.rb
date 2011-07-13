@@ -5,8 +5,9 @@ class FlickrStreamsController < ApplicationController
   # GET /flickr_streams
   # GET /flickr_streams.xml
   def index
-    @flickr_streams = FlickrStream.paginate( :page => params[:page], :order => 'created_at DESC',
-                                             conditions: {collector_id: current_collector.id} )
+    @flickr_streams =  FlickrStream.where(collector_id: current_collector.id).
+                                   order('created_at DESC').
+                                   paginate(page: params[:page])
     @number_of_new_pics = Picture.unviewed.collected_by(current_collector).count
 
     respond_to do |format|
