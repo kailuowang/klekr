@@ -15,6 +15,11 @@ gem "rails_config"
 gem 'delayed_job'
 gem 'whenever', :require => false
 
+# Rails 3.1 - Asset Pipeline
+gem 'json'
+gem 'sass'
+gem 'coffee-script'
+gem 'uglifier'
 
 group :test, :development do
   gem 'sqlite3-ruby', :require => 'sqlite3'

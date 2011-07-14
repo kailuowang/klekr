@@ -6,7 +6,17 @@ function preload(arrayOfImages) {
 }
 
 
+next = function() {
+    go_link($('#next'));
+};
 
+go_link = function(link) {
+    window.location = link.attr('href');
+};
+
+back = function() {
+    history.back()
+};
 
 $(document).ready(function() {
 
@@ -55,18 +65,6 @@ $(document).ready(function() {
 
   });
 
-  var next = function(){
-    go_link($('#next'));
-  };
-
-  var go_link = function(link){
-    window.location = link.attr('href');
-  };
-
-  var back = function(){
-    history.back()
-  };
-
   $('#right').click(next);
 
   $('#left').click(back);
@@ -82,14 +80,14 @@ $(document).ready(function() {
     $('#favedText').show();
   });
 
-  $(document).bind('keydown', 'space', next);
-  $(document).bind('keydown', 'n', next);
-  $(document).bind('keydown', 'b', back);
-  $(document).bind('keydown', 'f', function(){
-      $('#fave').click();
-  });
-  $(document).bind('keydown', 'o', function(){
-      go_link($('#owner'));
-  });
+//  $(document).bind('keydown', 'space', next);
+//  $(document).bind('keydown', 'n', next);
+//  $(document).bind('keydown', 'b', back);
+//  $(document).bind('keydown', 'f', function(){
+//      $('#fave').click();
+//  });
+//  $(document).bind('keydown', 'o', function(){
+//      go_link($('#owner'));
+//  });
 
 });
