@@ -10,3 +10,4 @@ config/flickr.yml
 .idea/dataSources.ids
 db/development.sqlite3-journal
 db/bkp
+collectr.iml
