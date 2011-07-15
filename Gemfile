@@ -26,6 +26,10 @@ group :test, :development do
   gem "rspec-rails", "~> 2.4"
   gem 'factory_girl'
   gem 'spork', '~> 0.9.0.rc9'
+  gem 'guard'
+  gem 'guard-coffeescript'
+  gem 'guard-livereload'
+  gem 'jasmine'
 end
 
 group :production do

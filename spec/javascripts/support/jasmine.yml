@@ -1,0 +1,37 @@
+
+# stylesheets
+#
+# Return an array of stylesheet filepaths relative to src_dir to include before jasmine specs.
+# Default: []
+#
+# EXAMPLE:
+#
+# stylesheets:
+#   - css/style.css
+#   - stylesheets/*.css
+#
+stylesheets:
+  - stylesheets/**/*.css
+
+# helpers
+#
+# Return an array of filepaths relative to spec_dir to include before jasmine specs.
+# Default: ["helpers/**/*.js"]
+#
+# EXAMPLE:
+#
+# helpers:
+#   - helpers/**/*.js
+#
+helpers:
+  - helpers/**/*.js
+
+
+spec_dir: spec/javascripts/compiled
+spec_files:
+  - '**/*[sS]pec.js'
+
+src_dir: spec/javascripts/src
+src_files:
+  - **/*.js
+
