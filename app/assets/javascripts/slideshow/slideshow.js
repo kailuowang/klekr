@@ -80,14 +80,4 @@ $(document).ready(function() {
     $('#favedText').show();
   });
 
-//  $(document).bind('keydown', 'space', next);
-//  $(document).bind('keydown', 'n', next);
-//  $(document).bind('keydown', 'b', back);
-//  $(document).bind('keydown', 'f', function(){
-//      $('#fave').click();
-//  });
-//  $(document).bind('keydown', 'o', function(){
-//      go_link($('#owner'));
-//  });
-
 });
