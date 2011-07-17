@@ -1,3 +1,5 @@
 class window.Picture
   constructor: (data) ->
-    { url: @url } = data
+    @data = data
+
+  url: -> @data.large_url

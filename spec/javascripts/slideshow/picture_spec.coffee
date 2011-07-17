@@ -1,6 +1,6 @@
 describe 'Picture', ->
   describe 'constructor()', ->
-     it 'should create from data', ->
-       data = { url: 'a url'}
-       expect(new Picture(data).url).toEqual 'a url'
+     it 'should return large_url', ->
+       data = { large_url: 'a url'}
+       expect(new Picture(data).url()).toEqual 'a url'
 
