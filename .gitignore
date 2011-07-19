@@ -8,7 +8,8 @@ tmp/*.jpg
 config/flickr.yml
 .DS_Store
 .idea/dataSources.ids
+.idea/dataSources.xml
 db/development.sqlite3-journal
 db/bkp
-collectr.iml
+.idea/collectr.iml
 compiled
