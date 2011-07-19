@@ -3,7 +3,7 @@ class window.Picture
     @largeUrl = data.large_url
     @nextPicturePath = data.next_picture_path
 
-  url: -> @data.large_url
+  url: -> @largeUrl
 
   retrieveNext: (onNextReady)->
     unless @next
