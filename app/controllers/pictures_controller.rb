@@ -40,9 +40,10 @@ class PicturesController < ApplicationController
     end
   end
 
-  #GET /pictures/slide_show
+
+    #GET /pictures/slide_show
   def slide_show
-    @picture = Picture.desc.collected_by(current_collector).unviewed.first
+    @picture = current_picture
 
     if @picture
       redirect_to @picture
@@ -50,6 +51,12 @@ class PicturesController < ApplicationController
       redirect_to flickr_streams_path, notice: "You have no unviewed pictures, please sync your subscriptions from here."
     end
 
+  end
+
+  def current
+    respond_to do |f|
+      f.js {render :json => { :large_url => current_picture.large_url, :next_picture_path => "google" } }
+    end
   end
 
   #GET /pictures/1/next
@@ -81,6 +88,10 @@ class PicturesController < ApplicationController
   end
 
   private
+
+  def current_picture
+    Picture.desc.collected_by(current_collector).unviewed.first
+  end
 
   def preload_pics_according_to_window_size
     case window_size

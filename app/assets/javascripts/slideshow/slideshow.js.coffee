@@ -1,15 +1,15 @@
 class window.Slideshow
 
-  constructor:  (@view, currentPictureUrl) ->
-    getCurrentPicture(currentPictureUrl)
-    @view.nextClicked(navigateToNext)
-
-  getCurrentPicture: (currentPictureUrl) ->
-    $.ajax( url: currentPictureUrl
-            success: (data) =>
-              @currentPicture = new Picture(data)
-              displayCurrentPicture()
+  getCurrentPicture: ->
+    @server.currentPicture((data) =>
+      @currentPicture = new Picture(data)
+      this.displayCurrentPicture()
     )
+
+  constructor:  (@view, @server) ->
+    this.getCurrentPicture()
+    @view.nextClicked(this.navigateToNext)
+
 
   displayCurrentPicture: ->
     @view.display(@currentPicture) if @currentPicture?
@@ -21,4 +21,5 @@ class window.Slideshow
         displayCurrentPicture()
       )
 
-
+$(document).ready ->
+  new Slideshow(new View, new Server)
