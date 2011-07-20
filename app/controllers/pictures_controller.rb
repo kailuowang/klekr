@@ -41,16 +41,8 @@ class PicturesController < ApplicationController
   end
 
 
-    #GET /pictures/slide_show
+  #GET /pictures/slide_show
   def slide_show
-    @picture = current_picture
-
-    if @picture
-      redirect_to @picture
-    else
-      redirect_to flickr_streams_path, notice: "You have no unviewed pictures, please sync your subscriptions from here."
-    end
-
   end
 
   def current
@@ -84,7 +76,13 @@ class PicturesController < ApplicationController
 
   #GET /pictures
   def index
-    slide_show
+    @picture = current_picture
+
+    if @picture
+      redirect_to @picture
+    else
+      redirect_to flickr_streams_path, notice: "You have no unviewed pictures, please sync your subscriptions from here."
+    end
   end
 
   private

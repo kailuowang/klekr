@@ -5,12 +5,12 @@ class window.Picture
 
   url: -> @largeUrl
 
-  retrieveNext: (onNextReady)->
+  retrieveNext: (onNextReady) ->
     unless @next
-      $.ajax( url: @nextPicturePath,
-              success: (data) =>
-                @next = new Picture(data)
-                onNextReady?(@next)
+      server.get( @nextPicturePath,
+                  (data) =>
+                    @next = new Picture(data)
+                    onNextReady?(@next)
       )
     else
       onNextReady?(@next)

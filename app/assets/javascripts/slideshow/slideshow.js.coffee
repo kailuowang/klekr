@@ -1,18 +1,17 @@
 class window.Slideshow
 
   getCurrentPicture: ->
-    @server.currentPicture((data) =>
+    server.currentPicture((data) =>
       @currentPicture = new Picture(data)
       this.displayCurrentPicture()
     )
 
-  constructor:  (@view, @server) ->
+  constructor: ->
     this.getCurrentPicture()
-    @view.nextClicked(this.navigateToNext)
-
+    view.nextClicked(this.navigateToNext)
 
   displayCurrentPicture: ->
-    @view.display(@currentPicture) if @currentPicture?
+    view.display(@currentPicture) if @currentPicture?
 
   navigateToNext: ->
     if @currentPicture?
@@ -22,4 +21,6 @@ class window.Slideshow
       )
 
 $(document).ready ->
-  new Slideshow(new View, new Server)
+  window.view = new View
+  window.server = new Server
+  window.slideshow = new Slideshow

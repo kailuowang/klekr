@@ -1,5 +1,5 @@
 - content_for(:head) do
-  = javascript_include_tag 'slideshow.js'
+  = javascript_include_tag 'show.js'
 :javascript
   next3images = #{@pictures_to_cache.to_json}
   largeUrl = '#{@picture.flickr_url(:large)}'
