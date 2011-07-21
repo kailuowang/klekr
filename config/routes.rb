@@ -22,7 +22,6 @@ Collectr::Application.routes.draw do
 
   resources :pictures, :only => [:show, :destroy, :index] do
     collection do
-      get 'slide_show'
       get 'current'
     end
     member do
@@ -45,6 +44,8 @@ Collectr::Application.routes.draw do
       post 'search'
     end
   end
+
+  match 'slideshow' => "slideshow#show"
 
 
   if ["development", "test"].include? Rails.env

@@ -41,16 +41,6 @@ class PicturesController < ApplicationController
   end
 
 
-  #GET /pictures/slide_show
-  def slide_show
-  end
-
-  def current
-    respond_to do |f|
-      f.js {render :json => { :large_url => current_picture.large_url, :next_picture_path => "google" } }
-    end
-  end
-
   #GET /pictures/1/next
   def next
     pic = Picture.find(params[:id])
