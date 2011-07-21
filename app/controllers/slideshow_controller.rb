@@ -4,9 +4,10 @@ class SlideshowController < ApplicationController
   def  show
   end
 
+
   def current
     respond_to do |f|
-      f.js {render :json => { :large_url => current_picture.large_url, :next_picture_path => "google" } }
+      f.js {render :json => picture_data(current_picture) }
     end
   end
 
@@ -14,6 +15,10 @@ class SlideshowController < ApplicationController
 
   def current_picture
     Picture.desc.collected_by(current_collector).unviewed.first
+  end
+
+  def picture_data(picture)
+    {:large_url => picture.large_url}
   end
 
 end

@@ -1,6 +1,6 @@
 class window.Server
   constructor: ->
-    @currentPicturePath = '/pictures/current'
+    @currentPicturePath = '/slideshow/current'
 
   get: (url, callback) ->
     $.ajax(

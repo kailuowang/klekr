@@ -1,37 +1,6 @@
 require 'spec_helper'
 
 describe PicturesController do
-  describe "GET slide_show" do
-    it "should redirect to show the latest picture" do
-      collector = Factory(:collector)
-      Factory( :picture, date_upload:  2.hour.ago, collector: collector)
-      pic = Factory( :picture, date_upload: 1.hour.ago, collector: collector)
-      controller.stub!(:current_collector).and_return(collector)
-      get 'slide_show'
-      response.should redirect_to pic
-    end
-    it "should redirect to show the picture collected by the current collector" do
-      collector = Factory(:collector)
-      Factory( :picture, date_upload:  1.hour.ago)
-      pic = Factory( :picture, date_upload: 2.hour.ago, collector: collector)
-      controller.stub!(:current_collector).and_return(collector)
-      get 'slide_show'
-      response.should redirect_to pic
-    end
-
-    it "should redirect to show the latest picture that has not been viewed yet" do
-      collector = Factory(:collector)
-
-      Factory( :picture, date_upload:  3.hour.ago , :viewed => true, collector: collector)
-      pic2 = Factory( :picture, date_upload:  2.hour.ago, collector: collector )
-      pic = Factory( :picture, date_upload: 1.hour.ago, :viewed => true, collector: collector )
-      get 'show', id: pic.id
-      get 'slide_show'
-
-      response.should redirect_to pic2
-    end
-
-  end
 
   describe "GET show" do
     it "should not change viewed? flag when showing the picture" do
@@ -60,12 +29,6 @@ describe PicturesController do
       pic.should be_viewed
     end
 
-    it "should redirect to the slide_show picture when there is no next one" do
-      pic = Factory( :picture, date_upload: 1.hour.ago )
-      get 'next', id: pic.id
-
-      response.should redirect_to flickr_streams_path
-    end
 
     it "should redirect to the hidden treasure if the hidden_treaure is in parameter" do
       Factory( :picture)

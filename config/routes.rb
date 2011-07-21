@@ -46,7 +46,7 @@ Collectr::Application.routes.draw do
   end
 
   match 'slideshow' => "slideshow#show"
-
+  match 'slideshow/current' => "slideshow#current"
 
   if ["development", "test"].include? Rails.env
     mount Jasminerice::Engine => "/jasmine"
