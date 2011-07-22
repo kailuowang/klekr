@@ -1,6 +1,19 @@
 require 'spec_helper'
 
 describe SlideshowController do
+
+  describe "#current" do
+    it "return the json data for the most_interesting_picture of the collector" do
+      collector = Factory(:collector)
+      picture = Factory(:picture)
+      controller.stub(:current_collector).and_return(collector)
+      Picture.should_receive(:most_interesting_for).with(collector).and_return(picture)
+      get "current", format: :js
+      response.body.should include picture.large_url
+
+    end
+  end
+
   describe "#picture_data" do
     it "include the large url in the data" do
       picture = Factory(:picture)
@@ -9,37 +22,18 @@ describe SlideshowController do
     end
   end
 
+  describe "#pictures_after" do
+    it "return interesting pictures after the target picture" do
+      target_pic = Factory(:picture)
+      Picture.should_receive(:find).with(target_pic.id).and_return(target_pic)
 
-#describe "GET slide_show" do
-#    it "should redirect to show the latest picture" do
-#      collector = Factory(:collector)
-#      Factory( :picture, date_upload:  2.hour.ago, collector: collector)
-#      pic = Factory( :picture, date_upload: 1.hour.ago, collector: collector)
-#      controller.stub!(:current_collector).and_return(collector)
-#      get 'slide_show'
-#      response.should redirect_to pic
-#    end
-#    it "should redirect to show the picture collected by the current collector" do
-#      collector = Factory(:collector)
-#      Factory( :picture, date_upload:  1.hour.ago)
-#      pic = Factory( :picture, date_upload: 2.hour.ago, collector: collector)
-#      controller.stub!(:current_collector).and_return(collector)
-#      get 'slide_show'
-#      response.should redirect_to pic
-#    end
-#
-#    it "should redirect to show the latest picture that has not been viewed yet" do
-#      collector = Factory(:collector)
-#
-#      Factory( :picture, date_upload:  3.hour.ago , :viewed => true, collector: collector)
-#      pic2 = Factory( :picture, date_upload:  2.hour.ago, collector: collector )
-#      pic = Factory( :picture, date_upload: 1.hour.ago, :viewed => true, collector: collector )
-#      get 'show', id: pic.id
-#      get 'slide_show'
-#
-#      response.should redirect_to pic2
-#    end
-#
-#  end
+      new_pic = Factory(:picture)
+      target_pic.should_receive(:next_new_pictures).with(7).and_return([new_pic])
 
+      get "pictures_after", format: :js, target_picture: target_pic.id, num: 7
+
+      response.body.should include new_pic.large_url
+
+    end
+  end
 end

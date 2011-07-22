@@ -64,6 +64,34 @@ describe Picture do
         Picture.collected_by(Factory(:collector)).should be_empty
       end
     end
+
+
+    describe "#most_insteresting_for" do
+
+      it "return the latest picture" do
+        collector = Factory(:collector)
+        Factory(:picture, date_upload: 2.hour.ago, collector: collector)
+        pic = Factory(:picture, date_upload: 1.hour.ago, collector: collector)
+        Picture.most_interesting_for(collector).should == pic
+      end
+
+      it "should redirect to show the picture collected by the current collector" do
+        collector = Factory(:collector)
+        Factory(:picture, date_upload: 1.hour.ago)
+        pic = Factory(:picture, date_upload: 2.hour.ago, collector: collector)
+        Picture.most_interesting_for(collector).should == pic
+      end
+
+      it "should redirect to show the latest picture that has not been viewed yet" do
+        collector = Factory(:collector)
+
+        Factory(:picture, date_upload: 3.hour.ago, :viewed => true, collector: collector)
+        pic2 = Factory(:picture, date_upload: 2.hour.ago, collector: collector)
+        pic = Factory(:picture, date_upload: 1.hour.ago, :viewed => true, collector: collector)
+        pic.get_viewed
+        Picture.most_interesting_for(collector).should == pic2
+      end
+    end
   end
 
   describe "#fave" do
