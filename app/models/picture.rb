@@ -45,8 +45,13 @@ class Picture < ActiveRecord::Base
       desc.collected_by(collector).unviewed.first
     end
 
+    def new_pictures_by(collector, n, *exclude_ids)
+      scope = collected_by(collector).new_pictures(n)
+      pictures = Picture.arel_table
+      scope = scope.where(pictures[:id].not_in(exclude_ids)) if exclude_ids.present?
+      scope
+    end
   end
-
 
   def reset_stream_rating
     total_rating = flickr_streams.inject(0) { |sum, stream| sum + stream.star_rating }
@@ -68,7 +73,7 @@ class Picture < ActiveRecord::Base
   end
 
   def next_new_pictures(n)
-    Picture.collected_by(collector).before(self).where('stream_rating <= ?', stream_rating).new_pictures(n)
+    Picture.new_pictures_by(collector, n, self.id)
   end
 
   def next

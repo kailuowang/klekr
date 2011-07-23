@@ -1,31 +1,44 @@
 class window.Picture
-  constructor: (data) ->
-    @largeUrl = data.large_url
-    @mediumUrl = data.medium_url
-    @nextPicturesPathTemplate = data.next_pictures_path
-    @interestingess = data.interestingess
+  @uniq: (pictures) ->
+    h = {}
+    h[p.id] = p for p in pictures
+    p for id, p of h
 
-    this.preload()
+  @uniqConcat: (original, newOnes) ->
+    h = {}
+    h[p.id] = 1 for p in original
+    original.push newP for newP in newOnes when not h[newP.id]?
+    original
 
-  url: ->
-    if @canUseLargeVersion
-      @largeUrl
-    else
-      @mediumUrl
-
-  retrieveNextPictures: (num, callback) ->
-    server.get(this.nextPicturesPath(num), (data) =>
+  @retrieveNew: (num, oldOnes, callback) ->
+    excludeIds = (p.id for p in oldOnes)
+    server.newPictures(num, excludeIds, (data) =>
       pictures = ( new Picture(picData) for picData in data )
       callback(pictures)
     )
 
+  constructor: (@data) ->
+    @id = @data.id
+    this.preload() if @data.mediumUrl?
+
+  url: ->
+    if @canUseLargeVersion
+      @data.largeUrl
+    else
+      @data.mediumUrl
+
+  id: -> id
+
   preload: ->
-    this.preloadImage @mediumUrl, (image) =>
+    this.preloadImage @data.mediumUrl, (image) =>
       @canUseLargeVersion = this.largerVersionWithinWindow(image)
       if @canUseLargeVersion
-        this.preloadImage @largeUrl, => @isReady = true
+        this.preloadImage @data.largeUrl, => @isReady = true
       else
         @isReady = true
+
+  getViewed: ->
+    server.post(@data.getViewedPath)
 
   preloadImage: (url, onload) ->
     image = new Image()
@@ -43,6 +56,6 @@ class window.Picture
     ratio = 1024 / longEdge
     [mediumWidth * ratio, mediumHeight * ratio]
 
-  nextPicturesPath: (num) ->
-    @nextPicturesPathTemplate + num
+
+
 

@@ -27,6 +27,7 @@ Collectr::Application.routes.draw do
     member do
       put 'fave'
       get 'next'
+      post 'viewed'
     end
   end
 
@@ -45,9 +46,11 @@ Collectr::Application.routes.draw do
     end
   end
 
-  match 'slideshow' => "slideshow#show"
-  match 'slideshow/current' => "slideshow#current"
-  match 'slideshow/pictures_after' => "slideshow#pictures_after"
+  resource :slideshow, :only => [:show], :controller => :slideshow do
+    get 'current'
+    post 'new_pictures'
+  end
+
 
   if ["development", "test"].include? Rails.env
     mount Jasminerice::Engine => "/jasmine"

@@ -1,6 +1,14 @@
 require 'spec_helper'
 
 describe Picture do
+  before do
+    @collector = Factory(:collector)
+  end
+
+  def create_picture(opts = {})
+    Factory(:picture, {collector: @collector}.merge(opts))
+  end
+
   describe "class" do
     describe "#find_or_initialize_from_pic_info" do
       it "should be able to create from flickr pic info" do
@@ -170,60 +178,63 @@ describe Picture do
     end
   end
 
-  describe "#next_new_pictures" do
-    before do
-      @collector = Factory(:collector)
-    end
-
-    def create_picture(opts)
-      Factory(:picture, {collector: @collector}.merge(opts))
-    end
-
+  describe ".new_pictures" do
     it "should return x number of unviewed pictures and return in a desc order" do
       picture4 = create_picture(date_upload: DateTime.new(2010, 1, 4), viewed: true)
       picture3 = create_picture(date_upload: DateTime.new(2010, 1, 3))
       create_picture(date_upload: DateTime.new(2010, 1, 2), :viewed => true)
       picture1 = create_picture(date_upload: DateTime.new(2010, 1, 1))
       create_picture(date_upload: DateTime.new(2000, 1, 1))
-      picture4.next_new_pictures(2).should == [picture3, picture1]
+      Picture.new_pictures_by(@collector, 2).should == [picture3, picture1]
     end
 
     it "should return x number of unviewed pictures with highest rating" do
       create_picture(stream_rating: 2)
       pic_with_higher_rating = create_picture(stream_rating: 3)
-      create_picture(stream_rating: 3).next_new_pictures(1)[0].should == pic_with_higher_rating
+      Picture.new_pictures_by(@collector, 1)[0].should == pic_with_higher_rating
     end
 
     it "should return x number of unviewed pictures with latest date" do
       create_picture(date_upload: 1.month.ago)
-      later_pic = create_picture( date_upload: 2.days.ago)
-      create_picture(date_upload: 1.day.ago).next_new_pictures(1)[0].should == later_pic
+      later_pic = create_picture(date_upload: 2.days.ago)
+      Picture.new_pictures_by(@collector, 1)[0].should == later_pic
     end
+
+
+    it "should return pictures by the collector" do
+      collector = Factory(:collector)
+      pic = create_picture(:collector => collector)
+      Picture.new_pictures_by(collector, 1).should == [pic]
+    end
+
+    it "should not return pictures by a different collector" do
+      Factory(:picture)
+      Picture.new_pictures_by(Factory(:collector), 1).should be_empty
+    end
+
+
+    it "include the pictures of not in the list of exclude_ids if given" do
+      pic_to_exclude = create_picture
+      pic_to_include = create_picture
+      Picture.new_pictures_by(@collector, 3, pic_to_exclude.id).should include(pic_to_include)
+    end
+
+    it "exclude the pictures of the exclude_ids if given" do
+      pic1 = create_picture
+      pic2 = create_picture
+      exclude_ids = [pic1.id, pic2.id]
+      Picture.new_pictures_by(@collector, 3, exclude_ids).should_not include(pic1, pic2)
+    end
+
+
+  end
+
+  describe "#next_new_pictures" do
 
     it "should not include the picture itself" do
       Factory(:picture).next_new_pictures(1).should be_empty
     end
 
-    it "should return pictures by the collector" do
-      collector = Factory(:collector)
-      pic = create_picture(:collector => collector)
-      create_picture(:collector => collector).next_new_pictures(1).should == [pic]
-    end
-
-    it "should not return pictures by a different collector" do
-      Factory(:picture)
-      create_picture(collector: Factory(:collector)).next_new_pictures(1).should be_empty
-    end
-
-    it "not return pictures has higher rating than self" do
-      create_picture(stream_rating: 2)
-      create_picture(stream_rating: 1).next_new_pictures(1).should be_empty
-    end
-
-    it "not return pictures later than self" do
-      create_picture(date_upload: 1.day.ago)
-      create_picture(date_upload: 2.day.ago).next_new_pictures(1).should be_empty
-    end
 
   end
 

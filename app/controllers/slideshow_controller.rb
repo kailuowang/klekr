@@ -11,10 +11,10 @@ class SlideshowController < ApplicationController
     end
   end
 
-  def pictures_after
-    target_picture = Picture.find(params[:target_picture])
+  def new_pictures
+    exclude_ids = params[:exclude_ids].map(&:to_i)
     num_of_pictures = params[:num].to_i
-    new_pictures = target_picture.next_new_pictures(num_of_pictures)
+    new_pictures = Picture.new_pictures_by(current_collector, num_of_pictures, exclude_ids)
 
     respond_to do |f|
       f.js { render :json => pictures_data(new_pictures) }
@@ -31,11 +31,11 @@ class SlideshowController < ApplicationController
 
   def picture_data(picture)
     {
-      :large_url => picture.large_url,
-      :medium_url => picture.medium_url,
-      :next_pictures_path => slideshow_pictures_after_path + "?target_picture=#{picture.id}&num=",
-      :interestingess => picture.stream_rating.to_i
-
+      :id => picture.id,
+      :largeUrl => picture.large_url,
+      :mediumUrl => picture.medium_url,
+      :interestingess => picture.stream_rating.to_i,
+      :getViewedPath => viewed_picture_path(picture)
     }
   end
 

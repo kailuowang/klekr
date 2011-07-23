@@ -64,6 +64,14 @@ class PicturesController < ApplicationController
     end
   end
 
+  #PUT /pictures/1/viewed
+  def viewed
+    Picture.find(params[:id]).get_viewed
+    respond_to do |format|
+      format.js  { head :ok }
+    end
+  end
+
   #GET /pictures
   def index
     @picture = current_picture

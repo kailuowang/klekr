@@ -19,20 +19,20 @@ describe SlideshowController do
       picture = Factory(:picture)
 
       data = controller.picture_data(picture)
-      data[:large_url].should == picture.large_url
-      data[:next_pictures_path].should == slideshow_pictures_after_path + "?target_picture=#{picture.id}&num="
+      data[:largeUrl].should == picture.large_url
     end
   end
 
-  describe "#pictures_after" do
+  describe "#new_pictures" do
     it "return interesting pictures after the target picture" do
-      target_pic = Factory(:picture)
-      Picture.should_receive(:find).with(target_pic.id).and_return(target_pic)
+      collector = Factory(:collector)
+      controller.stub(:current_collector).and_return(collector)
 
       new_pic = Factory(:picture)
-      target_pic.should_receive(:next_new_pictures).with(7).and_return([new_pic])
 
-      get "pictures_after", format: :js, target_picture: target_pic.id, num: 7
+      Picture.should_receive(:new_pictures_by).with(collector, 7, [1, 2, 3]).and_return([new_pic])
+
+      post "new_pictures", format: :js, exclude_ids: [1,2,3], num: 7
 
       response.body.should include new_pic.large_url
 
