@@ -33,9 +33,7 @@ class window.Picture
     this.preloadImage @data.mediumUrl, (image) =>
       @canUseLargeVersion = this.largerVersionWithinWindow(image)
       if @canUseLargeVersion
-        this.preloadImage @data.largeUrl, => @isReady = true
-      else
-        @isReady = true
+        this.preloadImage @data.largeUrl
 
   getViewed: ->
     server.post(@data.getViewedPath)
@@ -43,7 +41,7 @@ class window.Picture
   preloadImage: (url, onload) ->
     image = new Image()
     image.src = url
-    $(image).load -> onload(image)
+    $(image).load -> onload(image) if onload?
 
   largerVersionWithinWindow: (image) ->
     [largeWidth, largeHeight] = this.guessLargeSize(image.width, image.height)

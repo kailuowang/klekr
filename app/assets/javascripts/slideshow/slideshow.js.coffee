@@ -19,8 +19,14 @@ class window.Slideshow
 
   retrieveMorePictures: ->
     Picture.retrieveNew(10, this.unseenPictures(), (newPictures) =>
-      Picture.uniqConcat(@pictures, newPictures)
+      this.addPictures(newPictures)
     )
+
+  addPictures: (newPictures) ->
+    unless @addingPictures
+      @addingPictures = true
+      Picture.uniqConcat(@pictures, newPictures)
+      @addingPictures = false
 
   unseenPictures: ->
     @pictures[@currentIndex...@pictures.length]
@@ -55,11 +61,9 @@ class window.Slideshow
 
 
   report: ->
-    readyPictures = (p for p in @pictures when p.isRead?)
     canUseLargePictures = (p for p in @pictures when p.canUseLargeVersion?)
     console.info """
       Total pictures in cache: #{@pictures.length}
-      ready:  #{readyPictures.length}
       canUseLarge: #{canUseLargePictures.length}
       duplicates: #{@pictures.length - Picture.uniq(@pictures).length}
     """
