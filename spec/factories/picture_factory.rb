@@ -21,4 +21,6 @@ Factory.define :picture, :class => Picture do |p|
   p.date_upload  Time.at(pic_info.dateupload.to_i).to_datetime
   p.owner_name 'Hillary Clinton'
   p.viewed false
+  p.stream_rating 0
+  p.collector_id { Factory(:collector).id }
 end

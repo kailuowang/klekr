@@ -23,7 +23,6 @@ class SlideshowController < ApplicationController
 
   private
 
-
   def pictures_data(pictures)
     pictures.map do |picture|
       picture_data(picture)
@@ -31,7 +30,13 @@ class SlideshowController < ApplicationController
   end
 
   def picture_data(picture)
-    {:large_url => picture.large_url}
+    {
+      :large_url => picture.large_url,
+      :medium_url => picture.medium_url,
+      :next_pictures_path => slideshow_pictures_after_path + "?target_picture=#{picture.id}&num=",
+      :interestingess => picture.stream_rating.to_i
+
+    }
   end
 
 

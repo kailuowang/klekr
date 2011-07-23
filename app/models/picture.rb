@@ -3,7 +3,7 @@ class Picture < ActiveRecord::Base
   scope :desc, order('stream_rating DESC, date_upload DESC')
   scope :asc, order('stream_rating ASC, date_upload ASC')
   scope :after, lambda { |pic| where('date_upload > ?', pic.date_upload) }
-  scope :before, lambda { |pic| where('date_upload < ?', pic.date_upload) }
+  scope :before, lambda { |pic| where('date_upload <= ? and id <> ? ', pic.date_upload, pic.id) }
   scope :new_pictures, lambda { |n| desc.unviewed.limit(n) }
   scope :collected_by, lambda { |collector| where(collector_id: collector) if collector }
   scope :unviewed, where(viewed: false)
@@ -68,7 +68,7 @@ class Picture < ActiveRecord::Base
   end
 
   def next_new_pictures(n)
-    Picture.new_pictures(n).collected_by(collector) - [self]
+    Picture.collected_by(collector).before(self).where('stream_rating <= ?', stream_rating).new_pictures(n)
   end
 
   def next

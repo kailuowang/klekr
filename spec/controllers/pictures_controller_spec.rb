@@ -15,7 +15,7 @@ describe PicturesController do
   describe "GET next" do
     it "should redirect to the next new picture when there is one" do
       pic = Factory( :picture, date_upload: 1.hour.ago )
-      pic2 = Factory( :picture, date_upload:  2.hour.ago )
+      pic2 = Factory( :picture, date_upload:  2.hour.ago, :collector => pic.collector )
       get 'next', id: pic.id
 
       response.should redirect_to pic2

@@ -18,7 +18,9 @@ describe SlideshowController do
     it "include the large url in the data" do
       picture = Factory(:picture)
 
-      controller.picture_data(picture)[:large_url].should == picture.large_url
+      data = controller.picture_data(picture)
+      data[:large_url].should == picture.large_url
+      data[:next_pictures_path].should == slideshow_pictures_after_path + "?target_picture=#{picture.id}&num="
     end
   end
 

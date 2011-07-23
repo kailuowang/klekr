@@ -171,25 +171,33 @@ describe Picture do
   end
 
   describe "#next_new_pictures" do
+    before do
+      @collector = Factory(:collector)
+    end
+
+    def create_picture(opts)
+      Factory(:picture, {collector: @collector}.merge(opts))
+    end
+
     it "should return x number of unviewed pictures and return in a desc order" do
-      picture4 = Factory(:picture, date_upload: DateTime.new(2010, 1, 4), viewed: true)
-      picture3 = Factory(:picture, date_upload: DateTime.new(2010, 1, 3))
-      Factory(:picture, date_upload: DateTime.new(2010, 1, 2), :viewed => true)
-      picture1 = Factory(:picture, date_upload: DateTime.new(2010, 1, 1))
-      Factory(:picture, date_upload: DateTime.new(2000, 1, 1))
-      picture4.next_new_pictures(2).map(&:id).should == [picture3.id, picture1.id]
+      picture4 = create_picture(date_upload: DateTime.new(2010, 1, 4), viewed: true)
+      picture3 = create_picture(date_upload: DateTime.new(2010, 1, 3))
+      create_picture(date_upload: DateTime.new(2010, 1, 2), :viewed => true)
+      picture1 = create_picture(date_upload: DateTime.new(2010, 1, 1))
+      create_picture(date_upload: DateTime.new(2000, 1, 1))
+      picture4.next_new_pictures(2).should == [picture3, picture1]
     end
 
     it "should return x number of unviewed pictures with highest rating" do
-      Factory(:picture, stream_rating: 2)
-      pic_with_higher_rating = Factory(:picture, stream_rating: 3)
-      Factory(:picture).next_new_pictures(1)[0].id.should == pic_with_higher_rating.id
+      create_picture(stream_rating: 2)
+      pic_with_higher_rating = create_picture(stream_rating: 3)
+      create_picture(stream_rating: 3).next_new_pictures(1)[0].should == pic_with_higher_rating
     end
 
     it "should return x number of unviewed pictures with latest date" do
-      Factory(:picture, stream_rating: 2, date_upload: 1.month.ago)
-      later_pic = Factory(:picture, stream_rating: 2, date_upload: 1.day.ago)
-      Factory(:picture).next_new_pictures(1)[0].id.should == later_pic.id
+      create_picture(date_upload: 1.month.ago)
+      later_pic = create_picture( date_upload: 2.days.ago)
+      create_picture(date_upload: 1.day.ago).next_new_pictures(1)[0].should == later_pic
     end
 
     it "should not include the picture itself" do
@@ -198,14 +206,25 @@ describe Picture do
 
     it "should return pictures by the collector" do
       collector = Factory(:collector)
-      pic = Factory(:picture, :collector => collector)
-      Factory(:picture, :collector => collector).next_new_pictures(1).should == [pic]
+      pic = create_picture(:collector => collector)
+      create_picture(:collector => collector).next_new_pictures(1).should == [pic]
     end
 
     it "should not return pictures by a different collector" do
       Factory(:picture)
-      Factory(:picture, collector: Factory(:collector)).next_new_pictures(1).should be_empty
+      create_picture(collector: Factory(:collector)).next_new_pictures(1).should be_empty
     end
+
+    it "not return pictures has higher rating than self" do
+      create_picture(stream_rating: 2)
+      create_picture(stream_rating: 1).next_new_pictures(1).should be_empty
+    end
+
+    it "not return pictures later than self" do
+      create_picture(date_upload: 1.day.ago)
+      create_picture(date_upload: 2.day.ago).next_new_pictures(1).should be_empty
+    end
+
   end
 
   describe "#flickr_url" do
