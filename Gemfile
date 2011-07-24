@@ -31,6 +31,8 @@ end
 
 group :production do
   gem 'mysql2'
+  gem 'execjs'
+  gem 'therubyracer'
 end
 
 # Use unicorn as the web server
