@@ -3,7 +3,6 @@ class PicturesController < ApplicationController
 
   before_filter :authenticate
 
-
   #PUT /pictures/1/fave
   def fave
     @picture = Picture.find(params[:id])
