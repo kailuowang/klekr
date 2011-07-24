@@ -62,7 +62,9 @@ class window.View
     $('#right').click(listener)
 
   faveClicked: (listener) ->
-    @faveLink.click(listener)
+    @faveLink.click ->
+      listener()
+      false
 
   previousClicked: (listener) ->
     $('#left').click(listener)
