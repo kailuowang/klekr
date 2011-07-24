@@ -46,7 +46,6 @@ Collectr::Application.routes.draw do
   end
 
   resource :slideshow, :only => [:show], :controller => :slideshow do
-    get 'current'
     post 'new_pictures'
   end
 

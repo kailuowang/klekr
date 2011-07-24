@@ -3,7 +3,8 @@ class SlideshowController < ApplicationController
   before_filter :authenticate
 
   def show
-    @first_picture_path = current_pictures_path
+    id = params[:id]
+    @first_picture_path = id ? picture_path(id) : current_pictures_path
     @new_pictures_path = new_pictures_slideshow_path
   end
 
