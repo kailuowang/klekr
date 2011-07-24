@@ -81,7 +81,7 @@ namespace :deploy do
   end
 
   def rake task
-    run_in_app "#{rails_env} rake #{task} --trace"
+    run_in_app "#{rails_env} bundle exec rake #{task} --trace"
   end
 
   def run_in_app cmd
