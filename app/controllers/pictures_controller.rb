@@ -36,7 +36,7 @@ class PicturesController < ApplicationController
     @picture.fave
     respond_to do |format|
       format.html { redirect_to(:back, notice: "Faved!") }
-      format.js  { head :ok }
+      format.js  { render :json => {} }
     end
   end
 
@@ -68,7 +68,7 @@ class PicturesController < ApplicationController
   def viewed
     Picture.find(params[:id]).get_viewed
     respond_to do |format|
-      format.js  { head :ok }
+      format.js  { render :json => {} }
     end
   end
 

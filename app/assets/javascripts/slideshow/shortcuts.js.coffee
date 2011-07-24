@@ -1,11 +1,13 @@
 window.bindKeys = ->
   next = () -> slideshow.navigateToNext()
   previous = () -> slideshow.navigateToPrevious()
+  bindKey = (key, func) -> $(document).bind('keydown', key, func)
 
-  $(document).bind('keydown', 'space', next)
-  $(document).bind('keydown', 'n', next)
-  $(document).bind('keydown', 'right', next)
-  $(document).bind('keydown', 'left', previous)
-#  $(document).bind('keydown', 'f', -> $('#fave').click())
-#  $(document).bind('keydown', 'o', -> go_link($('#owner')))
+  bindKey('space', next)
+  bindKey('n', next)
+  bindKey('right', next)
+  bindKey('left', previous)
+  bindKey('b', previous)
+  bindKey('f', -> slideshow.faveCurrentPicture())
+  bindKey('o', -> view.gotoOwner())
 

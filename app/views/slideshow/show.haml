@@ -14,31 +14,33 @@
       #slideShowCaption
         %h3{style: 'margin: 8px'}
           -#- if(@picture.faved?)
-          -#  Faved
+          %span#faved
+            Faved
+          %img#faveWaiting{src: 'assets/loading.gif', style: 'display:none'}
+          %a#faveLink{href: '#'}
+            Fave it!
           -#- else
           -#  = image_tag('loading.gif', id: 'faveWaiting', style: 'display:none')
           -#  -#= link_to 'Fave it!', fave_picture_path(@picture), method: :put, id: 'fave', remote: true
           -#  %span{id: 'favedText', style: 'display:none'} Faved
         %h5
           %b Title:
-          = link_to '?pictureTitle', '?titleUrl'
+          %a#title{target: '_blank'}
           |
           %b By:
-          = link_to '?pictureOwner', '?pictureOwnerPath', id: 'owner'
+          %a#owner
           |
           %b From:
-          -#- @picture.flickr_streams.each do |flickr_stream|
-          -#  = link_to "#{flickr_stream.username}'s #{flickr_stream.type_display}", user_path(flickr_stream.user_id)
-          -#  |
+          #fromStreams{style: 'display:inline'}
 
         %h5.inline
           %b
             Personal Interestingness:
-            -#= @picture.stream_rating.to_i
+            %span#interestingness
 
         #windowSizeSetting
           -#= render 'cookie_settings/form'
-      Key shortcuts: "space" or "n" to the next picture, "b" to go back, "f" to fave it, "o" to see owners page
+      Key shortcuts: "space" or &rarr; to the next picture, "b" or &larr; to go back, "f" to fave it, "o" to see owners page
       -if notice
         %p#notice= notice
       = render(partial: 'general/copyright')

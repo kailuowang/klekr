@@ -27,7 +27,10 @@ class window.Picture
     else
       @data.mediumUrl
 
-  id: -> id
+  fave: (onSuccess) ->
+    server.put @data.favePath, {}, =>
+      @data.faved = true
+      onSuccess()
 
   preload: ->
     this.preloadImage @data.mediumUrl, (image) =>
@@ -36,7 +39,9 @@ class window.Picture
         this.preloadImage @data.largeUrl
 
   getViewed: ->
-    server.post(@data.getViewedPath)
+    unless @viewed
+      server.put(@data.getViewedPath)
+      @viewed = true
 
   preloadImage: (url, onload) ->
     image = new Image()

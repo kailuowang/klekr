@@ -6,6 +6,7 @@ class window.Slideshow
     this.initPictures()
     view.nextClicked  => this.navigateToNext()
     view.previousClicked => this.navigateToPrevious()
+    view.faveClicked => this.faveCurrentPicture()
 
   initPictures: ->
     @pictures = []
@@ -52,6 +53,11 @@ class window.Slideshow
     unless this.atTheBegining()
       @currentIndex -= 1
       this.displayCurrentPicture()
+
+  faveCurrentPicture: ->
+    view.changingFavedStatus()
+    this.currentPicture().fave =>
+      view.updateFavedStatus(this.currentPicture())
 
   atTheLast: ->
     @currentIndex == @pictures.length - 1

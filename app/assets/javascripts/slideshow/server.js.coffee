@@ -3,7 +3,6 @@ class window.Server
     @currentPicturePath = '/slideshow/current'
     @newPicturesPath = '/slideshow/new_pictures'
 
-
   currentPicture: (callback) ->
     this.get(@currentPicturePath, null, callback)
 
@@ -18,11 +17,15 @@ class window.Server
   post: (url, data, callback) ->
     this.ajax(url, data, 'POST', callback)
 
+  put: (url, data, callback) ->
+    this.ajax(url, data, 'PUT', callback)
+
   ajax: (url, data, type, callback) ->
     $.ajax(
             url: url,
             dataType: 'json',
             data: data,
             type: type
-            success: (data) -> callback(data) if callback?
+            success: (data) ->
+              callback(data) if callback?
     )

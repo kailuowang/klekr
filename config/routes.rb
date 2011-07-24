@@ -27,7 +27,7 @@ Collectr::Application.routes.draw do
     member do
       put 'fave'
       get 'next'
-      post 'viewed'
+      put 'viewed'
     end
   end
 

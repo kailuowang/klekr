@@ -46,7 +46,7 @@ class Picture < ActiveRecord::Base
     end
 
     def new_pictures_by(collector, n, *exclude_ids)
-      scope = collected_by(collector).new_pictures(n)
+      scope = collected_by(collector).new_pictures(n).includes(:flickr_streams)
       pictures = Picture.arel_table
       scope = scope.where(pictures[:id].not_in(exclude_ids)) if exclude_ids.present?
       scope
