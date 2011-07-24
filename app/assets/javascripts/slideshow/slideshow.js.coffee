@@ -77,8 +77,6 @@ class window.Slideshow
 
 
 
-
-
 $(document).ready ->
   window.view = new View
   window.server = new Server

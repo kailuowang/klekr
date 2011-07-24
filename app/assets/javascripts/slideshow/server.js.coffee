@@ -1,7 +1,7 @@
 class window.Server
   constructor: ->
-    @firstPicturePath = '/slideshow/current'
-    @newPicturesPath = '/slideshow/new_pictures'
+    @firstPicturePath = __firstPicturePath__
+    @newPicturesPath = __newPicturesPath__
 
   firstPicture: (callback) ->
     this.get(@firstPicturePath, null, callback)

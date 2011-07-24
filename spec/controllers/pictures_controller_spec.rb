@@ -2,66 +2,36 @@ require 'spec_helper'
 
 describe PicturesController do
 
-  describe "GET show" do
-    it "should not change viewed? flag when showing the picture" do
-      Factory( :picture, date_upload:  2.hour.ago )
-      pic = Factory( :picture, date_upload: 1.hour.ago )
-      get 'show', id: pic.id
-      pic.reload
-      pic.should_not be_viewed
+  describe "#current" do
+    it "return the json data for the most_interesting_picture of the collector" do
+      collector = Factory(:collector)
+      picture = Factory(:picture)
+      controller.stub(:current_collector).and_return(collector)
+      Picture.should_receive(:most_interesting_for).with(collector).and_return(picture)
+      get "current", format: :js
+      response.body.should include picture.large_url
+
     end
   end
 
-  describe "GET next" do
-    it "should redirect to the next new picture when there is one" do
-      pic = Factory( :picture, date_upload: 1.hour.ago )
-      pic2 = Factory( :picture, date_upload:  2.hour.ago, :collector => pic.collector )
-      get 'next', id: pic.id
 
-      response.should redirect_to pic2
-    end
+  describe "PUT fave" do
 
-    it "should set the pic next from as viewed" do
-      pic = Factory( :picture, date_upload: 1.hour.ago )
-
-      get 'next', id: pic.id
-      pic.reload
-      pic.should be_viewed
-    end
-
-
-    it "should redirect to the hidden treasure if the hidden_treaure is in parameter" do
-      Factory( :picture)
-      pic2 = Factory( :picture)
-      pic = Factory( :picture)
-
+    it "should mark the picture as faved" do
+      pic = Factory(:picture)
       Picture.stub!(:find).with(pic.id).and_return(pic)
-      Picture.stub!(:find).with(pic2.id).and_return(pic2)
-      pic.stub!(:guess_hidden_treasure).and_return(pic2)
-      get 'next', id: pic.id, :hidden_treasure => true
-
-      response.should redirect_to picture_path(id: pic2.id, hidden_treasure: true)
+      pic.should_receive(:fave)
+      put 'fave', format: :json, id: pic.id
     end
 
-    describe "PUT fave" do
-      before do
-        request.env["HTTP_REFERER"] = "some_url"
-      end
-      it "should mark the picture as faved" do
-        pic = Factory(:picture)
-        Picture.stub!(:find).with(pic.id).and_return(pic)
-        pic.should_receive(:fave)
-        put 'fave', id: pic.id
-      end
-
-      it "should mark the picture as viewed" do
-        pic = Factory(:picture)
-        Picture.stub!(:find).with(pic.id).and_return(pic)
-        pic.should_receive(:get_viewed)
-        pic.stub!(:fave)
-        put 'fave', id: pic.id
-      end
+    it "should mark the picture as viewed" do
+      pic = Factory(:picture)
+      Picture.stub!(:find).with(pic.id).and_return(pic)
+      pic.should_receive(:get_viewed)
+      pic.stub!(:fave)
+      put 'fave', format: :json, id: pic.id
     end
-
   end
+
+
 end

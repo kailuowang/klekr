@@ -1,6 +1,12 @@
 - content_for(:head) do
   = javascript_include_tag 'slideshow.js'
 
+:javascript
+  __firstPicturePath__ = '#{@first_picture_path}'
+  __newPicturesPath__ = '#{@new_pictures_path}'
+
+
+
 #slide{style: 'width:90%; text-align: center;'}
   .spacer{style: 'width: 1280px;'}
     = image_tag('spacer.gif', width: '1280px', height: '875px')

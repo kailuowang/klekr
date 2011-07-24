@@ -20,13 +20,12 @@ Collectr::Application.routes.draw do
 
   end
 
-  resources :pictures, :only => [:show, :destroy, :index] do
+  resources :pictures, :only => [:show] do
     collection do
       get 'current'
     end
     member do
       put 'fave'
-      get 'next'
       put 'viewed'
     end
   end
