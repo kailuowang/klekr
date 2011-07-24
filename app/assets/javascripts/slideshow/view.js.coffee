@@ -15,6 +15,7 @@ class window.View
     @pictureArea.fadeOut(100, =>
       this.updateDOM(picture)
     )
+    @pictureArea.show() unless @pictureArea.is(":visible")
     @pictureArea.fadeIn(100)
 
   updateDOM: (picture) ->

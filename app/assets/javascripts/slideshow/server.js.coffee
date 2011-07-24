@@ -1,10 +1,10 @@
 class window.Server
   constructor: ->
-    @currentPicturePath = '/slideshow/current'
+    @firstPicturePath = '/slideshow/current'
     @newPicturesPath = '/slideshow/new_pictures'
 
-  currentPicture: (callback) ->
-    this.get(@currentPicturePath, null, callback)
+  firstPicture: (callback) ->
+    this.get(@firstPicturePath, null, callback)
 
   newPictures: (num, excludeIds, callback) ->
     this.post( @newPicturesPath,

@@ -10,7 +10,7 @@ class window.Slideshow
 
   initPictures: ->
     @pictures = []
-    server.currentPicture (data) =>
+    server.firstPicture (data) =>
       @pictures.push(new Picture(data))
       this.displayCurrentPicture()
       this.retrieveMorePictures()

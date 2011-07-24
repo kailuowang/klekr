@@ -9,7 +9,8 @@
       = @current_collector.user_name
       's Slide Show
       = link_to 'Back to My Collections', flickr_streams_path
-    #pictureArea
+
+    #pictureArea{style: 'display:none'}
       = image_tag('loading.gif', id: 'picture')
       #slideShowCaption
         %h3{style: 'margin: 8px'}
