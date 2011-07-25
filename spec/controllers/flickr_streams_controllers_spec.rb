@@ -19,6 +19,20 @@ describe FlickrStreamsController do
       get "index"
       assigns[:number_of_new_pics].should == 1
     end
+
+    it "assigns flickr streams that has collecting flag as true" do
+      stream = Factory(:fave_stream, collecting: true, collector: Factory(:collector))
+      controller.stub!(:current_collector).and_return stream.collector
+      get "index"
+      assigns[:flickr_streams].should == [stream]
+    end
+
+    it "not assigns flickr streams that has collecting flag as false" do
+      stream = Factory(:fave_stream, collecting: false, collector: Factory(:collector))
+      controller.stub!(:current_collector).and_return stream.collector
+      get "index"
+      assigns[:flickr_streams].should_not include stream
+    end
   end
 
   describe "get sync" do

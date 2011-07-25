@@ -50,8 +50,8 @@ class window.Picture
 
   largerVersionWithinWindow: (image) ->
     [largeWidth, largeHeight] = this.guessLargeSize(image.width, image.height)
-    displayWidth = $(window).width() - 50
-    displayHeight = $(window).height() - 200
+    displayWidth = $(window).width() - 40
+    displayHeight = $(window).height()
     largeWidth < displayWidth and largeHeight < displayHeight
 
   guessLargeSize: (mediumWidth, mediumHeight) ->

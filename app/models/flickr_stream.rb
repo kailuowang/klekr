@@ -3,13 +3,16 @@ class FlickrStream < ActiveRecord::Base
   extend Collectr::Flickr
 
   TYPES = ['FaveStream', 'UploadStream']
-  PER_PAGE = 20
+  FLICKR_PHOTOS_PER_PAGE = 20
 
   validates_uniqueness_of :user_id, :scope => [:collector_id, :type]
   validates_presence_of :user_id
   belongs_to :collector
+
   scope :collected_by, lambda {|collector| where(collector_id: collector) if collector }
   scope :of_user, lambda {|user_id| where(user_id: user_id)}
+  scope :collecting, where(collecting: true)
+
   has_many :syncages
   has_many :pictures, through: :syncages
   has_many :monthly_scores, order: 'year desc, month desc'
@@ -42,7 +45,8 @@ class FlickrStream < ActiveRecord::Base
     end
 
     def sync_all(collector = nil)
-      streams_to_sync = collector ? collected_by(collector) : all
+      streams_to_sync = collector ? collected_by(collector).collecting : collecting
+
       streams_to_sync.inject(0) {|total_synced, stream| total_synced + stream.sync }
     end
 
@@ -202,9 +206,9 @@ class FlickrStream < ActiveRecord::Base
   def get_pic_up_to(up_to, max = 200, page = 1 )
     up_to = nil unless max.nil?
 
-    result =  get_pictures_from_flickr(PER_PAGE, up_to, page).to_a
+    result =  get_pictures_from_flickr(FLICKR_PHOTOS_PER_PAGE, up_to, page).to_a
 
-    retrieved_max_num_of_pics = max && PER_PAGE * page >= max
+    retrieved_max_num_of_pics = max && FLICKR_PHOTOS_PER_PAGE * page >= max
     unless(retrieved_max_num_of_pics || result.empty?)
       result += get_pic_up_to(up_to,  max, page + 1)
     end

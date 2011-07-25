@@ -11,6 +11,7 @@ describe FlickrStream do
 
     before do
       stub_flickr(FlickrStream, :people).stub!(:getInfo).and_return(mock(username: 'a_username', photosurl: 'http://flickr/a_usrname'))
+      stub_flickr(FlickrStream, :favorites).stub!(:getList).and_return([])
     end
 
     describe "#build" do
@@ -33,22 +34,37 @@ describe FlickrStream do
 
     describe "#sync_all" do
       it "should sync all streams and return the total number of pictures synced" do
-        stream1 = Factory(:fave_stream, :user_id => Factory.next(:user_id))
-        stream2 = Factory(:fave_stream, :user_id => Factory.next(:user_id))
+        stream1 = Factory(:fave_stream)
+        stream2 = Factory(:fave_stream)
         stream1.stub!(:sync).and_return 1
         stream2.stub!(:sync).and_return 2
-        FlickrStream.stub!(:all).and_return [stream1, stream2]
+        FlickrStream.stub!(:collecting).and_return [stream1, stream2]
         FlickrStream.sync_all.should == 3
       end
 
-      it "should sync all streams fromt the collector if the collector is given" do
+      it "sync streams from the collector if the collector is given" do
         collector = Factory(:collector)
-        stream = Factory(:fave_stream, :user_id => Factory.next(:user_id), collector: collector)
-        stream.stub!(:sync).and_return 1
-        Factory(:fave_stream, :user_id => Factory.next(:user_id))
-        FlickrStream.should_receive(:collected_by).with(collector).and_return([stream])
+        stream = Factory(:fave_stream, collector: collector)
         FlickrStream.sync_all(collector)
+        stream.reload.last_sync.should be_present
+      end
 
+      it "not sync streams from other collector if the collector is given" do
+        stream = Factory(:fave_stream, collector: Factory(:collector))
+        FlickrStream.sync_all(Factory(:collector))
+        stream.reload.last_sync.should be_blank
+      end
+
+      it "sync the streams whose collecting? is true" do
+        collecting_stream = Factory( :fave_stream, collecting: true )
+        FlickrStream.sync_all()
+        collecting_stream.reload.last_sync.should be_present
+      end
+
+      it "does not sync the streams whose collecting? is false" do
+        notcollecting_stream = Factory(:fave_stream, collecting: false)
+        FlickrStream.sync_all()
+        notcollecting_stream.reload.last_sync.should be_blank
       end
     end
 
@@ -214,13 +230,13 @@ describe FlickrStream do
       end
 
       it "should sync up to how many pages it takes to get max_num_of pictures" do
-        @flickr_module.should_receive(@flickr_method).and_return([Factory.next(:pic_info)]*FlickrStream::PER_PAGE)
+        @flickr_module.should_receive(@flickr_method).and_return([Factory.next(:pic_info)]*FlickrStream::FLICKR_PHOTOS_PER_PAGE)
         @flickr_module.should_receive(@flickr_method).
-            with(hash_including(page: 2)).and_return([Factory.next(:pic_info)]*FlickrStream::PER_PAGE)
+            with(hash_including(page: 2)).and_return([Factory.next(:pic_info)]*FlickrStream::FLICKR_PHOTOS_PER_PAGE)
         @flickr_module.should_not_receive(@flickr_method).with(hash_including(page: 3))
 
 
-        @flickr_stream.sync(nil, 2*FlickrStream::PER_PAGE )
+        @flickr_stream.sync(nil, 2*FlickrStream::FLICKR_PHOTOS_PER_PAGE )
       end
 
       it "should update the last_sync date" do
