@@ -71,17 +71,10 @@ class FlickrStream < ActiveRecord::Base
 
     protected
     def sync_uses(flickr_module, get_photo_method, related_time_field)
-      define_method(:get_pictures_from_flickr) do |per_page = 10, since = nil, page_number = 1|
-        opts = {user_id: user_id, extras: 'date_upload, owner_name', per_page: per_page }
-        opts[related_time_field] = since.to_i if since
-        opts[:page] = page_number if page_number > 1
-        begin
-          flickr.send(flickr_module).send(get_photo_method, opts)
-        rescue FlickRaw::FailedResponse => e
-          Rails.logger.error("failed sync photo from flickr" + e.code.to_s + "\n" + e.msg)
-          []
-        end
-      end
+      define_method(:flickr_module) { flickr_module }
+      define_method(:get_photo_method) { get_photo_method }
+      define_method(:related_time_field) { related_time_field }
+      private :flickr_module, :get_photo_method, :related_time_field
     end
 
     private
@@ -104,7 +97,6 @@ class FlickrStream < ActiveRecord::Base
     end
   end
 
-
   def sync(up_to = last_sync || 1.month.ago, max_num = nil)
     photos_synced = 0
     get_pic_up_to(up_to, max_num).each do |pic_info|
@@ -116,7 +108,6 @@ class FlickrStream < ActiveRecord::Base
     update_attribute(:last_sync, DateTime.now)
     photos_synced
   end
-
 
   def picture_viewed
     score_for(Date.today).add_num_of_pics_viewed
@@ -213,6 +204,19 @@ class FlickrStream < ActiveRecord::Base
       result += get_pic_up_to(up_to,  max, page + 1)
     end
     result
+  end
+
+  def get_pictures_from_flickr(per_page = 10, since = nil, page_number = 1)
+    opts = {user_id: user_id, extras: 'date_upload, owner_name', per_page: per_page}
+    min_time_field = ('min_' + related_time_field.to_s).to_sym
+    opts[min_time_field] = since.to_i if since
+    opts[:page] = page_number if page_number > 1
+    begin
+      flickr.send(flickr_module).send(get_photo_method, opts)
+    rescue FlickRaw::FailedResponse => e
+      Rails.logger.error("failed sync photo from flickr" + e.code.to_s + "\n" + e.msg)
+      []
+    end
   end
 
 

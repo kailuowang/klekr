@@ -10,7 +10,7 @@ gem 'flickraw'
 
 gem "jquery-rails"
 gem 'capistrano'
-gem 'will_paginate', :git => 'https://github.com/wantful/will_paginate.git'
+gem 'will_paginate', '~> 3.0pre4'
 gem "rails_config"
 gem 'delayed_job'
 gem 'whenever', :require => false
