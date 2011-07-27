@@ -10,6 +10,7 @@ describe Picture do
   end
 
   describe "class" do
+
     describe "#find_or_initialize_from_pic_info" do
       it "should be able to create from flickr pic info" do
         pic_info = Factory.next(:pic_info)
@@ -30,6 +31,7 @@ describe Picture do
         pic.save!
         Picture.find_or_initialize_from_pic_info(pic_info, collector).should == pic
       end
+
       it "should create duplicate picture for different collectors" do
         pic_info = Factory.next(:pic_info)
         pic = Picture.find_or_initialize_from_pic_info(pic_info, Factory(:collector))

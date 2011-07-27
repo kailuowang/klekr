@@ -253,9 +253,9 @@ describe FlickrStream do
 
       it "should not duplicate syncage when syncing the same picture" do
         a_pic_info = Factory.next(:pic_info)
-        @flickr_module.should_receive(@flickr_method).and_return([a_pic_info])
-        @flickr_stream.sync
-        @flickr_stream.sync
+        @flickr_module.stub(@flickr_method).and_return([a_pic_info])
+        @flickr_stream.sync(nil,1)
+        @flickr_stream.sync(nil,1)
         Syncage.count.should == 1
       end
 

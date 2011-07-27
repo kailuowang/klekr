@@ -17,22 +17,21 @@ class Picture < ActiveRecord::Base
 
     def find_or_initialize_from_pic_info(pic_info, collector = nil)
       url = FlickRaw.url_photopage(pic_info)
-      picture = Picture.collected_by(collector).where(url: url).first
-
-      picture ||= Picture.new
-      picture.url = url
-      picture.title = pic_info.title
-      picture.date_upload = Time.at(pic_info.dateupload.to_i).to_datetime
-      picture.owner_name = pic_info.ownername
-      picture.pic_info_dump = pic_info.marshal_dump
-      picture.collector = collector
-      picture
+      Picture.collected_by(collector).where(url: url).first ||
+        Picture.new.tap do |picture|
+          picture.url = url
+          picture.title = pic_info.title
+          picture.date_upload = Time.at(pic_info.dateupload.to_i).to_datetime
+          picture.owner_name = pic_info.ownername
+          picture.pic_info_dump = pic_info.marshal_dump
+          picture.collector = collector
+        end
     end
 
     def create_from_sync(pic_info, stream)
       picture = Picture.find_or_initialize_from_pic_info(pic_info, stream.collector)
-      picture.save!
-      already_synced = Syncage.where(flickr_stream_id: stream.id, picture_id: picture.id).present?
+      new_picture = picture.new_record?
+      already_synced = !new_picture && Syncage.where(flickr_stream_id: stream.id, picture_id: picture.id).present?
       picture.synced_by(stream) unless already_synced
       return picture, !already_synced
     end
@@ -63,12 +62,6 @@ class Picture < ActiveRecord::Base
       update_attribute(:viewed, true)
       flickr_streams.each(&:picture_viewed)
     end
-    self
-  end
-
-  def synced_by(stream)
-    syncages.create(flickr_stream_id: stream.id)
-    update_attribute(:stream_rating, stream.star_rating + (stream_rating || 0))
     self
   end
 
@@ -127,5 +120,13 @@ class Picture < ActiveRecord::Base
 
   def guess_hidden_treasure
     Picture.syned_from(FlickrStream.least_viewed).desc.unviewed.limit(1)[0]
+  end
+
+  def synced_by(stream)
+    new_stream_rating = stream.star_rating + (stream_rating || 0)
+    self.stream_rating = new_stream_rating
+    save!
+    syncages.create(flickr_stream_id: stream.id)
+    self
   end
 end
