@@ -71,10 +71,12 @@ class FlickrStream < ActiveRecord::Base
 
     protected
     def sync_uses(flickr_module, get_photo_method, related_time_field)
-      define_method(:flickr_module) { flickr_module }
-      define_method(:get_photo_method) { get_photo_method }
-      define_method(:related_time_field) { related_time_field }
-      private :flickr_module, :get_photo_method, :related_time_field
+      define_method(:retriever) do
+        @retriever ||= Collectr::FlickrPictureRetriever.new(module: flickr_module,
+                                                            method: get_photo_method,
+                                                            time_field: related_time_field,
+                                                            user_id: user_id)
+      end
     end
 
     private
@@ -92,14 +94,14 @@ class FlickrStream < ActiveRecord::Base
   end
 
   def get_pictures(num)
-    get_pictures_from_flickr(num).map do |pic_info|
+    retriever.get(num).map do |pic_info|
       Picture.find_or_initialize_from_pic_info(pic_info, collector)
     end
   end
 
   def sync(up_to = last_sync || 1.month.ago, max_num = nil)
     photos_synced = 0
-    get_pic_up_to(up_to, max_num).each do |pic_info|
+    retriever.get_up_to(up_to, max_num).each do |pic_info|
       _, newly_synced = Picture.create_from_sync(pic_info, self)
       photos_synced += 1 if newly_synced
     end
@@ -190,44 +192,6 @@ class FlickrStream < ActiveRecord::Base
       @rating = nil
       monthly_scores.all.each(&adjustment)
     end
-  end
-
-  def get_pic_up_to(up_to, max = 200, page = 1 )
-    up_to = nil unless max.nil?
-
-    result =  get_pictures_from_flickr(FLICKR_PHOTOS_PER_PAGE, up_to, page).to_a
-
-    retrieved_max_num_of_pics = max && FLICKR_PHOTOS_PER_PAGE * page >= max
-    unless(retrieved_max_num_of_pics || result.empty?)
-      result += get_pic_up_to(up_to,  max, page + 1)
-    end
-    result
-  end
-
-  def get_pictures_from_flickr(per_page = 10, since = nil, page_number = 1)
-    paging_opts = {}.tap do |h|
-      h[:per_page] = per_page
-      h[:page] = page_number if page_number > 1
-    end
-
-    range_opts = {}.tap do |h|
-      h[min_time_field] = since.to_i if since
-    end
-
-    opts = {user_id: user_id, extras: 'date_upload, owner_name'}.
-            merge(paging_opts).
-            merge(range_opts)
-
-    begin
-      flickr.send(flickr_module).send(get_photo_method, opts)
-    rescue FlickRaw::FailedResponse => e
-      Rails.logger.error("failed sync photo from flickr" + e.code.to_s + "\n" + e.msg)
-      []
-    end
-  end
-
-  def min_time_field
-    ('min_' + related_time_field.to_s).to_sym
   end
 
 

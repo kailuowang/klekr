@@ -92,7 +92,6 @@ class Picture < ActiveRecord::Base
     @pic_info ||= FlickRaw::Response.new *pic_info_dump
   end
 
-
   def flickr_url size
     case size
       when :large

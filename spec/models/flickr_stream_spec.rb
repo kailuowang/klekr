@@ -11,7 +11,7 @@ describe FlickrStream do
 
     before do
       stub_flickr(FlickrStream, :people).stub!(:getInfo).and_return(mock(username: 'a_username', photosurl: 'http://flickr/a_usrname'))
-      stub_flickr(FlickrStream, :favorites).stub!(:getList).and_return([])
+      #stub_flickr(FlickrStream, :favorites).stub!(:getList).and_return([])
     end
 
     describe "#build" do
@@ -194,15 +194,15 @@ describe FlickrStream do
   shared_examples_for "All FlickrStreams" do
     describe "#sync" do
       before do
-        @flickr_module = stub_flickr(@flickr_stream, @flickr_module_name)
-        @flickr_module.stub!(@flickr_method).and_return([])
+        @module = stub_flickr(@flickr_stream.retriever, @flickr_module_name)
+        @module.stub!(@flickr_method).and_return([])
       end
 
 
       it "should use flickr module with user id to get pictures and return the number of pictures synced" do
         a_pic_info = Factory.next(:pic_info)
         another_pic_info = Factory.next(:pic_info)
-        @flickr_module.should_receive(@flickr_method).
+        @module.should_receive(@flickr_method).
             with(hash_including(user_id: 'a_user_id')).
             and_return([a_pic_info, another_pic_info])
 
@@ -211,29 +211,29 @@ describe FlickrStream do
       end
 
       it "should sync with owner_name and date_upload" do
-        @flickr_module.should_receive(@flickr_method).
+        @module.should_receive(@flickr_method).
             with(hash_including(extras: 'date_upload, owner_name')).and_return([])
 
         @flickr_stream.sync
       end
 
       it "should sync up to howmany pages it takes to get to the last sync date of the pictures" do
-        @flickr_module.should_receive(@flickr_method).and_return([Factory.next(:pic_info)])
-        @flickr_module.should_receive(@flickr_method).
+        @module.should_receive(@flickr_method).and_return([Factory.next(:pic_info)])
+        @module.should_receive(@flickr_method).
             with(hash_including(page: 2)).and_return([Factory.next(:pic_info)])
-        @flickr_module.should_receive(@flickr_method).
+        @module.should_receive(@flickr_method).
             with(hash_including(page: 3)).and_return([])
-        @flickr_module.should_not_receive(@flickr_method).with(hash_including(page: 4))
+        @module.should_not_receive(@flickr_method).with(hash_including(page: 4))
 
 
         @flickr_stream.sync
       end
 
       it "should sync up to how many pages it takes to get max_num_of pictures" do
-        @flickr_module.should_receive(@flickr_method).and_return([Factory.next(:pic_info)]*FlickrStream::FLICKR_PHOTOS_PER_PAGE)
-        @flickr_module.should_receive(@flickr_method).
+        @module.should_receive(@flickr_method).and_return([Factory.next(:pic_info)]*FlickrStream::FLICKR_PHOTOS_PER_PAGE)
+        @module.should_receive(@flickr_method).
             with(hash_including(page: 2)).and_return([Factory.next(:pic_info)]*FlickrStream::FLICKR_PHOTOS_PER_PAGE)
-        @flickr_module.should_not_receive(@flickr_method).with(hash_including(page: 3))
+        @module.should_not_receive(@flickr_method).with(hash_including(page: 3))
 
 
         @flickr_stream.sync(nil, 2*FlickrStream::FLICKR_PHOTOS_PER_PAGE )
@@ -246,14 +246,14 @@ describe FlickrStream do
 
       it "should synced picture should be linked with the stream" do
         a_pic_info = Factory.next(:pic_info)
-        @flickr_module.should_receive(@flickr_method).and_return([a_pic_info])
+        @module.should_receive(@flickr_method).and_return([a_pic_info])
         @flickr_stream.sync
         Picture.first.flickr_streams.should include(@flickr_stream)
       end
 
       it "should not duplicate syncage when syncing the same picture" do
         a_pic_info = Factory.next(:pic_info)
-        @flickr_module.stub(@flickr_method).and_return([a_pic_info])
+        @module.stub(@flickr_method).and_return([a_pic_info])
         @flickr_stream.sync(nil,1)
         @flickr_stream.sync(nil,1)
         Syncage.count.should == 1
@@ -263,9 +263,9 @@ describe FlickrStream do
         a_pic_info = Factory.next(:pic_info)
         flickr_stream2 = @flickr_stream.class.create!(user_id: 'another_user', collector: @flickr_stream.collector)
 
-        @flickr_module.should_receive(@flickr_method).and_return([a_pic_info])
-        @flickr_module.should_receive(@flickr_method).and_return([])
-        flickr_module2 = stub_flickr(flickr_stream2, @flickr_module_name)
+        @module.should_receive(@flickr_method).and_return([a_pic_info])
+        @module.should_receive(@flickr_method).and_return([])
+        flickr_module2 = stub_flickr(flickr_stream2.retriever, @flickr_module_name)
         flickr_module2.should_receive(@flickr_method).and_return([a_pic_info])
         flickr_module2.should_receive(@flickr_method).and_return([])
         @flickr_stream.sync
@@ -278,19 +278,19 @@ describe FlickrStream do
       it "should only sync photos faved upto the last sync time" do
         last_sync = DateTime.new(2010,1,2)
         @flickr_stream.last_sync = DateTime.new(2010,1,2)
-        @flickr_module.should_receive(@flickr_method).with(hash_including(@related_date_field => last_sync.to_i)).and_return([])
+        @module.should_receive(@flickr_method).with(hash_including(@related_date_field => last_sync.to_i)).and_return([])
         @flickr_stream.sync
       end
 
       it "should only sync photos faved upto the 1 month ago if it's the first time sync" do
         @flickr_stream.last_sync = nil
-        @flickr_module.should_receive(@flickr_method).with(hash_including(@related_date_field => 1.month.ago.to_i)).and_return([])
+        @module.should_receive(@flickr_method).with(hash_including(@related_date_field => 1.month.ago.to_i)).and_return([])
         @flickr_stream.sync
       end
 
       it "should add the picture synced to the collector this stream belongs to" do
         a_pic_info =  Factory.next(:pic_info)
-        @flickr_module.should_receive(@flickr_method).and_return([a_pic_info])
+        @module.should_receive(@flickr_method).and_return([a_pic_info])
 
         @flickr_stream.sync
 
@@ -436,14 +436,13 @@ describe FlickrStream do
         a_pic_info =  Factory.next(:pic_info)
 
         stream1 = Factory(:fave_stream, collector: Factory(:collector))
-        stream1.stub(:get_pic_up_to).and_return([a_pic_info])
+        stream1.stub(:retriever).and_return(stub(:get_up_to => [a_pic_info]))
         stream1.sync
         Picture.count.should == 1
 
         collector = Factory(:collector)
         stream2 = Factory(:fave_stream, collector: collector)
-        stream2.stub(:get_pic_up_to).and_return([a_pic_info])
-
+        stream2.stub(:retriever).and_return(stub(:get_up_to => [a_pic_info]))
         stream2.sync
 
         Picture.count.should == 2
