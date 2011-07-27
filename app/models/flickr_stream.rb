@@ -101,9 +101,7 @@ class FlickrStream < ActiveRecord::Base
     photos_synced = 0
     get_pic_up_to(up_to, max_num).each do |pic_info|
       _, newly_synced = Picture.create_from_sync(pic_info, self)
-      if newly_synced
-        photos_synced += 1
-      end
+      photos_synced += 1 if newly_synced
     end
     update_attribute(:last_sync, DateTime.now)
     photos_synced
@@ -207,16 +205,29 @@ class FlickrStream < ActiveRecord::Base
   end
 
   def get_pictures_from_flickr(per_page = 10, since = nil, page_number = 1)
-    opts = {user_id: user_id, extras: 'date_upload, owner_name', per_page: per_page}
-    min_time_field = ('min_' + related_time_field.to_s).to_sym
-    opts[min_time_field] = since.to_i if since
-    opts[:page] = page_number if page_number > 1
+    paging_opts = {}.tap do |h|
+      h[:per_page] = per_page
+      h[:page] = page_number if page_number > 1
+    end
+
+    range_opts = {}.tap do |h|
+      h[min_time_field] = since.to_i if since
+    end
+
+    opts = {user_id: user_id, extras: 'date_upload, owner_name'}.
+            merge(paging_opts).
+            merge(range_opts)
+
     begin
       flickr.send(flickr_module).send(get_photo_method, opts)
     rescue FlickRaw::FailedResponse => e
       Rails.logger.error("failed sync photo from flickr" + e.code.to_s + "\n" + e.msg)
       []
     end
+  end
+
+  def min_time_field
+    ('min_' + related_time_field.to_s).to_sym
   end
 
 
