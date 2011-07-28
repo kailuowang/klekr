@@ -37,4 +37,10 @@ class ApplicationController < ActionController::Base
     Thread.current[:current_collector] = collector
     @current_collector = collector
   end
+
+  def render_json(data)
+    respond_to do |f|
+      f.js { render :json => data }
+    end
+  end
 end

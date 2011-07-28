@@ -1,15 +1,13 @@
 class window.Server
   constructor: ->
     @firstPicturePath = __firstPicturePath__
-    @newPicturesPath = __newPicturesPath__
+    @morePicturesPath = __morePicturesPath__
 
   firstPicture: (callback) ->
     this.get(@firstPicturePath, null, callback)
 
-  newPictures: (num, excludeIds, callback) ->
-    this.post( @newPicturesPath,
-              { num: num, exclude_ids: excludeIds},
-              callback )
+  morePictures: (opts, callback) ->
+    this.post( @morePicturesPath, opts, callback )
 
   get: (url, data, callback) ->
     this.ajax(url, data, 'GET', callback)

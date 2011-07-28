@@ -10,13 +10,6 @@ class window.Picture
     original.push newP for newP in newOnes when not h[newP.id]?
     original
 
-  @retrieveNew: (num, oldOnes, callback) ->
-    excludeIds = (p.id for p in oldOnes)
-    server.newPictures(num, excludeIds, (data) =>
-      pictures = ( new Picture(picData) for picData in data )
-      callback(pictures)
-    )
-
   constructor: (@data) ->
     @id = @data.id
     this.preload() if @data.mediumUrl?

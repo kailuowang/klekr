@@ -1,5 +1,5 @@
 class PicturesController < ApplicationController
-  include Collectr::PictureData
+  include Collectr::PictureControllerHelper
 
   before_filter :authenticate
 

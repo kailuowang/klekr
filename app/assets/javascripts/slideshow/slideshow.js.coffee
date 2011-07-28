@@ -2,6 +2,7 @@ class window.Slideshow
 
   constructor: ->
     @currentIndex = 0
+    @currentPage = 0
     @cacheSize = 50
     this.initPictures()
     view.nextClicked  => this.navigateToNext()
@@ -19,9 +20,14 @@ class window.Slideshow
     view.display(this.currentPicture())
 
   retrieveMorePictures: ->
-    Picture.retrieveNew(10, this.unseenPictures(), (newPictures) =>
-      this.addPictures(newPictures)
-    )
+    @currentPage += 1
+    excludeIds = (p.id for p in this.unseenPictures())
+    opts = { num: 10, exclude_ids: excludeIds, page: @currentPage }
+    server.morePictures opts, (data) =>
+      this.addPictures(
+        new Picture(picData) for picData in data
+      )
+
 
   addPictures: (newPictures) ->
     unless @addingPictures

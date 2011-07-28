@@ -1,22 +1,28 @@
 module Collectr
-  module PictureData
+  module PictureControllerHelper
     def data_for(picture)
       {
-        id:               picture.id,
+        id:               picture.id || picture.url,
         largeUrl:         picture.large_url,
         mediumUrl:        picture.medium_url,
         interestingness:  picture.stream_rating.to_i,
-        getViewedPath:    viewed_picture_path(picture),
         title:            picture.title,
         flickrPageUrl:    picture.url,
         ownerName:        picture.owner_name,
-        ownerPath:        user_path(picture.pic_info.owner),
         faved:            picture.faved?,
-        favePath:         fave_picture_path(picture),
+        ownerPath:        user_path(picture.pic_info.owner),
         fromStreams:      picture.flickr_streams.map do |stream|
                             { username: stream.username, type: stream.type_display, path: user_path(stream.user_id)}
                           end
-      }
+      }.merge action_paths_for(picture)
+    end
+
+    def action_paths_for(picture)
+      picture.new_record? ? {} :
+        {
+          getViewedPath:    viewed_picture_path(picture),
+          favePath:         fave_picture_path(picture)
+        }
     end
 
 
@@ -26,6 +32,10 @@ module Collectr
       end
     end
 
+
+    def render_json_pictures(pictures)
+      render_json data_list_for(pictures)
+    end
 
   end
 end

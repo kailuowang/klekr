@@ -9,9 +9,9 @@ class FlickrStream < ActiveRecord::Base
   validates_presence_of :user_id
   belongs_to :collector
 
-  scope :collected_by, lambda {|collector| where(collector_id: collector) if collector }
-  scope :of_user, lambda {|user_id| where(user_id: user_id)}
   scope :collecting, where(collecting: true)
+  scope :collected_by, lambda {|collector| collecting.where(collector_id: collector) if collector }
+  scope :of_user, lambda {|user_id| where(user_id: user_id)}
 
   has_many :syncages
   has_many :pictures, through: :syncages
@@ -93,15 +93,15 @@ class FlickrStream < ActiveRecord::Base
     end
   end
 
-  def get_pictures(num)
-    retriever.get(num).map do |pic_info|
+  def get_pictures(num, page = 1)
+    retriever.get(num, page).map do |pic_info|
       Picture.find_or_initialize_from_pic_info(pic_info, collector)
     end
   end
 
-  def sync(up_to = last_sync || 1.month.ago, max_num = nil)
+  def sync(since = last_sync || 1.month.ago, max_num = nil)
     photos_synced = 0
-    retriever.get_up_to(up_to, max_num).each do |pic_info|
+    retriever.get_all(since, max_num).each do |pic_info|
       _, newly_synced = Picture.create_from_sync(pic_info, self)
       photos_synced += 1 if newly_synced
     end

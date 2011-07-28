@@ -1,4 +1,5 @@
 class AuthenticationsController < ApplicationController
+  include Collectr::Flickr
 
   #GET validate
   def validate

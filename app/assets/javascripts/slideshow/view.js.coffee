@@ -10,6 +10,9 @@ class window.View
     @faveLink = $('#faveLink')
     @faved = $('#faved')
     @faveWaiting = $('#faveWaiting')
+    @fromTitle = $('#fromTitle')
+    @faveArea = $('#faveArea')
+
 
   display: (picture) ->
     @pictureArea.fadeOut(100, =>
@@ -30,12 +33,9 @@ class window.View
 
   updateFavedStatus: (picture) ->
     @faveWaiting.hide()
-    if picture.data.faved
-      @faveLink.hide()
-      @faved.show()
-    else
-      @faved.hide()
-      @faveLink.show()
+    this.setVisible(@faveLink, !picture.data.faved)
+    this.setVisible(@faved, picture.data.faved)
+    this.setVisible(@faveArea, picture.favePath?)
 
   gotoOwner: () ->
     window.location = @ownerLink.attr('href')
@@ -50,6 +50,7 @@ class window.View
       link = $('<a>').attr('href', stream.path).text(stream.username + "'s " + stream.type)
       @fromStreamsDiv.append(link)
       @fromStreamsDiv.append($('<span>').text(' | '))
+    this.setVisible(@fromTitle, streams.length > 0 )
 
   pictureTitle: (picture) ->
     t = picture.data.title
@@ -69,3 +70,10 @@ class window.View
 
   previousClicked: (listener) ->
     $('#left').click(listener)
+
+
+  setVisible: (element, visible) ->
+    if(visible)
+       element.show()
+    else
+       element.hide()

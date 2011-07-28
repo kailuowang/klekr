@@ -6,11 +6,13 @@ Collectr::Application.routes.draw do
     end
   end
 
-  resources :flickr_streams, :only => [:index, :destroy] do
+  resources :flickr_streams, :only => [:index, :destroy, :show] do
     member do
       get 'sync'
       put 'adjust_rating'
       put 'mark_all_as_read'
+      post 'pictures'
+      get 'first_picture'
     end
 
     collection do
@@ -47,7 +49,9 @@ Collectr::Application.routes.draw do
 
   resource :slideshow, :only => [:show], :controller => :slideshow do
     post 'new_pictures'
+    get 'flickr_stream'
   end
+
 
 
   if ["development", "test"].include? Rails.env

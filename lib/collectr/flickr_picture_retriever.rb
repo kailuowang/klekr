@@ -1,7 +1,8 @@
 module Collectr
   class FlickrPictureRetriever
-    include Flickr
-    FLICKR_PHOTOS_PER_PAGE = 20
+    include Collectr::Flickr
+
+    FLICKR_PHOTOS_PER_PAGE = 40
 
     def initialize(params)
       @module = params[:module]
@@ -10,7 +11,7 @@ module Collectr
       @user_id = params[:user_id]
     end
 
-    def get(per_page = 10, since = nil, page_number = 1)
+    def get(per_page = nil, page_number = 1, since = nil)
       opts = {user_id: @user_id, extras: 'date_upload, owner_name'}.
               merge(paging_opts(per_page, page_number)).
               merge(range_opts(since))
@@ -22,26 +23,31 @@ module Collectr
       end
     end
 
-    def get_up_to(up_to, max = 200, page = 1 )
-      up_to = nil unless max.nil?
+    def get_all(since, max_num)
+      get_all_by_page(since, max_num, 1)
+    end
+    private
 
-      result =  get(FLICKR_PHOTOS_PER_PAGE, up_to, page).to_a
+    def get_all_by_page(since, max = 200, page)
+      since = nil unless max.nil?
+
+      result =  get(FLICKR_PHOTOS_PER_PAGE, page, since).to_a
 
       retrieved_max_num_of_pics = max && FLICKR_PHOTOS_PER_PAGE * page >= max
       unless(retrieved_max_num_of_pics || result.empty?)
-        result += get_up_to(up_to,  max, page + 1)
+        result += get_all_by_page(since, max, page + 1)
       end
       result
     end
 
-    private
+
     def min_time_field
      ('min_' + @time_field.to_s).to_sym
     end
 
     def paging_opts(per_page, page_number)
       {}.tap do |h|
-        h[:per_page] = per_page
+        h[:per_page] = per_page || FLICKR_PHOTOS_PER_PAGE
         h[:page] = page_number if page_number > 1
       end
     end

@@ -1,23 +1,40 @@
 class FlickrStreamsController < ApplicationController
-
+  include Collectr::PictureControllerHelper
   before_filter :authenticate
 
   # GET /flickr_streams
   # GET /flickr_streams.xml
   def index
-    @flickr_streams =  FlickrStream.collecting.
-                                    collected_by(current_collector).
+    @flickr_streams =  FlickrStream.collected_by(current_collector).
+                                    includes(:monthly_scores, :pictures).
                                     order('created_at DESC').
                                     paginate(page: params[:page])
     @number_of_new_pics = Picture.unviewed.collected_by(current_collector).count
 
     respond_to do |format|
-      format.html # index.html.haml
-      format.xml  { render :xml => @flickr_streams }
+      format.html
       format.yaml  { render :text => FlickrStream.collected_by(current_collector).map(&:attributes).to_yaml, :content_type => 'text/yaml' }
     end
   end
 
+  def show
+    respond_to do |format|
+      format.html { redirect_to action: :flickr_stream, controller: :slideshow, id: params[:id] }
+    end
+  end
+
+  def pictures
+    stream = FlickrStream.find(params[:id].to_i)
+    page = params[:page] ? params[:page].to_i : 1
+    per_page = params[:num] ? params[:num].to_i : 1
+    render_json_pictures stream.get_pictures(per_page, page)
+  end
+
+  def first_picture
+    stream = FlickrStream.find(params[:id].to_i)
+    first_picture = stream.get_pictures(1)
+    render_json first_picture.present? ? data_for(first_picture.first) : []
+  end
 
   # GET /flickr_streams/1/edit
   def edit

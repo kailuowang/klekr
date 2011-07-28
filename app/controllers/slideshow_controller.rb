@@ -1,11 +1,17 @@
 class SlideshowController < ApplicationController
-  include Collectr::PictureData
+  include Collectr::PictureControllerHelper
   before_filter :authenticate
+
+  def flickr_stream
+    id = params[:id]
+    @first_picture_path = first_picture_flickr_stream_path(id)
+    @more_pictures_path = pictures_flickr_stream_path(id)
+  end
 
   def show
     id = params[:id]
     @first_picture_path = id ? picture_path(id) : current_pictures_path
-    @new_pictures_path = new_pictures_slideshow_path
+    @more_pictures_path = new_pictures_slideshow_path
   end
 
 
@@ -14,9 +20,7 @@ class SlideshowController < ApplicationController
     num_of_pictures = params[:num].to_i
     new_pictures = Picture.new_pictures_by(current_collector, num_of_pictures, exclude_ids)
 
-    respond_to do |f|
-      f.js { render :json => data_list_for(new_pictures) }
-    end
+    render_json_pictures(new_pictures)
   end
 
 

@@ -35,7 +35,7 @@
         - @flickr_streams.each do |flickr_stream|
           %tr
             %td{style: 'text-align:right;'}
-              = link_to flickr_stream.type_display, flickr_stream.stream_url
+              = link_to flickr_stream.type_display, flickr_stream_path(flickr_stream)
             %td of
             %td{style: 'text-align:left;'}= link_to flickr_stream.username, user_path(flickr_stream.user_id)
             %td= rating_display(flickr_stream)
