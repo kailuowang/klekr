@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110724185443) do
+ActiveRecord::Schema.define(:version => 20110730132423) do
 
   create_table "collectors", :force => true do |t|
     t.string   "user_id"
@@ -89,5 +89,7 @@ ActiveRecord::Schema.define(:version => 20110724185443) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "syncages", ["picture_id", "flickr_stream_id"], :name => "index_syncages_on_picture_id_and_flickr_stream_id"
 
 end

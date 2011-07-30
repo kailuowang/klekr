@@ -3,13 +3,15 @@ class SlideshowController < ApplicationController
   before_filter :authenticate
 
   def flickr_stream
-    id = params[:id]
+    id = params[:id].to_i
+    @slideshow_name = FlickrStream.find(id).to_s
     @first_picture_path = first_picture_flickr_stream_path(id)
     @more_pictures_path = pictures_flickr_stream_path(id)
   end
 
   def show
     id = params[:id]
+    @slideshow_name = @current_collector.user_name + " 's Slide Show"
     @first_picture_path = id ? picture_path(id) : current_pictures_path
     @more_pictures_path = new_pictures_slideshow_path
   end

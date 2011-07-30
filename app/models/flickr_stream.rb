@@ -12,6 +12,7 @@ class FlickrStream < ActiveRecord::Base
   scope :collecting, where(collecting: true)
   scope :collected_by, lambda {|collector| collecting.where(collector_id: collector) if collector }
   scope :of_user, lambda {|user_id| where(user_id: user_id)}
+  scope :type, lambda { |type| where(type: type) }
 
   has_many :syncages
   has_many :pictures, through: :syncages
@@ -21,15 +22,25 @@ class FlickrStream < ActiveRecord::Base
   @@per_page = 30
 
   class << self
-    def build(params)
+    def create_type(params)
       params = params.to_options
       unless params[:username] && params[:user_url]
         user = get_user_from_flickr(params[:user_id], params[:collector])
         params[:username] = user.username
         params[:user_url] = user.photosurl
       end
-      params[:type].constantize.new(params)
+      stream = params[:type].constantize.new(params)
+      stream.save!
+      stream
     end
+
+    def find_or_create(params)
+      stream = of_user(params[:user_id]).collected_by(params[:collector]).type(params[:type]).first
+      stream ||
+        create_type(params.merge(collecting: false))
+    end
+
+
 
     def inherited(child)
       child.instance_eval do
@@ -53,8 +64,8 @@ class FlickrStream < ActiveRecord::Base
     def import(data, collector)
       count = 0
       data.map(&:to_options).each do |entry|
-        unless where(user_id: entry[:user_id], type: entry[:type], collector_id: collector.id).count > 0
-          build(entry.merge(collector_id: collector.id)).save!
+        unless of_user(entry[:user_id]).collected_by(collector).type(entry[:type]).count > 0
+          create_type(entry.merge(collector_id: collector.id))
           count += 1
         end
       end
@@ -95,8 +106,17 @@ class FlickrStream < ActiveRecord::Base
 
   def get_pictures(num, page = 1)
     retriever.get(num, page).map do |pic_info|
-      Picture.find_or_initialize_from_pic_info(pic_info, collector)
+      pic, _  = Picture.create_from_sync(pic_info, self)
+      pic
     end
+  end
+
+  def subscribe
+    update_attribute(:collecting, true)
+  end
+
+  def unsubscribe
+    update_attribute(:collecting, false)
   end
 
   def sync(since = last_sync || 1.month.ago, max_num = nil)
@@ -151,9 +171,8 @@ class FlickrStream < ActiveRecord::Base
   end
 
   def to_s
-    username + "'s " + type
+    username + "'s " + self.type_display
   end
-
 
   def rating
     @rating ||= calculate_rating()

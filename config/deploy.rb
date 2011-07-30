@@ -51,9 +51,13 @@ namespace :deploy do
     rake "db:migrate"
     whenever.update_crontab
     run_in_app "#{try_sudo} touch tmp/restart.txt"
-    run_in_app "#{rails_env} script/delayed_job start"
+    deploy.start_delayed_job
     deploy.post_deploy
 
+  end
+
+  task :start_delayed_job, :roles => :app do
+    run_in_app "#{rails_env} script/delayed_job start"
   end
 
   task :post_deploy, :roles => :app do

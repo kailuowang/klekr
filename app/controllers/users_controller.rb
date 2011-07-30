@@ -18,8 +18,7 @@ class UsersController < ApplicationController
   end
 
   def subscribe
-    stream = FlickrStream.build(user_id: params[:id], collector: current_collector, 'type' => params[:type])
-    stream.save
+    stream = FlickrStream.create_type(user_id: params[:id], collector: current_collector, 'type' => params[:type])
     sync_new_stream(stream)
     respond_to do |format|
       format.html { redirect_to(user_path(id: params[:id]),
@@ -31,7 +30,6 @@ class UsersController < ApplicationController
   # put users/search
   def search
     keyword = params[:keyword]
-    user = nil
     begin
       user = flickr.people.findByUsername(username: keyword)
     rescue FlickRaw::FailedResponse

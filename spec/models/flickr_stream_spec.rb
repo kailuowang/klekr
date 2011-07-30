@@ -13,21 +13,42 @@ describe FlickrStream do
       stub_flickr(FlickrStream, :people).stub!(:getInfo).and_return(mock(username: 'a_username', photosurl: 'http://flickr/a_usrname'))
     end
 
-    describe "#build" do
+    describe "#create" do
       it "should create a FaveStream when arg['type'] is 'fave' " do
-        stream = FlickrStream.build(user_id: 'a_user_id', 'type' => 'FaveStream')
+        stream = FlickrStream.create_type(user_id: 'a_user_id', 'type' => 'FaveStream')
         stream.class.should == FaveStream
         stream.user_id.should == 'a_user_id'
       end
 
       it "should create a UploadStream when arg['type'] is 'UploadStream' " do
-        FlickrStream.build(user_id: 'a_user_id', 'type' => 'UploadStream').class.should == UploadStream
+        FlickrStream.create_type(user_id: 'a_user_id', 'type' => 'UploadStream').class.should == UploadStream
       end
 
       it "should store the username" do
-        stream = FlickrStream.build(user_id: 'a_user_id', 'type' => 'FaveStream')
-        stream.save!
+        FlickrStream.create_type(user_id: 'a_user_id', 'type' => 'FaveStream')
         FlickrStream.first.username.should == 'a_username'
+      end
+
+      it "throws error if type unknown" do
+        lambda{ FlickrStream.create_type(user_id: 'some id')}.should raise_error
+      end
+    end
+
+    describe "#find_or_create" do
+      it "creates a stream that is not collecting if the stream does not exist yet" do
+        collector = Factory(:collector)
+        Factory(:fave_stream, user_id: 'a_user_id', collector: collector)
+        result = FlickrStream.find_or_create(user_id: 'a_user_id', collector: collector, type: 'UploadStream')
+        stream = UploadStream.all.first
+        result.should == stream
+        stream.should_not be_collecting
+      end
+
+      it "return an existing one with the same user id and collector" do
+        collector = Factory(:collector)
+        stream = Factory(:fave_stream, user_id: 'a_user_id', collector: collector)
+        FlickrStream.find_or_create(user_id: 'a_user_id', collector: collector, type: 'FaveStream').should == stream
+        stream.reload.should be_collecting
       end
     end
 
@@ -88,15 +109,15 @@ describe FlickrStream do
       it "should not reimport if the stream is already subscribed by the same collector" do
         collector = Factory(:collector)
         stream_args = {'user_id' => 'a_user_id', 'type' => 'FaveStream', collector: collector}
-        FlickrStream.build(stream_args).save!
+        FlickrStream.create_type(stream_args)
         FlickrStream.import( [stream_args], collector)
         FlickrStream.count.should == 1
       end
 
       it "should still import if the stream is subscribed by another collector" do
         stream_args = {'user_id' => 'a_user_id', 'type' => 'FaveStream', collector: Factory(:collector)}
-        FlickrStream.build(stream_args).save!
-        FlickrStream.import( [stream_args], Factory(:collector))
+        FlickrStream.create_type(stream_args)
+        FlickrStream.import([stream_args], Factory(:collector))
         FlickrStream.count.should == 2
       end
 

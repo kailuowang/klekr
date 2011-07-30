@@ -49,14 +49,14 @@ describe UsersController do
 
     it "should get pictures to show " do
       stream = Factory(:fave_stream)
-      FlickrStream.stub!(:build).and_return(stream)
+      FlickrStream.stub!(:create_type).and_return(stream)
       stream.should_receive(:sync).with(nil, 12)
       get 'subscribe', id: 'a_user_id', type: 'FaveStream'
     end
 
     it "should set newly synced pictures as viewed" do
       stream = Factory(:fave_stream)
-      FlickrStream.stub!(:build).and_return(stream)
+      FlickrStream.stub!(:create_type).and_return(stream)
       stream.should_receive(:sync).with(nil, 12)
       mock_pictures = (1..12).map{ |_| mock(:picture) }
       stream.should_receive(:pictures).and_return mock_pictures

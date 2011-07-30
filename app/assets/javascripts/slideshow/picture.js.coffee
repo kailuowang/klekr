@@ -26,6 +26,13 @@ class window.Picture
       onSuccess()
 
   preload: ->
+    if view.largeWindow()
+      @canUseLargeVersion = true
+      this.preloadImage @data.largeUrl
+    else
+      this.preloadAdaptiveSize()
+
+  preloadAdaptiveSize: ->
     this.preloadImage @data.mediumUrl, (image) =>
       @canUseLargeVersion = this.largerVersionWithinWindow(image)
       if @canUseLargeVersion
@@ -43,9 +50,9 @@ class window.Picture
 
   largerVersionWithinWindow: (image) ->
     [largeWidth, largeHeight] = this.guessLargeSize(image.width, image.height)
-    displayWidth = $(window).width() - 40
-    displayHeight = $(window).height()
+    [displayWidth, displayHeight] = view.displayDimension()
     largeWidth < displayWidth and largeHeight < displayHeight
+
 
   guessLargeSize: (mediumWidth, mediumHeight) ->
     longEdge = Math.max(mediumWidth, mediumHeight)

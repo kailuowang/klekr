@@ -35,7 +35,7 @@ class window.View
     @faveWaiting.hide()
     this.setVisible(@faveLink, !picture.data.faved)
     this.setVisible(@faved, picture.data.faved)
-    this.setVisible(@faveArea, picture.favePath?)
+    this.setVisible(@faveArea, picture.data.favePath?)
 
   gotoOwner: () ->
     window.location = @ownerLink.attr('href')
@@ -58,6 +58,13 @@ class window.View
       picture.data.title
     else
       'untitled'
+
+  displayDimension: ->
+    [$(window).width() - 40, $(window).height()]
+
+  largeWindow: ->
+    [displayWidth, displayHeight] = this.displayDimension()
+    displayWidth > 1024 and displayHeight > 1024
 
 
   nextClicked: (listener) ->
