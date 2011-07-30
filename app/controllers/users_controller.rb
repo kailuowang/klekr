@@ -17,6 +17,16 @@ class UsersController < ApplicationController
 
   end
 
+  def stream
+    params[:user_id] = params.delete(:id)
+    stream = FlickrStream.find_or_create(params)
+    respond_to do |format|
+      format.html do
+        redirect_to(action: :show, controller: :flickr_streams, id: stream.id)
+      end
+    end
+  end
+
   def subscribe
     stream = FlickrStream.create_type(user_id: params[:id], collector: current_collector, 'type' => params[:type])
     sync_new_stream(stream)

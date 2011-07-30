@@ -23,7 +23,7 @@ class FlickrStream < ActiveRecord::Base
 
   class << self
     def create_type(params)
-      params = params.to_options
+      params = params.with_indifferent_access
       unless params[:username] && params[:user_url]
         user = get_user_from_flickr(params[:user_id], params[:collector])
         params[:username] = user.username

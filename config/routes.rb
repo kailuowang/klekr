@@ -41,6 +41,7 @@ Collectr::Application.routes.draw do
   resources :users, :only => [:show, :index] do
     member do
       put 'subscribe'
+      get 'stream'
     end
     collection do
       post 'search'
