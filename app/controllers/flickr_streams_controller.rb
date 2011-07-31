@@ -1,6 +1,6 @@
 class FlickrStreamsController < ApplicationController
   include Collectr::PictureControllerHelper
-  before_filter :authenticate
+  before_filter :authenticate, :load_stream
 
   # GET /flickr_streams
   # GET /flickr_streams.xml
@@ -23,27 +23,29 @@ class FlickrStreamsController < ApplicationController
     end
   end
 
+  def subscribe
+    @flickr_stream.subscribe
+    render_json([])
+  end
+
+  def unsubscribe
+    @flickr_stream.unsubscribe
+    render_json([])
+  end
+
   def pictures
-    stream = FlickrStream.find(params[:id].to_i)
     page = params[:page] ? params[:page].to_i : 1
     per_page = params[:num] ? params[:num].to_i : 1
-    render_json_pictures stream.get_pictures(per_page, page)
+    render_json_pictures @flickr_stream.get_pictures(per_page, page)
   end
 
   def first_picture
-    stream = FlickrStream.find(params[:id].to_i)
-    first_picture = stream.get_pictures(1)
+    first_picture = @flickr_stream.get_pictures(1)
     render_json first_picture.present? ? data_for(first_picture.first) : []
-  end
-
-  # GET /flickr_streams/1/edit
-  def edit
-    @flickr_stream = FlickrStream.find(params[:id])
   end
 
   #GET /flickr_stream/1/sync
   def sync
-    @flickr_stream = FlickrStream.find(params[:id])
     respond_to do |format|
       synced = @flickr_stream.sync(@flickr_stream.last_sync, params[:num_of_pics].try(:to_i))
       format.html { redirect_to(:back, :notice => "#{synced} new pictures were synced from #{@flickr_stream} @#{DateTime.now.to_s(:short)} " ) }
@@ -53,7 +55,6 @@ class FlickrStreamsController < ApplicationController
 
   #PUT /flickr_stream/1/bump_rating
   def adjust_rating
-    @flickr_stream = FlickrStream.find(params[:id])
     respond_to do |format|
       params[:adjustment] == 'up' ? @flickr_stream.bump_rating : @flickr_stream.trash_rating
       format.html { redirect_to(:back) }
@@ -63,12 +64,8 @@ class FlickrStreamsController < ApplicationController
 
   #PUT /flickr_stream/1/mark_all_as_read
   def mark_all_as_read
-    @flickr_stream = FlickrStream.find(params[:id])
-    respond_to do |format|
-      @flickr_stream.mark_all_as_read
-      format.html { redirect_to(:back) }
-      format.js  { head :ok }
-    end
+    @flickr_stream.mark_all_as_read
+    render_json([])
   end
 
   #POST /flickr_streams/import
@@ -100,5 +97,10 @@ class FlickrStreamsController < ApplicationController
       format.html { redirect_to :back }
       format.xml  { head :ok }
     end
+  end
+
+  private
+  def load_stream
+    @flickr_stream = FlickrStream.find(params[:id].to_i) if params[:id]
   end
 end

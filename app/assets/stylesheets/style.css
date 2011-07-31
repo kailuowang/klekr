@@ -473,6 +473,10 @@ table{
   display: inline;
 }
 
+.hidden{
+  display: none;
+}
+
 #countdown{
   color: #D93544;
 }

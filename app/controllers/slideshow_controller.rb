@@ -4,6 +4,7 @@ class SlideshowController < ApplicationController
 
   def flickr_stream
     id = params[:id].to_i
+    @stream = FlickrStream.find(id)
     @slideshow_name = FlickrStream.find(id).to_s
     @first_picture_path = first_picture_flickr_stream_path(id)
     @more_pictures_path = pictures_flickr_stream_path(id)

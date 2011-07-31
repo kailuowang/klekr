@@ -1,0 +1,9 @@
+#noncollectingStreamOperations{class: hidden_class(@stream.collecting?)}
+  = link_to 'Start Collecting!', subscribe_flickr_stream_path(@stream), remote: true, :method => :put, id: 'startCollecting'
+#collectingStreamOperations{class: hidden_class(!@stream.collecting?)}
+  Rating:
+  = rating_display(@stream)
+  |
+  = link_to 'Mark All Pictures as Viewed', mark_all_as_read_flickr_stream_path(@stream), remote: true, confirm: 'Are you sure? This will mark all unviewed pictures in this stream as viewed.', :method => :put
+  |
+  = link_to 'Stop Collecting!', unsubscribe_flickr_stream_path(@stream), remote: true, method: :put, id: 'stopCollecting'

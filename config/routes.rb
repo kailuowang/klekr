@@ -13,6 +13,8 @@ Collectr::Application.routes.draw do
       put 'mark_all_as_read'
       post 'pictures'
       get 'first_picture'
+      put 'subscribe'
+      put 'unsubscribe'
     end
 
     collection do
@@ -41,7 +43,7 @@ Collectr::Application.routes.draw do
   resources :users, :only => [:show, :index] do
     member do
       put 'subscribe'
-      get 'stream'
+      get 'flickr_stream'
     end
     collection do
       post 'search'

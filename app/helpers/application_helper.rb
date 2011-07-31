@@ -13,4 +13,8 @@ module ApplicationHelper
     f.present? ? "%0.2f" % f : '0'
   end
 
+  def hidden_class hide
+    hide ? 'hidden' : ''
+  end
+
 end

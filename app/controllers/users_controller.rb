@@ -17,9 +17,8 @@ class UsersController < ApplicationController
 
   end
 
-  def stream
-    params[:user_id] = params.delete(:id)
-    stream = FlickrStream.find_or_create(params)
+  def flickr_stream
+    stream = FlickrStream.find_or_create(user_id: params[:id], type: params[:type])
     respond_to do |format|
       format.html do
         redirect_to(action: :show, controller: :flickr_streams, id: stream.id)
