@@ -10,7 +10,7 @@ module Collectr
         flickrPageUrl:    picture.url,
         ownerName:        picture.owner_name,
         faved:            picture.faved?,
-        ownerPath:        flickr_stream_user_path(picture.pic_info.owner, type: 'UploadStream'),
+        ownerPath:        user_path(picture.pic_info.owner),
         fromStreams:      picture.flickr_streams.map do |stream|
                             data_for_stream(stream)
                           end
@@ -26,7 +26,7 @@ module Collectr
     end
 
     def data_for_stream(stream)
-      { username: stream.username, type: stream.type_display, path: flickr_stream_user_path(stream.user_id, type: stream.type)}
+      { username: stream.username, type: stream.type_display, path: flickr_stream_path(stream)}
     end
 
 

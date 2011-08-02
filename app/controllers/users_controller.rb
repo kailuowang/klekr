@@ -5,35 +5,15 @@ class UsersController < ApplicationController
   before_filter :authenticate
 
   def show
-    user_id = params[:id]
-    @user = flickr.people.getInfo(user_id: user_id)
-
-    @fave_stream = FaveStream.of_user(@user.nsid).collected_by(current_collector).first
-    @upload_stream = UploadStream.of_user(@user.nsid).collected_by(current_collector).first
-
-    @pictures = upload_pictures(user_id)
-
-    @faves = fave_pictures(user_id)
-
+    redirect_to(action: :flickr_stream, type: FlickrStream::DEFAULT_TYPE)
   end
 
   def flickr_stream
-    stream = FlickrStream.find_or_create(user_id: params[:id], type: params[:type])
-    respond_to do |format|
-      format.html do
-        redirect_to(action: :show, controller: :flickr_streams, id: stream.id)
-      end
-    end
+    stream = FlickrStream.find_or_create(user_id: params[:id], collector: current_collector, type: params[:type])
+    redirect_to(action: :show, controller: :flickr_streams, id: stream.id)
   end
 
-  def subscribe
-    stream = FlickrStream.create_type(user_id: params[:id], collector: current_collector, 'type' => params[:type])
-    sync_new_stream(stream)
-    respond_to do |format|
-      format.html { redirect_to(user_path(id: params[:id]),
-                                :notice => "Starting to collect #{stream.username}'s #{stream.type}" ) }
-      format.xml  { head :ok }
-    end
+  def index
   end
 
   # put users/search
@@ -52,46 +32,15 @@ class UsersController < ApplicationController
     rescue FlickRaw::FailedResponse
     end
 
-
-    if(user)
-      respond_to do |format|
-        format.html { redirect_to(user_path(id: user.nsid)) }
-        format.xml  { head :ok }
-      end
-    else
-      respond_to do |format|
-        format.html { redirect_to(:back, :notice => "User not found") }
-        format.xml  { head :not_found }
-      end
-    end
-  end
-
-  # GET /users
-  # GET /users.xml
-  def index
     respond_to do |format|
-      format.html # index.html.haml
+      format.html do
+        if(user)
+          redirect_to(user_path(id: user.nsid))
+        else
+          redirect_to(:back, :notice => "User not found")
+        end
+      end
     end
-  end
-
-
-  private
-
-  def upload_pictures(user_id)
-    get_pictures_from( @upload_stream || UploadStream.new(user_id: user_id, collector: current_collector))
-  end
-
-  def fave_pictures(user_id)
-    get_pictures_from(@fave_stream || FaveStream.new(user_id: user_id, collector: current_collector))
-  end
-
-  def get_pictures_from(stream)
-    stream.get_pictures(NUM_OF_PIX_TO_SHOW)
-  end
-
-  def sync_new_stream(stream)
-    stream.sync(nil, NUM_OF_PIX_TO_SHOW)
-    stream.pictures.each(&:get_viewed)
   end
 
 end

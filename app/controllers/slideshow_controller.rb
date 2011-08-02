@@ -8,6 +8,7 @@ class SlideshowController < ApplicationController
     @slideshow_name = FlickrStream.find(id).to_s
     @first_picture_path = first_picture_flickr_stream_path(id)
     @more_pictures_path = pictures_flickr_stream_path(id)
+    @alternative_stream = @stream.alternative_stream
   end
 
   def show

@@ -1,10 +1,14 @@
 #topBanner{style: 'width: 99%; padding: 5px'}
-  %h4
-    .fleft
+  .fleft
+    %h3
       = @slideshow_name
-      |&nbsp;
-    .fleft
+  .fleft
+    %h5
       = render partial: 'stream_panel'
-    .fright
-      = link_to 'Back to My Collections', flickr_streams_path
+  .fright
+    %h4
+      = link_to 'My Collections', flickr_streams_path
+      = link_to 'My Slideshow', slideshow_path
+      = link_to @stream.alternative_stream.to_s, flickr_stream_path(@stream.alternative_stream)
+
 =render partial: 'slideshow'

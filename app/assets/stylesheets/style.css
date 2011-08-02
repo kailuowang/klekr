@@ -22,7 +22,7 @@ h1, h2, h3, h4, h5 {
 	text-transform: uppercase;
 	font-family: Impact, Arial, Helvetica, sans-serif;
 	font-weight: normal;
-	color: #4B4542;
+	color: #707070;
 }
 
 h1 {
@@ -43,8 +43,9 @@ h4 {
 
 h5 {
 	font-size: 1.2em;
-  font-family:  Arial, Helvetica, sans-serif;
-  text-transform: none;
+    text-transform: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: lighter;
 }
 
 p, ul, ol {

@@ -221,6 +221,9 @@ describe FlickrStream do
   end
 
   shared_examples_for "All FlickrStreams" do
+    before do
+      stub_flickr(FlickrStream, :people).stub!(:getInfo).and_return(mock(username: 'a_username', photosurl: 'http://flickr/a_usrname'))
+    end
     describe "#sync" do
       before do
         @module = stub_flickr(@flickr_stream.retriever, @flickr_module_name)
@@ -445,6 +448,26 @@ describe FlickrStream do
         @flickr_stream.mark_all_as_read
         pic.reload.should be_viewed
       end
+    end
+
+    describe "alternative_stream" do
+      it "return the stream of the same collector and same user but different type" do
+        collector = Factory(:collector)
+        @flickr_stream.collector = collector
+        alternative_stream = @flickr_stream.alternative_stream
+        alternative_stream.reload
+        alternative_stream.type.should_not == @flickr_stream.type
+        alternative_stream.collector.should == collector
+        alternative_stream.user_id.should == @flickr_stream.user_id
+      end
+
+      it "does not create a new one when there is already existing in db" do
+        collector = Factory(:collector)
+        @flickr_stream.collector = collector
+        @flickr_stream.alternative_stream == @flickr_stream.alternative_stream
+
+      end
+
     end
 
   end

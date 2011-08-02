@@ -2,7 +2,8 @@ class FlickrStream < ActiveRecord::Base
   include Collectr::Flickr
   extend Collectr::Flickr
 
-  TYPES = ['FaveStream', 'UploadStream']
+  TYPES = ['FaveStream', 'UploadStream'].freeze
+  DEFAULT_TYPE = 'UploadStream'
   FLICKR_PHOTOS_PER_PAGE = 20
 
   validates_uniqueness_of :user_id, :scope => [:collector_id, :type]
@@ -35,12 +36,10 @@ class FlickrStream < ActiveRecord::Base
     end
 
     def find_or_create(params)
-      stream = of_user(params[:user_id]).collected_by(params[:collector]).type(params[:type]).first
+      stream = of_user(params[:user_id]).where(collector_id: params[:collector]).type(params[:type]).first
       stream ||
         create_type(params.merge(collecting: false))
     end
-
-
 
     def inherited(child)
       child.instance_eval do
@@ -102,6 +101,10 @@ class FlickrStream < ActiveRecord::Base
       return nil unless result
       FlickrStream.find(result.flickr_stream_id)
     end
+  end
+
+  def alternative_stream
+    FlickrStream.find_or_create(user_id: user_id, collector: collector, type: alternative_type)
   end
 
   def get_pictures(num, page = 1)
@@ -211,6 +214,12 @@ class FlickrStream < ActiveRecord::Base
       @rating = nil
       monthly_scores.all.each(&adjustment)
     end
+  end
+
+  def alternative_type
+    rest = FlickrStream::TYPES.dup
+    rest.delete(self.type)
+    rest.first
   end
 
 
