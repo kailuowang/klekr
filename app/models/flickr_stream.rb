@@ -85,7 +85,8 @@ class FlickrStream < ActiveRecord::Base
         @retriever ||= Collectr::FlickrPictureRetriever.new(module: flickr_module,
                                                             method: get_photo_method,
                                                             time_field: related_time_field,
-                                                            user_id: user_id)
+                                                            user_id: user_id,
+                                                            collector: collector)
       end
     end
 

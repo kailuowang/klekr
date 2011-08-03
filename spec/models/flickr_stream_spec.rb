@@ -224,6 +224,14 @@ describe FlickrStream do
     before do
       stub_flickr(FlickrStream, :people).stub!(:getInfo).and_return(mock(username: 'a_username', photosurl: 'http://flickr/a_usrname'))
     end
+
+    describe "#retriever" do
+      it "return the retriever of the same collector" do
+        collector = Factory(:collector)
+        @flickr_stream.collector = collector
+        @flickr_stream.retriever.collector.should == collector
+      end
+    end
     describe "#sync" do
       before do
         @module = stub_flickr(@flickr_stream.retriever, @flickr_module_name)

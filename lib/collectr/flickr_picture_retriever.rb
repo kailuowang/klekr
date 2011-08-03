@@ -3,12 +3,14 @@ module Collectr
     include Collectr::Flickr
 
     FLICKR_PHOTOS_PER_PAGE = 40
+    attr_reader :collector
 
     def initialize(params)
       @module = params[:module]
       @method = params[:method]
       @time_field = params[:time_field]
       @user_id = params[:user_id]
+      @collector = params[:collector]
     end
 
     def get(per_page = nil, page_number = 1, since = nil)
