@@ -230,46 +230,19 @@ describe FlickrStream do
         @module.stub!(@flickr_method).and_return([])
       end
 
-
-      it "should use flickr module with user id to get pictures and return the number of pictures synced" do
-        a_pic_info = Factory.next(:pic_info)
-        another_pic_info = Factory.next(:pic_info)
-        @module.should_receive(@flickr_method).
-            with(hash_including(user_id: 'a_user_id')).
-            and_return([a_pic_info, another_pic_info])
-
-        @flickr_stream.sync.should == 2
-        Picture.count.should == 2
-      end
-
-      it "should sync with owner_name and date_upload" do
-        @module.should_receive(@flickr_method).
-            with(hash_including(extras: 'date_upload, owner_name')).and_return([])
-
+      it "should only sync photos faved upto the last sync time" do
+        last_sync = DateTime.new(2010,1,2)
+        @flickr_stream.last_sync = DateTime.new(2010,1,2)
+        @flickr_stream.retriever.should_receive(:get_all).with(last_sync, nil).and_return([])
         @flickr_stream.sync
       end
 
-      it "should sync up to howmany pages it takes to get to the last sync date of the pictures" do
-        @module.should_receive(@flickr_method).and_return([Factory.next(:pic_info)])
-        @module.should_receive(@flickr_method).
-            with(hash_including(page: 2)).and_return([Factory.next(:pic_info)])
-        @module.should_receive(@flickr_method).
-            with(hash_including(page: 3)).and_return([])
-        @module.should_not_receive(@flickr_method).with(hash_including(page: 4))
-
-
+      it "should only sync photos faved upto the 1 month ago if it's the first time sync" do
+        @flickr_stream.last_sync = nil
+        @flickr_stream.retriever.should_receive(:get_all).with() do |since, _|
+          since.to_date.should == 1.month.ago.to_date
+        end.and_return([])
         @flickr_stream.sync
-      end
-
-      it "should sync up to how many pages it takes to get max_num_of pictures" do
-        per_page = Collectr::FlickrPictureRetriever::FLICKR_PHOTOS_PER_PAGE
-        @module.should_receive(@flickr_method).and_return([Factory.next(:pic_info)] * per_page)
-        @module.should_receive(@flickr_method).
-            with(hash_including(page: 2)).and_return([Factory.next(:pic_info)]* per_page)
-        @module.should_not_receive(@flickr_method).with(hash_including(page: 3))
-
-
-        @flickr_stream.sync(nil, 2 * per_page )
       end
 
       it "should update the last_sync date" do
@@ -306,19 +279,6 @@ describe FlickrStream do
 
         Picture.count.should == 1
         Picture.first.flickr_streams.should == [@flickr_stream, flickr_stream2]
-      end
-
-      it "should only sync photos faved upto the last sync time" do
-        last_sync = DateTime.new(2010,1,2)
-        @flickr_stream.last_sync = DateTime.new(2010,1,2)
-        @module.should_receive(@flickr_method).with(hash_including(@related_date_field => last_sync.to_i)).and_return([])
-        @flickr_stream.sync
-      end
-
-      it "should only sync photos faved upto the 1 month ago if it's the first time sync" do
-        @flickr_stream.last_sync = nil
-        @module.should_receive(@flickr_method).with(hash_including(@related_date_field => 1.month.ago.to_i)).and_return([])
-        @flickr_stream.sync
       end
 
       it "should add the picture synced to the collector this stream belongs to" do

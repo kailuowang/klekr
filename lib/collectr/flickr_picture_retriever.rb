@@ -26,9 +26,11 @@ module Collectr
     def get_all(since, max_num)
       get_all_by_page(since, max_num, 1)
     end
+
     private
 
     def get_all_by_page(since, max = 200, page)
+
       since = nil unless max.nil?
 
       result =  get(FLICKR_PHOTOS_PER_PAGE, page, since).to_a
