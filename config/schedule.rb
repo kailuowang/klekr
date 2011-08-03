@@ -7,11 +7,11 @@
 #
 set :output, "/app/collectr/log/cron.log"
 
-every 1.day, :at => '2:30am' do
+every 1.day, :at => '5:30am' do
   rake 'sync:all_streams'
 end
 
-every 1.day, :at => '4:30 am' do
+every 1.day, :at => '7:30 am' do
   rake 'sync:picture_ratings'
 end
 
