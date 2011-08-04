@@ -52,6 +52,10 @@ class Picture < ActiveRecord::Base
     end
   end
 
+  def string_id
+    id || url.hash
+  end
+
   def reset_stream_rating
     total_rating = flickr_streams.inject(0) { |sum, stream| sum + stream.star_rating }
     update_attribute(:stream_rating, total_rating)

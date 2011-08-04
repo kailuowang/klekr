@@ -20,6 +20,9 @@ class window.Picture
     else
       @data.mediumUrl
 
+  smallUrl: ->
+    @data.smallUrl
+
   fave: (onSuccess) ->
     server.put @data.favePath, {}, =>
       @data.faved = true
@@ -28,15 +31,18 @@ class window.Picture
   preload: ->
     if view.largeWindow()
       @canUseLargeVersion = true
+      this.preloadImage @data.smallUrl
       this.preloadImage @data.largeUrl
     else
       this.preloadAdaptiveSize()
 
   preloadAdaptiveSize: ->
-    this.preloadImage @data.mediumUrl, (image) =>
+    this.preloadImage @data.smallUrl, (image) =>
       @canUseLargeVersion = this.largerVersionWithinWindow(image)
       if @canUseLargeVersion
         this.preloadImage @data.largeUrl
+      else
+        this.preloadImage @data.mediumUrl
 
   getViewed: ->
     unless @viewed
@@ -53,10 +59,10 @@ class window.Picture
     largeWidth < view.displayWidth and largeHeight < view.displayHeight
 
 
-  guessLargeSize: (mediumWidth, mediumHeight) ->
-    longEdge = Math.max(mediumWidth, mediumHeight)
+  guessLargeSize: (smallerWidth, smallerHeight) ->
+    longEdge = Math.max(smallerWidth, smallerHeight)
     ratio = 1024 / longEdge
-    [mediumWidth * ratio, mediumHeight * ratio]
+    [smallerWidth * ratio, smallerHeight * ratio]
 
 
 

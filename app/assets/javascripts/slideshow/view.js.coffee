@@ -3,6 +3,8 @@ class window.View
   constructor: () ->
     @mainImg = $('#picture')
     @pictureArea = $('#pictureArea')
+    @gridview = $('#gridview')
+    @slide = $('#slide')
     @interestingness = $('#interestingness')
     @titleLink = $('#title')
     @ownerLink = $('#owner')
@@ -14,8 +16,10 @@ class window.View
     @faveArea = $('#faveArea')
     @leftArrow = $('#leftArrow')
     @rightArrow = $('#rightArrow')
+    @spacer = $('#spacer')
     [@displayWidth, @displayHeight] = this.displayDimension()
     this.adjustArrowsPosition()
+    this.adjustSpacerWidth()
 
   display: (picture) ->
     @pictureArea.fadeOut 100, =>
@@ -84,8 +88,22 @@ class window.View
     @leftArrow.css('line-height', sideArrowHeight)
     @rightArrow.css('line-height', sideArrowHeight)
 
+  adjustSpacerWidth: ->
+    @spacer.attr('width', @displayWidth + 'px')
+
+  toggleGridview: ->
+    showingGridview = @gridview.is(":visible")
+    this.fadeInOut(@slide, showingGridview)
+    this.fadeInOut(@gridview, !showingGridview)
+
   setVisible: (element, visible) ->
     if(visible)
        element.show()
     else
        element.hide()
+
+  fadeInOut: (element, visible) ->
+    if(visible)
+      element.fadeIn(100)
+    else
+      element.fadeOut(100)

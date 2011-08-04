@@ -2,7 +2,7 @@ module Collectr
   module PictureControllerHelper
     def data_for(picture)
       {
-        id:               picture.id || picture.url,
+        id:               picture.string_id,
         largeUrl:         picture.large_url,
         mediumUrl:        picture.medium_url,
         smallUrl:         picture.small_url,

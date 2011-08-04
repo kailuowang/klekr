@@ -14,12 +14,14 @@ class window.Slideshow
     server.firstPicture (data) =>
       @pictures.push(new Picture(data))
       this.displayCurrentPicture()
-      this.retrieveMorePictures()
+      this.retrieveMorePictures =>
+        this.loadGridview()
 
   displayCurrentPicture: ->
     view.display(this.currentPicture())
+    gridview.highlightPicture(this.currentPicture())
 
-  retrieveMorePictures: ->
+  retrieveMorePictures: (onRetrieve)->
     @currentPage += 1
     excludeIds = (p.id for p in this.unseenPictures())
     opts = { num: 10, exclude_ids: excludeIds, page: @currentPage }
@@ -27,7 +29,7 @@ class window.Slideshow
       this.addPictures(
         new Picture(picData) for picData in data
       )
-
+      onRetrieve() if onRetrieve?
 
   addPictures: (newPictures) ->
     unless @addingPictures
@@ -52,18 +54,38 @@ class window.Slideshow
     this.currentPicture().getViewed()
     unless this.atTheLast()
       @currentIndex += 1
+      this.checkPage(true)
       this.displayCurrentPicture()
       this.ensurePictureCache()
 
   navigateToPrevious: ->
     unless this.atTheBegining()
       @currentIndex -= 1
+      this.checkPage(false)
       this.displayCurrentPicture()
 
   faveCurrentPicture: ->
     view.changingFavedStatus()
     this.currentPicture().fave =>
       view.updateFavedStatus(this.currentPicture())
+
+  checkPage: (goingForward) ->
+    if this.pageChanged(goingForward)
+      this.loadGridview()
+
+  pageChanged: (goingForward) ->
+    changingPosition =  if(goingForward) then 0 else gridview.size - 1
+    (@currentIndex % gridview.size) == changingPosition
+
+  loadGridview: ->
+    gridview.loadPictures(this.currentPageOfPictures())
+    gridview.highlightPicture(this.currentPicture())
+
+  currentPageOfPictures: () ->
+    positionInPage = @currentIndex % gridview.size
+    pageStart = @currentIndex - positionInPage
+    pageEnd = pageStart + gridview.size - 1
+    @pictures[pageStart..pageEnd]
 
   atTheLast: ->
     @currentIndex == @pictures.length - 1
@@ -86,6 +108,7 @@ class window.Slideshow
 $(document).ready ->
   window.view = new View
   window.server = new Server
+  window.gridview = new Gridview
   window.slideshow = new Slideshow
   new StreamPanel
   bindKeys()
