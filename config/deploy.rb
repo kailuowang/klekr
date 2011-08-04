@@ -53,7 +53,12 @@ namespace :deploy do
     run_in_app "#{try_sudo} touch tmp/restart.txt"
     deploy.start_delayed_job
     deploy.post_deploy
+    deploy.warm_server
 
+  end
+
+  task :warm_server do
+    system "curl #{ec2_server}"
   end
 
   task :start_delayed_job, :roles => :app do
