@@ -11,4 +11,5 @@ window.bindKeys = ->
   bindKey('o', -> view.gotoOwner())
   bindKey('g', -> view.toggleGridview())
   bindKey('space', -> view.toggleGridview())
+  bindKey('enter', -> view.toggleGridview())
 
