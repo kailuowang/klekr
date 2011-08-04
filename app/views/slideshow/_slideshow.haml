@@ -8,17 +8,15 @@
 
 #slide{style: 'width:90%; text-align: center;'}
   .spacer{style: 'width: 1280px;'}
-    = image_tag('spacer.gif', width: '1280px', height: '875px')
+    = image_tag('spacer.gif', width: '1280px', height: '2px ')
   .center{style: 'position: absolute; top: 40px; left: 0px; width: 100%; text-align: center;'}
-
-
-    #pictureArea{style: 'display:none'}
+    #pictureArea.hidden
       = image_tag('loading.gif', id: 'picture')
       #slideShowCaption
         %h3#faveArea{style: 'margin: 8px'}
           %span#faved
             Faved
-          %img#faveWaiting{src: '/assets/loading.gif', style: 'display:none'}
+          %img#faveWaiting.hidden{src: '/assets/loading.gif'}
           %a#faveLink{href: '#'}
             Fave it!
         %h5
@@ -36,16 +34,15 @@
             Personal Interestingness:
             %span#interestingness
 
-        #windowSizeSetting
       Key shortcuts: "space" or &rarr; to the next picture, "b" or &larr; to go back, "f" to fave it, "o" to see owners page
       = render(partial: 'general/copyright')
       = link_to "Find a flickr user ", users_path
 
-  #left{style: 'position: absolute; top: 40px; left: 0px; width: 15%; height: 750px; vertical-align: middle; '}
-    %h2{style: 'line-height:750px; text-align:left; padding-left: 5px; cursor: pointer'}
+  #left{style: 'position: absolute; top: 40px; left: 0px; width: 15%; vertical-align: middle; '}
+    %h2#leftArrow{style: 'text-align:left; padding-left: 5px; cursor: pointer'}
       <
-  #right{style: 'position: absolute; top: 40px; right: 0px; width: 15%; height: 750px; vertical-align: middle;'}
-    %h2{style: 'line-height:750px; text-align:right; padding-right: 5px; cursor: pointer'}
+  #right{style: 'position: absolute; top: 40px; right: 0px; width: 15%; vertical-align: middle;'}
+    %h2#rightArrow{style: 'text-align:right; padding-right: 5px; cursor: pointer'}
       >
 
 = link_to 'Next', '#', id: 'next', style: 'display: none'

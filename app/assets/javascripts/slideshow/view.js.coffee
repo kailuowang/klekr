@@ -12,12 +12,14 @@ class window.View
     @faveWaiting = $('#faveWaiting')
     @fromTitle = $('#fromTitle')
     @faveArea = $('#faveArea')
-
+    @leftArrow = $('#leftArrow')
+    @rightArrow = $('#rightArrow')
+    [@displayWidth, @displayHeight] = this.displayDimension()
+    this.adjustArrowsPosition()
 
   display: (picture) ->
-    @pictureArea.fadeOut(100, =>
+    @pictureArea.fadeOut 100, =>
       this.updateDOM(picture)
-    )
     @pictureArea.show() unless @pictureArea.is(":visible")
     @pictureArea.fadeIn(100)
 
@@ -63,8 +65,7 @@ class window.View
     [$(window).width() - 40, $(window).height()]
 
   largeWindow: ->
-    [displayWidth, displayHeight] = this.displayDimension()
-    displayWidth > 1024 and displayHeight > 1024
+    @displayWidth > 1024 and @displayHeight > 1024
 
 
   nextClicked: (listener) ->
@@ -78,6 +79,10 @@ class window.View
   previousClicked: (listener) ->
     $('#left').click(listener)
 
+  adjustArrowsPosition: ->
+    sideArrowHeight = ( @displayHeight - 150 )+ "px"
+    @leftArrow.css('line-height', sideArrowHeight)
+    @rightArrow.css('line-height', sideArrowHeight)
 
   setVisible: (element, visible) ->
     if(visible)

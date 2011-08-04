@@ -5,6 +5,7 @@ module Collectr
         id:               picture.id || picture.url,
         largeUrl:         picture.large_url,
         mediumUrl:        picture.medium_url,
+        smallUrl:         picture.small_url,
         interestingness:  picture.stream_rating.to_i,
         title:            picture.title,
         flickrPageUrl:    picture.url,

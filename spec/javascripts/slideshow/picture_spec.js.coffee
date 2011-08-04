@@ -1,11 +1,6 @@
 #= require slideshow/picture
 
 describe 'Picture', ->
-  describe 'constructor', ->
-    it 'should return mediumUrl', ->
-      data = { mediumUrl: 'a url' }
-      expect(new Picture(data).url()).toEqual 'a url'
-
   describe 'equality', ->
     it 'be true for two pictures with the same id', ->
       data = {id: 1}

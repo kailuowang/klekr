@@ -50,8 +50,7 @@ class window.Picture
 
   largerVersionWithinWindow: (image) ->
     [largeWidth, largeHeight] = this.guessLargeSize(image.width, image.height)
-    [displayWidth, displayHeight] = view.displayDimension()
-    largeWidth < displayWidth and largeHeight < displayHeight
+    largeWidth < view.displayWidth and largeHeight < view.displayHeight
 
 
   guessLargeSize: (mediumWidth, mediumHeight) ->
