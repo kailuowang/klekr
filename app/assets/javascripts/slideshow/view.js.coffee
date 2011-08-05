@@ -80,6 +80,9 @@ class window.View
       listener()
       false
 
+  faveOperationVisible: ->
+    @faveLink.is(':visible')
+
   previousClicked: (listener) ->
     $('#left').click(listener)
 
@@ -92,9 +95,12 @@ class window.View
     @spacer.attr('width', @displayWidth + 'px')
 
   toggleGridview: ->
-    showingGridview = @gridview.is(":visible")
+    showingGridview = this.inGridview()
     this.fadeInOut(@slide, showingGridview)
     this.fadeInOut(@gridview, !showingGridview)
+
+  inGridview: ->
+    @gridview.is(":visible")
 
   setVisible: (element, visible) ->
     if(visible)

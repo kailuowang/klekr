@@ -3,13 +3,21 @@ window.bindKeys = ->
   previous =  -> slideshow.navigateToPrevious()
   bindKey = (key, func) -> $(document).bind('keydown', key, func)
 
-  bindKey('n', next)
-  bindKey('right', next)
-  bindKey('left', previous)
-  bindKey('b', previous)
-  bindKey('f', -> slideshow.faveCurrentPicture())
-  bindKey('o', -> view.gotoOwner())
-  bindKey('g', -> view.toggleGridview())
-  bindKey('space', -> view.toggleGridview())
-  bindKey('enter', -> view.toggleGridview())
+  bindKey 'right', next
+  bindKey 'left', previous
+
+  bindKey 'f', ->
+    if view.faveOperationVisible()
+      slideshow.faveCurrentPicture()
+
+  bindKey 'o', -> view.gotoOwner()
+  bindKey 'g', -> view.toggleGridview()
+
+  bindKey 'space', ->
+    if view.inGridview()
+      view.toggleGridview()
+    else
+      next()
+
+  bindKey 'return', -> view.toggleGridview()
 
