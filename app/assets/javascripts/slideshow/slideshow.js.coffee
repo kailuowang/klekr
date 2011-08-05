@@ -4,10 +4,13 @@ class window.Slideshow
     @currentIndex = 0
     @currentPage = 0
     @cacheSize = gridview.size() * 2
+
     this.initPictures()
+
     view.nextClicked  => this.navigateToNext()
     view.previousClicked => this.navigateToPrevious()
     view.faveClicked => this.faveCurrentPicture()
+    view.toggleGridview() if __gridMode__?
 
   initPictures: ->
     @pictures = []

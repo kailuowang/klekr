@@ -2,8 +2,9 @@
   = javascript_include_tag 'slideshow.js'
 
 :javascript
-  __firstPicturePath__ = '#{@first_picture_path}'
-  __morePicturesPath__ = '#{@more_pictures_path}'
+  __firstPicturePath__ = '#{@first_picture_path}';
+  __morePicturesPath__ = '#{@more_pictures_path}';
+
 
 = render partial: 'gridview'
 #slide{style: 'width:90%; text-align: center;'}
