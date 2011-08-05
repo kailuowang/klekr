@@ -66,7 +66,7 @@ class window.View
       'untitled'
 
   displayDimension: ->
-    [$(window).width() - 40, $(window).height()]
+    [$(window).width() - 40, $(window).height() - 40]
 
   largeWindow: ->
     @displayWidth > 1024 and @displayHeight > 1024

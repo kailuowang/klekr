@@ -2,7 +2,14 @@ class window.Gridview
   constructor: ->
     @template = $('#template')
     @grid = $('#gridPictures')
-    @size = 10
+
+  size: ->
+    @msize ?= this.calculateSize()
+
+  calculateSize: ->
+    columns = Math.floor( view.displayWidth / 260 )
+    rows = Math.floor( view.displayHeight / 260 )
+    columns * rows
 
   loadPictures: (pictures) ->
     @grid.html('')
