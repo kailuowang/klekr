@@ -1,13 +1,6 @@
 #= require slideshow/picture
 
 describe 'Picture', ->
-  describe 'equality', ->
-    it 'be true for two pictures with the same id', ->
-      data = {id: 1}
-      expect(new Picture(data)).toEqual(new Picture(data))
-
-    it 'be false for two pictures with the same id', ->
-      expect(new Picture({id: 1})).toNotEqual(new Picture({id: 2}))
 
   describe '.uniq', ->
     data = {id: 1}

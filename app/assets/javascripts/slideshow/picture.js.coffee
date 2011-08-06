@@ -13,8 +13,8 @@ class window.Picture
 
   constructor: (@data) ->
     @id = @data.id
-    this.preload() if @data.mediumUrl?
     @width = 640
+    this.preload() if @data.mediumUrl?
 
   url: ->
     if @canUseLargeVersion
