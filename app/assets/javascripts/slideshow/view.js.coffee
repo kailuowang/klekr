@@ -17,8 +17,10 @@ class window.View
     @leftArrow = $('#leftArrow')
     @rightArrow = $('#rightArrow')
     @spacer = $('#spacer')
+    @imageFrameSpan = $('#imageFrameSpan')
     [@displayWidth, @displayHeight] = this.displayDimension()
     this.adjustArrowsPosition()
+    this.adjustImageFrame()
     this.adjustSpacerWidth()
 
   display: (picture) ->
@@ -66,7 +68,8 @@ class window.View
       'untitled'
 
   displayDimension: ->
-    [$(window).width() - 40, $(window).height() - 40]
+    [windowWidth, windowHeight] = this.honeycombAdjustedDimension($(window).width(), $(window).height() )
+    [windowWidth - 40, windowHeight - 40]
 
   largeWindow: ->
     @displayWidth > 1024 and @displayHeight > 1024
@@ -94,6 +97,9 @@ class window.View
   adjustSpacerWidth: ->
     @spacer.attr('width', @displayWidth + 'px')
 
+  adjustImageFrame: ->
+    @imageFrameSpan.css('line-height', (@displayHeight - 80) + 'px')
+
   toggleGridview: ->
     showingGridview = this.inGridview()
     this.fadeInOut(@slide, showingGridview)
@@ -113,3 +119,13 @@ class window.View
       element.fadeIn(100)
     else
       element.fadeOut(100)
+
+
+  debug: (msg) ->
+    $('#debugInfo').text(msg)
+
+  honeycombAdjustedDimension: (originalWidth, originalHeight) ->
+    if isHoneycombCheating = originalWidth is 980
+      [1280, 780]
+    else
+      [originalWidth, originalHeight]

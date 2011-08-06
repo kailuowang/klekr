@@ -105,13 +105,11 @@ class window.Slideshow
       duplicates: #{@pictures.length - Picture.uniq(@pictures).length}
     """
 
-
-
-
 $(document).ready ->
   window.view = new View
   window.server = new Server
   window.gridview = new Gridview
   window.slideshow = new Slideshow
   new StreamPanel
-  bindKeys()
+  new KeyShortcuts
+
