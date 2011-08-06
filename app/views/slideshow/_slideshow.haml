@@ -12,28 +12,30 @@
     %img#spacer{src: '/assets/spacer.gif', height: '2px', width: '1280px'}
   .center{style: 'position: absolute; top: 40px; left: 0px; width: 100%; text-align: center;'}
     #pictureArea.hidden
-      %span#imageFrameSpan
-        %img#picture{style: 'vertical-align: middle;'}
-      #slideShowCaption
-        %h3#faveArea.inline{style: 'margin: 8px'}
-          %span#faved
-            Faved
-          %img#faveWaiting.hidden{src: '/assets/loading.gif'}
-          %a#faveLink{href: '#'}
-            Fave it!
-        %h5.inline{style: 'margin-left: 100px'}
-          Personal Interestingness:
-          %span#interestingness
+      #imageFrameOuter{style: 'display: table; width: 100%'}
+        #imageFrameInner{style: 'display: table-cell; vertical-align: middle; text-align: center;'}
+          #imageFrame
+            %img#picture{style: 'vertical-align: middle;'}
+            #slideShowCaption
+              %h3#faveArea.inline{style: 'margin: 8px'}
+                %span#faved
+                  Faved
+                %img#faveWaiting.hidden{src: '/assets/loading.gif'}
+                %a#faveLink{href: '#'}
+                  Fave it!
+              %h5.inline{style: 'margin-left: 100px'}
+                Personal Interestingness:
+                %span#interestingness
 
-        %h5
-          %b Title:
-          %a#title{target: '_blank'}
-          |
-          %b By:
-          %a#owner
-          |
-          %span#fromTitle{style: 'font-weight:bold'}From:
-          #fromStreams{style: 'display:inline'}
+              %h5
+                %b Title:
+                %a#title{target: '_blank'}
+                |
+                %b By:
+                %a#owner
+                |
+                %span#fromTitle{style: 'font-weight:bold'}From:
+                #fromStreams{style: 'display:inline'}
 
       %a#keyShortcutsLink{href: '#'}
         Key Shortcuts

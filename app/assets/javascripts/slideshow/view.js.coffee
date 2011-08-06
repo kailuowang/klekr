@@ -98,7 +98,7 @@ class window.View
     @spacer.attr('width', @displayWidth + 'px')
 
   adjustImageFrame: ->
-    @imageFrameSpan.css('line-height', (@displayHeight - 80) + 'px')
+    $('#imageFrameInner').css('height', (@displayHeight - 80) + 'px')
 
   toggleGridview: ->
     showingGridview = this.inGridview()
