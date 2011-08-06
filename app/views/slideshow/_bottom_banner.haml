@@ -1,0 +1,11 @@
+#bottomBanner
+  = render partial: 'general/copyright'
+  |
+  = link_to "Find a flickr user ", users_path
+  |
+  %a#keyShortcutsLink{href: '#'}
+    Key Shortcuts
+
+  #debugInfo.inline
+
+= render partial: 'key_shortcuts'

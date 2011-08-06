@@ -1,4 +1,5 @@
 class window.Picture
+
   @uniq: (pictures) ->
     h = {}
     h[p.id] = p for p in pictures
@@ -13,6 +14,7 @@ class window.Picture
   constructor: (@data) ->
     @id = @data.id
     this.preload() if @data.mediumUrl?
+    @width = 640
 
   url: ->
     if @canUseLargeVersion
@@ -32,7 +34,7 @@ class window.Picture
     if view.largeWindow()
       @canUseLargeVersion = true
       this.preloadImage @data.smallUrl
-      this.preloadImage @data.largeUrl
+      this.preloadImage @data.largeUrl, this.updateSize
     else
       this.preloadAdaptiveSize()
 
@@ -40,9 +42,9 @@ class window.Picture
     this.preloadImage @data.smallUrl, (image) =>
       @canUseLargeVersion = this.largerVersionWithinWindow(image)
       if @canUseLargeVersion
-        this.preloadImage @data.largeUrl
+        this.preloadImage @data.largeUrl, this.updateSize
       else
-        this.preloadImage @data.mediumUrl
+        this.preloadImage @data.mediumUrl, this.updateSize
 
   getViewed: ->
     unless @viewed
@@ -52,11 +54,14 @@ class window.Picture
   preloadImage: (url, onload) ->
     image = new Image()
     image.src = url
-    $(image).load -> onload(image) if onload?
+    $(image).load => onload(image) if onload?
+
+  updateSize: (image) =>
+    @width = image.width
 
   largerVersionWithinWindow: (image) ->
     [largeWidth, largeHeight] = this.guessLargeSize(image.width, image.height)
-    largeWidth < view.displayWidth and largeHeight < view.displayHeight
+    largeWidth < view.displayWidth and largeHeight < view.displayHeight - 31
 
 
   guessLargeSize: (smallerWidth, smallerHeight) ->

@@ -17,7 +17,9 @@ class window.View
     @leftArrow = $('#leftArrow')
     @rightArrow = $('#rightArrow')
     @spacer = $('#spacer')
-    @imageFrameSpan = $('#imageFrameSpan')
+    @imageCaption = $('#imageCaption')
+    @bottomLeft = $('#bottomLeft')
+    @bottomRight = $('#bottomRight')
     [@displayWidth, @displayHeight] = this.displayDimension()
     this.adjustArrowsPosition()
     this.adjustImageFrame()
@@ -31,6 +33,7 @@ class window.View
 
   updateDOM: (picture) ->
     @mainImg.attr('src', picture.url())
+    @imageCaption.css('width', picture.width + 'px')
     @interestingness.text(picture.data.interestingness)
     @titleLink.attr('href', picture.data.flickrPageUrl)
     @titleLink.text( this.pictureTitle(picture))
@@ -45,7 +48,7 @@ class window.View
     this.setVisible(@faved, picture.data.faved)
     this.setVisible(@faveArea, picture.data.favePath?)
 
-  gotoOwner: () ->
+  gotoOwner: =>
     window.location = @ownerLink.attr('href')
 
   changingFavedStatus: ->
@@ -99,11 +102,16 @@ class window.View
 
   adjustImageFrame: ->
     $('#imageFrameInner').css('height', (@displayHeight - 80) + 'px')
+    $('#bottomBanner').css('top',(@displayHeight + 20) + 'px' )
+    @bottomLeft.css('top', (@displayHeight + 10) + 'px' )
+    @bottomRight.css('top', (@displayHeight + 10) + 'px' )
 
-  toggleGridview: ->
+  toggleGridview: =>
     showingGridview = this.inGridview()
     this.fadeInOut(@slide, showingGridview)
     this.fadeInOut(@gridview, !showingGridview)
+    this.setVisible @bottomLeft, showingGridview
+    this.setVisible @bottomRight, showingGridview
 
   inGridview: ->
     @gridview.is(":visible")

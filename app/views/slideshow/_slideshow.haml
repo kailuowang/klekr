@@ -5,43 +5,31 @@
   __firstPicturePath__ = '#{@first_picture_path}';
   __morePicturesPath__ = '#{@more_pictures_path}';
 
+%img#spacer{src: '/assets/spacer.gif', height: '2px', width: '1280px'}
 
 = render partial: 'gridview'
+
 #slide{style: 'width:90%; text-align: center;'}
-  .spacer
-    %img#spacer{src: '/assets/spacer.gif', height: '2px', width: '1280px'}
   .center{style: 'position: absolute; top: 40px; left: 0px; width: 100%; text-align: center;'}
     #pictureArea.hidden
       #imageFrameOuter{style: 'display: table; width: 100%'}
-        #imageFrameInner{style: 'display: table-cell; vertical-align: middle; text-align: center;'}
-          #imageFrame
+        #imageFrameInner{style: 'display: table-cell; vertical-align: middle;'}
+          #imageFrame{align: 'center'}
             %img#picture{style: 'vertical-align: middle;'}
-            #slideShowCaption
-              %h3#faveArea.inline{style: 'margin: 8px'}
-                %span#faved
-                  Faved
-                %img#faveWaiting.hidden{src: '/assets/loading.gif'}
-                %a#faveLink{href: '#'}
-                  Fave it!
-              %h5.inline{style: 'margin-left: 100px'}
-                Personal Interestingness:
-                %span#interestingness
+            #imageCaption
+              .fleft
+                %h5
+                  %b Title:
+                  %a#title{target: '_blank'}
+                  |
+                  %b By:
+                  %a#owner
+              .fright
+                %h5
+                  %span#fromTitle{style: 'font-weight:bold'}From:
+                  #fromStreams{style: 'display:inline'}
 
-              %h5
-                %b Title:
-                %a#title{target: '_blank'}
-                |
-                %b By:
-                %a#owner
-                |
-                %span#fromTitle{style: 'font-weight:bold'}From:
-                #fromStreams{style: 'display:inline'}
 
-      %a#keyShortcutsLink{href: '#'}
-        Key Shortcuts
-
-      = render partial: 'general/copyright'
-      #debugInfo
 
   #left{style: 'position: absolute; top: 40px; left: 0px; width: 15%; vertical-align: middle; '}
     %h2#leftArrow{style: 'text-align:left; padding-left: 5px; cursor: pointer'}
@@ -52,4 +40,18 @@
 
   = link_to 'Next', '#', id: 'next', style: 'display: none'
 #preload{style: 'display: none'}
-= render partial: 'key_shortcuts'
+
+= render partial: 'bottom_banner'
+
+#bottomLeft
+  %h3#faveArea.inline{style: 'margin: 8px'}
+    %span#faved.hidden
+      Faved
+    %img#faveWaiting.hidden{src: '/assets/loading.gif'}
+    %a#faveLink.hidden{href: '#'}
+      Fave it!
+
+#bottomRight
+  %h5
+    Personal Interestingness:
+    %span#interestingness

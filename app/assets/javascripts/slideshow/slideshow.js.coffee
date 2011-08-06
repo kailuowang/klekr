@@ -7,9 +7,9 @@ class window.Slideshow
 
     this.initPictures()
 
-    view.nextClicked  => this.navigateToNext()
-    view.previousClicked => this.navigateToPrevious()
-    view.faveClicked => this.faveCurrentPicture()
+    view.nextClicked this.navigateToNext
+    view.previousClicked this.navigateToPrevious
+    view.faveClicked this.faveCurrentPicture
     view.toggleGridview() if __gridMode__?
 
   initPictures: ->
@@ -17,8 +17,7 @@ class window.Slideshow
     server.firstPicture (data) =>
       @pictures.push(new Picture(data))
       this.displayCurrentPicture()
-      this.retrieveMorePictures =>
-        this.loadGridview()
+      this.retrieveMorePictures this.loadGridview
 
   displayCurrentPicture: ->
     view.display(this.currentPicture())
@@ -53,7 +52,7 @@ class window.Slideshow
   currentPicture: ->
     @pictures[@currentIndex]
 
-  navigateToNext: ->
+  navigateToNext: =>
     this.currentPicture().getViewed()
     unless this.atTheLast()
       @currentIndex += 1
@@ -61,13 +60,13 @@ class window.Slideshow
       this.displayCurrentPicture()
       this.ensurePictureCache()
 
-  navigateToPrevious: ->
+  navigateToPrevious: =>
     unless this.atTheBegining()
       @currentIndex -= 1
       this.checkPage(false)
       this.displayCurrentPicture()
 
-  faveCurrentPicture: ->
+  faveCurrentPicture: =>
     view.changingFavedStatus()
     this.currentPicture().fave =>
       view.updateFavedStatus(this.currentPicture())
@@ -80,7 +79,7 @@ class window.Slideshow
     changingPosition =  if(goingForward) then 0 else gridview.size() - 1
     (@currentIndex % gridview.size()) == changingPosition
 
-  loadGridview: ->
+  loadGridview: =>
     gridview.loadPictures(this.currentPageOfPictures())
     gridview.highlightPicture(this.currentPicture())
 

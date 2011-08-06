@@ -416,16 +416,26 @@ input[type="file"]{
   line-height: 244px;
 }
 
-#copyright {
+#bottomBanner {
   width: 100%;
   text-align: center;
-  margin-top: 40px;
+  position: absolute;
+  left: 0px;
 }
 
-#slideShowCaption {
-  width: 100%;
-  text-align: center;
-  line-height: 250%;
+#bottomLeft {
+  text-align: left;
+  position: absolute;
+  left: 0px;
+  margin-left: 20px;
+}
+
+#bottomRight {
+  text-align: right;
+  position: absolute;
+  right: 0px;
+  width: 250px;
+  margin-right: 20px;
 }
 
 .center{

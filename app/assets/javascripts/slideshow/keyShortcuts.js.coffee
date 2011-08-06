@@ -4,8 +4,8 @@ class window.KeyShortcuts
     this.registerPopup()
 
   bindKeys: ->
-    next =  -> slideshow.navigateToNext()
-    previous =  -> slideshow.navigateToPrevious()
+    next =  slideshow.navigateToNext
+    previous =  slideshow.navigateToPrevious
     bindKey = (key, func) -> $(document).bind('keydown', key, func)
 
     bindKey 'right', next
@@ -15,8 +15,8 @@ class window.KeyShortcuts
       if view.faveOperationVisible()
         slideshow.faveCurrentPicture()
 
-    bindKey 'o', -> view.gotoOwner()
-    bindKey 'g', -> view.toggleGridview()
+    bindKey 'o', view.gotoOwner
+    bindKey 'g', view.toggleGridview
 
     bindKey 'space', ->
       if view.inGridview()
@@ -24,7 +24,7 @@ class window.KeyShortcuts
       else
         next()
 
-    bindKey 'return', -> view.toggleGridview()
+    bindKey 'return', view.toggleGridview
 
   registerPopup: ->
     $('#keyShortcutsLink').click ->
