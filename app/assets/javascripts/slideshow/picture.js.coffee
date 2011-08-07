@@ -57,7 +57,15 @@ class window.Picture
     $(image).load => onload(image) if onload?
 
   updateSize: (image) =>
-    @width = image.width
+    unless this.largeVersionInvalid(image)
+      @width = image.width
+
+  largeVersionInvalid: (image)
+    if @canUseLargeVersion
+      if(image.width is 500 and image.height is 375)
+        @canUseLargeVersion = false
+        this.preloadImage @data.mediumUrl, this.updateSize
+        true
 
   largerVersionWithinWindow: (image) ->
     [largeWidth, largeHeight] = this.guessLargeSize(image.width, image.height)
