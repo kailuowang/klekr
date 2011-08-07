@@ -24,7 +24,7 @@ describe 'Picture', ->
     picture = new Picture({})
 
     it 'calculate correctly for horizontal image', ->
-      expect(picture.guessLargeSize(640, 480)).toEqual [1024, 768]
+      expect(picture.guessLargeSize(640, 480)).toEqual [1024, 755]
 
     it 'calculate correctly for vertical image', ->
       expect(picture.guessLargeSize(480, 640)).toEqual [768, 1024]
