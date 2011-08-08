@@ -3,7 +3,7 @@ class window.Slideshow
   constructor: ->
     @currentIndex = 0
     @currentPage = 0
-    @cacheSize = gridview.size() * 2
+    @cacheSize = gridview.size * 2
 
     this.initPictures()
 
@@ -26,7 +26,7 @@ class window.Slideshow
   retrieveMorePictures: (onRetrieve)->
     @currentPage += 1
     excludeIds = (p.id for p in this.unseenPictures())
-    opts = { num: gridview.size(), exclude_ids: excludeIds, page: @currentPage }
+    opts = { num: gridview.size, exclude_ids: excludeIds, page: @currentPage }
     server.morePictures opts, (data) =>
       this.addPictures(
         new Picture(picData) for picData in data
@@ -76,17 +76,17 @@ class window.Slideshow
       this.loadGridview()
 
   pageChanged: (goingForward) ->
-    changingPosition =  if(goingForward) then 0 else gridview.size() - 1
-    (@currentIndex % gridview.size()) == changingPosition
+    changingPosition =  if(goingForward) then 0 else gridview.size - 1
+    (@currentIndex % gridview.size) == changingPosition
 
   loadGridview: =>
     gridview.loadPictures(this.currentPageOfPictures())
     gridview.highlightPicture(this.currentPicture())
 
   currentPageOfPictures: () ->
-    positionInPage = @currentIndex % gridview.size()
+    positionInPage = @currentIndex % gridview.size
     pageStart = @currentIndex - positionInPage
-    pageEnd = pageStart + gridview.size() - 1
+    pageEnd = pageStart + gridview.size - 1
     @pictures[pageStart..pageEnd]
 
   atTheLast: ->

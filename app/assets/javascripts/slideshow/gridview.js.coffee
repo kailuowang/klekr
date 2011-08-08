@@ -2,14 +2,13 @@ class window.Gridview
   constructor: ->
     @template = $('#template')
     @grid = $('#gridPictures')
-
-  size: ->
-    @msize ?= this.calculateSize()
+    this.calculateSize()
+    this.adjustWidth()
 
   calculateSize: ->
-    columns = Math.floor( view.displayWidth / 260 )
-    rows = Math.floor( view.displayHeight / 260 )
-    columns * rows
+    @columns ?= Math.floor( view.displayWidth / 260 )
+    @rows ?= Math.floor( view.displayHeight / 260 )
+    @size = @columns * @rows
 
   loadPictures: (pictures) ->
     @grid.html('')
@@ -29,3 +28,7 @@ class window.Gridview
 
   picId: (picture) ->
     'pic' + picture.id
+
+  adjustWidth: =>
+    $('#gridPictures').css('width', @columns * 260 + 'px')
+

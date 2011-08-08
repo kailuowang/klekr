@@ -1,6 +1,8 @@
-#gridview.hidden{style: 'margin-left: 40px; margin-right: 30px; margin-top: 40px; text-align: center'}
-  #gridPictures
-    #template.gridPicture.fleft.hidden{style: 'width: 260px; height: 260px; text-align: center; '}
-      %span{style: 'vertical-align: middle; line-height: 260px'}
-        %img#imgItem{style: 'vertical-align: middle; line-height: 260px'}
-  .clearFloat
+#gridview.hidden{style: 'margin-top: 40px; width: 100%'}
+  #gridOutter{style: 'display: table; width: 100%'}
+    #gridInner{style: 'display: table-cell;'}
+      #gridPictures{style: 'vertical-align:middle; margin-left: auto; margin-right: auto;'}
+        #template.gridPicture.fleft.hidden{style: 'width: 260px; height: 260px; text-align: center; '}
+          %span{style: 'vertical-align: middle; line-height: 260px'}
+            %img#imgItem{style: 'vertical-align: middle; line-height: 260px'}
+      .clearFloat
