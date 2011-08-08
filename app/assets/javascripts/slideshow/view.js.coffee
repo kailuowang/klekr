@@ -72,7 +72,7 @@ class window.View
 
   displayDimension: ->
     [windowWidth, windowHeight] = this.honeycombAdjustedDimension($(window).width(), $(window).height() )
-    [windowWidth - 40, windowHeight - 40]
+    [windowWidth - 80, windowHeight - 40]
 
   largeWindow: ->
     @displayWidth > 1024 and @displayHeight > 1024

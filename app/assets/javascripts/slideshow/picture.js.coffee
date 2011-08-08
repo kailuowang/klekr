@@ -60,7 +60,7 @@ class window.Picture
     unless this.largeVersionInvalid(image)
       @width = image.width
 
-  largeVersionInvalid: (image)
+  largeVersionInvalid: (image) =>
     if @canUseLargeVersion
       if(image.width is 500 and image.height is 375)
         @canUseLargeVersion = false
