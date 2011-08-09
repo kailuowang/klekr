@@ -108,10 +108,13 @@ class window.View
 
   toggleGridview: =>
     showingGridview = this.inGridview()
-    this.fadeInOut(@slide, showingGridview)
-    this.fadeInOut(@gridview, !showingGridview)
-    this.setVisible @bottomLeft, showingGridview
-    this.setVisible @bottomRight, showingGridview
+    this.showHideGridview(!showingGridview)
+
+  showHideGridview: (showGridview)=>
+    this.fadeInOut(@slide, !showGridview)
+    this.fadeInOut(@gridview, showGridview)
+    this.setVisible @bottomLeft, !showGridview
+    this.setVisible @bottomRight, !showGridview
 
   inGridview: ->
     @gridview.is(":visible")
