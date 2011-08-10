@@ -1,30 +1,44 @@
 class window.KeyShortcuts
   constructor: ->
-    this.bindKeys()
-    this.registerPopup()
+    @shortcuts = []
+    this._registerHelpPopup()
+    @helpList = $('#shortcuts')
 
-  bindKeys: ->
-    bindKey = (key, func) -> $(document).bind('keydown', key, func)
+  bind: (shortcuts)->
+    this._updateKeys(this._unbindKey)
+    @shortcuts = shortcuts
+    this._updateKeys(this._bindKey)
+    this._updateHelp()
 
-    bindKey 'right', gallery.next
-    bindKey 'left', gallery.previous
+  _updateKeys: (action)->
+    action(shortcut) for shortcut in @shortcuts
 
-    bindKey 'f', gallery.currentMode.faveCurrentPicture
+  _bindKey: (shortcut) ->
+    $(document).bind('keydown', key, shortcut.func) for key in shortcut.keys
 
-    bindKey 'o', view.gotoOwner
+  _unbindKey: (shortcut) ->
+    $(document).unbind('keydown', shortcut.func)
 
-    bindKey 'g', gallery.toggleMode
-    bindKey 'return', gallery.toggleMode
-
-#
-#    bindKey 'space', ->
-#      if view.inGridview()
-#        view.toggleGridview()
-#      else
-#        next()
-
-
-  registerPopup: ->
+  _registerHelpPopup: ->
     $('#keyShortcutsLink').click ->
       $('#keyShortcuts').bPopup()
       false
+
+  _updateHelp: ->
+    @helpList.empty()
+    for shortcut in @shortcuts
+      do (shortcut) =>
+        @helpList.append(
+          $('<li>').text(shortcut.text())
+        )
+
+
+class window.KeyShortcut
+  constructor: (@keys, @func, @desc) ->
+    unless @keys instanceof Array
+      @keys = [@keys]
+
+  text: ->
+    keysStrings = ("'#{key}'" for key in @keys)
+    "#{keysStrings.join(', ')}: #{@desc}"
+

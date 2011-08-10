@@ -5,22 +5,15 @@ class window.Gallery
     @cacheSize = gridview.size * 2
     [@grid, @slide] = [new Grid, new Slide]
     @currentMode = if __gridMode__? then @grid else @slide
-    this.initPictures()
-    view.nextClicked this.next
-    view.previousClicked this.previous
 
-  initPictures: =>
+  init: =>
     @pictures = []
     server.firstPicture (data) =>
       @pictures.push(new Picture(data))
       @currentMode.onFirstPictureLoad?()
       this._retrieveMorePictures @currentMode.onFirstBatchOfPicturesLoaded
+    this._bindShortcuts()
 
-  next: =>
-    @currentMode.navigateToNext?()
-
-  previous: =>
-    @currentMode.navigateToPrevious?()
 
   findIndex: (picId)=>
     (i for picture, i in @pictures when picture.id is picId)[0]
@@ -35,6 +28,9 @@ class window.Gallery
       )
       onRetrieve() if onRetrieve?
 
+  _bindShortcuts: =>
+    keyShortcuts.bind(@currentMode.shortcuts())
+
   size: =>
     @pictures.length
 
@@ -48,8 +44,8 @@ class window.Gallery
     progress = this.currentProgress()
     @currentMode = if @currentMode is @grid then @slide else @grid
     @currentMode.updateProgress(progress)
+    this._bindShortcuts()
     @currentMode.show()
-
 
   unseenPictures: ->
     @pictures[this.currentProgress()...@pictures.length]
@@ -64,10 +60,11 @@ class window.Gallery
 
 
 $(document).ready ->
+  window.keyShortcuts = new KeyShortcuts
   window.view = new View
   window.server = new Server
   window.gridview = new Gridview
   window.gallery = new Gallery
   new StreamPanel
-  new KeyShortcuts
+  gallery.init()
 

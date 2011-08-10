@@ -2,6 +2,8 @@ class window.Slide
   constructor: ->
     @currentIndex = 0
     view.faveClicked this.faveCurrentPicture
+    view.nextClicked this.navigateToNext
+    view.previousClicked this.navigateToPrevious
 
   faveCurrentPicture: =>
     view.changingFavedStatus()
@@ -44,3 +46,12 @@ class window.Slide
 
   show: =>
     view.showHideGridview(false)
+
+  shortcuts: =>
+    @_shortcuts ?= [
+      new KeyShortcut 'right', this.navigateToNext, 'next picture'
+      new KeyShortcut 'left', this.navigateToPrevious, 'previous picture'
+      new KeyShortcut 'f', this.faveCurrentPicture, 'fave picture'
+      new KeyShortcut 'o', view.gotoOwner, "go to photographer's page"
+      new KeyShortcut ['g', 'return'], gallery.toggleMode, "go to grid mode"
+    ]
