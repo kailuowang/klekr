@@ -56,7 +56,7 @@ class window.View
     @faveLink.hide()
 
   updateFromStreams: (streams) ->
-    @fromStreamsDiv.html('')
+    @fromStreamsDiv.empty()
     for stream in streams
       link = $('<a>').attr('href', stream.path).text(stream.username + "'s " + stream.type)
       @fromStreamsDiv.append(link)

@@ -2,33 +2,52 @@ class window.Gridview
   constructor: ->
     @template = $('#template')
     @grid = $('#gridPictures')
-    this.calculateSize()
-    this.adjustWidth()
+    this._calculateSize()
+    this._adjustWidth()
 
-  calculateSize: ->
+  itemSelect: (handler)=>
+    @itemSelectHandler = handler
+
+
+  highlightPicture: (picture) ->
+    this._highlightPictureDiv $('#' + this._picId(picture))
+
+  loadPictures: (pictures) ->
+    @grid.empty()
+    this.load picture for picture in pictures
+
+  load: (picture) ->
+    newItem = this._createPictureItem(picture)
+    @grid.append(newItem)
+    newItem.show()
+
+  _highlightPictureDiv: (div) ->
+    $('.gridPicture').css('background', '')
+    div.css('background', '#606060')
+
+  _calculateSize: ->
     @columns ?= Math.floor( view.displayWidth / 260 )
     @rows ?= Math.floor( view.displayHeight / 260 )
     @size = @columns * @rows
 
-  loadPictures: (pictures) ->
-    @grid.html('')
-    this.load picture for picture in pictures
-
-  load: (picture) ->
-    newItem = @template.clone()
-    newItem.attr('id', this.picId(picture))
-    img = $(newItem.find('#imgItem').first())
+  _createPictureItem: (picture)=>
+    item = @template.clone()
+    item.attr('id', this._picId(picture))
+    img = item.find('#imgItem')
     img.attr('src', picture.smallUrl())
-    @grid.append(newItem)
-    newItem.show()
+    item.click this._itemClickHandler
+    item
 
-  highlightPicture: (picture) ->
-    $('.gridPicture').css('background', '')
-    $('#' + this.picId(picture)).css('background', '#606060')
+  _itemClickHandler: (clickEvent) =>
+    clickedDiv = $(clickEvent.currentTarget)
+    divId = clickedDiv.attr('id')
+    picId = parseInt(divId.split('-')[1])
+    this._highlightPictureDiv(clickedDiv)
+    @itemSelectHandler(picId)
 
-  picId: (picture) ->
-    'pic' + picture.id
+  _picId: (picture) ->
+    'pic-' + picture.id
 
-  adjustWidth: =>
+  _adjustWidth: =>
     $('#gridPictures').css('width', @columns * 260 + 'px')
 

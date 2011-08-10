@@ -14,7 +14,7 @@ class window.Gallery
     server.firstPicture (data) =>
       @pictures.push(new Picture(data))
       @currentMode.onFirstPictureLoad?()
-      this.retrieveMorePictures @currentMode.onFirstBatchOfPicturesLoaded
+      this._retrieveMorePictures @currentMode.onFirstBatchOfPicturesLoaded
 
   next: =>
     @currentMode.navigateToNext?()
@@ -22,7 +22,10 @@ class window.Gallery
   previous: =>
     @currentMode.navigateToPrevious?()
 
-  retrieveMorePictures: (onRetrieve)->
+  findIndex: (picId)=>
+    (i for picture, i in @pictures when picture.id is picId)[0]
+
+  _retrieveMorePictures: (onRetrieve)->
     @currentPage += 1
     excludeIds = (p.id for p in this.unseenPictures())
     opts = { num: gridview.size, exclude_ids: excludeIds, page: @currentPage }
@@ -53,7 +56,7 @@ class window.Gallery
 
   ensurePictureCache: ()=>
     if @pictures.length - this.currentProgress() < @cacheSize
-      this.retrieveMorePictures()
+      this._retrieveMorePictures()
 
   currentProgress: =>
     @currentMode.currentProgress()

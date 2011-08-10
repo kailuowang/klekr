@@ -2,6 +2,7 @@ class window.Grid
 
   constructor: ->
     @selectedIndex = 0
+    gridview.itemSelect this.selectPicture
 
   currentPageOfPictures:  =>
     positionInPage = @selectedIndex % gridview.size
@@ -15,6 +16,9 @@ class window.Grid
 
   selectedPicture: =>
     gallery.pictures[@selectedIndex]
+
+  selectPicture: (picId) =>
+    @selectedIndex = gallery.findIndex(picId)
 
   onFirstBatchOfPicturesLoaded: =>
     this.loadGridView()
