@@ -47,11 +47,15 @@ class window.Slide
   show: =>
     view.showHideGridview(false)
 
+  backToGrid: =>
+    this.currentPicture().getViewed()
+    gallery.toggleMode()
+
   shortcuts: =>
     @_shortcuts ?= [
       new KeyShortcut 'right', this.navigateToNext, 'next picture'
       new KeyShortcut 'left', this.navigateToPrevious, 'previous picture'
       new KeyShortcut 'f', this.faveCurrentPicture, 'fave picture'
       new KeyShortcut 'o', view.gotoOwner, "go to photographer's page"
-      new KeyShortcut ['g', 'return'], gallery.toggleMode, "go to grid mode"
+      new KeyShortcut ['g', 'return'], this.backToGrid, "go to grid mode"
     ]
