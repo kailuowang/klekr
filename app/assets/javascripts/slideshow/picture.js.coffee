@@ -1,10 +1,5 @@
 class window.Picture
 
-  @uniq: (pictures) ->
-    h = {}
-    h[p.id] = p for p in pictures
-    p for id, p of h
-
   @uniqConcat: (original, newOnes) ->
     h = {}
     h[p.id] = 1 for p in original
