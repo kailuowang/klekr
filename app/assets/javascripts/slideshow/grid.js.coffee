@@ -66,5 +66,5 @@ class window.Grid
       new KeyShortcut 'right', this.moveRight, 'move right'
       new KeyShortcut 'down', this.moveDown, 'move down'
       new KeyShortcut 'left', this.moveLeft, 'move left'
-      new KeyShortcut ['g', 'return'], gallery.toggleMode, "go to the selected picture"
+      new KeyShortcut ['return','space'], gallery.toggleMode, "go to the selected picture"
     ]

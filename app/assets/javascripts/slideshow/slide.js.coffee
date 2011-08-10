@@ -53,7 +53,7 @@ class window.Slide
 
   shortcuts: =>
     @_shortcuts ?= [
-      new KeyShortcut 'right', this.navigateToNext, 'next picture'
+      new KeyShortcut ['right', 'space'], this.navigateToNext, 'next picture'
       new KeyShortcut 'left', this.navigateToPrevious, 'previous picture'
       new KeyShortcut 'f', this.faveCurrentPicture, 'fave picture'
       new KeyShortcut 'o', view.gotoOwner, "go to photographer's page"
