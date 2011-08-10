@@ -15,7 +15,6 @@ class window.Grid
   selectedPicture: =>
     gallery.pictures[@selectedIndex]
 
-
   onFirstBatchOfPicturesLoaded: =>
     this.loadGridView()
 
@@ -26,14 +25,22 @@ class window.Grid
     @selectedIndex = progress
     this.loadGridview()
 
-  moveUp: =>
-    this._tryMoveTo(@selectedIndex - gridview.columns)
-  moveDown: =>
-    this._tryMoveTo(@selectedIndex + gridview.columns)
-  moveLeft: =>
-    this._tryMoveTo(@selectedIndex - 1)
-  moveRight: =>
-    this._tryMoveTo(@selectedIndex + 1)
+  show: =>
+    view.showHideGridview(true)
+
+  moveUp: => this._tryMoveTo(@selectedIndex - gridview.columns)
+  moveDown: => this._tryMoveTo(@selectedIndex + gridview.columns)
+  moveLeft: => this._tryMoveTo(@selectedIndex - 1)
+  moveRight: => this._tryMoveTo(@selectedIndex + 1)
+
+  shortcuts: =>
+    @_shortcuts ?= [
+      new KeyShortcut 'up', this.moveUp, 'move up'
+      new KeyShortcut 'right', this.moveRight, 'move right'
+      new KeyShortcut 'down', this.moveDown, 'move down'
+      new KeyShortcut 'left', this.moveLeft, 'move left'
+      new KeyShortcut ['return','space'], gallery.toggleMode, "go to the selected picture"
+    ]
 
   _tryMoveTo: (newIndex) =>
     [pageStart, pageEnd] = this._currentPageRange()
@@ -50,21 +57,9 @@ class window.Grid
     pageEnd = pageStart + gridview.size - 1
     [pageStart, pageEnd]
 
-  show: =>
-    view.showHideGridview(true)
-
   _onPictureSelect: (picId) =>
       picIndex = gallery.findIndex(picId)
       if @selectedIndex is picIndex
         gallery.toggleMode()
       else
         @selectedIndex = picIndex
-
-  shortcuts: =>
-    @_shortcuts ?= [
-      new KeyShortcut 'up', this.moveUp, 'move up'
-      new KeyShortcut 'right', this.moveRight, 'move right'
-      new KeyShortcut 'down', this.moveDown, 'move down'
-      new KeyShortcut 'left', this.moveLeft, 'move left'
-      new KeyShortcut ['return','space'], gallery.toggleMode, "go to the selected picture"
-    ]
