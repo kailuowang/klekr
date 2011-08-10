@@ -18,7 +18,11 @@ class window.Grid
     gallery.pictures[@selectedIndex]
 
   selectPicture: (picId) =>
-    @selectedIndex = gallery.findIndex(picId)
+    picIndex = gallery.findIndex(picId)
+    if @selectedIndex is picIndex
+      gallery.toggleMode()
+    else
+      @selectedIndex = picIndex
 
   onFirstBatchOfPicturesLoaded: =>
     this.loadGridView()
