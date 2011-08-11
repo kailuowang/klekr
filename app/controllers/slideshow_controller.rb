@@ -13,7 +13,7 @@ class SlideshowController < ApplicationController
 
   def show
     id = params[:id]
-    @slideshow_name = @current_collector.user_name + " 's Slide Show"
+    @slideshow_name = "My Slideshow"
     @first_picture_path = id ? picture_path(id) : current_pictures_path
     @more_pictures_path = new_pictures_slideshow_path
   end
