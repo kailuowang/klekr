@@ -12,9 +12,12 @@ class window.Gallery
 
   init: =>
     @pictures = []
-    server.firstPicture (data) =>
-      @pictures.push(new Picture(data))
-      @currentMode.onFirstPictureLoad?()
+    if server.firstPicturePath
+      server.firstPicture (data) =>
+        @pictures.push(new Picture(data))
+        @currentMode.onFirstPictureLoad?()
+        this._retrieveMorePictures @currentMode.onFirstBatchOfPicturesLoaded
+    else
       this._retrieveMorePictures @currentMode.onFirstBatchOfPicturesLoaded
     this._bindShortcuts()
     @currentMode.show()

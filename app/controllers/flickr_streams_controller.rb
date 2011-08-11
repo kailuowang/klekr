@@ -39,10 +39,6 @@ class FlickrStreamsController < ApplicationController
     render_json_pictures @flickr_stream.get_pictures(per_page, page)
   end
 
-  def first_picture
-    first_picture = @flickr_stream.get_pictures(1)
-    render_json first_picture.present? ? data_for(first_picture.first) : []
-  end
 
   #GET /flickr_stream/1/sync
   def sync

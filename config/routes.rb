@@ -12,7 +12,6 @@ Collectr::Application.routes.draw do
       put 'adjust_rating'
       put 'mark_all_as_read'
       post 'pictures'
-      get 'first_picture'
       put 'subscribe'
       put 'unsubscribe'
     end
