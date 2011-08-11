@@ -22,7 +22,7 @@ class window.Gallery
   _retrieveMorePictures: (onRetrieve)->
     @currentPage += 1
     excludeIds = (p.id for p in this.unseenPictures())
-    opts = { num: gridview.size, exclude_ids: excludeIds, page: @currentPage }
+    opts = { num: @cacheSize, exclude_ids: excludeIds, page: @currentPage }
     server.morePictures opts, (data) =>
       this.addPictures(
         new Picture(picData) for picData in data
@@ -53,11 +53,17 @@ class window.Gallery
 
   ensurePictureCache: ()=>
     if @pictures.length - this.currentProgress() < @cacheSize
-      this._retrieveMorePictures()
+      this._retrieveMorePictures @currentMode.onMorePicturesLoaded
 
   currentProgress: =>
     @currentMode.currentProgress()
 
+  report: ->
+    console.debug "cache size: " + @cacheSize
+    console.debug "current flickr page: " + @currentPage
+    console.debug "gridview size: " + gridview.size
+    console.debug "pictures size: " + @pictures.length
+    console.debug "current progress: " + this.currentProgress()
 
 
 $(document).ready ->

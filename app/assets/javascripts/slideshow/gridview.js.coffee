@@ -8,6 +8,8 @@ class window.Gridview
   itemSelect: (handler)=>
     @itemSelectHandler = handler
 
+  currentSize: =>
+    @grid.children().size()
 
   highlightPicture: (picture) ->
     this._highlightPictureDiv $('#' + this._picId(picture))

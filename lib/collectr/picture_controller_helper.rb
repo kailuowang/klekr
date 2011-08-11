@@ -11,6 +11,7 @@ module Collectr
         flickrPageUrl:    picture.url,
         ownerName:        picture.owner_name,
         faved:            picture.faved?,
+        viewed:           picture.viewed?,
         ownerPath:        user_path(picture.pic_info.owner),
         fromStreams:      picture.flickr_streams.map do |stream|
                             data_for_stream(stream)

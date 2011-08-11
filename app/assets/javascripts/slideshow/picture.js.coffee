@@ -42,9 +42,9 @@ class window.Picture
         this.preloadImage @data.mediumUrl, this.updateSize
 
   getViewed: ->
-    unless @viewed
+    unless @data.viewed
       server.put(@data.getViewedPath)
-      @viewed = true
+      @data.viewed = true
 
   preloadImage: (url, onload) ->
     image = new Image()

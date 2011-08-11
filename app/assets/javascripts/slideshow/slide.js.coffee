@@ -1,9 +1,10 @@
 class window.Slide
   constructor: ->
     @currentIndex = 0
-    view.faveClicked this.faveCurrentPicture
-    view.nextClicked this.navigateToNext
-    view.previousClicked this.navigateToPrevious
+    view.faveClick this.faveCurrentPicture
+    view.nextClick this.navigateToNext
+    view.previousClick this.navigateToPrevious
+    view.toGridLinkClick this.backToGrid
 
   faveCurrentPicture: =>
     view.changingFavedStatus()

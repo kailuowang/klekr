@@ -78,10 +78,10 @@ class window.View
     @displayWidth > 1024 and @displayHeight > 1024
 
 
-  nextClicked: (listener) ->
+  nextClick: (listener) ->
     $('#right').click(listener)
 
-  faveClicked: (listener) ->
+  faveClick: (listener) ->
     @faveLink.click ->
       listener()
       false
@@ -89,8 +89,13 @@ class window.View
   faveOperationVisible: ->
     @faveLink.is(':visible')
 
-  previousClicked: (listener) ->
+  previousClick: (listener) ->
     $('#left').click(listener)
+
+  toGridLinkClick: (listener) ->
+    $('#toGridLink').click ->
+      listener()
+      false
 
   adjustArrowsPosition: ->
     sideArrowHeight = ( @displayHeight - 150 )+ "px"
@@ -103,8 +108,8 @@ class window.View
   adjustImageFrame: ->
     $('#imageFrameInner').css('height', (@displayHeight - 80) + 'px')
     $('#bottomBanner').css('top',(@displayHeight + 20) + 'px' )
-    @bottomLeft.css('top', (@displayHeight + 10) + 'px' )
-    @bottomRight.css('top', (@displayHeight + 10) + 'px' )
+    @bottomLeft.css('top', (@displayHeight + 8) + 'px' )
+    @bottomRight.css('top', (@displayHeight + 8) + 'px' )
 
   toggleGridview: =>
     showingGridview = this.inGridview()
