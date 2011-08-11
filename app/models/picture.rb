@@ -5,7 +5,8 @@ class Picture < ActiveRecord::Base
   scope :after, lambda { |pic| where('date_upload > ?', pic.date_upload) }
   scope :before, lambda { |pic| where('date_upload <= ? and id <> ? ', pic.date_upload, pic.id) }
   scope :new_pictures, lambda { |n| desc.unviewed.limit(n) }
-  scope :collected_by, lambda { |collector| where(collector_id: collector) if collector }
+  scope :collected_by, lambda { |collector| where(collector_id: collector, collected: true) if collector }
+  scope :collected, where(collected: true)
   scope :unviewed, where(viewed: false)
   scope :syned_from, lambda { |stream| joins(:syncages).where(syncages: {flickr_stream_id: stream.id}) }
   serialize :pic_info_dump
@@ -17,7 +18,7 @@ class Picture < ActiveRecord::Base
 
     def find_or_initialize_from_pic_info(pic_info, collector = nil)
       url = FlickRaw.url_photopage(pic_info)
-      Picture.collected_by(collector).where(url: url).first ||
+      Picture.where(collector_id: collector, url: url).first ||
         Picture.new.tap do |picture|
           picture.url = url
           picture.title = pic_info.title
@@ -67,14 +68,6 @@ class Picture < ActiveRecord::Base
       flickr_streams.each(&:picture_viewed)
     end
     self
-  end
-
-  def next_new_pictures(n)
-    Picture.new_pictures_by(collector, n, self.id)
-  end
-
-  def next
-    Picture.after(self).asc.first
   end
 
   def fave
@@ -128,6 +121,7 @@ class Picture < ActiveRecord::Base
   def synced_by(stream)
     new_stream_rating = stream.star_rating + (stream_rating || 0)
     self.stream_rating = new_stream_rating
+    self.collected = true if stream.collecting?
     save!
     syncages.create(flickr_stream_id: stream.id)
     self

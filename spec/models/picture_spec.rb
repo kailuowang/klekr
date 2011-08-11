@@ -73,6 +73,12 @@ describe Picture do
         Factory(:picture, collector: Factory(:collector))
         Picture.collected_by(Factory(:collector)).should be_empty
       end
+
+      it "does not return pictures are not collected" do
+        pic = create_picture(collected: false)
+        Picture.collected_by(@collector).should_not include(pic)
+      end
+
     end
 
 
@@ -84,6 +90,7 @@ describe Picture do
         pic = Factory(:picture, date_upload: 1.hour.ago, collector: collector)
         Picture.most_interesting_for(collector).should == pic
       end
+
 
       it "should redirect to show the picture collected by the current collector" do
         collector = Factory(:collector)
@@ -150,6 +157,22 @@ describe Picture do
       picture.synced_by(stream)
       picture.stream_rating.should == 0.2
     end
+
+    it "sets the collected to true if stream is collecting" do
+      picture = Factory(:picture, collected: false)
+      stream = Factory(:fave_stream, collecting: true)
+      picture.synced_by(stream)
+      picture.should be_collected
+    end
+
+    it "does not change the collected status if stream is not collecting" do
+      picture = Factory(:picture, collected: false)
+      stream = Factory(:fave_stream, collecting: false)
+      picture.synced_by(stream)
+      picture.should_not be_collected
+    end
+
+
   end
 
   describe "#get_viewed" do
@@ -180,7 +203,7 @@ describe Picture do
     end
   end
 
-  describe ".new_pictures" do
+  describe ".new_pictures_by" do
     it "should return x number of unviewed pictures and return in a desc order" do
       picture4 = create_picture(date_upload: DateTime.new(2010, 1, 4), viewed: true)
       picture3 = create_picture(date_upload: DateTime.new(2010, 1, 3))
@@ -228,16 +251,10 @@ describe Picture do
       Picture.new_pictures_by(@collector, 3, exclude_ids).should_not include(pic1, pic2)
     end
 
-
-  end
-
-  describe "#next_new_pictures" do
-
-    it "should not include the picture itself" do
-      Factory(:picture).next_new_pictures(1).should be_empty
+    it "not include pictures that are collected" do
+      pic1 = create_picture(collected: false)
+      Picture.new_pictures_by(@collector, 2).should_not include(pic1)
     end
-
-
   end
 
   describe "#flickr_url" do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110730132423) do
+ActiveRecord::Schema.define(:version => 20110811211434) do
 
   create_table "collectors", :force => true do |t|
     t.string   "user_id"
@@ -65,16 +65,17 @@ ActiveRecord::Schema.define(:version => 20110730132423) do
 
   create_table "pictures", :force => true do |t|
     t.string   "title"
-    t.string   "url"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "date_upload"
+    t.string   "url"
     t.text     "pic_info_dump"
     t.boolean  "viewed",        :default => false
     t.string   "owner_name"
     t.float    "stream_rating"
     t.integer  "rating",        :default => 0
     t.integer  "collector_id"
+    t.boolean  "collected"
   end
 
   add_index "pictures", ["collector_id"], :name => "index_pictures_on_collector_id"
@@ -86,7 +87,6 @@ ActiveRecord::Schema.define(:version => 20110730132423) do
   create_table "syncages", :force => true do |t|
     t.integer  "picture_id"
     t.integer  "flickr_stream_id"
-    t.string   "flickr_stream_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
