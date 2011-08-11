@@ -13,6 +13,7 @@ class window.Gallery
       @currentMode.onFirstPictureLoad?()
       this._retrieveMorePictures @currentMode.onFirstBatchOfPicturesLoaded
     this._bindShortcuts()
+    @currentMode.show()
 
 
   findIndex: (picId)=>

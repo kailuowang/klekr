@@ -16,7 +16,7 @@ class window.Grid
     gallery.pictures[@selectedIndex]
 
   onFirstBatchOfPicturesLoaded: =>
-    this.loadGridView()
+    this.loadGridview()
 
   currentProgress: =>
     @selectedIndex
@@ -59,7 +59,5 @@ class window.Grid
 
   _onPictureSelect: (picId) =>
       picIndex = gallery.findIndex(picId)
-      if @selectedIndex is picIndex
-        gallery.toggleMode()
-      else
-        @selectedIndex = picIndex
+      @selectedIndex = picIndex
+      gallery.toggleMode()
