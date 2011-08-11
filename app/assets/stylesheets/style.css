@@ -487,3 +487,8 @@ table{
 #countdown{
   color: #D93544;
 }
+
+
+.pointer {
+ cursor: pointer;
+}

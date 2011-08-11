@@ -32,20 +32,20 @@ class window.Grid
   show: =>
     view.showHideGridview(true)
 
-  nextPage: =>
+  navigateToNext: =>
     this._markCurrentPageAsViewed()
     unless this._pageIncomplete()
       [pageStart, pageEnd] = this._currentPageRange()
       this._changePage(pageEnd + 1)
 
-  previousPage: =>
+  navigateToPrevious: =>
     [pageStart, pageEnd] = this._currentPageRange()
     this._changePage(pageStart - 1)
 
   moveUp: => this._tryMoveTo(@selectedIndex - gridview.columns)
   moveDown: => this._tryMoveTo(@selectedIndex + gridview.columns)
-  moveLeft: => this._tryMoveTo @selectedIndex - 1 , this.previousPage
-  moveRight: => this._tryMoveTo @selectedIndex + 1,  this.nextPage
+  moveLeft: => this._tryMoveTo @selectedIndex - 1 , this.navigateToPrevious
+  moveRight: => this._tryMoveTo @selectedIndex + 1,  this.navigateToNext
 
   shortcuts: =>
     @_shortcuts ?= [
@@ -53,8 +53,8 @@ class window.Grid
       new KeyShortcut 'right', this.moveRight, 'move right'
       new KeyShortcut 'down', this.moveDown, 'move down'
       new KeyShortcut 'left', this.moveLeft, 'move left'
-      new KeyShortcut 'pagedown', this.nextPage, 'next page'
-      new KeyShortcut 'pageup', this.previousPage, 'previous page'
+      new KeyShortcut 'pagedown', this.navigateToNext, 'next page'
+      new KeyShortcut 'pageup', this.navigateToPrevious, 'previous page'
       new KeyShortcut ['return','space'], gallery.toggleMode, "go to the selected picture"
     ]
 

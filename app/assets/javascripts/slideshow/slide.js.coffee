@@ -2,8 +2,6 @@ class window.Slide
   constructor: ->
     @currentIndex = 0
     view.faveClick this.faveCurrentPicture
-    view.nextClick this.navigateToNext
-    view.previousClick this.navigateToPrevious
     view.toGridLinkClick this.backToGrid
 
   faveCurrentPicture: =>

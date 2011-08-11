@@ -5,6 +5,10 @@ class window.Gallery
     @cacheSize = gridview.size * 2
     [@grid, @slide] = [new Grid, new Slide]
     @currentMode = if __gridMode__? then @grid else @slide
+    view.nextClick =>
+      @currentMode.navigateToNext?()
+    view.previousClick =>
+      @currentMode.navigateToPrevious?()
 
   init: =>
     @pictures = []
@@ -14,7 +18,6 @@ class window.Gallery
       this._retrieveMorePictures @currentMode.onFirstBatchOfPicturesLoaded
     this._bindShortcuts()
     @currentMode.show()
-
 
   findIndex: (picId)=>
     (i for picture, i in @pictures when picture.id is picId)[0]
