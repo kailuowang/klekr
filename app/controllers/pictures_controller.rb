@@ -7,7 +7,7 @@ class PicturesController < ApplicationController
   def fave
     @picture = Picture.find(params[:id])
     @picture.get_viewed
-    @picture.fave
+    @picture.fave(params[:rating].to_i)
     respond_to do |format|
       format.js  { render :json => {} }
     end

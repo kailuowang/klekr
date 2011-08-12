@@ -1,14 +1,20 @@
-class window.KeyShortcuts
+class window.KeyShortcuts extends ViewBase
   constructor: ->
     @shortcuts = []
     this._registerHelpPopup()
     @helpList = $('#shortcuts')
 
   bind: (shortcuts)->
-    this._updateKeys(this._unbindKey)
+    this.disable()
     @shortcuts = shortcuts
-    this._updateKeys(this._bindKey)
+    this.enable()
     this._updateHelp()
+
+  disable: =>
+    this._updateKeys(this._unbindKey)
+
+  enable: =>
+    this._updateKeys(this._bindKey)
 
   _updateKeys: (action)->
     action(shortcut) for shortcut in @shortcuts
@@ -20,8 +26,8 @@ class window.KeyShortcuts
     $(document).unbind('keydown', shortcut.func)
 
   _registerHelpPopup: ->
-    $('#keyShortcutsLink').click ->
-      $('#keyShortcuts').bPopup()
+    $('#keyShortcutsLink').click =>
+      this.popup($('#keyShortcuts'))
       false
 
   _updateHelp: ->

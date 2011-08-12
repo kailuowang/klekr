@@ -73,14 +73,10 @@ class Picture < ActiveRecord::Base
     self
   end
 
-  def fave
-    return if faved?
-    update_attribute(:rating, 1)
-    flickr_streams.each { |stream| stream.add_score(created_at) }
-    begin
-      flickr.favorites.add(photo_id: pic_info.id)
-    rescue FlickRaw::FailedResponse => e
-      Rails.logger.error('Failed to fave picture' + e.inspect)
+  def fave(new_rating = 1)
+    if (old_rating = rating) != new_rating
+      update_attribute(:rating, new_rating)
+      newly_faved if old_rating == 0
     end
   end
 
@@ -129,4 +125,16 @@ class Picture < ActiveRecord::Base
     syncages.create(flickr_stream_id: stream.id)
     self
   end
+
+  private
+
+  def newly_faved
+    flickr_streams.each { |stream| stream.add_score(created_at) }
+    begin
+      flickr.favorites.add(photo_id: pic_info.id)
+    rescue FlickRaw::FailedResponse => e
+      Rails.logger.error('Failed to fave picture' + e.inspect)
+    end
+  end
+
 end

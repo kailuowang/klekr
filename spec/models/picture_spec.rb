@@ -138,6 +138,13 @@ describe Picture do
       stub_flickr(picture, :favorites).should_not_receive(:add)
       picture.fave
     end
+
+    it "update ratings if already faved" do
+      picture = Factory(:picture, rating: 1)
+      stub_flickr(picture, :favorites).should_not_receive(:add)
+      picture.fave(2)
+      picture.rating.should == 2
+    end
   end
 
   describe "#faved?" do

@@ -20,9 +20,10 @@ class window.Picture
   smallUrl: ->
     @data.smallUrl
 
-  fave: (onSuccess) ->
-    server.put @data.favePath, {}, =>
+  fave: (rating, onSuccess) =>
+    server.put @data.favePath, {rating: rating}, =>
       @data.faved = true
+      @data.rating = rating
       onSuccess()
 
   preload: ->

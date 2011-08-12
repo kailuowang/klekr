@@ -1,4 +1,4 @@
-class window.View
+class window.View extends ViewBase
 
   constructor: () ->
     @mainImg = $('#picture')
@@ -9,11 +9,8 @@ class window.View
     @titleLink = $('#title')
     @ownerLink = $('#owner')
     @fromStreamsDiv = $('#fromStreams')
-    @faveLink = $('#faveLink')
-    @faved = $('#faved')
-    @faveWaiting = $('#faveWaiting')
+
     @fromTitle = $('#fromTitle')
-    @faveArea = $('#faveArea')
     @leftArrow = $('#leftArrow')
     @rightArrow = $('#rightArrow')
     @spacer = $('#spacer')
@@ -40,20 +37,9 @@ class window.View
     @ownerLink.attr('href', picture.data.ownerPath)
     @ownerLink.text(picture.data.ownerName)
     this.updateFromStreams(picture.data.fromStreams)
-    this.updateFavedStatus(picture)
-
-  updateFavedStatus: (picture) ->
-    @faveWaiting.hide()
-    this.setVisible(@faveLink, !picture.data.faved)
-    this.setVisible(@faved, picture.data.faved)
-    this.setVisible(@faveArea, picture.data.favePath?)
 
   gotoOwner: =>
     window.location = @ownerLink.attr('href')
-
-  changingFavedStatus: ->
-    @faveWaiting.show()
-    @faveLink.hide()
 
   updateFromStreams: (streams) ->
     @fromStreamsDiv.empty()
@@ -80,14 +66,6 @@ class window.View
 
   nextClick: (listener) ->
     $('#right').click(listener)
-
-  faveClick: (listener) ->
-    @faveLink.click ->
-      listener()
-      false
-
-  faveOperationVisible: ->
-    @faveLink.is(':visible')
 
   previousClick: (listener) ->
     $('#left').click(listener)
@@ -123,19 +101,6 @@ class window.View
 
   inGridview: ->
     @gridview.is(":visible")
-
-  setVisible: (element, visible) ->
-    if(visible)
-       element.show()
-    else
-       element.hide()
-
-  fadeInOut: (element, visible) ->
-    if(visible)
-      element.fadeIn(100)
-    else
-      element.fadeOut(100)
-
 
   debug: (msg) ->
     $('#debugInfo').text(msg)

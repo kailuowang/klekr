@@ -492,3 +492,6 @@ table{
 .pointer {
  cursor: pointer;
 }
+
+
+.modalPopup{ padding: 20px; background: black; opacity:0.6; color: #EEEEEE; display: none;}
