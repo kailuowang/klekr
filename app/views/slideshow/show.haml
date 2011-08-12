@@ -2,8 +2,9 @@
 
   .fleft
     %h3
-      = @slideshow_name
+      My Slideshow
   .fright
     %h4
+      = link_to 'My Faves', faves_slideshow_path
       = link_to 'My Collections', flickr_streams_path
 =render partial: 'slideshow'

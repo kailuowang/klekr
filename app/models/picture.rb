@@ -6,7 +6,6 @@ class Picture < ActiveRecord::Base
   scope :before, lambda { |pic| where('date_upload <= ? and id <> ? ', pic.date_upload, pic.id) }
   scope :new_pictures, lambda { |n| desc.unviewed.limit(n) }
   scope :collected_by, lambda { |collector| where(collector_id: collector, collected: true) if collector }
-  scope :collected, where(collected: true)
   scope :unviewed, where(viewed: false)
   scope :syned_from, lambda { |stream| joins(:syncages).where(syncages: {flickr_stream_id: stream.id}) }
   serialize :pic_info_dump
@@ -50,6 +49,10 @@ class Picture < ActiveRecord::Base
       pictures = Picture.arel_table
       scope = scope.where(pictures[:id].not_in(exclude_ids)) if exclude_ids.present?
       scope
+    end
+
+    def faved_by(collector, page, per_page)
+      collected_by(collector).where('rating > ?', 0).order('updated_at DESC').paginate(page: page, per_page: per_page )
     end
   end
 

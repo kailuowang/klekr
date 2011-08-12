@@ -12,11 +12,17 @@ class SlideshowController < ApplicationController
 
   def show
     id = params[:id]
-    @slideshow_name = "My Slideshow"
     @first_picture_path = id ? picture_path(id) : current_pictures_path
     @more_pictures_path = new_pictures_slideshow_path
   end
 
+  def faves
+    @more_pictures_path = fave_pictures_slideshow_path
+  end
+
+  def fave_pictures
+    render_json_pictures Picture.faved_by(current_collector, params[:page].to_i,  params[:num].to_i)
+  end
 
   def new_pictures
     exclude_ids = params[:exclude_ids].map(&:to_i)

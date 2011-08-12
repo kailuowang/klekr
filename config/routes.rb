@@ -33,12 +33,6 @@ Collectr::Application.routes.draw do
     end
   end
 
-  resources :cookie_settings, :only => [] do
-    member do
-      put 'update'
-    end
-  end
-
   resources :users, :only => [:show, :index] do
     member do
       put 'subscribe'
@@ -51,6 +45,8 @@ Collectr::Application.routes.draw do
 
   resource :slideshow, :only => [:show], :controller => :slideshow do
     post 'new_pictures'
+    post 'fave_pictures'
+    get 'faves'
     get 'flickr_stream'
   end
 
