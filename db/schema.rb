@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110811211434) do
+ActiveRecord::Schema.define(:version => 20110813213251) do
 
   create_table "collectors", :force => true do |t|
     t.string   "user_id"
@@ -76,6 +76,7 @@ ActiveRecord::Schema.define(:version => 20110811211434) do
     t.integer  "rating",        :default => 0
     t.integer  "collector_id"
     t.boolean  "collected"
+    t.datetime "faved_at"
   end
 
   add_index "pictures", ["collector_id"], :name => "index_pictures_on_collector_id"

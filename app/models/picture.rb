@@ -52,7 +52,7 @@ class Picture < ActiveRecord::Base
     end
 
     def faved_by(collector, page, per_page)
-      collected_by(collector).where('rating > ?', 0).order('updated_at DESC').paginate(page: page, per_page: per_page )
+      collected_by(collector).where('rating > ?', 0).order('faved_at DESC, updated_at DESC').paginate(page: page, per_page: per_page )
     end
   end
 
@@ -129,6 +129,7 @@ class Picture < ActiveRecord::Base
   private
 
   def newly_faved
+    update_attribute(:faved_at, DateTime.now )
     flickr_streams.each { |stream| stream.add_score(created_at) }
     begin
       flickr.favorites.add(photo_id: pic_info.id)
