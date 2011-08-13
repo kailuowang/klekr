@@ -1,8 +1,10 @@
-class window.Grid
+class window.Grid extends ModeBase
 
   constructor: ->
+    super()
     @selectedIndex = 0
     gridview.itemSelect this._onPictureSelect
+
 
   currentPageOfPictures:  =>
     [pageStart, pageEnd] = this._currentPageRange()
@@ -42,24 +44,27 @@ class window.Grid
     [pageStart, pageEnd] = this._currentPageRange()
     this._changePage(pageStart - 1)
 
+  switchToSlide: =>
+    gallery.toggleMode()
+
   moveUp: => this._tryMoveTo(@selectedIndex - gridview.columns)
   moveDown: => this._tryMoveTo(@selectedIndex + gridview.columns)
   moveLeft: => this._tryMoveTo @selectedIndex - 1 , this.navigateToPrevious
   moveRight: => this._tryMoveTo @selectedIndex + 1,  this.navigateToNext
 
-  shortcuts: =>
-    @_shortcuts ?= [
-      new KeyShortcut 'up', this.moveUp, 'move up'
-      new KeyShortcut 'right', this.moveRight, 'move right'
-      new KeyShortcut 'down', this.moveDown, 'move down'
-      new KeyShortcut 'left', this.moveLeft, 'move left'
-      new KeyShortcut 'pagedown', this.navigateToNext, 'next page'
-      new KeyShortcut 'pageup', this.navigateToPrevious, 'previous page'
-      new KeyShortcut ['return','space'], gallery.toggleMode, "go to the selected picture"
+  shortcutsSettings: ->
+    [
+      [ 'up', this.moveUp, 'move up' ]
+      [ 'right', this.moveRight, 'move right' ]
+      [ 'down', this.moveDown, 'move down' ]
+      [ 'left', this.moveLeft, 'move left' ]
+      [ 'pagedown', this.navigateToNext, 'next page' ]
+      [ 'pageup', this.navigateToPrevious, 'previous page' ]
+      [ ['return','space'], this.switchToSlide, "go to the selected picture" ]
     ]
 
   _changePage: (newIndex)=>
-   if 0 <= newIndex < gallery.size()
+    if 0 <= newIndex < gallery.size()
       @selectedIndex = newIndex
       this.loadGridview()
       gallery.ensurePictureCache()
@@ -84,7 +89,7 @@ class window.Grid
   _onPictureSelect: (picId) =>
     picIndex = gallery.findIndex(picId)
     @selectedIndex = picIndex
-    gallery.toggleMode()
+    this.switchToSlide()
 
   _pageIncomplete: =>
     gridview.currentSize() < gridview.size

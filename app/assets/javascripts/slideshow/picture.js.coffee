@@ -22,13 +22,15 @@ class window.Picture
 
   fave: (rating, onSuccess) =>
     server.put @data.favePath, {rating: rating}, =>
-      @data.faved = true
       @data.rating = rating
       onSuccess()
 
+  faved: =>
+    @data.rating > 0
+
   preload: ->
     if view.largeWindow()
-      @canUseLargeVersion = true
+      @canUseLargeVersion   = true
       this.preloadImage @data.smallUrl
       this.preloadImage @data.largeUrl, this.updateSize
     else

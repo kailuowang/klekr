@@ -1,4 +1,6 @@
 class window.ViewBase
+  @showingPopup: false
+
   setVisible: (element, visible) ->
     if(visible)
        element.show()
@@ -11,9 +13,20 @@ class window.ViewBase
     else
       element.fadeOut(100)
 
-  popup: (div)->
+  popup: (div, opts = {})->
     div.bPopup({
-      onOpen: keyShortcuts.disable
-      onClose: keyShortcuts.enable
+      onOpen: =>
+        ViewBase.showingPopup = true
+        opts.onOpen?()
+      onClose: =>
+        ViewBase.showingPopup = false
+        opts.onClose?()
     })
+
+  closePopup: (div) ->
+    div.bPopup().close()
+
+  showing: (elem) ->
+    elem.is(':visible')
+
 

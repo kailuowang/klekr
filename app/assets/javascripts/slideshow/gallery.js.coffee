@@ -19,7 +19,6 @@ class window.Gallery
         this._retrieveMorePictures @currentMode.onFirstBatchOfPicturesLoaded
     else
       this._retrieveMorePictures @currentMode.onFirstBatchOfPicturesLoaded
-    this._bindShortcuts()
     @currentMode.show()
 
   findIndex: (picId)=>
@@ -35,9 +34,6 @@ class window.Gallery
       )
       onRetrieve() if onRetrieve?
 
-  _bindShortcuts: =>
-    keyShortcuts.bind(@currentMode.shortcuts())
-
   size: =>
     @pictures.length
 
@@ -51,7 +47,6 @@ class window.Gallery
     progress = this.currentProgress()
     @currentMode = if @currentMode is @grid then @slide else @grid
     @currentMode.updateProgress(progress)
-    this._bindShortcuts()
     @currentMode.show()
 
   unseenPictures: ->
