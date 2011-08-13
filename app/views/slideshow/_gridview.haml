@@ -1,8 +1,10 @@
 #gridview.hidden{style: 'margin-top: 40px; width: 100%'}
   #gridOutter{style: 'display: table; width: 100%'}
     #gridInner{style: 'display: table-cell;'}
-      #gridPictures{style: 'vertical-align:middle; margin-left: auto; margin-right: auto;'}
-        #template.gridPicture.fleft.hidden.pointer{style: 'width: 260px; height: 260px; text-align: center; '}
-          %span{style: 'vertical-align: middle; line-height: 260px'}
-            %img#imgItem{style: 'vertical-align: middle; line-height: 260px'}
+      #gridPictures{style: 'vertical-align:middle; margin-left: auto; margin-right: auto; border-top: 1px solid #303030; border-left: 1px solid #303030;'}
+        #template.gridPicture
+          %span{style: 'vertical-align: middle; line-height: 259px'}
+            %img#imgItem{style: 'vertical-align: middle; line-height: 259px'}
+          #ratingInGrid{style: 'position:relative; top: -7px; left:5px; text-align:left;'}
+            %img#ratingStarTemplate{src: '/assets/star-small.png'}
       .clearFloat

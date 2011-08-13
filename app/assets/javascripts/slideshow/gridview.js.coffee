@@ -29,7 +29,7 @@ class window.Gridview
 
   _calculateSize: ->
     @columns ?= Math.floor( view.displayWidth / 260 )
-    @rows ?= Math.floor( view.displayHeight / 260 )
+    @rows ?= Math.floor( view.displayHeight /   270 )
     @size = @columns * @rows
 
   _createPictureItem: (picture)=>
@@ -37,6 +37,7 @@ class window.Gridview
     item.attr('id', this._picId(picture))
     img = item.find('#imgItem')
     img.attr('src', picture.smallUrl())
+    this._updateRating(picture, item)
     item.click this._itemClickHandler
     item
 
@@ -47,9 +48,19 @@ class window.Gridview
     this._highlightPictureDiv(clickedDiv)
     @itemSelectHandler(picId)
 
+  _updateRating: (picture, itemDiv) =>
+    ratingDiv = itemDiv.find('#ratingInGrid').first()
+    if picture.faved()
+      template = itemDiv.find('#ratingStarTemplate').first()
+      ratingDiv.append(template.clone()) for i in [1..picture.data.rating]
+      template.remove()
+    else
+      ratingDiv.empty()
+
   _picId: (picture) ->
     'pic-' + picture.id
 
   _adjustWidth: =>
     $('#gridPictures').css('width', @columns * 260 + 'px')
+    $('#gridPictures').css('height', @rows * 270 + 'px')
 

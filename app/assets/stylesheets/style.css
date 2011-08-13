@@ -495,3 +495,14 @@ table{
 
 
 .modalPopup{ padding: 20px; background: black; opacity:0.6; color: #EEEEEE; display: none;}
+
+.gridPicture{
+  float: left;
+  display: none;
+  cursor: pointer;
+  width: 259px;
+  height: 269px;
+  text-align: center;
+  border-right: 1px solid #303030;
+  border-bottom: 1px solid #303030;
+}
