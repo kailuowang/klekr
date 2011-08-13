@@ -13,4 +13,4 @@ class window.ModeBase
 
   _createShortcut: (setting)=>
     new KeyShortcut setting[0], setting[1], setting[2], =>
-      this.active and !ViewBase.showingPopup
+      this.active() and !ViewBase.showingPopup

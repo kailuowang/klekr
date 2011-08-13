@@ -12,7 +12,6 @@ class window.KeyShortcuts extends ViewBase
     this._updateKeys(this._bindKey)
     this._registerClearLock(shortcut) for shortcut in @shortcuts
 
-
   addShortcuts: (shortcuts) =>
     this.disable()
     @shortcuts = @shortcuts.concat(shortcuts)
@@ -52,7 +51,7 @@ class window.KeyShortcuts extends ViewBase
     @locked = false
 
 class window.KeyShortcut
-  constructor: (@keys, @_func, @desc, @enable = (-> true)) ->
+  constructor: (@keys, @_func, @desc, @enable) ->
     unless @keys instanceof Array
       @keys = [@keys]
 

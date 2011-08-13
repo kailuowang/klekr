@@ -69,7 +69,8 @@ class window.FavePanel  extends ViewBase
   _createRatingShortcut: (rating)=>
     new KeyShortcut( rating.toString(),
       ( => this._changeRating(rating)),
-      'set rating to '+ rating, this._ratingShortcutsEnabled
+      'set rating to '+ rating,
+      this._ratingShortcutsEnabled
     )
 
 
