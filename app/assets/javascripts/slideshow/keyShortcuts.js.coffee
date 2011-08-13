@@ -10,21 +10,23 @@ class window.KeyShortcuts extends ViewBase
 
   enable: =>
     this._updateKeys(this._bindKey)
-    for shortcut in @shortcuts
-      do (shortcut) =>
-        $(document).bind('keydown', shortcut.key, this._clearLock)
+    this._registerClearLock(shortcut) for shortcut in @shortcuts
+
 
   addShortcuts: (shortcuts) =>
     this.disable()
     @shortcuts = @shortcuts.concat(shortcuts)
     this.enable()
 
+  _registerClearLock: (shortcut) =>
+   this._bindKey(shortcut, this._clearLock)
+
   _updateKeys: (action)->
     action(shortcut) for shortcut in @shortcuts
 
-  _bindKey: (shortcut) ->
+  _bindKey: (shortcut, toBind = shortcut.onKeydown) ->
     for key in shortcut.keys
-      $(document).bind('keydown', key, shortcut.onKeydown)
+      $(document).bind('keydown', key, toBind)
 
   _unbindKey: (shortcut) ->
     $(document).unbind('keydown', shortcut.onKeydown)
