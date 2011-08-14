@@ -29,7 +29,7 @@ class window.Gridview
 
   _calculateSize: ->
     @columns ?= Math.floor( view.displayWidth / 260 )
-    @rows ?= Math.floor( view.displayHeight /   270 )
+    @rows ?= Math.floor( view.displayHeight /  270 )
     @size = @columns * @rows
 
   _createPictureItem: (picture)=>
