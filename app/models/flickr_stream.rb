@@ -2,6 +2,7 @@ class FlickrStream < ActiveRecord::Base
   include Collectr::Flickr
   extend Collectr::Flickr
 
+
   TYPES = ['FaveStream', 'UploadStream'].freeze
   DEFAULT_TYPE = 'UploadStream'
   FLICKR_PHOTOS_PER_PAGE = 20
@@ -14,8 +15,9 @@ class FlickrStream < ActiveRecord::Base
   scope :collected_by, lambda {|collector| collecting.where(collector_id: collector) if collector }
   scope :of_user, lambda {|user_id| where(user_id: user_id)}
   scope :type, lambda { |type| where(type: type) }
+  scope :old, lambda { |num_of_days| where('updated_at < ?', num_of_days.days.ago)}
 
-  has_many :syncages
+  has_many :syncages, :dependent => :delete_all
   has_many :pictures, through: :syncages
   has_many :monthly_scores, order: 'year desc, month desc'
 

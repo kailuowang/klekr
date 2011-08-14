@@ -1,4 +1,7 @@
+include Collectr::RakeHelper
+
 namespace :clean do
+
   desc "clean synced pictures"
   task :pictures => :environment do
     Syncage.delete_all
@@ -32,6 +35,19 @@ namespace :clean do
     Picture.update_all("collector_id = NULL")
     FlickrStream.update_all("collector_id = NULL")
     Collector.delete_all
+  end
+
+  desc "garbage"
+  task :garbage => :environment do
+
+    cleaner = Collectr::GarbageCollector.new
+    output("========Start to clean garbage=========")
+    output(cleaner.report)
+    cleaner.clean
+    output("After clean")
+    output(cleaner.report)
+    output("=======Finish cleanning garbage=========")
+
   end
 
 end

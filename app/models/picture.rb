@@ -2,14 +2,18 @@ class Picture < ActiveRecord::Base
   include Collectr::Flickr
   scope :desc, order('stream_rating DESC, date_upload DESC')
   scope :asc, order('stream_rating ASC, date_upload ASC')
+  scope :old, lambda { |num_of_days| where('updated_at < ?', num_of_days.days.ago)}
   scope :after, lambda { |pic| where('date_upload > ?', pic.date_upload) }
   scope :before, lambda { |pic| where('date_upload <= ? and id <> ? ', pic.date_upload, pic.id) }
   scope :new_pictures, lambda { |n| desc.unviewed.limit(n) }
   scope :collected_by, lambda { |collector| where(collector_id: collector, collected: true) if collector }
+  scope :unfaved, where(rating:  0)
+  scope :faved, where('rating > 0')
   scope :unviewed, where(viewed: false)
+  scope :viewed, where(viewed: true)
   scope :syned_from, lambda { |stream| joins(:syncages).where(syncages: {flickr_stream_id: stream.id}) }
   serialize :pic_info_dump
-  has_many :syncages
+  has_many :syncages, :dependent => :delete_all
   has_many :flickr_streams, through: :syncages
   belongs_to :collector
 
@@ -25,6 +29,7 @@ class Picture < ActiveRecord::Base
           picture.owner_name = pic_info.ownername
           picture.pic_info_dump = pic_info.marshal_dump
           picture.collector = collector
+          picture.collected = false
         end
     end
 
