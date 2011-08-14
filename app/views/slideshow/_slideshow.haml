@@ -29,12 +29,10 @@
                   %span#fromTitle{style: 'font-weight:bold'}From:
                   #fromStreams{style: 'display:inline'}
 
-
-
 #left{style: 'position: absolute; top: 40px; left: 0px; width: 40px; vertical-align: middle; '}
   %h2#leftArrow{style: 'text-align:left; padding-left: 5px; cursor: pointer'}
     <
-#right{style: 'position: absolute; top: 40px; right: 0px; width: 40px%; vertical-align: middle;'}
+#right{style: 'position: absolute; top: 40px; right: 0px; width: 40px; vertical-align: middle;'}
   %h2#rightArrow{style: 'text-align:right; padding-right: 5px; cursor: pointer'}
     >
 
@@ -45,10 +43,12 @@
 
 #bottomLeft
   = render partial: 'fave_panel'
-  %a#toGridLink{href: '#'}
-    %img{src: '/assets/grid.png'}
+
 #bottomRight
-  #interestingessPanel
+  .fright{style: 'margin-left: 10px'}
+    %a#toGridLink{href: '#'}
+      %img{src: '/assets/grid.png'}
+  #interestingessPanel.fright
     %h5
       Interestingness:
       %span#interestingness

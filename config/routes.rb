@@ -29,6 +29,7 @@ Collectr::Application.routes.draw do
     end
     member do
       put 'fave'
+      put 'unfave'
       put 'viewed'
     end
   end

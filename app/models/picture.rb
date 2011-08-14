@@ -80,6 +80,15 @@ class Picture < ActiveRecord::Base
     end
   end
 
+  def unfave
+    if faved?
+      update_attribute(:rating, 0)
+      try_flickr('Failed to remove from fave picture') do
+        flickr.favorites.remove(photo_id: pic_info.id)
+      end
+    end
+  end
+
   def faved?
     rating > 0
   end
@@ -131,10 +140,8 @@ class Picture < ActiveRecord::Base
   def newly_faved
     update_attribute(:faved_at, DateTime.now )
     flickr_streams.each { |stream| stream.add_score(created_at) }
-    begin
+    try_flickr('Failed to fave picture') do
       flickr.favorites.add(photo_id: pic_info.id)
-    rescue FlickRaw::FailedResponse => e
-      Rails.logger.error('Failed to fave picture' + e.inspect)
     end
   end
 

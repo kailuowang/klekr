@@ -8,7 +8,7 @@ class window.Slide extends ModeBase
 
   displayCurrentPicture: =>
     view.display(this.currentPicture())
-    @favePanel.updateFavedStatus(this.currentPicture())
+    @favePanel.updateFavedStatus()
 
 
   currentPicture: =>
@@ -53,7 +53,6 @@ class window.Slide extends ModeBase
     [
       [ ['right', 'space'], this.navigateToNext, 'next picture' ]
       [ 'left', this.navigateToPrevious, 'previous picture' ]
-      [ 'f', @favePanel.fave, 'fave picture' ]
       [ 'o', view.gotoOwner, "go to photographer's page" ]
       [ ['g', 'return'], this.backToGrid, "go to grid mode" ]
     ]

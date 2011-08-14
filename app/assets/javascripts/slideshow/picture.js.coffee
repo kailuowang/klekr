@@ -25,6 +25,11 @@ class window.Picture
       @data.rating = rating
       onSuccess()
 
+  unfave: (onSuccess) =>
+    server.put @data.unfavePath, {}, =>
+      @data.rating = 0
+      onSuccess()
+
   faved: =>
     @data.rating > 0
 
@@ -67,7 +72,7 @@ class window.Picture
 
   largerVersionWithinWindow: (image) ->
     [largeWidth, largeHeight] = this.guessLargeSize(image.width, image.height)
-    largeWidth < view.displayWidth and largeHeight < view.displayHeight - 31
+    largeWidth < view.displayWidth and largeHeight < view.displayHeight - 41
 
 
   guessLargeSize: (smallerWidth, smallerHeight) ->

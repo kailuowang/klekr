@@ -1,9 +1,14 @@
-%h3#faveArea.inline{style: 'margin: 8px'}
+#faveArea.inline{style: 'margin: 8px'}
   %span#faved.hidden
-    Collected
+    %h3.inline
+      In Collection
+    %h4.inline
+      %a#removeFaveLink{href: '#'}
+        remove
   %img#faveWaiting.hidden{src: '/assets/loading.gif'}
   %a#faveLink.hidden{href: '#'}
-    Collect it!
+    %h3
+      Collect it!
 
 #faveRatingPanel.modalPopup{style: 'margin: 40px'}
   %h3

@@ -5,6 +5,14 @@ module Collectr::Flickr
     @flickr ||= FlickRawFactory.create(for_collector.try(:auth_token))
   end
 
+  def try_flickr(msg = 'failed to do flickr request')
+    begin
+      yield
+    rescue FlickRaw::FailedResponse => e
+      Rails.logger.error(msg + ' ' + e.inspect)
+    end
+  end
+
   #since merely mentioning the FlickrRaw::Flickr class will cause a call to the flickr server
   class FlickRawFactory
 

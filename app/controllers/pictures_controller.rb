@@ -13,6 +13,15 @@ class PicturesController < ApplicationController
     end
   end
 
+ #PUT /pictures/1/unfave
+  def unfave
+    @picture = Picture.find(params[:id])
+    @picture.unfave
+    respond_to do |format|
+      format.js  { render :json => {} }
+    end
+  end
+
   #GET /pictures/current
   def current
     respond_to do |f|

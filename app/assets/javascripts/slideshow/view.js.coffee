@@ -17,7 +17,7 @@ class window.View extends ViewBase
     @imageCaption = $('#imageCaption')
     @bottomLeft = $('#bottomLeft')
     @bottomRight = $('#bottomRight')
-    [@displayWidth, @displayHeight] = this.displayDimension()
+    this._calculateDimensions()
     this.adjustArrowsPosition()
     this.adjustImageFrame()
     this.adjustSpacerWidth()
@@ -56,9 +56,9 @@ class window.View extends ViewBase
     else
       'untitled'
 
-  displayDimension: ->
-    [windowWidth, windowHeight] = this.honeycombAdjustedDimension($(window).width(), $(window).height() )
-    [windowWidth - 80, windowHeight - 40]
+  _calculateDimensions: ->
+    [@windowWidth, @windowHeight] = this.honeycombAdjustedDimension($(window).width(), $(window).height() )
+    [@displayWidth, @displayHeight] = [@windowWidth - 80, @windowHeight - 40]
 
   largeWindow: ->
     @displayWidth > 1024 and @displayHeight > 1024
@@ -81,13 +81,13 @@ class window.View extends ViewBase
     @rightArrow.css('line-height', sideArrowHeight)
 
   adjustSpacerWidth: ->
-    @spacer.attr('width', @displayWidth + 'px')
+    @spacer.attr('width', @windowWidth + 'px')
 
   adjustImageFrame: ->
     $('#imageFrameInner').css('height', (@displayHeight - 80) + 'px')
     $('#bottomBanner').css('top',(@displayHeight + 20) + 'px' )
-    @bottomLeft.css('top', (@displayHeight + 8) + 'px' )
-    @bottomRight.css('top', (@displayHeight + 8) + 'px' )
+    @bottomLeft.css('top', (@displayHeight ) + 'px' )
+    @bottomRight.css('top', (@displayHeight) + 'px' )
 
   toggleGridview: =>
     showingGridview = this.inGridview()
@@ -107,6 +107,6 @@ class window.View extends ViewBase
 
   honeycombAdjustedDimension: (originalWidth, originalHeight) ->
     if isHoneycombCheating = originalWidth is 980
-      [1280, 780]
+      [1280, 750]
     else
       [originalWidth, originalHeight]

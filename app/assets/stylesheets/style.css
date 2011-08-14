@@ -427,7 +427,7 @@ input[type="file"]{
   text-align: left;
   position: absolute;
   left: 0px;
-  margin-left: 20px;
+  margin-left: 10px;
 }
 
 #bottomRight {
@@ -488,11 +488,9 @@ table{
   color: #D93544;
 }
 
-
 .pointer {
  cursor: pointer;
 }
-
 
 .modalPopup{ padding: 20px; background: black; opacity:0.6; color: #EEEEEE; display: none;}
 

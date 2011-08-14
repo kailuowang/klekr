@@ -24,7 +24,8 @@ module Collectr
       picture.new_record? ? {} :
         {
           getViewedPath:    viewed_picture_path(picture),
-          favePath:         fave_picture_path(picture)
+          favePath:         fave_picture_path(picture),
+          unfavePath:       unfave_picture_path(picture)
         }
     end
 

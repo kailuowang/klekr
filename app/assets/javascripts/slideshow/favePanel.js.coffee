@@ -1,6 +1,7 @@
 class window.FavePanel  extends ViewBase
   constructor: (@currentPicture) ->
     @faveLink = $('#faveLink')
+    @removeFaveLink = $('#removeFaveLink')
     @faved = $('#faved')
     @faveWaiting = $('#faveWaiting')
     @faveArea = $('#faveArea')
@@ -12,26 +13,35 @@ class window.FavePanel  extends ViewBase
     this._registerEvents()
     this._initRaty(@faveRating)
     this._initRaty(@ratingDisplay)
-    keyShortcuts.addShortcuts(this._ratingShortcuts())
+    keyShortcuts.addShortcuts(this._shortcuts())
 
   fave: =>
     unless this.currentPicture().faved()
       this.popup(@faveRatingPanel)
 
+  unfave: =>
+    if this.currentPicture().faved()
+      this._changingFavedStatus()
+      this.currentPicture().unfave(this.updateFavedStatus)
+
+  updateFavedStatus: =>
+    picture = this.currentPicture()
+    @faveWaiting.hide()
+    faved = picture.faved()
+    this.setVisible(@faveArea, true)
+    this.setVisible(@faveLink, !faved)
+    this.setVisible(@faved, faved)
+    this._updateRating(picture.data.rating)
+    this.setVisible(@ratingDisplayPanel, faved)
+    this.setVisible(@interestingessPanel, !faved)
+
   _registerEvents: =>
     @faveLink.click =>
       this.fave()
       false
-
-  updateFavedStatus: (picture) ->
-    @faveWaiting.hide()
-    faved = picture.faved()
-    this.setVisible(@faveLink, !faved)
-    this.setVisible(@faved, faved)
-    this.setVisible(@faveArea, picture.data.favePath?)
-    this._updateRating(picture.data.rating)
-    this.setVisible(@ratingDisplayPanel, faved)
-    this.setVisible(@interestingessPanel, !faved)
+    @removeFaveLink.click =>
+      this.unfave()
+      false
 
   _changingFavedStatus: ->
     @faveWaiting.show()
@@ -54,14 +64,17 @@ class window.FavePanel  extends ViewBase
     this._changingFavedStatus()
     this.closePopup(@faveRatingPanel) if this._showingPopup()
     this.currentPicture().fave rating, =>
-      this.updateFavedStatus(this.currentPicture())
+      this.updateFavedStatus()
 
   _showingPopup: =>
     this.showing(@faveRatingPanel)
 
-  _ratingShortcuts: ->
-    @mratingShortcuts ?=
-      this._createRatingShortcut(i) for i in [1..5]
+  _shortcuts: ->
+    @mShortcuts ?=
+      (this._createRatingShortcut(i) for i in [1..5]).concat([
+        new KeyShortcut(['f','c'], this.fave, 'collect the picture', => gallery.slide.active())
+        new KeyShortcut('u', this.unfave, 'remove the picture from collection', => this.showing(@removeFaveLink))
+      ])
 
   _ratingShortcutsEnabled: =>
     this._showingPopup() or this.showing(@ratingDisplayPanel)
