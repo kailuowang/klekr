@@ -12,7 +12,8 @@ class window.Gridview
     @grid.children().size()
 
   highlightPicture: (picture) ->
-    this._highlightPictureDiv $('#' + this._picId(picture))
+    $('.gridPicture').css('background', '')
+    this._highlightPictureDiv $('#' + this._picId(picture)) if picture?
 
   loadPictures: (pictures) ->
     @grid.empty()
@@ -24,7 +25,6 @@ class window.Gridview
     newItem.show()
 
   _highlightPictureDiv: (div) ->
-    $('.gridPicture').css('background', '')
     div.css('background', '#606060')
 
   _calculateSize: ->

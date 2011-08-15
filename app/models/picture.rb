@@ -56,8 +56,8 @@ class Picture < ActiveRecord::Base
       scope
     end
 
-    def faved_by(collector, page, per_page)
-      collected_by(collector).where('rating > ?', 0).order('faved_at DESC, updated_at DESC').paginate(page: page, per_page: per_page )
+    def faved_by(collector, min_rating, page, per_page)
+      collected_by(collector).where('rating >= ?', min_rating).order('faved_at DESC, updated_at DESC').paginate(page: page, per_page: per_page )
     end
   end
 

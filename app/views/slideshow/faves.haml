@@ -4,4 +4,9 @@
 - content_for(:top_left) do
   %h3
     My Collection
+- content_for(:top_middle) do
+  .fleft
+    %h4.inline{style: 'vertical-align:bottom; margin-left:10px'}
+      filter by rating:
+    = select_tag 'rating_filter', options_for_select(['> 1 star', '> 2 star', '> 3 star', '> 4 star', '5 star'])
 =render partial: 'slideshow'

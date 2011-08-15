@@ -18,7 +18,7 @@ class window.Grid extends ModeBase
     gallery.pictures[@selectedIndex]
 
   onFirstBatchOfPicturesLoaded: =>
-    this.loadGridview()
+    this.updateProgress(0)
 
   onMorePicturesLoaded: =>
     if this._pageIncomplete()

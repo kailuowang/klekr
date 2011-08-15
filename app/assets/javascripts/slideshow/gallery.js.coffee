@@ -1,7 +1,7 @@
 class window.Gallery
 
   constructor: ->
-    @currentPage = 0
+    @ratingFilter = 1
     @cacheSize = gridview.size * 2
     [@grid, @slide] = [new Grid, new Slide]
     @currentMode = if __gridMode__? then @grid else @slide
@@ -9,8 +9,11 @@ class window.Gallery
       @currentMode.navigateToNext?()
     view.previousClick =>
       @currentMode.navigateToPrevious?()
+    @filterView = new FilterView
+    @filterView.ratingFilterChange this._applyRatingFilter
 
   init: =>
+    @currentPage = 0
     @pictures = []
     if server.firstPicturePath
       server.firstPicture (data) =>
@@ -27,12 +30,20 @@ class window.Gallery
   _retrieveMorePictures: (onRetrieve)->
     @currentPage += 1
     excludeIds = (p.id for p in this.unseenPictures())
-    opts = { num: @cacheSize, exclude_ids: excludeIds, page: @currentPage }
+    opts = $.extend({ num: @cacheSize, exclude_ids: excludeIds, page: @currentPage }, this._filterOpts())
     server.morePictures opts, (data) =>
       this.addPictures(
         new Picture(picData) for picData in data
       )
       onRetrieve() if onRetrieve?
+
+  _applyRatingFilter: (rating) =>
+    @ratingFilter = rating
+    @currentMode = @grid
+    this.init()
+
+  _filterOpts: =>
+    { min_rating: @ratingFilter }
 
   size: =>
     @pictures.length

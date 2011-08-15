@@ -63,7 +63,6 @@ class window.View extends ViewBase
   largeWindow: ->
     @displayWidth > 1024 and @displayHeight > 1024
 
-
   nextClick: (listener) ->
     $('#right').click(listener)
 

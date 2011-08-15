@@ -9,7 +9,6 @@ class window.StreamPanel
       @noncollectingOperationDiv.hide()
       @collectingOperationDiv.show()
 
-
     @stopCollectingLink.bind 'ajax:success', =>
       @noncollectingOperationDiv.show()
       @collectingOperationDiv.hide()

@@ -5,11 +5,9 @@ class window.Slide extends ModeBase
     view.toGridLinkClick this.backToGrid
     super()
 
-
   displayCurrentPicture: =>
     view.display(this.currentPicture())
     @favePanel.updateFavedStatus()
-
 
   currentPicture: =>
     gallery.pictures[@currentIndex]
