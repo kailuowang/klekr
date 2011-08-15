@@ -44,9 +44,10 @@ class window.View extends ViewBase
   updateFromStreams: (streams) ->
     @fromStreamsDiv.empty()
     for stream in streams
+      @fromStreamsDiv.append($('<span>').text(', ')) if @fromStreamsDiv.children().length > 0
       link = $('<a>').attr('href', stream.path).text(stream.username + "'s " + stream.type)
       @fromStreamsDiv.append(link)
-      @fromStreamsDiv.append($('<span>').text(' | '))
+
     this.setVisible(@fromTitle, streams.length > 0 )
 
   pictureTitle: (picture) ->

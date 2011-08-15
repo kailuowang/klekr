@@ -9,7 +9,7 @@ class UploadStream < FlickrStream
 
 
   def type_display
-    "Uploads"
+    "Works"
   end
 
 end
