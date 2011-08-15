@@ -7,7 +7,7 @@ gem 'rails', '3.1.0.rc4'
 
 gem 'haml'
 gem 'flickraw'
-gem "rake", "~> 0.9.2"
+
 gem "jquery-rails"
 gem 'capistrano'
 gem 'will_paginate', '~> 3.0pre4'
