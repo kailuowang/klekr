@@ -20,7 +20,7 @@ module Collectr
       begin
         flickr.send(@module).send(@method, opts)
       rescue FlickRaw::FailedResponse => e
-        Rails.logger.error("failed sync photo from flickr" + e.code.to_s + "\n" + e.msg)
+        Rails.logger.error("failed sync #{@module} photo for #{@user_id} from flickr. Response code:" + e.code.to_s + "\n" + e.msg)
         []
       end
     end
