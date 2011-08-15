@@ -8,5 +8,13 @@
     = yield(:head)
     = csrf_meta_tag
   %body
+    #topBanner{style: 'width: 99%; padding: 5px'}
+      .fleft
+        = yield(:top_left)
+      = yield(:top_middle)
+      .fright
+        = yield(:top_right)
+        %h4.inline
+          = navigation_links( 'My Sources' => flickr_streams_path, 'My Collection' => faves_slideshow_path, 'Home' => slideshow_path )
     = yield
 

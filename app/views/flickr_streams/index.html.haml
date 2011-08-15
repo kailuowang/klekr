@@ -1,21 +1,15 @@
+- content_for(:top_left) do
+  %h3.inline
+    My Sources
+  %h4.inline
+    = link_to 'Search for a flickr user', users_path
 .center
   #myCollections
-
-    %h1
-      = @current_collector.user_name
-      's Collections
-      = link_to 'Show Pictures!', slideshow_path
-
     %p{:id => "notice"}
       = notice
 
     %p
       = link_to 'Refresh All Collections', sync_all_flickr_streams_path
-      |
-      = link_to 'Slide Show', slideshow_path
-      |
-      = link_to 'Search for a flickr user', users_path
-
 
     - if @number_of_new_pics > 0
       %h4="#{@number_of_new_pics} New Photos!"

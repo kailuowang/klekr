@@ -1,17 +1,15 @@
 :javascript
   __gridMode__ = true;
 
-#topBanner{style: 'width: 99%; padding: 5px'}
-  .fleft
-    %h3
-      = @slideshow_name
+- content_for(:top_left) do
+  %h4
+    = @slideshow_name
+- content_for(:top_middle) do
   .fleft
     %h5
       = render partial: 'stream_panel'
-  .fright
-    %h4
-      = link_to @stream.alternative_stream.to_s, flickr_stream_path(@stream.alternative_stream)
-      = link_to 'My Slideshow', slideshow_path
-      = link_to 'My Collections', flickr_streams_path
-
+- content_for(:top_right) do
+  %h4.inline
+    = link_to @stream.alternative_stream.to_s, flickr_stream_path(@stream.alternative_stream)
+    |
 =render partial: 'slideshow'

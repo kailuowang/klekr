@@ -29,9 +29,9 @@ class window.View extends ViewBase
     @pictureArea.fadeIn(100)
 
   updateDOM: (picture) ->
+    @interestingness.text(picture.data.interestingness)
     @mainImg.attr('src', picture.url())
     @imageCaption.css('width', picture.width + 'px')
-    @interestingness.text(picture.data.interestingness)
     @titleLink.attr('href', picture.data.flickrPageUrl)
     @titleLink.text( this.pictureTitle(picture))
     @ownerLink.attr('href', picture.data.ownerPath)

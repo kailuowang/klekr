@@ -1,10 +1,4 @@
-#topBanner{style: 'width: 99%; padding: 5px'}
-
-  .fleft
-    %h3
-      My Slideshow
-  .fright
-    %h4
-      = link_to 'My Faves', faves_slideshow_path
-      = link_to 'My Collections', flickr_streams_path
+- content_for(:top_left) do
+  %h3
+    New Pictures From My Sources
 =render partial: 'slideshow'

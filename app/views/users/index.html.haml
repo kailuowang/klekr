@@ -1,10 +1,14 @@
-.content
+- content_for(:top_left) do
   %h1 Search User
-  %p{:id => "notice"}
-    = notice
 
-  = form_tag(search_users_path, method: :post) do |f|
-    .field
-      = label_tag :keyword, 'Search by user id, username or Email'
-      = text_field_tag :keyword
-      = submit_tag "Search!"
+.content{style: 'width:98%;'}
+  %div{style: 'width:98%; text-align: center; margin-top: 200px'}
+    %p{:id => "notice"}
+      = notice
+
+    = form_tag(search_users_path, method: :post) do |f|
+      .field
+        %h4
+          = label_tag :keyword, 'Search by user id, username or Email'
+        = text_field_tag :keyword
+        = submit_tag "Search!"

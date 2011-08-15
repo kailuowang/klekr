@@ -17,4 +17,14 @@ module ApplicationHelper
     hide ? 'hidden' : ''
   end
 
+  def navigation_link name, path
+    if path != request.env['PATH_INFO']
+      link_to name, path
+    end
+  end
+
+  def navigation_links(links)
+    links.map{|name, path| navigation_link(name, path)}.compact.join(' | ').html_safe
+  end
+
 end
