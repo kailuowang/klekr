@@ -1,22 +1,36 @@
 - content_for(:head) do
-  %meta{ 'HTTP-EQUIV' => "REFRESH", :content => "5; url=#{@auth_url}"}
   = javascript_include_tag 'authentication.js'
+
+:javascript
+  __authUrl__ = '#{@auth_url}';
 .center
-  #redirectAuthentication
+  .bigTopPadding
     %h2
       Welcome to Collectr!
-  #redirectAuthentication
-    %h3
-      Redirecting to flickr.com to login in
-      %span#countdown
-        5
-      secs.
-    %div{style: 'padding-top:5px'}
-      %h5{style:  'text-transform: none;'}
-        Click
-        = link_to 'here', @auth_url
-        if you are not redirected promptly
-  #redirectAuthentication
-    %h5
-      Collectr requires flickr.com login and permission to Fave pictures
+  .bigTopPadding{align: 'center'}
+    #welcome-message{style: 'width: 500px; text-align: left; border: 1px solid #303030; padding: 20px'}
+      %h5
+        %p
+          Collectr requires flickr.com login and permission to collect pictures.
+        %p
+          After you login, you will see new pictures from your sources and be able to collect and rate them.
+        %p
+          You can also view and manage your picture collections. Add other people's collections and works to your sources.
+
+  .bigTopPadding
+    #countDownRedirect
+      %h3
+        Redirecting to flickr.com to login in
+        %span#countdown
+          5
+        secs.
+      %h4 Click any place to stop.
+      %div{style: 'padding-top:5px'}
+        %h5{style:  'text-transform: none;'}
+          Click
+          = link_to 'here', @auth_url
+          if you are not redirected promptly
+    #stoppedRedirect.hidden
+      %h4
+        = link_to 'Click here to login from Flickr.com', @auth_url
 

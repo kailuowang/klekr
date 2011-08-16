@@ -15,6 +15,7 @@
       .fright
         = yield(:top_right)
         %h4.inline
-          = navigation_links( 'My Sources' => flickr_streams_path, 'My Collection' => faves_slideshow_path, 'Home' => slideshow_path )
+          - unless @disable_navigation
+            = navigation_links( 'My Sources' => flickr_streams_path, 'My Collection' => faves_slideshow_path, 'Home' => slideshow_path )
     = yield
 

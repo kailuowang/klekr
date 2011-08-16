@@ -35,7 +35,7 @@ class window.Picture
 
   preload: ->
     if view.largeWindow()
-      @canUseLargeVersion   = true
+      @canUseLargeVersion = true
       this.preloadImage @data.smallUrl
       this.preloadImage @data.largeUrl, this.updateSize
     else

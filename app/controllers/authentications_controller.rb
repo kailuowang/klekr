@@ -12,6 +12,7 @@ class AuthenticationsController < ApplicationController
 
   #Get
   def show
+    @disable_navigation = true
     frob = flickr.auth.getFrob
     @auth_url = FlickRaw.auth_url(perms: 'write', frob: frob )
   end
