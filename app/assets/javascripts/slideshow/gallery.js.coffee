@@ -29,13 +29,10 @@ class window.Gallery
 
   _retrieveMorePictures: (onRetrieve)->
     @currentPage += 1
-    excludeIds = (p.id for p in this.unseenPictures())
-    opts = $.extend({ num: @cacheSize, exclude_ids: excludeIds, page: @currentPage }, this._filterOpts())
-    server.morePictures opts, (data) =>
-      this.addPictures(
-        new Picture(picData) for picData in data
-      )
-      onRetrieve() if onRetrieve?
+    retriever = new PictureRetriever(@currentPage, @cacheSize, this._filterOpts())
+    retriever.retrieve(this._addPictures)
+    retriever.retrieve(onRetrieve) if onRetrieve?
+    retriever.retrieve()
 
   _applyRatingFilter: (rating) =>
     @ratingFilter = rating
@@ -43,12 +40,13 @@ class window.Gallery
     this.init()
 
   _filterOpts: =>
-    { min_rating: @ratingFilter }
+    excludeIds = (p.id for p in this._unseenPictures())
+    {exclude_ids: excludeIds, min_rating: @ratingFilter }
 
   size: =>
     @pictures.length
 
-  addPictures: (newPictures) ->
+  _addPictures: (newPictures) =>
     unless @addingPictures
       @addingPictures = true
       Picture.uniqConcat(@pictures, newPictures)
@@ -60,7 +58,7 @@ class window.Gallery
     @currentMode.updateProgress(progress)
     @currentMode.show()
 
-  unseenPictures: ->
+  _unseenPictures: ->
     @pictures[this.currentProgress()...@pictures.length]
 
   ensurePictureCache: ()=>

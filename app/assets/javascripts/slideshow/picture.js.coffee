@@ -9,6 +9,7 @@ class window.Picture
   constructor: (@data) ->
     @id = @data.id
     @width = 640
+    @canUseLargeVersion = view.largeWindow()
     this.preload() if @data.mediumUrl?
 
   url: ->
@@ -34,20 +35,16 @@ class window.Picture
     @data.rating > 0
 
   preload: ->
-    if view.largeWindow()
-      @canUseLargeVersion = true
-      this.preloadImage @data.smallUrl
-      this.preloadImage @data.largeUrl, this.updateSize
-    else
-      this.preloadAdaptiveSize()
-
-  preloadAdaptiveSize: ->
     this.preloadImage @data.smallUrl, (image) =>
       @canUseLargeVersion = this.largerVersionWithinWindow(image)
-      if @canUseLargeVersion
-        this.preloadImage @data.largeUrl, this.updateSize
-      else
-        this.preloadImage @data.mediumUrl, this.updateSize
+      this.preloadForSlide()
+
+  preloadForSlide: ->
+    if @canUseLargeVersion
+      this.preloadImage @data.largeUrl, this.updateSize
+    else
+      this.preloadImage @data.mediumUrl, this.updateSize
+
 
   getViewed: ->
     unless @data.viewed

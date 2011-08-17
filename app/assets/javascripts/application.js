@@ -5,4 +5,6 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require ./global/underscore-min
+//= require ./global/backbone-min
 //= require_tree ./global
