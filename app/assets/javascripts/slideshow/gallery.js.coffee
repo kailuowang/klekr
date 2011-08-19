@@ -4,12 +4,10 @@ class window.Gallery
     @ratingFilter = 1
     @cacheSize = gridview.size * 2
     [@grid, @slide] = modes = [new Grid, new Slide]
-    mode.bind('progress-changed', this.ensurePictureCache) for mode in modes
+    mode.bind('progress-changed', this._ensurePictureCache) for mode in modes
     @currentMode = if __gridMode__? then @grid else @slide
-    view.nextClick =>
-      @currentMode.navigateToNext?()
-    view.previousClick =>
-      @currentMode.navigateToPrevious?()
+    view.nextClick => @currentMode.navigateToNext?()
+    view.previousClick => @currentMode.navigateToPrevious?()
     @filterView = new FilterView
     @filterView.ratingFilterChange this._applyRatingFilter
 
@@ -59,9 +57,12 @@ class window.Gallery
   _unseenPictures: ->
     @pictures[this.currentProgress()...@pictures.length]
 
-  ensurePictureCache: ()=>
+  _ensurePictureCache: ()=>
     if @pictures.length - this.currentProgress() < @cacheSize
-      this._retrieveMorePictures @currentMode.onMorePicturesLoaded
+      unless @retriever?
+        this._retrieveMorePictures @currentMode.onMorePicturesLoaded
+      else
+        @retriever.onRetrieve(this._ensurePictureCache)
 
   currentProgress: =>
     @currentMode.currentProgress()
