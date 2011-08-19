@@ -46,6 +46,7 @@ class window.Grid extends ModeBase
 
   switchToSlide: =>
     gallery.toggleMode()
+    this.trigger('progress-changed')
 
   moveUp: => this._tryMoveTo(@selectedIndex - gridview.columns)
   moveDown: => this._tryMoveTo(@selectedIndex + gridview.columns)
@@ -67,7 +68,7 @@ class window.Grid extends ModeBase
     if 0 <= newIndex < gallery.size()
       @selectedIndex = newIndex
       this.loadGridview()
-      gallery.ensurePictureCache()
+      this.trigger('progress-changed')
 
   _tryMoveTo: (newIndex, alternative) =>
     [pageStart, pageEnd] = this._currentPageRange()

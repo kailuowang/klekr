@@ -3,7 +3,8 @@ class window.Gallery
   constructor: ->
     @ratingFilter = 1
     @cacheSize = gridview.size * 2
-    [@grid, @slide] = [new Grid, new Slide]
+    [@grid, @slide] = modes = [new Grid, new Slide]
+    mode.bind('progress-changed', this.ensurePictureCache) for mode in modes
     @currentMode = if __gridMode__? then @grid else @slide
     view.nextClick =>
       @currentMode.navigateToNext?()
@@ -15,7 +16,6 @@ class window.Gallery
   init: =>
     @currentPage = 0
     @pictures = []
-
     this._retrieveMorePictures @currentMode.onFirstBatchOfPicturesLoaded, @currentMode.onFirstPictureLoad
     @currentMode.show()
 
@@ -23,12 +23,14 @@ class window.Gallery
     (i for picture, i in @pictures when picture.id is picId)[0]
 
   _retrieveMorePictures: (onRetrieve, onFirstPictureReady) ->
-    @currentPage += 1
-    retriever = new PictureRetriever(@currentPage, @cacheSize, this._filterOpts())
-    retriever.onRetrieve(this._addPictures)
-    retriever.onRetrieve(onRetrieve) if onRetrieve?
-    retriever.bind('first-picture-ready', onFirstPictureReady) if onFirstPictureReady?
-    retriever.retrieve()
+    unless @retriever?
+      @currentPage += 1
+      @retriever = new PictureRetriever(@currentPage, @cacheSize, this._filterOpts())
+      @retriever.onRetrieve(this._addPictures)
+      @retriever.onRetrieve(onRetrieve) if onRetrieve?
+      @retriever.onRetrieve => @retriever = null
+      @retriever.bind('first-picture-ready', onFirstPictureReady) if onFirstPictureReady?
+      @retriever.retrieve()
 
   _applyRatingFilter: (rating) =>
     @ratingFilter = rating
@@ -65,7 +67,10 @@ class window.Gallery
     @currentMode.currentProgress()
 
   report: ->
+    readyPictures = _(@pictures).select (p) -> p.ready
     console.debug "cache size: " + @cacheSize
+    console.debug "pictures in cache: " + @pictures.length
+    console.debug "pictures preloaded: " + readyPictures.length
     console.debug "current flickr page: " + @currentPage
     console.debug "gridview size: " + gridview.size
     console.debug "pictures size: " + @pictures.length

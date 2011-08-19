@@ -17,7 +17,7 @@ class window.Slide extends ModeBase
     unless this.atTheLast()
       @currentIndex += 1
       this.displayCurrentPicture()
-      gallery.ensurePictureCache()
+      this.trigger('progress-changed')
 
   navigateToPrevious: =>
     unless this.atTheBegining()

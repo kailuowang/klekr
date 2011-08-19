@@ -1,4 +1,4 @@
-class window.ModeBase
+class window.ModeBase extends Events
   constructor: ->
     keyShortcuts.addShortcuts(this.shortcuts())
 

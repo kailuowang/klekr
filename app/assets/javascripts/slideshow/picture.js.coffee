@@ -10,6 +10,7 @@ class window.Picture extends Events
     @id = @data.id
     @width = 640
     @canUseLargeVersion = view.largeWindow()
+    @ready = false
 
   url: ->
     if @canUseLargeVersion
@@ -43,10 +44,8 @@ class window.Picture extends Events
       callback?()
 
   preloadLarge: ->
-    if @canUseLargeVersion
-      this._preloadImage @data.largeUrl, this._updateSize
-    else
-      this._preloadImage @data.mediumUrl, this._updateSize
+    imageUrl = if @canUseLargeVersion then @data.largeUrl else @data.mediumUrl
+    this._preloadImage imageUrl, this._updateSize
 
   getViewed: ->
     unless @data.viewed
@@ -61,6 +60,7 @@ class window.Picture extends Events
   _updateSize: (image) =>
     unless this._largeVersionInvalid(image)
       @width = image.width
+      @ready = true
       this.trigger('fully-ready')
 
   _largeVersionInvalid: (image) =>
