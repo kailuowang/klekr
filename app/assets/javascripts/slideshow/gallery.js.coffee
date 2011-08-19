@@ -15,23 +15,19 @@ class window.Gallery
   init: =>
     @currentPage = 0
     @pictures = []
-    if server.firstPicturePath
-      server.firstPicture (data) =>
-        @pictures.push(new Picture(data))
-        @currentMode.onFirstPictureLoad?()
-        this._retrieveMorePictures @currentMode.onFirstBatchOfPicturesLoaded
-    else
-      this._retrieveMorePictures @currentMode.onFirstBatchOfPicturesLoaded
+
+    this._retrieveMorePictures @currentMode.onFirstBatchOfPicturesLoaded, @currentMode.onFirstPictureLoad
     @currentMode.show()
 
   findIndex: (picId)=>
     (i for picture, i in @pictures when picture.id is picId)[0]
 
-  _retrieveMorePictures: (onRetrieve)->
+  _retrieveMorePictures: (onRetrieve, onFirstPictureReady) ->
     @currentPage += 1
     retriever = new PictureRetriever(@currentPage, @cacheSize, this._filterOpts())
-    retriever.retrieve(this._addPictures)
-    retriever.retrieve(onRetrieve) if onRetrieve?
+    retriever.onRetrieve(this._addPictures)
+    retriever.onRetrieve(onRetrieve) if onRetrieve?
+    retriever.bind('first-picture-ready', onFirstPictureReady) if onFirstPictureReady?
     retriever.retrieve()
 
   _applyRatingFilter: (rating) =>

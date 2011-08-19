@@ -1,4 +1,4 @@
-class window.Picture
+class window.Picture extends Events
 
   @uniqConcat: (original, newOnes) ->
     h = {}
@@ -10,7 +10,6 @@ class window.Picture
     @id = @data.id
     @width = 640
     @canUseLargeVersion = view.largeWindow()
-    this.preload() if @data.mediumUrl?
 
   url: ->
     if @canUseLargeVersion
@@ -35,42 +34,45 @@ class window.Picture
     @data.rating > 0
 
   preload: ->
-    this.preloadImage @data.smallUrl, (image) =>
+    this.preloadSmall this.preloadLarge
+
+  preloadSmall: (callback)=>
+    this._preloadImage @data.smallUrl, (image) =>
       @canUseLargeVersion = this.largerVersionWithinWindow(image)
-      this.preloadForSlide()
+      this.trigger('small-version-ready')
+      callback?()
 
-  preloadForSlide: ->
+  preloadLarge: ->
     if @canUseLargeVersion
-      this.preloadImage @data.largeUrl, this.updateSize
+      this._preloadImage @data.largeUrl, this._updateSize
     else
-      this.preloadImage @data.mediumUrl, this.updateSize
-
+      this._preloadImage @data.mediumUrl, this._updateSize
 
   getViewed: ->
     unless @data.viewed
       server.put(@data.getViewedPath)
       @data.viewed = true
 
-  preloadImage: (url, onload) ->
+  _preloadImage: (url, onload) ->
     image = new Image()
     image.src = url
     $(image).load => onload(image) if onload?
 
-  updateSize: (image) =>
-    unless this.largeVersionInvalid(image)
+  _updateSize: (image) =>
+    unless this._largeVersionInvalid(image)
       @width = image.width
+      this.trigger('fully-ready')
 
-  largeVersionInvalid: (image) =>
+  _largeVersionInvalid: (image) =>
     if @canUseLargeVersion
       if(image.width is 500 and image.height is 375)
         @canUseLargeVersion = false
-        this.preloadImage @data.mediumUrl, this.updateSize
+        this._preloadImage @data.mediumUrl, this._updateSize
         true
 
   largerVersionWithinWindow: (image) ->
     [largeWidth, largeHeight] = this.guessLargeSize(image.width, image.height)
     largeWidth < view.displayWidth and largeHeight < view.displayHeight - 41
-
 
   guessLargeSize: (smallerWidth, smallerHeight) ->
     longEdge = Math.max(smallerWidth, smallerHeight)

@@ -1,15 +1,7 @@
 #= require slideshow/picture
 
 describe 'Picture', ->
-
-  describe '.uniq', ->
-    data = {id: 1}
-
-    it 'filter out pictures with the same id', ->
-      expect( Picture.uniq([new Picture(data), new Picture(data)]).length ).toEqual(1)
-
-    it 'keeps pictures with the different ids', ->
-      expect(Picture.uniq([new Picture(data), new Picture({id: 2})]).length ).toEqual(2)
+  window.view = {largeWindow: -> false}
 
   describe '.uniqConcat', ->
     it 'only add ones that does not exist in the orignal', ->
@@ -24,7 +16,7 @@ describe 'Picture', ->
     picture = new Picture({})
 
     it 'calculate correctly for horizontal image', ->
-      expect(picture.guessLargeSize(640, 480)).toEqual [1024, 758]
+      expect(picture.guessLargeSize(640, 480)).toEqual [1024, 768]
 
     it 'calculate correctly for vertical image', ->
       expect(picture.guessLargeSize(480, 640)).toEqual [768, 1024]

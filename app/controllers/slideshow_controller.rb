@@ -25,9 +25,9 @@ class SlideshowController < ApplicationController
   end
 
   def new_pictures
-    exclude_ids = params[:exclude_ids].map(&:to_i)
+    exclude_ids =  params[:exclude_ids].present? ? params[:exclude_ids].map(&:to_i) : []
     num_of_pictures = params[:num].to_i
-    new_pictures = Picture.new_pictures_by(current_collector, num_of_pictures, exclude_ids)
+    new_pictures = Picture.new_pictures_by(current_collector, num_of_pictures, *exclude_ids)
 
     render_json_pictures(new_pictures)
   end
