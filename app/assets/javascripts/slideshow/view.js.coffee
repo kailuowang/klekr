@@ -55,7 +55,7 @@ class window.View extends ViewBase
     if t? and t isnt '-' and t isnt '.' and t isnt ''
       picture.data.title
     else
-      'untitled'
+      'Untitled'
 
   _calculateDimensions: ->
     [@windowWidth, @windowHeight] = this.honeycombAdjustedDimension($(window).width(), $(window).height() )
