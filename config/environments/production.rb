@@ -44,6 +44,8 @@ Collectr::Application.configure do
   # the I18n.default_locale when a translation can not be found)
   config.i18n.fallbacks = true
 
+  config.assets.compress = true
+  config.assets.js_compressor = :uglifier
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 end

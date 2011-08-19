@@ -25,6 +25,5 @@ Collectr::Application.configure do
 
   Rails.logger = Logger.new(STDOUT)
 
-
 end
 
