@@ -24,6 +24,7 @@ module Collectr
       picture.new_record? ? {} :
         {
           getViewedPath:    viewed_picture_path(picture),
+          getAllViewedPath:    all_viewed_pictures_path,
           favePath:         fave_picture_path(picture),
           unfavePath:       unfave_picture_path(picture)
         }
@@ -44,6 +45,7 @@ module Collectr
     def render_json_pictures(pictures)
       render_json data_list_for(pictures)
     end
+
 
   end
 end

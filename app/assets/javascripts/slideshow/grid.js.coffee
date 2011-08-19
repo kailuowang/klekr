@@ -96,4 +96,4 @@ class window.Grid extends ModeBase
     gridview.currentSize() < gridview.size
 
   _markCurrentPageAsViewed: =>
-    picture.getViewed() for picture in this.currentPageOfPictures()
+    Picture.allGetViewed(this.currentPageOfPictures())

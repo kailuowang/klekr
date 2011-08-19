@@ -8,18 +8,14 @@ class PicturesController < ApplicationController
     @picture = Picture.find(params[:id])
     @picture.get_viewed
     @picture.fave(params[:rating].to_i)
-    respond_to do |format|
-      format.js  { render :json => {} }
-    end
+    js_ok
   end
 
  #PUT /pictures/1/unfave
   def unfave
     @picture = Picture.find(params[:id])
     @picture.unfave
-    respond_to do |format|
-      format.js  { render :json => {} }
-    end
+    js_ok
   end
 
   #GET /pictures/current
@@ -32,9 +28,12 @@ class PicturesController < ApplicationController
   #PUT /pictures/1/viewed
   def viewed
     Picture.find(params[:id]).get_viewed
-    respond_to do |format|
-      format.js  { render :json => {} }
-    end
+    js_ok
+  end
+
+  def all_viewed
+    Picture.find(params[:ids]).map(&:get_viewed)
+    js_ok
   end
 
   #GET /pictures

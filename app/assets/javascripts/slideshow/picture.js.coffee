@@ -6,6 +6,14 @@ class window.Picture extends Events
     original.push newP for newP in newOnes when not h[newP.id]?
     original
 
+  @allGetViewed: (pictures) ->
+    unviewedPictures = _(pictures).select (pic) -> !pic.data.viewed
+    if unviewedPictures.length > 0
+      updatePath = unviewedPictures[0].data.getAllViewedPath
+      pic.data.viewed = true for pic in unviewedPictures
+      picIds = ( pic.id for pic in unviewedPictures )
+      server.post(updatePath, {ids: picIds})
+
   constructor: (@data) ->
     @id = @data.id
     @width = 640

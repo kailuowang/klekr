@@ -26,6 +26,7 @@ Collectr::Application.routes.draw do
   resources :pictures, :only => [:show] do
     collection do
       get 'current'
+      post 'all_viewed'
     end
     member do
       put 'fave'

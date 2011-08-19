@@ -43,4 +43,11 @@ class ApplicationController < ActionController::Base
       f.js { render :json => data }
     end
   end
+
+  def js_ok
+    respond_to do |format|
+      format.js  { render :json => {} }
+    end
+  end
+
 end
