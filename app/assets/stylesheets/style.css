@@ -23,6 +23,7 @@ h1, h2, h3, h4, h5 {
 	font-family: Impact, Arial, Helvetica, sans-serif;
 	font-weight: normal;
 	color: #707070;
+  text-shadow: 0 2px 0 #000;
 }
 
 h1 {
