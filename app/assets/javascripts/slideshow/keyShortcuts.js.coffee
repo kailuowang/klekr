@@ -42,10 +42,9 @@ class window.KeyShortcuts extends ViewBase
   _updateHelp: ->
     @helpList.empty()
     for shortcut in @shortcuts when shortcut.enable()
-      do (shortcut) =>
-        @helpList.append(
-          $('<li>').text(shortcut.text())
-        )
+      @helpList.append(
+        $('<li>').text(shortcut.text())
+      )
 
   _clearLock: =>
     @locked = false
