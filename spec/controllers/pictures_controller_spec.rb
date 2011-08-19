@@ -2,18 +2,6 @@ require 'spec_helper'
 
 describe PicturesController do
 
-  describe "#current" do
-    it "return the json data for the most_interesting_picture of the collector" do
-      collector = Factory(:collector)
-      picture = Factory(:picture)
-      controller.stub(:current_collector).and_return(collector)
-      Picture.should_receive(:most_interesting_for).with(collector).and_return(picture)
-      get "current", format: :js
-      response.body.should include picture.large_url
-
-    end
-  end
-
 
   describe "PUT fave" do
 

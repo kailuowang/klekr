@@ -11,8 +11,6 @@ class SlideshowController < ApplicationController
   end
 
   def show
-    id = params[:id]
-    @first_picture_path = id ? picture_path(id) : current_pictures_path
     @more_pictures_path = new_pictures_slideshow_path
   end
 

@@ -9,7 +9,7 @@ describe SlideshowController do
 
       new_pic = Factory(:picture)
 
-      Picture.should_receive(:new_pictures_by).with(collector, 7, [1, 2, 3]).and_return([new_pic])
+      Picture.should_receive(:new_pictures_by).with(collector, 7, *[1, 2, 3]).and_return([new_pic])
 
       post "new_pictures", format: :js, exclude_ids: [1,2,3], num: 7
 

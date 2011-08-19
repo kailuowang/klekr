@@ -18,13 +18,6 @@ class PicturesController < ApplicationController
     js_ok
   end
 
-  #GET /pictures/current
-  def current
-    respond_to do |f|
-      f.js { render :json => data_for( Picture.most_interesting_for(current_collector ) ) }
-    end
-  end
-
   #PUT /pictures/1/viewed
   def viewed
     Picture.find(params[:id]).get_viewed
