@@ -40,13 +40,12 @@ class window.Slide extends ModeBase
     @currentIndex = progress
     this.displayCurrentPicture()
 
-  show: =>
-    view.showHideGridview(false)
-
   backToGrid: =>
     this.currentPicture().getViewed()
     gallery.toggleMode()
 
+  view: ->
+    view
   shortcutsSettings: ->
     [
       [ ['right', 'space'], this.navigateToNext, 'next picture' ]

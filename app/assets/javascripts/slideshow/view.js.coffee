@@ -3,7 +3,6 @@ class window.View extends ViewBase
   constructor: () ->
     @mainImg = $('#picture')
     @pictureArea = $('#pictureArea')
-    @gridview = $('#gridview')
     @slide = $('#slide')
     @interestingness = $('#interestingness')
     @titleLink = $('#title')
@@ -92,18 +91,10 @@ class window.View extends ViewBase
     @bottomLeft.css('top', (@displayHeight - 5 ) + 'px' )
     @bottomRight.css('top', (@displayHeight - 5 ) + 'px' )
 
-  toggleGridview: =>
-    showingGridview = this.inGridview()
-    this.showHideGridview(!showingGridview)
-
-  showHideGridview: (showGridview)=>
-    this.fadeInOut(@slide, !showGridview)
-    this.fadeInOut(@gridview, showGridview)
-    this.setVisible @bottomLeft, !showGridview
-    this.setVisible @bottomRight, !showGridview
-
-  inGridview: ->
-    @gridview.is(":visible")
+  switchVisible: (showing) =>
+    this.fadeInOut @bottomLeft, showing
+    this.fadeInOut @bottomRight, showing
+    this.fadeInOut @slide, showing
 
   debug: (msg) ->
     $('#debugInfo').text(msg)

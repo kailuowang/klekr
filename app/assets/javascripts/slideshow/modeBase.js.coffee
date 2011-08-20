@@ -8,6 +8,14 @@ class window.ModeBase extends Events
   shortcuts: =>
     @_shortcuts ?= this._createShortcuts()
 
+  on: =>
+    this.view().switchVisible(true)
+    this.trigger('on')
+
+  off: =>
+    this.view().switchVisible(false)
+    this.trigger('off')
+
   _createShortcuts: =>
     this._createShortcut(setting) for setting in this.shortcutsSettings()
 

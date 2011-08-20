@@ -1,7 +1,8 @@
-class window.Gridview
+class window.Gridview extends ViewBase
   constructor: ->
     @template = $('#template')
     @grid = $('#gridPictures')
+    @gridview = $('#gridview')
     this._calculateSize()
     this._adjustWidth()
 
@@ -64,3 +65,5 @@ class window.Gridview
     $('#gridPictures').css('width', @columns * 260 + 'px')
     $('#gridPictures').css('height', @rows * 270 + 'px')
 
+  switchVisible: (showing)=>
+    this.fadeInOut(@gridview, showing)

@@ -4,7 +4,8 @@
 - content_for(:top_left) do
   %h3
     My Collection
-  %h4
-    filter by rating:
-    = select_tag 'rating_filter', options_for_select(['> 1 star', '> 2 star', '> 3 star', '> 4 star', '5 star'])
+  #filtersPanel
+    %h4
+      filter by rating:
+      = select_tag 'rating_filter', options_for_select(['> 1 star', '> 2 star', '> 3 star', '> 4 star', '5 star'])
 =render partial: 'slideshow'

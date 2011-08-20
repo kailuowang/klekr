@@ -24,6 +24,9 @@ class window.Grid extends ModeBase
     if this._pageIncomplete()
       this.loadGridview()
 
+  view: ->
+    gridview
+
   currentProgress: =>
     @selectedIndex
 
@@ -31,8 +34,6 @@ class window.Grid extends ModeBase
     @selectedIndex = progress
     this.loadGridview()
 
-  show: =>
-    view.showHideGridview(true)
 
   navigateToNext: =>
     this._markCurrentPageAsViewed()
