@@ -4,6 +4,6 @@
   Rating:
   = rating_display(@stream)
   |
-  = link_to 'mark all as viewed', mark_all_as_read_flickr_stream_path(@stream), remote: true, confirm: 'Are you sure? This will mark all unviewed pictures from this source as viewed.', :method => :put
+  = link_to 'Mark all as viewed', mark_all_as_read_flickr_stream_path(@stream), remote: true, confirm: 'Are you sure? This will mark all unviewed pictures from this source as viewed.', :method => :put
   |
   = link_to 'Remove from my sources', unsubscribe_flickr_stream_path(@stream), remote: true, method: :put, id: 'stopCollecting'

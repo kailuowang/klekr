@@ -81,13 +81,16 @@ class window.View extends ViewBase
     @rightArrow.css('line-height', sideArrowHeight)
 
   adjustSpacerWidth: ->
-    @spacer.attr('width', @windowWidth + 'px')
+    if @isHoneycombCheating
+      @spacer.attr('width', @windowWidth + 'px')
+    else
+      @spacer.hide()
 
   adjustImageFrame: ->
     $('#imageFrameInner').css('height', (@displayHeight - 80) + 'px')
     $('#bottomBanner').css('top',(@displayHeight + 20) + 'px' )
-    @bottomLeft.css('top', (@displayHeight ) + 'px' )
-    @bottomRight.css('top', (@displayHeight) + 'px' )
+    @bottomLeft.css('top', (@displayHeight - 5 ) + 'px' )
+    @bottomRight.css('top', (@displayHeight - 5 ) + 'px' )
 
   toggleGridview: =>
     showingGridview = this.inGridview()
@@ -106,7 +109,7 @@ class window.View extends ViewBase
     $('#debugInfo').text(msg)
 
   honeycombAdjustedDimension: (originalWidth, originalHeight) ->
-    if isHoneycombCheating = originalWidth is 980
+    if @isHoneycombCheating = ( originalWidth is 980 )
       [1280, 750]
     else
       [originalWidth, originalHeight]
