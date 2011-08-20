@@ -1,5 +1,9 @@
 class window.ViewBase
   @showingPopup: false
+  $.fx.interval = 50;
+  @isHoneycomb: $(window).width() is 980
+
+  isHoneycomb: -> ViewBase.isHoneycomb
 
   setVisible: (element, visible) ->
     if(visible)
@@ -8,10 +12,10 @@ class window.ViewBase
        element.hide()
 
   fadeInOut: (element, visible) ->
-    if(visible)
-      element.fadeIn(100)
+    if this.isHoneycomb
+      this.setVisible(element, visible)
     else
-      element.fadeOut(100)
+      this._animateVisible(element, visible)
 
   popup: (div, opts = {})->
     div.bPopup({
@@ -29,4 +33,14 @@ class window.ViewBase
   showing: (elem) ->
     elem.is(':visible')
 
+  honeycombAdjustedDimension:  =>
+    if this.isHoneycomb()
+      [1280, 750]
+    else
+      [$(window).width(), $(window).height()]
 
+  _animateVisible: (element, visible) ->
+    if(visible)
+      element.fadeIn(100)
+    else
+      element.fadeOut(100)

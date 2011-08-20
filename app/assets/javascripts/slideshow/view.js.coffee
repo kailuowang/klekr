@@ -32,7 +32,7 @@ class window.View extends ViewBase
     @mainImg.attr('src', picture.url())
     @imageCaption.css('width', picture.width + 'px')
     @titleLink.attr('href', picture.data.flickrPageUrl)
-    @titleLink.text( this.pictureTitle(picture))
+    @titleLink.text picture.displayTitle()
     @ownerLink.attr('href', picture.data.ownerPath)
     @ownerLink.text(picture.data.ownerName)
     this.updateFromStreams(picture.data.fromStreams)
@@ -49,15 +49,8 @@ class window.View extends ViewBase
 
     this.setVisible(@fromTitle, streams.length > 0 )
 
-  pictureTitle: (picture) ->
-    t = picture.data.title
-    if t? and t isnt '-' and t isnt '.' and t isnt ''
-      picture.data.title
-    else
-      'Untitled'
-
   _calculateDimensions: ->
-    [@windowWidth, @windowHeight] = this.honeycombAdjustedDimension($(window).width(), $(window).height() )
+    [@windowWidth, @windowHeight] = this.honeycombAdjustedDimension()
     [@displayWidth, @displayHeight] = [@windowWidth - 80, @windowHeight - 40]
 
   largeWindow: ->
@@ -80,7 +73,7 @@ class window.View extends ViewBase
     @rightArrow.css('line-height', sideArrowHeight)
 
   adjustSpacerWidth: ->
-    if @isHoneycombCheating
+    if this.isHoneycomb()
       @spacer.attr('width', @windowWidth + 'px')
     else
       @spacer.hide()
@@ -99,8 +92,3 @@ class window.View extends ViewBase
   debug: (msg) ->
     $('#debugInfo').text(msg)
 
-  honeycombAdjustedDimension: (originalWidth, originalHeight) ->
-    if @isHoneycombCheating = ( originalWidth is 980 )
-      [1280, 750]
-    else
-      [originalWidth, originalHeight]

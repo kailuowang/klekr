@@ -20,6 +20,13 @@ class window.Picture extends Events
     @canUseLargeVersion = view.largeWindow()
     @ready = false
 
+  displayTitle:  =>
+    t = @data.title
+    if t? and t isnt '-' and t isnt '.' and t isnt ''
+      @data.title
+    else
+      'Untitled'
+
   url: ->
     if @canUseLargeVersion
       @data.largeUrl
