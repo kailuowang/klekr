@@ -26,21 +26,25 @@ class FlickrStream < ActiveRecord::Base
 
   class << self
     def create_type(params)
+      stream = build_type(params)
+      stream.save!
+      stream
+    end
+
+    def build_type(params)
       params = params.with_indifferent_access
       unless params[:username] && params[:user_url]
         user = get_user_from_flickr(params[:user_id], params[:collector])
         params[:username] = user.username
         params[:user_url] = user.photosurl
       end
-      stream = params[:type].constantize.new(params)
-      stream.save!
-      stream
+      params[:type].constantize.new(params)
     end
 
     def find_or_create(params)
       stream = of_user(params[:user_id]).where(collector_id: params[:collector]).type(params[:type]).first
       stream ||
-        create_type(params.merge(collecting: false))
+        create_type(params)
     end
 
     def inherited(child)
@@ -65,7 +69,7 @@ class FlickrStream < ActiveRecord::Base
     def import(data, collector)
       count = 0
       data.map(&:to_options).each do |entry|
-        unless of_user(entry[:user_id]).collected_by(collector).type(entry[:type]).count > 0
+        unless of_user(entry[:user_id]).where(collector_id: collector).type(entry[:type]).count > 0
           create_type(entry.merge(collector_id: collector.id))
           count += 1
         end
@@ -112,8 +116,12 @@ class FlickrStream < ActiveRecord::Base
 
   def get_pictures(num, page = 1)
     retriever.get(num, page).map do |pic_info|
-      pic, _  = Picture.create_from_sync(pic_info, self)
-      pic
+      if(self.new_record?)
+        Picture.create_for_collector(pic_info, self.collector)
+      else
+        pic, _  =  Picture.create_from_sync(pic_info, self)
+        pic
+      end
     end
   end
 

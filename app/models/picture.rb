@@ -41,6 +41,10 @@ class Picture < ActiveRecord::Base
       return picture, !already_synced
     end
 
+    def create_for_collector(pic_info, collector)
+      Picture.find_or_initialize_from_pic_info(pic_info, collector).tap{|p| p.save!}
+    end
+
     def reset_stream_ratings
       unviewed.each(&:reset_stream_rating)
     end
