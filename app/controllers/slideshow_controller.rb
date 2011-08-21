@@ -19,7 +19,7 @@ class SlideshowController < ApplicationController
   end
 
   def fave_pictures
-    render_json_pictures Picture.faved_by(current_collector, params[:min_rating].to_i, params[:page].to_i,  params[:num].to_i)
+    render_json_pictures current_collector.collection( params[:num].to_i, params[:page].to_i, params.slice(:min_rating))
   end
 
   def new_pictures

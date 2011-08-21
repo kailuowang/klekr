@@ -2,17 +2,8 @@ require 'spec_helper'
 
 describe Collectr::FlickrPictureRetriever do
 
-  class Fixnum
-    def pics
-      self.times.map do
-        Factory.next(:pic_info)
-      end
-    end
-    alias :pic :pics
-  end
-
   before do
-    @retriever =   Collectr::FlickrPictureRetriever.new(module: :favorites, method: :getList, time_field: :fave_date, user_id: 'a_user_id')
+    @retriever = Collectr::FlickrPictureRetriever.new(module: :favorites, method: :getList, time_field: :fave_date, user_id: 'a_user_id')
     @flickr = stub_flickr(@retriever, :favorites)
   end
 

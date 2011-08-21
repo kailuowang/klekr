@@ -114,14 +114,13 @@ class FlickrStream < ActiveRecord::Base
     FlickrStream.find_or_create(user_id: user_id, collector: collector, type: alternative_type)
   end
 
-  def get_pictures(num, page = 1)
-    retriever.get(num, page).map do |pic_info|
-      if(self.new_record?)
-        Picture.create_for_collector(pic_info, self.collector)
-      else
-        pic, _  =  Picture.create_from_sync(pic_info, self)
-        pic
-      end
+  def get_pictures(num, page = 1, since = nil, before = nil )
+    create_pictures(retriever.get(num, page, since, before))
+  end
+
+  def get_all_pictures
+    retriever.get_all(nil, nil) do |picture_data|
+      create_pictures(picture_data)
     end
   end
 
@@ -133,7 +132,7 @@ class FlickrStream < ActiveRecord::Base
     update_attribute(:collecting, false)
   end
 
-  def sync(since = last_sync || 1.month.ago, max_num = nil)
+  def sync(since = last_sync || 1.month.ago, max_num = 200)
     photos_synced = 0
     retriever.get_all(since, max_num).each do |pic_info|
       _, newly_synced = Picture.create_from_sync(pic_info, self)
@@ -231,6 +230,17 @@ class FlickrStream < ActiveRecord::Base
     rest = FlickrStream::TYPES.dup
     rest.delete(self.type)
     rest.first
+  end
+
+  def create_pictures(picture_data)
+    picture_data.map do |pic_info|
+      if(self.new_record?)
+        Picture.create_for_collector(pic_info, self.collector)
+      else
+        pic, _  =  Picture.create_from_sync(pic_info, self)
+        pic
+      end
+    end
   end
 
 

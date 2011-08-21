@@ -238,10 +238,10 @@ describe FlickrStream do
         @module.stub!(@flickr_method).and_return([])
       end
 
-      it "should only sync photos faved upto the last sync time" do
+      it "should only sync photos faved upto the last sync time or max to 200 by default" do
         last_sync = DateTime.new(2010,1,2)
         @flickr_stream.last_sync = DateTime.new(2010,1,2)
-        @flickr_stream.retriever.should_receive(:get_all).with(last_sync, nil).and_return([])
+        @flickr_stream.retriever.should_receive(:get_all).with(last_sync, 200).and_return([])
         @flickr_stream.sync
       end
 
