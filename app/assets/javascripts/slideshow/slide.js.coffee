@@ -46,6 +46,7 @@ class window.Slide extends ModeBase
 
   view: ->
     view
+
   shortcutsSettings: ->
     [
       [ ['right', 'space'], this.navigateToNext, 'next picture' ]

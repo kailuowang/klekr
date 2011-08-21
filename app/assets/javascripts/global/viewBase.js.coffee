@@ -11,11 +11,12 @@ class window.ViewBase
     else
        element.hide()
 
-  fadeInOut: (element, visible) ->
-    if this.isHoneycomb
+  fadeInOut: (element, visible, callback) ->
+    if this.isHoneycomb()
       this.setVisible(element, visible)
+      callback?()
     else
-      this._animateVisible(element, visible)
+      this._animateVisible(element, visible, callback)
 
   popup: (div, opts = {})->
     div.bPopup({
@@ -39,8 +40,8 @@ class window.ViewBase
     else
       [$(window).width(), $(window).height()]
 
-  _animateVisible: (element, visible) ->
+  _animateVisible: (element, visible, callback) ->
     if(visible)
-      element.fadeIn(100)
+      element.fadeIn(100, callback)
     else
-      element.fadeOut(100)
+      element.fadeOut(100, callback)

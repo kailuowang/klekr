@@ -22,10 +22,15 @@ class window.View extends ViewBase
     this.adjustSpacerWidth()
 
   display: (picture) ->
-    @pictureArea.fadeOut 100, =>
-      this.updateDOM(picture)
-    @pictureArea.show() unless @pictureArea.is(":visible")
-    @pictureArea.fadeIn(100)
+    if @pictureArea.is(':visible')
+      this.fadeInOut @pictureArea, false, =>
+        this._fadeInto(picture)
+    else
+      this._fadeInto(picture)
+
+  _fadeInto: (picture) =>
+    this.updateDOM(picture)
+    this.fadeInOut(@pictureArea, true)
 
   updateDOM: (picture) ->
     @interestingness.text(picture.data.interestingness)
@@ -85,10 +90,8 @@ class window.View extends ViewBase
     @bottomRight.css('top', (@displayHeight - 5 ) + 'px' )
 
   switchVisible: (showing) =>
-    this.fadeInOut @bottomLeft, showing
-    this.fadeInOut @bottomRight, showing
-    this.fadeInOut @slide, showing
-
-  debug: (msg) ->
-    $('#debugInfo').text(msg)
+    this.setVisible @bottomLeft, showing
+    this.setVisible @bottomRight, showing
+    this.setVisible @slide, showing
+    this.setVisible(@pictureArea, false) unless showing
 

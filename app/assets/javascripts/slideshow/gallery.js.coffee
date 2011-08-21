@@ -28,8 +28,8 @@ class window.Gallery
     progress = this._currentProgress()
     @currentMode.off()
     @currentMode = this._alternativeView()
-    @currentMode.updateProgress(progress)
     @currentMode.on()
+    @currentMode.updateProgress(progress)
 
   _alternativeView: =>
     if @currentMode is @grid then @slide else @grid

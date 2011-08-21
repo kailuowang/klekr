@@ -66,4 +66,4 @@ class window.Gridview extends ViewBase
     $('#gridPictures').css('height', @rows * 270 + 'px')
 
   switchVisible: (showing)=>
-    this.fadeInOut(@gridview, showing)
+    this.setVisible(@gridview, showing)
