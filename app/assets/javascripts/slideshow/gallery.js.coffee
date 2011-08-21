@@ -1,7 +1,6 @@
 class window.Gallery
 
   constructor: ->
-    @ratingFilter = 1
     @cacheSize = gridview.size * 2
     [@grid, @slide] = modes = [new Grid, new Slide]
     mode.bind('progress-changed', this._ensurePictureCache) for mode in modes
@@ -45,13 +44,15 @@ class window.Gallery
       @retriever.retrieve()
 
   _applyRatingFilter: (rating) =>
-    @ratingFilter = rating
+    @_ratingFilter = rating
     @currentMode = @grid
     this.init()
 
   _filterOpts: =>
     excludeIds = (p.id for p in this._unseenPictures())
-    {exclude_ids: excludeIds, min_rating: @ratingFilter }
+    _.tap {}, (opts) =>
+      opts.exclude_ids = excludeIds
+      opts.min_rating = @_ratingFilter if @_ratingFilter?
 
   _addPictures: (newPictures) =>
     unless @addingPictures

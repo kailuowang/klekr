@@ -45,3 +45,8 @@
 #gridview {
   width: 100%;
 }
+
+#rating_filter{
+  width: 100px;
+  height: 23px;
+}
