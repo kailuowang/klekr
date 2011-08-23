@@ -60,7 +60,11 @@ class Picture < ActiveRecord::Base
     end
 
     def faved_by(collector, min_rating, page, per_page)
-      collected_by(collector).where('rating >= ?', min_rating).order('faved_at DESC, updated_at DESC').paginate(page: page, per_page: per_page )
+      collected_by(collector).
+          where('rating >= ?', min_rating).
+          order('faved_at DESC, updated_at DESC').
+          includes(:flickr_streams).
+          paginate(page: page, per_page: per_page )
     end
   end
 
