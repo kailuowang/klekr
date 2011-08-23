@@ -18,34 +18,14 @@ class Collector < ActiveRecord::Base
     if(pictures_in_db.size == per_page || min_rating > 1)
       pictures_in_db
     else
-      pictures_in_db.to_a + get_picture_from_flickr(per_page, pictures_in_db)
+      pictures_in_db.to_a + Collectr::FaveImporter.new(self, earlest_faved_in_db).import(per_page - pictures_in_db.size)
     end
   end
 
   private
-  def fave_stream
-    @fave_stream ||= FlickrStream.build_type(user_id: self.user_id,
-                                             username: self.user_name,
-                                             user_url: 'N/A',
-                                             collector: self,
-                                             type: 'FaveStream')
-  end
-
-
-  def get_picture_from_flickr(per_page, pictures_in_db)
-
-    pictures = fave_stream.get_pictures(per_page - pictures_in_db.size, 1, nil, earlest_faved)
-    pictures.each do |pic|
-      pic.update_attributes(
-        faved_at: Time.at(pic.pic_info.date_faved.to_i).to_datetime,
-        rating: 1,
-        collected: true
-      )
-    end
-  end
-
-  def earlest_faved
+  def earlest_faved_in_db
     earlest_fave = Picture.faved.collected_by(self).order('faved_at ASC').where('faved_at IS NOT NULL').first
     earlest_fave ? earlest_fave.faved_at : DateTime.now
   end
+
 end

@@ -37,6 +37,11 @@ namespace :clean do
     Collector.delete_all
   end
 
+  desc "personal rating"
+  task :collection => :environment do
+    Picture.faved.update_all("faved_at = NULL, rating = 0")
+  end
+
   desc "garbage"
   task :garbage => :environment do
 

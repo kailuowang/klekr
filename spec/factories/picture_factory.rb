@@ -1,16 +1,15 @@
 Factory.sequence :pic_info do |n|
   FlickRaw::Response.new({"id"    =>  "#{n}",
                           "owner" =>  '23242325@N00',
-                          "secret"=>  "dfd91ef806",
+                          "secret"=>  "dfd91ef#{n * 17}",
                           "server"=>  "5162",
                           "farm"  =>  6,
-                          "title" =>  "a test picture created by factory",
+                          "title" =>  "test picture num#{n}",
                           "ispublic"  =>  1,
                           "isfriend"  =>  0,
                           "isfamily"  =>  0,
                           "ownername"=>  'John Kim',
-                          "dateupload"=>"1294841334",
-                          "date_faved"=>"1298678009"}, "photo")
+                          "dateupload"=>"1294841334"}, "photo")
 end
 
 Factory.define :picture, :class => Picture do |p|

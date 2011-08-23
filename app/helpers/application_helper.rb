@@ -1,5 +1,8 @@
 module ApplicationHelper
 
+  def current_collector
+    Thread.current[:current_collector]
+  end
 
   def rating_display flickr_stream
     "#{flickr_stream.star_rating}/5"
