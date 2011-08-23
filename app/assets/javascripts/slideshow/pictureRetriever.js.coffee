@@ -1,31 +1,32 @@
 class window.PictureRetriever extends Events
   constructor: (@pageNumber, @pageSize, @filterOpts) ->
+    @_numOfSubBatches = 2
 
   retrieve: =>
-    this._retrieveBatch 1, (retrieved) =>
+    this._retrieveBatch 1, (retrievedInFirst) =>
       this.trigger('first-batch-retrieved')
-      if retrieved.length > 0
+      if retrievedInFirst.length > 0
         this._retrieveBatch 2, (retrievedInSecond) =>
-          this._preload(retrieved.concat(retrievedInSecond))
+          this._preload(retrievedInFirst, retrievedInSecond)
           this.trigger('done-retrieving')
       else
         this.trigger('done-retrieving')
 
   _retrieveBatch: (batchNum, success) =>
-    opts = this._batchOpts( 2 * @pageNumber + batchNum )
+    opts = this._batchOpts( @_numOfSubBatches * @pageNumber + batchNum )
     server.morePictures opts, (data) =>
       pictures = ( new Picture(picData) for picData in data )
       this.trigger('batch-retrieved', pictures)
       success?(pictures)
 
   _batchOpts: (page)=>
-    $.extend({ num: (@pageSize / 2) , page: page }, @filterOpts)
+    batchSize = @pageSize / @_numOfSubBatches
+    $.extend({ num: batchSize , page: page }, @filterOpts)
 
-  _preload: (pictures) =>
-    splitAt = @pageSize / 2
-    batches =
-      for pics in [[pictures[0]], pictures[0...splitAt], pictures[splitAt...@pageSize]]
-        new _PictureBatchRetreiver(pics)
+  _preload: (pictureGroups...) =>
+    veryFirst = pictureGroups[0][0]
+    pictureGroups.unshift([veryFirst])
+    batches = (new _PictureBatchRetreiver(group) for group in pictureGroups)
     this._preloadInBatches(batches)
 
   _preloadInBatches: (batches) =>
