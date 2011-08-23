@@ -30,7 +30,7 @@ class window.Slide extends ModeBase
   atTheBegining: =>
     @currentIndex == 0
 
-  onFirstPictureLoad: =>
+  onFirstBatchOfPicturesLoaded: =>
     this.displayCurrentPicture()
 
   currentProgress: =>

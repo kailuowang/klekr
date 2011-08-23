@@ -49,7 +49,6 @@ class Picture < ActiveRecord::Base
       unviewed.each(&:reset_stream_rating)
     end
 
-
     def new_pictures_by(collector, n, *exclude_ids)
       scope = collected_by(collector).new_pictures(n).includes(:flickr_streams)
       pictures = Picture.arel_table

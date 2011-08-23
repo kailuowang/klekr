@@ -13,7 +13,7 @@ class window.Gallery
   init: =>
     @currentPage = 0
     @pictures = []
-    this._retrieveMorePictures @currentMode.onFirstBatchOfPicturesLoaded, @currentMode.onFirstPictureLoad
+    this._retrieveMorePictures @currentMode.onFirstBatchOfPicturesLoaded
     this._alternativeView().off()
     @currentMode.on()
 
@@ -33,14 +33,13 @@ class window.Gallery
   _alternativeView: =>
     if @currentMode is @grid then @slide else @grid
 
-  _retrieveMorePictures: (onRetrieve, onFirstPictureReady) ->
+  _retrieveMorePictures: (onRetrieve) =>
     unless @retriever?
       @currentPage += 1
       @retriever = new PictureRetriever(@currentPage, @cacheSize, this._filterOpts())
       @retriever.onRetrieve(this._addPictures)
       @retriever.onRetrieve(onRetrieve) if onRetrieve?
       @retriever.onRetrieve => @retriever = null
-      @retriever.bind('first-picture-ready', onFirstPictureReady) if onFirstPictureReady?
       @retriever.retrieve()
 
   _applyRatingFilter: (rating) =>

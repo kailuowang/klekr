@@ -15,7 +15,6 @@ class window.PictureRetriever extends Events
     batches =
       for pics in [[pictures[0]], pictures[0...splitAt], pictures[splitAt...@pageSize]]
         new _PictureBatchRetreiver(pics)
-    batches[0].bind 'done', => this.trigger('first-picture-ready')
     this._preloadInBatches(batches)
 
   _preloadInBatches: (batches) =>
