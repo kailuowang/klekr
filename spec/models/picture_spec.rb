@@ -182,56 +182,56 @@ describe Picture do
   end
 
   describe ".new_pictures_by" do
-    it "should return x number of unviewed pictures and return in a desc order" do
+    it "should return  of unviewed pictures and return in a desc order" do
       picture4 = create_picture(date_upload: DateTime.new(2010, 1, 4), viewed: true)
       picture3 = create_picture(date_upload: DateTime.new(2010, 1, 3))
       create_picture(date_upload: DateTime.new(2010, 1, 2), :viewed => true)
       picture1 = create_picture(date_upload: DateTime.new(2010, 1, 1))
       create_picture(date_upload: DateTime.new(2000, 1, 1))
-      Picture.new_pictures_by(@collector, 2).should == [picture3, picture1]
+      Picture.new_pictures_by(@collector).paginate(page: 1, per_page: 2).should == [picture3, picture1]
     end
 
-    it "should return x number of unviewed pictures with highest rating" do
+    it "return unviewed pictures with highest rating" do
       create_picture(stream_rating: 2)
       pic_with_higher_rating = create_picture(stream_rating: 3)
-      Picture.new_pictures_by(@collector, 1)[0].should == pic_with_higher_rating
+      Picture.new_pictures_by(@collector).first.should == pic_with_higher_rating
     end
 
-    it "should return x number of unviewed pictures with latest date" do
+    it "should return unviewed pictures with latest date" do
       create_picture(date_upload: 1.month.ago)
       later_pic = create_picture(date_upload: 2.days.ago)
-      Picture.new_pictures_by(@collector, 1)[0].should == later_pic
+      Picture.new_pictures_by(@collector).first.should == later_pic
     end
 
 
     it "should return pictures by the collector" do
       collector = Factory(:collector)
       pic = create_picture(:collector => collector)
-      Picture.new_pictures_by(collector, 1).should == [pic]
+      Picture.new_pictures_by(collector).first.should == pic
     end
 
     it "should not return pictures by a different collector" do
       Factory(:picture)
-      Picture.new_pictures_by(Factory(:collector), 1).should be_empty
+      Picture.new_pictures_by(Factory(:collector)).should be_empty
     end
 
 
     it "include the pictures of not in the list of exclude_ids if given" do
       pic_to_exclude = create_picture
       pic_to_include = create_picture
-      Picture.new_pictures_by(@collector, 3, pic_to_exclude.id).should include(pic_to_include)
+      Picture.new_pictures_by(@collector, pic_to_exclude.id).should include(pic_to_include)
     end
 
     it "exclude the pictures of the exclude_ids if given" do
       pic1 = create_picture
       pic2 = create_picture
       exclude_ids = [pic1.id, pic2.id]
-      Picture.new_pictures_by(@collector, 3, exclude_ids).should_not include(pic1, pic2)
+      Picture.new_pictures_by(@collector, exclude_ids).should_not include(pic1, pic2)
     end
 
     it "not include pictures that are collected" do
       pic1 = create_picture(collected: false)
-      Picture.new_pictures_by(@collector, 2).should_not include(pic1)
+      Picture.new_pictures_by(@collector).should_not include(pic1)
     end
   end
 

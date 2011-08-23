@@ -5,6 +5,7 @@ class window.Gallery
     [@grid, @slide] = modes = [new Grid, new Slide]
     mode.bind('progress-changed', this._ensurePictureCache) for mode in modes
     @currentMode = if __gridMode__? then @grid else @slide
+    @advanceByProgress = __advance_by_progress__ #vs progress by paging
     view.nextClick => @currentMode.navigateToNext?()
     view.previousClick => @currentMode.navigateToPrevious?()
     @filterView = new FilterView(@grid)
@@ -33,14 +34,14 @@ class window.Gallery
   _alternativeView: =>
     if @currentMode is @grid then @slide else @grid
 
-  _retrieveMorePictures: (onRetrieve) =>
+  _retrieveMorePictures: (somePicturesReady) =>
     unless @retriever?
-      @currentPage += 1
       @retriever = new PictureRetriever(@currentPage, @cacheSize, this._filterOpts())
-      @retriever.onRetrieve(this._addPictures)
-      @retriever.onRetrieve(onRetrieve) if onRetrieve?
-      @retriever.onRetrieve => @retriever = null
+      @retriever.bind('batch-retrieved', this._addPictures)
+      @retriever.bind('first-batch-retrieved', somePicturesReady) if somePicturesReady?
+      @retriever.bind('done-retrieving', => @retriever = null)
       @retriever.retrieve()
+      @currentPage += 1 unless @advanceByProgress
 
   _applyRatingFilter: (rating) =>
     @_ratingFilter = rating
@@ -67,7 +68,7 @@ class window.Gallery
       unless @retriever?
         this._retrieveMorePictures @currentMode.onMorePicturesLoaded
       else
-        @retriever.onRetrieve(this._ensurePictureCache)
+        @retriever.bind('done-retrieving', this._ensurePictureCache)
 
   _currentProgress: =>
     @currentMode.currentProgress()

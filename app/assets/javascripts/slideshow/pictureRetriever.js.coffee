@@ -2,13 +2,24 @@ class window.PictureRetriever extends Events
   constructor: (@pageNumber, @pageSize, @filterOpts) ->
 
   retrieve: =>
-    opts =  $.extend({ num: @pageSize, page: @pageNumber }, @filterOpts)
+    this._retrieveBatch 1, (retrieved) =>
+      this.trigger('first-batch-retrieved')
+      if retrieved.length > 0
+        this._retrieveBatch 2, (retrievedInSecond) =>
+          this._preload(retrieved.concat(retrievedInSecond))
+          this.trigger('done-retrieving')
+      else
+        this.trigger('done-retrieving')
+
+  _retrieveBatch: (batchNum, success) =>
+    opts = this._batchOpts( 2 * @pageNumber + batchNum )
     server.morePictures opts, (data) =>
       pictures = ( new Picture(picData) for picData in data )
-      this.trigger('retrieved', pictures)
-      this._preload(pictures) if (pictures.length > 0)
+      this.trigger('batch-retrieved', pictures)
+      success?(pictures)
 
-  onRetrieve: (callback) => this.bind('retrieved', callback)
+  _batchOpts: (page)=>
+    $.extend({ num: (@pageSize / 2) , page: page }, @filterOpts)
 
   _preload: (pictures) =>
     splitAt = @pageSize / 2

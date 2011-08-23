@@ -11,6 +11,7 @@ class SlideshowController < ApplicationController
   end
 
   def show
+    @advance_by_progress = true #contrast to progress by paging
     @more_pictures_path = new_pictures_slideshow_path
   end
 
@@ -24,8 +25,9 @@ class SlideshowController < ApplicationController
 
   def new_pictures
     exclude_ids =  params[:exclude_ids].present? ? params[:exclude_ids].map(&:to_i) : []
-    num_of_pictures = params[:num].to_i
-    new_pictures = Picture.new_pictures_by(current_collector, num_of_pictures, *exclude_ids)
+    per_page = params[:num].to_i
+    page = params[:page].to_i
+    new_pictures = Picture.new_pictures_by(current_collector, *exclude_ids).paginate(page: page , per_page: per_page)
 
     render_json_pictures(new_pictures)
   end

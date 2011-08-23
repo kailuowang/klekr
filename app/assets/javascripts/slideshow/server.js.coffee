@@ -1,10 +1,6 @@
 class window.Server
   constructor: ->
-    @firstPicturePath = __firstPicturePath__
     @morePicturesPath = __morePicturesPath__
-
-  firstPicture: (callback) ->
-    this.get(@firstPicturePath, null, callback)
 
   morePictures: (opts, callback) ->
     this.post( @morePicturesPath, opts, callback )

@@ -5,7 +5,6 @@ class Picture < ActiveRecord::Base
   scope :old, lambda { |num_of_days| where('updated_at < ?', num_of_days.days.ago)}
   scope :after, lambda { |pic| where('date_upload > ?', pic.date_upload) }
   scope :before, lambda { |pic| where('date_upload <= ? and id <> ? ', pic.date_upload, pic.id) }
-  scope :new_pictures, lambda { |n| desc.unviewed.limit(n) }
   scope :collected_by, lambda { |collector| where(collector_id: collector, collected: true) if collector }
   scope :unfaved, where(rating:  0)
   scope :faved, where('rating > 0')
@@ -21,7 +20,7 @@ class Picture < ActiveRecord::Base
 
     def find_or_initialize_from_pic_info(pic_info, collector = nil)
       url = FlickRaw.url_photopage(pic_info)
-      Picture.where(collector_id: collector, url: url).first ||
+      Picture.where(collector_id: collector, url: url).includes(:flickr_streams).first ||
         Picture.new.tap do |picture|
           picture.url = url
           picture.title = pic_info.title
@@ -49,8 +48,8 @@ class Picture < ActiveRecord::Base
       unviewed.each(&:reset_stream_rating)
     end
 
-    def new_pictures_by(collector, n, *exclude_ids)
-      scope = collected_by(collector).new_pictures(n).includes(:flickr_streams)
+    def new_pictures_by(collector, *exclude_ids)
+      scope = collected_by(collector).desc.unviewed.includes(:flickr_streams)
       pictures = Picture.arel_table
       if exclude_ids.present?
         scope = scope.where(pictures[:id].not_in(exclude_ids))
