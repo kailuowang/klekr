@@ -33,7 +33,7 @@ class window.FavePanel  extends ViewBase
     this.setVisible(@faved, faved)
     this._updateRating(picture.data.rating)
     this.setVisible(@ratingDisplayPanel, faved)
-    this.setVisible(@interestingessPanel, !faved)
+    this.setVisible(@interestingessPanel, !faved and picture.data.collected )
 
   _registerEvents: =>
     @faveLink.click =>

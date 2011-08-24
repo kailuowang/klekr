@@ -6,8 +6,8 @@ class window.FilterView extends ViewBase
     attachedMode.bind 'off', this.hide
 
   ratingFilterChange: (handler) =>
-    @ratingFilter.change? (evt)=>
-      newRatingFilter = evt.currentTarget.selectedIndex + 1
+    @ratingFilter.change? (e)=>
+      newRatingFilter = e.currentTarget.selectedIndex + 1
       handler(newRatingFilter)
 
   show: => this.fadeInOut(@filtersPanel, true)

@@ -32,11 +32,18 @@ class Picture < ActiveRecord::Base
         end
     end
 
+    def flickr_id(pic_info)
+      pic_info.id + "_" + pic_info.secret
+    end
+
     def create_from_sync(pic_info, stream)
       picture = Picture.find_or_initialize_from_pic_info(pic_info, stream.collector)
-      new_picture = picture.new_record?
-      already_synced = !new_picture && Syncage.where(flickr_stream_id: stream.id, picture_id: picture.id).present?
-      picture.synced_by(stream) unless already_synced
+      already_synced = false
+      if stream.collecting?
+        new_picture = picture.new_record?
+        already_synced = !new_picture && Syncage.where(flickr_stream_id: stream.id, picture_id: picture.id).present?
+        picture.synced_by(stream) unless already_synced
+      end
       return picture, !already_synced
     end
 
@@ -67,7 +74,7 @@ class Picture < ActiveRecord::Base
   end
 
   def string_id
-    id || url.hash
+    id.try(:to_s) || flickr_id
   end
 
   def reset_stream_rating
@@ -85,7 +92,7 @@ class Picture < ActiveRecord::Base
 
   def fave(new_rating = 1)
     if (old_rating = rating) != new_rating
-      update_attribute(:rating, new_rating)
+      update_attributes(rating: new_rating, collected: true )
       newly_faved if old_rating == 0
     end
   end
@@ -143,6 +150,10 @@ class Picture < ActiveRecord::Base
     save!
     syncages.create(flickr_stream_id: stream.id)
     self
+  end
+
+  def flickr_id
+    Picture.flickr_id(pic_info)
   end
 
   private

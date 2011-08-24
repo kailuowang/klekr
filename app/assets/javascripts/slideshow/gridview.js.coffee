@@ -36,16 +36,16 @@ class window.Gridview extends ViewBase
   _createPictureItem: (picture)=>
     item = @template.clone()
     item.attr('id', this._picId(picture))
+    item.attr('data', picture.id)
     img = item.find('#imgItem')
     img.attr('src', picture.smallUrl())
     this._updateRating(picture, item)
     item.click this._itemClickHandler
     item
 
-  _itemClickHandler: (clickEvent) =>
-    clickedDiv = $(clickEvent.currentTarget)
-    divId = clickedDiv.attr('id')
-    picId = parseInt(divId.split('-')[1])
+  _itemClickHandler: (e) =>
+    clickedDiv = $(e.currentTarget)
+    picId = clickedDiv.attr('data')
     this._highlightPictureDiv(clickedDiv)
     @itemSelectHandler(picId)
 

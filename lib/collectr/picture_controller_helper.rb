@@ -13,6 +13,7 @@ module Collectr
         faved:            picture.faved?,
         rating:           picture.rating,
         viewed:           picture.viewed?,
+        collected:        !picture.new_record? && picture.collected?,
         ownerPath:        user_path(picture.pic_info.owner),
         fromStreams:      picture.flickr_streams.map do |stream|
                             data_for_stream(stream)
@@ -21,19 +22,17 @@ module Collectr
     end
 
     def action_paths_for(picture)
-      picture.new_record? ? {} :
-        {
-          getViewedPath:    viewed_picture_path(picture),
-          getAllViewedPath:    all_viewed_pictures_path,
-          favePath:         fave_picture_path(picture),
-          unfavePath:       unfave_picture_path(picture)
-        }
+      {}.tap do |h|
+        h[:getViewedPath]    =      viewed_picture_path(picture) unless picture.new_record?
+        h[:getAllViewedPath] =      all_viewed_pictures_path
+        h[:favePath]         =      fave_picture_path(picture.string_id)
+        h[:unfavePath]       =      unfave_picture_path(picture.string_id)
+      end
     end
 
     def data_for_stream(stream)
       { username: stream.username, type: stream.type_display, path: flickr_stream_path(stream)}
     end
-
 
     def data_list_for(pictures)
       pictures.map do |picture|
@@ -41,11 +40,8 @@ module Collectr
       end
     end
 
-
     def render_json_pictures(pictures)
       render_json data_list_for(pictures)
     end
-
-
   end
 end

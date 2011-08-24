@@ -7,7 +7,7 @@ class window.Picture extends Events
     original
 
   @allGetViewed: (pictures) ->
-    unviewedPictures = _(pictures).select (pic) -> !pic.data.viewed
+    unviewedPictures = _(pictures).select (pic) -> !pic.data.viewed and pic.data.collected
     if unviewedPictures.length > 0
       updatePath = unviewedPictures[0].data.getAllViewedPath
       pic.data.viewed = true for pic in unviewedPictures
@@ -64,7 +64,7 @@ class window.Picture extends Events
 
   getViewed: ->
     unless @data.viewed
-      server.put(@data.getViewedPath)
+      server.put(@data.getViewedPath) if @data.getViewedPath
       @data.viewed = true
 
   _preloadImage: (url, onload) ->

@@ -4,7 +4,7 @@ require 'flickraw'
 describe FlickrStream do
 
   before do
-    @flickr_stream_init_args = {:user_id => 'a_user_id', collector: Factory(:collector)}
+    @flickr_stream_init_args = {user_id: 'a_user_id', collector: Factory(:collector), collecting: true}
   end
 
   describe "class" do
@@ -275,7 +275,7 @@ describe FlickrStream do
 
       it "should create one picture with multiple linked flickr_streams if the picture get synced by muitiple flickr_streams(from the same collector)" do
         a_pic_info = Factory.next(:pic_info)
-        flickr_stream2 = @flickr_stream.class.create!(user_id: 'another_user', collector: @flickr_stream.collector)
+        flickr_stream2 = @flickr_stream.class.create!(user_id: 'another_user', collector: @flickr_stream.collector, collecting: true)
 
         @module.should_receive(@flickr_method).and_return([a_pic_info])
         @module.should_receive(@flickr_method).and_return([])

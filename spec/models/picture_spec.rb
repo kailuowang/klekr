@@ -79,7 +79,6 @@ describe Picture do
         Picture.collected_by(@collector).should_not include(pic)
       end
     end
-
   end
 
   describe "#fave" do

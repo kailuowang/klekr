@@ -1,11 +1,10 @@
 class PicturesController < ApplicationController
   include Collectr::PictureControllerHelper
 
-  before_filter :authenticate
+  before_filter :authenticate, :load_picture
 
   #PUT /pictures/1/fave
   def fave
-    @picture = Picture.find(params[:id])
     @picture.get_viewed
     @picture.fave(params[:rating].to_i)
     js_ok
@@ -13,14 +12,13 @@ class PicturesController < ApplicationController
 
  #PUT /pictures/1/unfave
   def unfave
-    @picture = Picture.find(params[:id])
     @picture.unfave
     js_ok
   end
 
   #PUT /pictures/1/viewed
   def viewed
-    Picture.find(params[:id]).get_viewed
+     @picture.get_viewed
     js_ok
   end
 
@@ -45,5 +43,9 @@ class PicturesController < ApplicationController
     end
   end
 
+  private
+  def load_picture
+    @picture = Collectr::PictureRepo.new(@current_collector).find(params[:id])
+  end
 
 end
