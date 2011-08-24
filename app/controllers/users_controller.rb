@@ -1,12 +1,12 @@
 class UsersController < ApplicationController
   NUM_OF_PIX_TO_SHOW = 12
-  include Collectr::Flickr
 
   before_filter :authenticate
 
   def show
     redirect_to(action: :flickr_stream, type: FlickrStream::DEFAULT_TYPE)
   end
+
 
   def flickr_stream
     stream = FlickrStream.find_or_create(user_id: params[:id], collector: current_collector, type: params[:type])

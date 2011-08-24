@@ -3,13 +3,12 @@ class ApplicationController < ActionController::Base
 
   def authenticate
 
-    unless Settings.authentication
-      self.current_collector = ::Collector.find_by_user_id(Collectr::FlickrUserId)
+    if current_collector
       return true
     end
 
-    if session[:collector_id]
-      self.current_collector = ::Collector.find_by_id(session[:collector_id])
+    unless authenticating
+      self.current_collector = ::Collector.find_by_user_id(Collectr::FlickrUserId)
       return true
     end
 
@@ -29,12 +28,11 @@ class ApplicationController < ActionController::Base
   end
 
   def current_collector
-    Thread.current[:current_collector]
+    @current_collector ||= ::Collector.find_by_id(session[:collector_id]) if session[:collector_id]
   end
 
   def current_collector= collector
     session[:collector_id] = collector.try(:id)
-    Thread.current[:current_collector] = collector
     @current_collector = collector
   end
 
@@ -48,6 +46,12 @@ class ApplicationController < ActionController::Base
     respond_to do |format|
       format.js  { render :json => {} }
     end
+  end
+
+  private
+
+  def authenticating
+    Settings.authentication
   end
 
 end

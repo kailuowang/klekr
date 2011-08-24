@@ -46,15 +46,6 @@ describe AuthenticationsController do
 
       end
 
-      it "should make sure the current collector get stored in Thread.current" do
-        collector = Factory(:collector)
-        stub_flickr(controller, :auth).stub!(:getToken).and_return(create_mock_auth(collector.user_id))
-
-        get "validate", :frob => 'a_fake_frob'
-        Thread.current[:current_collector].should == collector
-
-      end
-
     end
   end
 end

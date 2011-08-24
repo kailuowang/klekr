@@ -18,7 +18,7 @@
           - unless @disable_navigation
             = navigation_links( 'My Sources' => flickr_streams_path, 'My Collection' => faves_slideshow_path, 'Home' => slideshow_path )
       .fright{style: 'margin-right:10px; padding-top:5px;'}
-        - if current_collector
-          Welcome #{current_collector.user_name}!
+        - if @current_collector
+          Welcome #{@current_collector.user_name}!
     = yield
 

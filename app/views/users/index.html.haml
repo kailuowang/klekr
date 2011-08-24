@@ -7,8 +7,7 @@
       = notice
 
     = form_tag(search_users_path, method: :post) do |f|
-      .field
-        %h4
-          = label_tag :keyword, 'Search by user id, username or Email'
-        = text_field_tag :keyword
-        = submit_tag "Search!"
+      %h4
+        Search by user id, username or Email
+      = text_field_tag :keyword
+      = submit_tag "Search!", class: 'btn'
