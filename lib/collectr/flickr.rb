@@ -1,5 +1,6 @@
 module Collectr::Flickr
-  def flickr(for_collector = self.collector)
+  def flickr(for_collector = nil)
+    for_collector ||= self.collector if self.respond_to?(:collector)
     @flickr ||= FlickRawFactory.create(for_collector.try(:auth_token))
   end
 
