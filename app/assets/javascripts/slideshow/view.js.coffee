@@ -28,6 +28,10 @@ class window.View extends ViewBase
     else
       this._fadeInto(picture)
 
+  displayProgress: (atLast, atBegining) =>
+    this.fadeInOut(@leftArrow, !atBegining)
+    this.fadeInOut(@rightArrow, !atLast)
+
   _fadeInto: (picture) =>
     this.updateDOM(picture)
     this.fadeInOut(@pictureArea, true)

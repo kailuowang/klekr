@@ -5,7 +5,6 @@ class window.Grid extends ModeBase
     @selectedIndex = 0
     gridview.itemSelect this._onPictureSelect
 
-
   currentPageOfPictures:  =>
     [pageStart, pageEnd] = this._currentPageRange()
     gallery.pictures[pageStart..pageEnd]
@@ -33,7 +32,6 @@ class window.Grid extends ModeBase
   updateProgress: (progress) =>
     @selectedIndex = progress
     this.loadGridview()
-
 
   navigateToNext: =>
     this._markCurrentPageAsViewed()

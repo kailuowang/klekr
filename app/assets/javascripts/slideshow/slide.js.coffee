@@ -7,6 +7,7 @@ class window.Slide extends ModeBase
 
   displayCurrentPicture: =>
     view.display(this.currentPicture())
+    view.displayProgress(this.atTheLast(), this.atTheBegining())
     @favePanel.updateFavedStatus()
 
   currentPicture: =>
