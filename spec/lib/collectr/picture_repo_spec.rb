@@ -17,7 +17,7 @@ describe Collectr::PictureRepo do
       create_picture(date_upload: DateTime.new(2010, 1, 2), :viewed => true)
       picture1 = create_picture(date_upload: DateTime.new(2010, 1, 1))
       create_picture(date_upload: DateTime.new(2000, 1, 1))
-      @repo.new_pictures.paginate(page: 1, per_page: 2).should == [picture3, picture1]
+      @repo.new_pictures(page: 1, per_page: 2).should == [picture3, picture1]
     end
 
     it "return unviewed pictures with highest rating" do
@@ -32,7 +32,6 @@ describe Collectr::PictureRepo do
       @repo.new_pictures.first.should == later_pic
     end
 
-
     it "return pictures by the collector" do
       pic = create_picture(:collector => @collector)
       @repo.new_pictures.first.should == pic
@@ -43,23 +42,24 @@ describe Collectr::PictureRepo do
       @repo.new_pictures.should be_empty
     end
 
-
     it "include the pictures of not in the list of exclude_ids if given" do
       pic_to_exclude = create_picture
       pic_to_include = create_picture
-      @repo.new_pictures(pic_to_exclude.id).should include(pic_to_include)
+      @repo.new_pictures(excluded_ids: [pic_to_exclude.id]).should include(pic_to_include)
     end
 
     it "exclude the pictures of the exclude_ids if given" do
       pic1 = create_picture
       pic2 = create_picture
-      @repo.new_pictures(pic1.id, pic2.id).should_not include(pic1, pic2)
+      @repo.new_pictures(excluded_ids: [pic1.id, pic2.id]).should_not include(pic1, pic2)
     end
 
     it "does not include pictures that are collected" do
       pic1 = create_picture(collected: false)
       @repo.new_pictures.should_not include(pic1)
     end
+
+
   end
 
   describe "#find_or_initialize_from_pic_info" do

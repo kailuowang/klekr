@@ -26,12 +26,13 @@ module Collectr
     end
 
 
-    def new_pictures(*exclude_ids)
+    def new_pictures(opts = {})
       scope = Picture.collected_by(@collector).desc.unviewed.includes(:flickr_streams)
-      pictures = Picture.arel_table
-      if exclude_ids.present?
-        scope = scope.where(pictures[:id].not_in(exclude_ids))
+      if opts[:excluded_ids].present?
+        pictures = Picture.arel_table
+        scope = scope.where(pictures[:id].not_in(opts[:excluded_ids]))
       end
+      scope = scope.paginate(opts.slice(:page, :per_page)) if opts[:page].present?
       scope
     end
 

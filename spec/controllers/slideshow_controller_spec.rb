@@ -12,9 +12,9 @@ describe SlideshowController do
 
       Collectr::PictureRepo.should_receive(:new).with(collector).and_return(repo)
 
-      repo.should_receive(:new_pictures).with(*[1, 2, 3]).and_return(mock(paginate: [new_pic]))
+      repo.should_receive(:new_pictures).with(excluded_ids: [1, 2, 3], per_page: 7, page: 1).and_return([new_pic])
 
-      post "new_pictures", format: :js, exclude_ids: [1,2,3], num: 7
+      post "new_pictures", format: :js, exclude_ids: [1,2,3], num: 7, page: 1
 
       response.body.should include new_pic.large_url
 
