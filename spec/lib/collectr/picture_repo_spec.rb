@@ -59,6 +59,11 @@ describe Collectr::PictureRepo do
       @repo.new_pictures.should_not include(pic1)
     end
 
+    it "accept string as page and per_page" do
+      create_picture
+      @repo.new_pictures(page: '1', per_page: '3').should be_present
+    end
+
 
   end
 

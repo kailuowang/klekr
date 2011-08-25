@@ -32,7 +32,8 @@ module Collectr
         pictures = Picture.arel_table
         scope = scope.where(pictures[:id].not_in(opts[:excluded_ids]))
       end
-      scope = scope.paginate(opts.slice(:page, :per_page)) if opts[:page].present?
+      scope = scope.paginate(page: opts[:page].to_i,
+                             per_page: opts[:per_page].to_i) if opts[:page].present?
       scope
     end
 
