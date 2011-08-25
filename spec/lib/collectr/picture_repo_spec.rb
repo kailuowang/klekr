@@ -10,7 +10,7 @@ describe Collectr::PictureRepo do
     Factory(:picture, {collector: @collector}.merge(opts))
   end
 
-  describe ".new_pictures_by" do
+  describe ".new_pictures" do
     it "return  of unviewed pictures and return in a desc order" do
       create_picture(date_upload: DateTime.new(2010, 1, 4), viewed: true)
       picture3 = create_picture(date_upload: DateTime.new(2010, 1, 3))
