@@ -9,9 +9,16 @@ class window.Grid extends ModeBase
     [pageStart, pageEnd] = this._currentPageRange()
     gallery.pictures[pageStart..pageEnd]
 
-  loadGridview: =>
+  _loadGridview: =>
     gridview.loadPictures(this.currentPageOfPictures())
     this._updateHighlight()
+    this.trigger('progress-changed')
+
+  atTheLast: => this._pageIncomplete()
+
+  atTheBegining: =>
+    [pageStart, pageEnd] = this._currentPageRange()
+    pageStart is 0
 
   selectedPicture: =>
     gallery.pictures[@selectedIndex]
@@ -21,7 +28,7 @@ class window.Grid extends ModeBase
 
   onMorePicturesLoaded: =>
     if this._pageIncomplete()
-      this.loadGridview()
+      this._loadGridview()
 
   view: ->
     gridview
@@ -31,13 +38,14 @@ class window.Grid extends ModeBase
 
   updateProgress: (progress) =>
     @selectedIndex = progress
-    this.loadGridview()
+    this._loadGridview()
 
   navigateToNext: =>
     this._markCurrentPageAsViewed()
     unless this._pageIncomplete()
       [pageStart, pageEnd] = this._currentPageRange()
       this._changePage(pageEnd + 1)
+      this.trigger('progressed')
 
   navigateToPrevious: =>
     [pageStart, pageEnd] = this._currentPageRange()
@@ -45,7 +53,6 @@ class window.Grid extends ModeBase
 
   switchToSlide: =>
     gallery.toggleMode()
-    this.trigger('progress-changed')
 
   moveUp: => this._tryMoveTo(@selectedIndex - gridview.columns)
   moveDown: => this._tryMoveTo(@selectedIndex + gridview.columns)
@@ -66,8 +73,8 @@ class window.Grid extends ModeBase
   _changePage: (newIndex)=>
     if 0 <= newIndex < gallery.size()
       @selectedIndex = newIndex
-      this.loadGridview()
-      this.trigger('progress-changed')
+      this._loadGridview()
+
 
   _tryMoveTo: (newIndex, alternative) =>
     [pageStart, pageEnd] = this._currentPageRange()

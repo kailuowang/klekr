@@ -1,9 +1,12 @@
 class window.Gallery
 
   constructor: ->
+
     @cacheSize = gridview.size * 2
     [@grid, @slide] = modes = [new Grid, new Slide]
-    mode.bind('progress-changed', this._ensurePictureCache) for mode in modes
+    for mode in modes
+      mode.bind('progressed', this._ensurePictureCache)
+      mode.bind('progress-changed', this._updateProgressInView)
     @currentMode = if __gridMode__? then @grid else @slide
     @advanceByProgress = __advance_by_progress__ #vs progress by paging
     view.nextClick => @currentMode.navigateToNext?()
@@ -33,11 +36,17 @@ class window.Gallery
     @currentMode.on()
     @currentMode.updateProgress(progress)
 
+  isLoading: =>
+    @retriever?
+
+  _updateProgressInView: =>
+    generalView.displayProgress(this.currentMode.atTheLast(), this.currentMode.atTheBegining())
+
   _alternativeView: =>
     if @currentMode is @grid then @slide else @grid
 
   _retrieveMorePictures: (somePicturesReady) =>
-    unless @retriever?
+    unless this.isLoading()
       @retriever = new PictureRetriever(@currentPage, @cacheSize, this._filterOpts())
       @retriever.bind('batch-retrieved', this._addPictures)
       @retriever.bind('first-batch-retrieved', somePicturesReady) if somePicturesReady?
@@ -94,9 +103,11 @@ class window.Gallery
     console.debug "current progress: " + this._currentProgress()
 
 
+
 $(document).ready ->
   window.keyShortcuts = new KeyShortcuts
   window.view = new View
+  window.generalView = new GeneralView
   window.server = new Server
   window.gridview = new Gridview
   window.gallery = new Gallery

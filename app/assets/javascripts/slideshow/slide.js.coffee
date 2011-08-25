@@ -7,8 +7,8 @@ class window.Slide extends ModeBase
 
   displayCurrentPicture: =>
     view.display(this.currentPicture())
-    view.displayProgress(this.atTheLast(), this.atTheBegining())
     @favePanel.updateFavedStatus()
+    this.trigger('progress-changed')
 
   currentPicture: =>
     gallery.pictures[@currentIndex]
@@ -18,7 +18,8 @@ class window.Slide extends ModeBase
     unless this.atTheLast()
       @currentIndex += 1
       this.displayCurrentPicture()
-      this.trigger('progress-changed')
+      this.trigger('progressed')
+
 
   navigateToPrevious: =>
     unless this.atTheBegining()
@@ -26,7 +27,7 @@ class window.Slide extends ModeBase
       this.displayCurrentPicture()
 
   atTheLast: =>
-    @currentIndex == gallery.size() - 1
+    @currentIndex == gallery.size() - 1 and !gallery.isLoading()
 
   atTheBegining: =>
     @currentIndex == 0
