@@ -8,9 +8,11 @@ describe SlideshowController do
       controller.stub(:current_collector).and_return(collector)
 
       new_pic = Factory(:picture)
+      repo = mock(:repo)
 
-      Picture.should_receive(:new_pictures_by).with(collector, *[1, 2, 3]).and_return(mock(paginate: [new_pic]))
+      Collectr::PictureRepo.should_receive(:new).with(collector).and_return(repo)
 
+      repo.should_receive(:new_pictures).with(*[1, 2, 3]).and_return(mock(paginate: [new_pic]))
 
       post "new_pictures", format: :js, exclude_ids: [1,2,3], num: 7
 

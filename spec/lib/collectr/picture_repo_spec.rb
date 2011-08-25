@@ -6,6 +6,62 @@ describe Collectr::PictureRepo do
     @repo = Collectr::PictureRepo.new(@collector)
   end
 
+  def create_picture(opts = {})
+    Factory(:picture, {collector: @collector}.merge(opts))
+  end
+
+  describe ".new_pictures_by" do
+    it "return  of unviewed pictures and return in a desc order" do
+      create_picture(date_upload: DateTime.new(2010, 1, 4), viewed: true)
+      picture3 = create_picture(date_upload: DateTime.new(2010, 1, 3))
+      create_picture(date_upload: DateTime.new(2010, 1, 2), :viewed => true)
+      picture1 = create_picture(date_upload: DateTime.new(2010, 1, 1))
+      create_picture(date_upload: DateTime.new(2000, 1, 1))
+      @repo.new_pictures.paginate(page: 1, per_page: 2).should == [picture3, picture1]
+    end
+
+    it "return unviewed pictures with highest rating" do
+      create_picture(stream_rating: 2)
+      pic_with_higher_rating = create_picture(stream_rating: 3)
+      @repo.new_pictures.first.should == pic_with_higher_rating
+    end
+
+    it "return unviewed pictures with latest date" do
+      create_picture(date_upload: 1.month.ago)
+      later_pic = create_picture(date_upload: 2.days.ago)
+      @repo.new_pictures.first.should == later_pic
+    end
+
+
+    it "return pictures by the collector" do
+      pic = create_picture(:collector => @collector)
+      @repo.new_pictures.first.should == pic
+    end
+
+    it "does not return pictures by a different collector" do
+      create_picture(:collector => Factory(:collector))
+      @repo.new_pictures.should be_empty
+    end
+
+
+    it "include the pictures of not in the list of exclude_ids if given" do
+      pic_to_exclude = create_picture
+      pic_to_include = create_picture
+      @repo.new_pictures(pic_to_exclude.id).should include(pic_to_include)
+    end
+
+    it "exclude the pictures of the exclude_ids if given" do
+      pic1 = create_picture
+      pic2 = create_picture
+      @repo.new_pictures(pic1.id, pic2.id).should_not include(pic1, pic2)
+    end
+
+    it "does not include pictures that are collected" do
+      pic1 = create_picture(collected: false)
+      @repo.new_pictures.should_not include(pic1)
+    end
+  end
+
   describe "#find_or_initialize_from_pic_info" do
     it "should be able to create from flickr pic info" do
       pic_info = Factory.next(:pic_info)

@@ -25,6 +25,16 @@ module Collectr
       return picture, !already_synced
     end
 
+
+    def new_pictures(*exclude_ids)
+      scope = Picture.collected_by(@collector).desc.unviewed.includes(:flickr_streams)
+      pictures = Picture.arel_table
+      if exclude_ids.present?
+        scope = scope.where(pictures[:id].not_in(exclude_ids))
+      end
+      scope
+    end
+
     private
 
     def find_or_initialize_from_pic_info(pic_info)

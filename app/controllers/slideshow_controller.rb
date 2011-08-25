@@ -27,7 +27,7 @@ class SlideshowController < ApplicationController
     exclude_ids =  params[:exclude_ids].present? ? params[:exclude_ids].map(&:to_i) : []
     per_page = params[:num].to_i
     page = params[:page].to_i
-    new_pictures = Picture.new_pictures_by(current_collector, *exclude_ids).paginate(page: page , per_page: per_page)
+    new_pictures = Collectr::PictureRepo.new(current_collector).new_pictures(*exclude_ids).paginate(page: page , per_page: per_page)
 
     render_json_pictures(new_pictures)
   end

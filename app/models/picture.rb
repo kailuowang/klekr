@@ -26,15 +26,6 @@ class Picture < ActiveRecord::Base
       unviewed.each(&:reset_stream_rating)
     end
 
-    def new_pictures_by(collector, *exclude_ids)
-      scope = collected_by(collector).desc.unviewed.includes(:flickr_streams)
-      pictures = Picture.arel_table
-      if exclude_ids.present?
-        scope = scope.where(pictures[:id].not_in(exclude_ids))
-      end
-      scope
-    end
-
     def faved_by(collector, min_rating, page, per_page)
       collected_by(collector).
           where('rating >= ?', min_rating).
