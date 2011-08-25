@@ -115,12 +115,8 @@ class FlickrStream < ActiveRecord::Base
   end
 
   def get_pictures(num, page = 1, since = nil, before = nil )
-    create_pictures(retriever.get(num, page, since, before))
-  end
-
-  def get_all_pictures
-    retriever.get_all(nil, nil) do |picture_data|
-      create_pictures(picture_data)
+    retriever.get(num, page, since, before).map do |pic_info|
+      picture_repo.build(pic_info)
     end
   end
 
@@ -132,10 +128,14 @@ class FlickrStream < ActiveRecord::Base
     update_attribute(:collecting, false)
   end
 
+  def synced_with?(picture)
+    Syncage.where(flickr_stream_id: id, picture_id: picture.id).present?
+  end
+
   def sync(since = last_sync || 1.month.ago, max_num = 200)
     photos_synced = 0
     retriever.get_all(since, max_num).each do |pic_info|
-      _, newly_synced = Picture.create_from_sync(pic_info, self)
+      _, newly_synced = picture_repo.create_from_sync(pic_info, self)
       photos_synced += 1 if newly_synced
     end
     update_attribute(:last_sync, DateTime.now)
@@ -232,16 +232,8 @@ class FlickrStream < ActiveRecord::Base
     rest.first
   end
 
-  def create_pictures(picture_data)
-    picture_data.map do |pic_info|
-      if(self.new_record?)
-        Picture.create_for_collector(pic_info, self.collector)
-      else
-        pic, _  =  Picture.create_from_sync(pic_info, self)
-        pic
-      end
-    end
+  def picture_repo
+    @picture_repo ||= Collectr::PictureRepo.new(self.collector)
   end
-
 
 end

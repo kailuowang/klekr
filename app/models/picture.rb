@@ -18,37 +18,8 @@ class Picture < ActiveRecord::Base
 
   class << self
 
-    def find_or_initialize_from_pic_info(pic_info, collector = nil)
-      url = FlickRaw.url_photopage(pic_info)
-      Picture.where(collector_id: collector, url: url).includes(:flickr_streams).first ||
-        Picture.new.tap do |picture|
-          picture.url = url
-          picture.title = pic_info.title
-          picture.date_upload = Time.at(pic_info.dateupload.to_i).to_datetime
-          picture.owner_name = pic_info.ownername
-          picture.pic_info_dump = pic_info.marshal_dump
-          picture.collector = collector
-          picture.collected = false
-        end
-    end
-
     def flickr_id(pic_info)
       pic_info.id + "_" + pic_info.secret
-    end
-
-    def create_from_sync(pic_info, stream)
-      picture = Picture.find_or_initialize_from_pic_info(pic_info, stream.collector)
-      already_synced = false
-      if stream.collecting?
-        new_picture = picture.new_record?
-        already_synced = !new_picture && Syncage.where(flickr_stream_id: stream.id, picture_id: picture.id).present?
-        picture.synced_by(stream) unless already_synced
-      end
-      return picture, !already_synced
-    end
-
-    def create_for_collector(pic_info, collector)
-      Picture.find_or_initialize_from_pic_info(pic_info, collector).tap{|p| p.save!}
     end
 
     def reset_stream_ratings

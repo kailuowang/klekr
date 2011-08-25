@@ -232,6 +232,7 @@ describe FlickrStream do
         @flickr_stream.retriever.collector.should == collector
       end
     end
+
     describe "#sync" do
       before do
         @module = stub_flickr(@flickr_stream.retriever, @flickr_module_name)
@@ -301,6 +302,20 @@ describe FlickrStream do
 
 
     end
+
+    describe "#get_pictures" do
+      before do
+        @retriever = mock(get: 3.pics)
+        Collectr::FlickrPictureRetriever.stub(:new).and_return(@retriever)
+      end
+
+      it "does not save pictures to db" do
+        @flickr_stream.get_pictures(3)
+        Picture.count.should == 0
+      end
+
+    end
+
 
     describe "#add_score" do
       it "should ensure that a monthly score for related date is created for the stream" do

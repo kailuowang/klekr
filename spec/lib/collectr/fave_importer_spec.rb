@@ -24,6 +24,12 @@ describe Collectr::FaveImporter do
 
   describe "#import" do
 
+    it "creates pictures in DB retrieved from flickr" do
+      @retriever.should_receive(:get).and_return(2.pics)
+      @importer.import(3)
+      Picture.count.should == 2
+    end
+
     it "does not create streams in DB when retrieving from flickr" do
       @importer.import(2)
       FlickrStream.count.should == 0

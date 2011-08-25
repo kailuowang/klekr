@@ -14,6 +14,17 @@ module Collectr
       end
     end
 
+    def build(pic_info)
+      find_or_initialize_from_pic_info(pic_info)
+    end
+
+    def create_from_sync(pic_info, stream)
+      picture = build(pic_info)
+      already_synced = !picture.new_record? && stream.synced_with?(picture)
+      picture.synced_by(stream) unless already_synced
+      return picture, !already_synced
+    end
+
     private
 
     def find_or_initialize_from_pic_info(pic_info)
