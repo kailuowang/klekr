@@ -167,33 +167,4 @@ describe Picture do
     end
   end
 
-  describe "#guess_hidden_treasure" do
-    it "should return the un-viewed pic from the stream least viewed" do
-      stream = Factory(:fave_stream)
-      FlickrStream.should_receive(:least_viewed).and_return(stream)
-
-      pic = Factory(:picture)
-      pic.synced_by(stream)
-      pic2 = Factory(:picture)
-      pic2.synced_by(stream)
-      pic2.get_viewed
-
-
-      Factory(:picture).guess_hidden_treasure.id.should == pic.id
-    end
-
-    it "should return the pics in upload date desc order" do
-      stream = Factory(:fave_stream)
-      FlickrStream.should_receive(:least_viewed).and_return(stream)
-
-      Factory(:picture, date_upload: 1.day.ago).synced_by(stream)
-      pic = Factory(:picture, date_upload: Date.today)
-      pic.synced_by(stream)
-      Factory(:picture, date_upload: 2.days.ago).synced_by(stream)
-
-      Factory(:picture).guess_hidden_treasure.id.should == pic.id
-    end
-
-  end
-
 end

@@ -101,10 +101,6 @@ class Picture < ActiveRecord::Base
     flickr_url(:small)
   end
 
-  def guess_hidden_treasure
-    Picture.syned_from(FlickrStream.least_viewed).desc.unviewed.limit(1)[0]
-  end
-
   def synced_by(stream)
     new_stream_rating = stream.star_rating + (stream_rating || 0)
     self.stream_rating = new_stream_rating
