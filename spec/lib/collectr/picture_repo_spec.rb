@@ -64,6 +64,20 @@ describe Collectr::PictureRepo do
       @repo.new_pictures(page: '1', per_page: '3').should be_present
     end
 
+    it "return picture from a flickrstream whose type matches the type filter" do
+      pic = create_picture
+      pic.synced_by(Factory(:fave_stream))
+      pic.synced_by(Factory(:upload_stream))
+      pic.synced_by(Factory(:fave_stream))
+      @repo.new_pictures(type: 'UploadStream').should include(pic)
+    end
+
+    it "does not return picture from a flickrstream whose type does not matche the type filter" do
+      upload_stream = Factory(:fave_stream)
+      pic = create_picture
+      pic.synced_by(upload_stream)
+      @repo.new_pictures(type: 'UploadStream').should_not include(pic)
+    end
 
   end
 

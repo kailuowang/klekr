@@ -21,5 +21,13 @@ describe PicturesController do
     end
   end
 
+  describe "POST all_viewed" do
+    it "mark all passed picture ids as viewed" do
+      picture_ids  = 3.pictures.map(&:id)
+      post 'all_viewed', ids: picture_ids
+      Picture.unviewed.count.should == 0
+
+    end
+  end
 
 end

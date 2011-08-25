@@ -25,7 +25,6 @@ module Collectr
       return picture, !already_synced
     end
 
-
     def new_pictures(opts = {})
       scope = Picture.collected_by(@collector).desc.unviewed.includes(:flickr_streams)
       if opts[:excluded_ids].present?
@@ -34,7 +33,12 @@ module Collectr
       end
       scope = scope.paginate(page: opts[:page].to_i,
                              per_page: opts[:per_page].to_i) if opts[:page].present?
+
+      if opts[:type].present?
+        scope = scope.includes(:flickr_streams).where("#{::FlickrStream.table_name}.type = ?", opts[:type])
+      end
       scope
+
     end
 
     private

@@ -50,3 +50,15 @@
   width: 100px;
   height: 23px;
 }
+
+
+.sideNav{
+  width: 50px;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+
+.sideNav:hover {
+  font-size: 1.3em;
+}

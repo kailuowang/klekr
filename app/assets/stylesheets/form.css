@@ -1,8 +1,8 @@
-form fieldset {
+fieldset {
   margin-bottom: 18px;
   padding-top: 18px;
 }
-form fieldset legend {
+fieldset legend {
   display: block;
   margin-left: 150px;
   font-size: 20px;
@@ -13,9 +13,9 @@ form div.clearfix {
   margin-bottom: 18px;
 }
 form label,
-form input,
-form select,
-form textarea {
+input,
+select,
+textarea {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
   font-weight: normal;
@@ -33,7 +33,7 @@ form label {
 form div.input {
   margin-left: 150px;
 }
-form input[type=checkbox], form input[type=radio] {
+input[type=checkbox], form input[type=radio] {
   cursor: pointer;
 }
 input[type=text],

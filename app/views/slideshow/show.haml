@@ -1,4 +1,8 @@
 - content_for(:top_left) do
   %h3
     New pictures from sources
+  #type-filter-panel.hidden
+    %h5
+      %input#type-filter-checkbox{type: 'checkbox', name: 'upload-only'}
+        show people's works only
 =render partial: 'slideshow'

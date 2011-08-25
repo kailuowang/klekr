@@ -8,8 +8,10 @@ class window.Gallery
     @advanceByProgress = __advance_by_progress__ #vs progress by paging
     view.nextClick => @currentMode.navigateToNext?()
     view.previousClick => @currentMode.navigateToPrevious?()
-    @filterView = new FilterView(@grid)
-    @filterView.ratingFilterChange this._applyRatingFilter
+    @ratingFilterView = new RatingFilterView(@grid)
+    @typeFilterView = new TypeFilterView(@grid)
+    @ratingFilterView.filterChange this._applyRatingFilter
+    @typeFilterView.filterChange this._applyTypeFilter
 
   init: =>
     @currentPage = 0
@@ -45,6 +47,13 @@ class window.Gallery
 
   _applyRatingFilter: (rating) =>
     @_ratingFilter = rating
+    this._reinitToGrid()
+
+  _applyTypeFilter: (type) =>
+    @_typeFilter = type
+    this._reinitToGrid()
+
+  _reinitToGrid: =>
     @currentMode = @grid
     this.init()
 
@@ -53,6 +62,7 @@ class window.Gallery
     _.tap {}, (opts) =>
       opts.exclude_ids = excludeIds
       opts.min_rating = @_ratingFilter if @_ratingFilter?
+      opts.type = @_typeFilter if @_typeFilter?
 
   _addPictures: (newPictures) =>
     unless @addingPictures

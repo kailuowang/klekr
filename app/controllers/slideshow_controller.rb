@@ -24,11 +24,11 @@ class SlideshowController < ApplicationController
   end
 
   def new_pictures
-    exclude_ids = params[:exclude_ids].map(&:to_i) if params[:exclude_ids].present?
-    new_pictures = Collectr::PictureRepo.new(current_collector).
-                      new_pictures(excluded_ids: exclude_ids,
-                                   page: params[:page] ,
-                                   per_page: params[:num])
+    opts = params.to_hash.to_options.slice(:page, :type).tap do |h|
+      h[:excluded_ids] = params[:exclude_ids].map(&:to_i) if params[:exclude_ids].present?
+      h[:per_page] = params[:num]
+    end
+    new_pictures = Collectr::PictureRepo.new(current_collector).new_pictures(opts)
 
     render_json_pictures(new_pictures)
   end
