@@ -5,11 +5,11 @@ set :whenever_command, "bundle exec whenever"
 require "whenever/capistrano"
 
 set :application, "collectr"
-set :repository, "git@github.com:kailuowang/collectr.git"
+set :repository, "git@github.com:kailuowang/klekr.git"
 set :user, "ec2-user"
 set :scm, :git
 set :deploy_to, '/apps/'
-set :ec2_server, 'collectr.kailuowang.com'
+set :ec2_server, 'klekr.com'
 
 set :environment, 'production'
 
