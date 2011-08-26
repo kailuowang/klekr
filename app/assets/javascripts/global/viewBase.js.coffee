@@ -36,7 +36,7 @@ class window.ViewBase
 
   honeycombAdjustedDimension:  =>
     if this.isHoneycomb()
-      [1280, 750]
+      [1280, 760]
     else
       [$(window).width(), $(window).height()]
 
