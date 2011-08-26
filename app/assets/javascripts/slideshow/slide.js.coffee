@@ -53,6 +53,7 @@ class window.Slide extends ModeBase
     [
       [ ['right', 'space'], this.navigateToNext, 'next picture' ]
       [ 'left', this.navigateToPrevious, 'previous picture' ]
+      [ 'up', this.backToGrid, 'go to grid mode' ]
       [ 'o', view.gotoOwner, "go to photographer's page" ]
       [ ['g', 'return'], this.backToGrid, "go to grid mode" ]
     ]
