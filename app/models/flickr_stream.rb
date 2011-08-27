@@ -212,11 +212,11 @@ class FlickrStream < ActiveRecord::Base
 
     total_weighted_monthly_rating = 0
 
-    monthly_scores.all.each { |ms|
+    monthly_scores.each { |ms|
       total_weighted_monthly_rating += ms.weighted_rating
     }
 
-    total_weight = monthly_scores.all.inject(0) { |w, ms| w + ms.weight }
+    total_weight = monthly_scores.inject(0) { |w, ms| w + ms.weight }
 
     total_weighted_monthly_rating / total_weight
   end
@@ -226,7 +226,7 @@ class FlickrStream < ActiveRecord::Base
     score_for(Date.today)
     while(star_rating == old_rating)
       @rating = nil
-      monthly_scores.all.each(&adjustment)
+      monthly_scores.each(&adjustment)
     end
   end
 
