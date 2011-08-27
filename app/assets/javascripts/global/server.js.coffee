@@ -1,9 +1,4 @@
 class window.Server
-  constructor: ->
-    @morePicturesPath = __morePicturesPath__
-
-  morePictures: (opts, callback) ->
-    this.post( @morePicturesPath, opts, callback )
 
   get: (url, data, callback) ->
     this.ajax(url, data, 'GET', callback)

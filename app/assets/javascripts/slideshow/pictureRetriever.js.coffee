@@ -1,6 +1,8 @@
 class window.PictureRetriever extends Events
   constructor: (@pageNumber, @pageSize, @filterOpts) ->
     @_numOfSubBatches = 2
+    @morePicturesPath = __morePicturesPath__
+
 
   retrieve: =>
     this._retrieveBatch 1, (retrievedInFirst) =>
@@ -14,7 +16,7 @@ class window.PictureRetriever extends Events
 
   _retrieveBatch: (batchNum, success) =>
     opts = this._batchOpts( @_numOfSubBatches * @pageNumber + batchNum )
-    server.morePictures opts, (data) =>
+    server.post @morePicturesPath, opts, (data) =>
       pictures = ( new Picture(picData) for picData in data )
       this.trigger('batch-retrieved', pictures)
       success?(pictures)

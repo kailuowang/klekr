@@ -3,7 +3,7 @@
 
 describe 'PictureRetriever', ->
   window.view = {largeWindow: -> false}
-
+  window.__morePicturesPath__ = 'blah'
   mockPicture = ->
     pic = new Picture({id: 'id'})
     pic._preloadImage = ->
