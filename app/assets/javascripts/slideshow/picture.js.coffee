@@ -17,7 +17,7 @@ class window.Picture extends Events
   constructor: (@data) ->
     @id = @data.id
     @width = 640
-    @canUseLargeVersion = view.largeWindow()
+    @canUseLargeVersion = slideview.largeWindow()
     @ready = false
 
   displayTitle:  =>
@@ -87,7 +87,7 @@ class window.Picture extends Events
 
   largerVersionWithinWindow: (image) ->
     [largeWidth, largeHeight] = this.guessLargeSize(image.width, image.height)
-    largeWidth < view.displayWidth and largeHeight < view.displayHeight - 41
+    largeWidth < generalView.displayWidth and largeHeight < generalView.displayHeight - 41
 
   guessLargeSize: (smallerWidth, smallerHeight) ->
     longEdge = Math.max(smallerWidth, smallerHeight)

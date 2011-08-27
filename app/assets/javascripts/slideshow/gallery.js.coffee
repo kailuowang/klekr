@@ -9,8 +9,8 @@ class window.Gallery
       mode.bind('progress-changed', this._updateProgressInView)
     @currentMode = if __gridMode__? then @grid else @slide
     @advanceByProgress = __advance_by_progress__ #vs progress by paging
-    view.nextClick => @currentMode.navigateToNext?()
-    view.previousClick => @currentMode.navigateToPrevious?()
+    generalView.nextClick => @currentMode.navigateToNext?()
+    generalView.previousClick => @currentMode.navigateToPrevious?()
     @ratingFilterView = new RatingFilterView(@grid)
     @typeFilterView = new TypeFilterView(@grid)
     @ratingFilterView.filterChange this._applyRatingFilter
@@ -104,8 +104,8 @@ class window.Gallery
 
 $(document).ready ->
   window.keyShortcuts = new KeyShortcuts
-  window.view = new View
   window.generalView = new GeneralView
+  window.slideview = new Slideview
   window.gridview = new Gridview
   window.gallery = new Gallery
   new StreamPanel

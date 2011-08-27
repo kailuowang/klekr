@@ -2,7 +2,7 @@
 
 
 describe 'PictureRetriever', ->
-  window.view = {largeWindow: -> false}
+  window.slideview = {largeWindow: -> false}
   window.__morePicturesPath__ = 'blah'
   mockPicture = ->
     pic = new Picture({id: 'id'})

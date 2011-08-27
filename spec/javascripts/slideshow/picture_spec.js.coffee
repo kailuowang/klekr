@@ -1,7 +1,7 @@
 #= require slideshow/picture
 
 describe 'Picture', ->
-  window.view = {largeWindow: -> false}
+  window.slideview = {largeWindow: -> false}
 
   describe '.uniqConcat', ->
     it 'only add ones that does not exist in the orignal', ->

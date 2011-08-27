@@ -29,8 +29,8 @@ class window.Gridview extends ViewBase
     div.css('background', '#606060')
 
   _calculateSize: ->
-    @columns ?= Math.floor( view.displayWidth / 260 )
-    @rows ?= Math.floor( view.displayHeight /  270 )
+    @columns ?= Math.floor( generalView.displayWidth / 260 )
+    @rows ?= Math.floor( generalView.displayHeight /  270 )
     @size = @columns * @rows
 
   _createPictureItem: (picture)=>
@@ -64,7 +64,7 @@ class window.Gridview extends ViewBase
   _adjustWidth: =>
     $('#gridPictures').css('width', @columns * 260 + 'px')
     $('#gridPictures').css('height', @rows * 270 + 'px')
-    $('#gridInner').css('height', (view.displayHeight - 80) + 'px')
+    $('#gridInner').css('height', (generalView.displayHeight - 80) + 'px')
 
   switchVisible: (showing)=>
     this.setVisible(@gridview, showing)

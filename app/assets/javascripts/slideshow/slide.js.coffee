@@ -2,11 +2,11 @@ class window.Slide extends ModeBase
   constructor: ->
     @currentIndex = 0
     @favePanel = new FavePanel(this.currentPicture)
-    view.toGridLinkClick this.backToGrid
+    slideview.toGridLinkClick this.backToGrid
     super()
 
   displayCurrentPicture: =>
-    view.display(this.currentPicture())
+    slideview.display(this.currentPicture())
     @favePanel.updateFavedStatus()
     this.trigger('progress-changed')
 
@@ -46,14 +46,13 @@ class window.Slide extends ModeBase
     this.currentPicture().getViewed()
     gallery.toggleMode()
 
-  view: ->
-    view
+  view: -> slideview
 
   shortcutsSettings: ->
     [
       [ ['right', 'space'], this.navigateToNext, 'next picture' ]
       [ 'left', this.navigateToPrevious, 'previous picture' ]
       [ 'up', this.backToGrid, 'go to grid mode' ]
-      [ 'o', view.gotoOwner, "go to photographer's page" ]
+      [ 'o', slideview.gotoOwner, "go to photographer's page" ]
       [ ['g', 'return'], this.backToGrid, "go to grid mode" ]
     ]

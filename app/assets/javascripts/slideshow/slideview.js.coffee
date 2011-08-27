@@ -1,4 +1,4 @@
-class window.View extends ViewBase
+class window.Slideview extends ViewBase
 
   constructor: () ->
     @mainImg = $('#picture')
@@ -8,18 +8,11 @@ class window.View extends ViewBase
     @titleLink = $('#title')
     @ownerLink = $('#owner')
     @fromStreamsDiv = $('#fromStreams')
-
     @fromTitle = $('#fromTitle')
-    @leftArrow = $('#leftArrow')
-    @rightArrow = $('#rightArrow')
-    @spacer = $('#spacer')
     @imageCaption = $('#imageCaption')
     @bottomLeft = $('#bottomLeft')
     @bottomRight = $('#bottomRight')
-    this._calculateDimensions()
-    this.adjustArrowsPosition()
     this.adjustImageFrame()
-    this.adjustSpacerWidth()
 
   display: (picture) ->
     if @pictureArea.is(':visible')
@@ -40,12 +33,12 @@ class window.View extends ViewBase
     @titleLink.text picture.displayTitle()
     @ownerLink.attr('href', picture.data.ownerPath)
     @ownerLink.text(picture.data.ownerName)
-    this.updateFromStreams(picture.data.fromStreams)
+    this._updateSources(picture.data.fromStreams)
 
   gotoOwner: =>
     window.location = @ownerLink.attr('href')
 
-  updateFromStreams: (streams) ->
+  _updateSources: (streams) ->
     @fromStreamsDiv.empty()
     for stream in streams
       @fromStreamsDiv.append($('<span>').text(', ')) if @fromStreamsDiv.children().length > 0
@@ -54,40 +47,20 @@ class window.View extends ViewBase
 
     this.setVisible(@fromTitle, streams.length > 0 )
 
-  _calculateDimensions: ->
-    [@windowWidth, @windowHeight] = this.honeycombAdjustedDimension()
-    [@displayWidth, @displayHeight] = [@windowWidth - 80, @windowHeight - 40]
-
   largeWindow: ->
-    @displayWidth > 1024 and @displayHeight > 1024
-
-  nextClick: (listener) ->
-    $('#right').click(listener)
-
-  previousClick: (listener) ->
-    $('#left').click(listener)
+    generalView.displayWidth > 1024 and generalView.displayHeight > 1024
 
   toGridLinkClick: (listener) ->
     $('#toGridLink').click ->
       listener()
       false
 
-  adjustArrowsPosition: ->
-    sideArrowHeight = ( @displayHeight - 150 )+ "px"
-    @leftArrow.css('line-height', sideArrowHeight)
-    @rightArrow.css('line-height', sideArrowHeight)
-
-  adjustSpacerWidth: ->
-    if this.isHoneycomb()
-      @spacer.attr('width', @windowWidth + 'px')
-    else
-      @spacer.hide()
-
   adjustImageFrame: ->
-    $('#imageFrameInner').css('height', (@displayHeight - 80) + 'px')
-    $('#bottomBanner').css('top',(@displayHeight + 20) + 'px' )
-    @bottomLeft.css('top', (@displayHeight - 5 ) + 'px' )
-    @bottomRight.css('top', (@displayHeight - 5 ) + 'px' )
+    displayHeight = generalView.displayHeight
+    $('#imageFrameInner').css('height', (displayHeight - 80) + 'px')
+    $('#bottomBanner').css('top',(displayHeight + 20) + 'px' )
+    @bottomLeft.css('top', (displayHeight - 5 ) + 'px' )
+    @bottomRight.css('top', (displayHeight - 5 ) + 'px' )
 
   switchVisible: (showing) =>
     this.setVisible @bottomLeft, showing
