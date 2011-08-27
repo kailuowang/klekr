@@ -1,14 +1,40 @@
 require 'spec_helper'
 
 describe Collector do
-  before do
-    @collector = Factory(:collector)
-    @importer = mock(:importer)
-    @importer.stub!(:import).and_return([])
-    Collectr::FaveImporter.stub!(:new).and_return(@importer)
+  describe '.from_new_user' do
+    it "should create a new flickr stream when a default stream user id is set" do
+      Settings.stub(:default_stream_userid).and_return('defaultstream_user_id')
+      auth = mock( user: mock(
+                      nsid: 'auersid',
+                      username: 'a new user',
+                      fullname: 'newusers full'),
+                   token: 'a_token')
+
+      FlickrStream.should_receive(:get_user_from_flickr).with('defaultstream_user_id', anything).
+              and_return(mock(username: 'defaultstream username', photosurl: 'someuser url'))
+      collector = Collector.from_new_user(auth)
+      FlickrStream.first.collector.should == collector
+      FlickrStream.first.username.should == 'defaultstream username'
+    end
+  end
+
+  describe '.find_or_create_by_auth' do
+    it 'does not create a new collector or stream if there is already one with the same user id' do
+      collector = Factory(:collector)
+      user_id = collector.user_id
+      Collector.find_or_create_by_auth(mock(user: mock(nsid: user_id))).should == collector
+      FlickrStream.count.should == 0
+    end
   end
 
   describe "#collection" do
+    before do
+      @collector = Factory(:collector)
+      @importer = mock(:importer)
+      @importer.stub!(:import).and_return([])
+      Collectr::FaveImporter.stub!(:new).and_return(@importer)
+    end
+
     context "get faved photos from DB" do
       it "return faved picture in the DB first" do
         @importer.should_not_receive(:import)
@@ -40,7 +66,7 @@ describe Collector do
         earlest_faved = 1.month.ago
         Factory(:picture, collector: @collector, rating: 1, faved_at: earlest_faved)
         Factory(:picture, collector: @collector, rating: 1, faved_at: 1.week.ago)
-        Collectr::FaveImporter.should_receive(:new).with(@collector, earlest_faved ).and_return(@importer)
+        Collectr::FaveImporter.should_receive(:new).with(@collector, earlest_faved).and_return(@importer)
         @collector.collection(3, 1)
       end
     end

@@ -14,7 +14,6 @@ module Collectr::Flickr
 
   #since merely mentioning the FlickrRaw::Flickr class will cause a call to the flickr server
   class FlickRawFactory
-
     def self.create(token)
       FlickRaw::Flickr.new(token)
     end
