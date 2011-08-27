@@ -1,5 +1,4 @@
-class window.Server
-
+class Server
   get: (url, data, callback) ->
     this.ajax(url, data, 'GET', callback)
 
@@ -18,3 +17,5 @@ class window.Server
             success: (data) ->
               callback(data) if callback?
     )
+
+this.server = new Server

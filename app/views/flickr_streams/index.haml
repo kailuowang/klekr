@@ -1,0 +1,22 @@
+- content_for(:head) do
+  = javascript_include_tag 'sources.js'
+  :javascript
+    __sourcesPath__ = '#{@sources_path}';
+
+- content_for(:top_left) do
+  %h3
+    My Sources
+
+#sources.container
+  #star-category-template.star-category.well.row.hidden
+    .stars-label
+      ★
+    .sources-grid
+      .source-cell.cell.hidden
+        .source-icon-placeholder
+          %a.source-icon-link
+            %img.source-icon.shadow{src: "http://flickr.com/buddyicons/45425373@N00.jpg"}
+        .source-name.text-shadow
+          NNBB & Alf's
+        .source-type.text-shadow
+          works

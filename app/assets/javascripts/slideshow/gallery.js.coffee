@@ -102,13 +102,10 @@ class window.Gallery
     console.debug "pictures size: " + @pictures.length
     console.debug "current progress: " + this._currentProgress()
 
-
-
 $(document).ready ->
   window.keyShortcuts = new KeyShortcuts
   window.view = new View
   window.generalView = new GeneralView
-  window.server = new Server
   window.gridview = new Gridview
   window.gallery = new Gallery
   new StreamPanel

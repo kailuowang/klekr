@@ -17,10 +17,10 @@ describe Picture do
         stream = Factory(:fave_stream)
         stream.score_for(Date.today).bump
         picture.synced_by(stream)
-        picture.stream_rating.should == 1
+        picture.stream_rating.should == 2
         stream.score_for(Date.today).bump
         Picture.reset_stream_ratings
-        picture.reload.stream_rating.should == 2
+        picture.reload.stream_rating.should == 3
       end
     end
 

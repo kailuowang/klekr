@@ -350,28 +350,9 @@ describe FlickrStream do
         @flickr_stream.score_for(1.month.ago).add_num_of_pics_viewed(100)
       end
 
-      it "should be 1 for rating 0 - 0.05" do
-        @flickr_stream.star_rating.should == 1
-      end
-
-      it "should be 2 for rating 0.05 - 0.10" do
-        @flickr_stream.add_score(1.month.ago, 5)
-        @flickr_stream.star_rating.should == 2
-      end
-
-      it "should be 3 for rating 0.1 - 0.2" do
-        @flickr_stream.add_score(1.month.ago, 10)
+      it "should be 3 for rating 0.05 - 0.10" do
+        @flickr_stream.add_score(1.month.ago, 6)
         @flickr_stream.star_rating.should == 3
-      end
-
-      it "should be 4 for rating 0.2 - 0.3" do
-        @flickr_stream.add_score(1.month.ago, 20)
-        @flickr_stream.star_rating.should == 4
-      end
-
-      it "should be 5 for rating > 0.3 " do
-        @flickr_stream.add_score(1.month.ago, 34)
-        @flickr_stream.star_rating.should == 5
       end
 
     end

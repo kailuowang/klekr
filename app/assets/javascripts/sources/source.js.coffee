@@ -1,4 +1,4 @@
-class Source
-  constructor: (@data) ->
-
+class window.Source
+  constructor: (data) ->
+    $.extend(this, data)
 

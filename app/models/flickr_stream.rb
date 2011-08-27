@@ -120,6 +120,10 @@ class FlickrStream < ActiveRecord::Base
     end
   end
 
+  def icon_url
+     "http://flickr.com/buddyicons/#{user_id}.jpg"
+  end
+
   def subscribe
     update_attribute(:collecting, true)
   end
@@ -166,13 +170,13 @@ class FlickrStream < ActiveRecord::Base
   end
 
   def star_rating
-    if rating < 0.05
+    if rating < 0.03
       1
-    elsif rating < 0.1
+    elsif rating < 0.05
       2
-    elsif rating < 0.2
+    elsif rating < 0.1
       3
-    elsif rating < 0.3
+    elsif rating < 0.2
       4
     else
       5

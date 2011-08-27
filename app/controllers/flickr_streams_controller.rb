@@ -4,7 +4,7 @@ class FlickrStreamsController < ApplicationController
 
   # GET /flickr_streams
   # GET /flickr_streams.xml
-  def index
+  def old_index
     @flickr_streams =  FlickrStream.collected_by(current_collector).
                                     includes(:monthly_scores, :pictures).
                                     order('created_at DESC').
@@ -14,6 +14,22 @@ class FlickrStreamsController < ApplicationController
     respond_to do |format|
       format.html
       format.yaml  { render :text => FlickrStream.collected_by(current_collector).map(&:attributes).to_yaml, :content_type => 'text/yaml' }
+    end
+  end
+
+
+  def index
+    respond_to do |format|
+      format.html do
+        @sources_path = flickr_streams_path
+      end
+      format.js do
+        streams = FlickrStream.collected_by(current_collector).includes(:monthly_scores)
+        render json: data_for_streams(streams)
+      end
+      format.yaml do
+        render :text => FlickrStream.collected_by(current_collector).map(&:attributes).to_yaml, :content_type => 'text/yaml'
+      end
     end
   end
 
@@ -98,5 +114,18 @@ class FlickrStreamsController < ApplicationController
   private
   def load_stream
     @flickr_stream = FlickrStream.find(params[:id].to_i) if params[:id]
+  end
+
+  def data_for_streams(streams)
+    streams.map do |stream|
+      {
+        id: stream.id,
+        iconUrl: stream.icon_url,
+        ownerName: stream.username,
+        type: stream.type_display,
+        slideUrl: flickr_stream_path(stream),
+        rating: stream.star_rating
+      }
+    end
   end
 end
