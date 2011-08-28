@@ -1,5 +1,5 @@
 .container {
-  width: 1024px;
+  width: 940px;
   margin: 0 auto;
   zoom: 1;
   margin-bottom: 18px;
@@ -20,7 +20,7 @@
 .row {
   zoom: 1;
   margin-bottom: 18px;
-  margin-left: -20px;
+  /*margin-left: -20px;*/
 }
 .row:before, .row:after {
   display: table;

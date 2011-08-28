@@ -1,7 +1,10 @@
 class window.SourcesView extends ViewBase
   constructor: ->
     @template = $('#star-category-template')
-    @container = $('#sources')
+    @container = $('#sources-list')
+    @expandLink = $('#expand-management')
+    @importPanel = $('#sources-import-panel')
+    @expandLink.click this._toggleManagementPanel
 
   loadSources: (star, sources)=>
     newStarCategory = @template.clone()
@@ -9,6 +12,9 @@ class window.SourcesView extends ViewBase
     this._loadCategory(newStarCategory, sources)
     @container.append(newStarCategory)
     newStarCategory.show()
+
+  showManagementSection: =>
+    $('#sources-management').show()
 
   _updateStar: (categoryDiv, star) =>
     label = categoryDiv.find('.stars-label').first()
@@ -30,3 +36,10 @@ class window.SourcesView extends ViewBase
     cell.find('.source-icon-link').attr('href', source.slideUrl)
     cell.find('.source-name').text(source.ownerName + "'s")
     cell.find('.source-type').text(source.type)
+
+  _toggleManagementPanel: () =>
+    if @importPanel.is(':visible')
+      @importPanel.slideUp()
+    else
+      @importPanel.slideDown()
+

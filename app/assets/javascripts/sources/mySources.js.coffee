@@ -12,6 +12,7 @@ class window.MySources
     keys = _.keys(sourcesByGroup)
     for star in (_.sortBy keys, (r) -> -r)
       @view.loadSources(star, sourcesByGroup[star])
+    @view.showManagementSection()
 
 $ ->
   window.mySources = new MySources(__sourcesPath__)
