@@ -39,6 +39,7 @@ h3 {
 
 h4 {
 	font-size: 1.3em;
+  text-shadow: 0 1px 0 #000;
 }
 
 h5 {
@@ -461,4 +462,3 @@ table{
  cursor: pointer;
 }
 
-.modalPopup{ padding: 20px; background: black; opacity:0.6; color: #EEEEEE; display: none;}

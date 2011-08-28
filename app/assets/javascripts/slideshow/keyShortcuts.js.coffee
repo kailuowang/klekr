@@ -3,6 +3,7 @@ class window.KeyShortcuts extends ViewBase
     @shortcuts = []
     this._registerHelpPopup()
     @helpList = $('#shortcuts')
+    this.addShortcuts new KeyShortcut('k', this._popupHelp, 'Show all keyboard shortcuts' )
 
   disable: =>
     $(document).unbind('keydown', this._clearLock)
@@ -50,13 +51,22 @@ class window.KeyShortcuts extends ViewBase
     @locked = false
 
 class window.KeyShortcut
-  constructor: (@keys, @_func, @desc, @enable) ->
+  constructor: (@keys, @_func, @desc, @enable = (-> true)) ->
     unless @keys instanceof Array
       @keys = [@keys]
 
   text: =>
-    keysStrings = ("'#{key}'" for key in @keys)
-    "#{keysStrings.join(', ')}: #{@desc}"
+    keysStrings = (this._keyDisplay(key) for key in @keys)
+    "#{keysStrings.join(', ')} : #{@desc}"
+
+  _keyDisplay: (stringKey) =>
+    switch stringKey
+      when 'up' then '↑'
+      when 'down' then '↓'
+      when 'left' then '←'
+      when 'right' then '→'
+      else
+        stringKey
 
   onKeydown: =>
     unless keyShortcuts.locked #this ensures that for one key stroke only one action is fired (needed to prevent chain reaction)
