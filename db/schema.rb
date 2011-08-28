@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110820042648) do
+ActiveRecord::Schema.define(:version => 20110828011824) do
 
   create_table "collectors", :force => true do |t|
     t.string   "user_id"
@@ -45,7 +45,6 @@ ActiveRecord::Schema.define(:version => 20110820042648) do
     t.datetime "updated_at"
     t.string   "type"
     t.string   "username"
-    t.string   "user_url"
     t.integer  "collector_id"
     t.boolean  "collecting",   :default => false
   end
@@ -65,10 +64,10 @@ ActiveRecord::Schema.define(:version => 20110820042648) do
 
   create_table "pictures", :force => true do |t|
     t.string   "title"
-    t.string   "url"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "date_upload"
+    t.string   "url"
     t.text     "pic_info_dump"
     t.boolean  "viewed",        :default => false
     t.string   "owner_name"
@@ -88,7 +87,6 @@ ActiveRecord::Schema.define(:version => 20110820042648) do
   create_table "syncages", :force => true do |t|
     t.integer  "picture_id"
     t.integer  "flickr_stream_id"
-    t.string   "flickr_stream_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

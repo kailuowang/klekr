@@ -19,7 +19,6 @@ module Collectr
     def fave_stream
       @fave_stream ||= FlickrStream.build_type(user_id: @collector.user_id,
                                                username: @collector.user_name,
-                                               user_url: 'N/A',
                                                collector: @collector,
                                                type: 'FaveStream')
     end

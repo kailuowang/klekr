@@ -33,18 +33,16 @@ class FlickrStream < ActiveRecord::Base
 
     def build_type(params)
       params = params.with_indifferent_access
-      unless params[:username] && params[:user_url]
+      unless params[:username]
         user = get_user_from_flickr(params[:user_id], params[:collector])
         params[:username] = user.username
-        params[:user_url] = user.photosurl
       end
       params[:type].constantize.new(params)
     end
 
     def find_or_create(params)
       stream = of_user(params[:user_id]).where(collector_id: params[:collector]).type(params[:type]).first
-      stream ||
-        create_type(params)
+      stream || create_type(params)
     end
 
     def inherited(child)
@@ -122,6 +120,10 @@ class FlickrStream < ActiveRecord::Base
 
   def icon_url
      "http://flickr.com/buddyicons/#{user_id}.jpg"
+  end
+
+  def user_url
+    "http://www.flickr.com/photos/#{user_id}/"
   end
 
   def subscribe
