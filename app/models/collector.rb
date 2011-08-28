@@ -1,16 +1,25 @@
 class Collector < ActiveRecord::Base
+  extend Collectr::FindOrCreate
+
   has_many :flickr_streams
   has_many :pictures
+
+  def self.create_default_stream(collector)
+    stream = FlickrStream.create_type(
+            user_id: Settings.default_stream_userid,
+            collector: collector,
+            type: FaveStream.name
+    )
+    stream.sync(1.month.ago, 40)
+  end
 
   def self.from_new_user(auth)
     user = auth.user
     user_id = user.nsid
     collector = create(user_id: user_id, auth_token: auth.token, user_name: user.username, full_name: user.fullname)
-    FlickrStream.create_type(
-      user_id: Settings.default_stream_userid,
-      collector: collector,
-      type: FaveStream.name
-    ) if Settings.default_stream_userid
+    if Settings.default_stream_userid
+      create_default_stream(collector)
+    end
     collector
   end
 

@@ -8,7 +8,7 @@ namespace :seed do
       collector = Collector.create(user_id: user_id,
                                    user_name: user.username,
                                    full_name: user.realname,
-                                   auth_token: Collectr::FlickrAuthToken)
+                                   auth_token: Collectr::DevFlickrAuthToken)
       Picture.update_all("collector_id = #{collector.id}", :collector_id => nil)
       FlickrStream.update_all("collector_id = #{collector.id}", :collector_id => nil)
     end

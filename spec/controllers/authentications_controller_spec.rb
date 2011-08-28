@@ -17,7 +17,7 @@ describe AuthenticationsController do
         auth = create_mock_auth(user_id)
 
         stub_flickr(controller, :auth).should_receive(:getToken).with(frob: 'a_fake_frob').and_return(auth)
-
+        Collector.stub(:create_default_stream)
         get "validate", :frob => 'a_fake_frob'
         collector = Collector.find_by_user_id(user_id)
         collector.auth_token.should == "a_fake_token"
@@ -30,6 +30,7 @@ describe AuthenticationsController do
         auth = create_mock_auth(user_id)
 
         stub_flickr(controller, :auth).should_receive(:getToken).with(frob: 'a_fake_frob').and_return(auth)
+        Collector.stub(:create_default_stream)
 
         get "validate", :frob => 'a_fake_frob'
         session[:collector_id].should == Collector.find_by_user_id(user_id).id

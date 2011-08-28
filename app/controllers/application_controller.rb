@@ -8,7 +8,9 @@ class ApplicationController < ActionController::Base
     end
 
     unless authenticating
-      self.current_collector = ::Collector.find_by_user_id(Collectr::FlickrUserId)
+      self.current_collector = ::Collector.find_or_create(user_id: Collectr::DevFlickrUserId,
+                                                          user_name: Collectr::DevFlickrUserName,
+                                                          auth_token: Collectr::DevFlickrAuthToken)
       return true
     end
 
