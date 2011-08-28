@@ -1,5 +1,6 @@
 class Collector < ActiveRecord::Base
   extend Collectr::FindOrCreate
+  include Collectr::FlickrIcon
 
   has_many :flickr_streams
   has_many :pictures
@@ -26,7 +27,6 @@ class Collector < ActiveRecord::Base
   def self.find_or_create_by_auth(auth)
     find_by_user_id(auth.user.nsid) || from_new_user(auth)
   end
-
 
   def collection(per_page, page, filters = {})
     min_rating = filters[:min_rating].to_i

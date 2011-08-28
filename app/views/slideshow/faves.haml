@@ -2,10 +2,13 @@
   __gridMode__ = true;
 
 - content_for(:top_left) do
-  %h3
-    My Collection
-  #filtersPanel
-    %h4
-      filter by rating:
-      = select_tag 'rating_filter', options_for_select(['★', '★★', '★★★', '★★★★', '★★★★★'])
+  .fleft
+    = icon(@current_collector)
+  .fleft
+    %h3
+      My Collection
+    #filtersPanel
+      %h4
+        filter by rating:
+        = select_tag 'rating_filter', options_for_select(['★', '★★', '★★★', '★★★★', '★★★★★'])
 =render partial: 'slideshow'

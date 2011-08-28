@@ -22,4 +22,7 @@ module ApplicationHelper
     links.map{|name, path| navigation_link(name, path)}.compact.join(' | ').html_safe
   end
 
+  def icon(with_icon)
+    render partial: '/general/icon', locals: {with_icon: with_icon}
+  end
 end

@@ -1,5 +1,6 @@
 class FlickrStream < ActiveRecord::Base
   include Collectr::Flickr
+  include Collectr::FlickrIcon
   extend Collectr::Flickr
 
 
@@ -118,9 +119,6 @@ class FlickrStream < ActiveRecord::Base
     end
   end
 
-  def icon_url
-     "http://flickr.com/buddyicons/#{user_id}.jpg"
-  end
 
   def user_url
     "http://www.flickr.com/photos/#{user_id}/"
