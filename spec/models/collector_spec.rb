@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe Collector do
+  before do
+    stub_retriever
+  end
   describe '.from_new_user' do
     it "should create a new flickr stream when a default stream user id is set" do
       Settings.stub(:default_stream_userid).and_return('defaultstream_user_id')

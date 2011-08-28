@@ -14,6 +14,7 @@ module Collectr
       @default_per_page = params[:per_page] || FLICKR_PHOTOS_PER_PAGE
     end
 
+
     def get(per_page = nil, page_number = 1, since = nil, before = nil)
       opts = {user_id: @user_id, extras: 'date_upload, owner_name'}.
               merge(paging_opts(per_page, page_number)).
@@ -21,8 +22,7 @@ module Collectr
       begin
         flickr.send(@module).send(@method, opts)
       rescue FlickRaw::FailedResponse => e
-        Rails.logger.error("failed sync #{@module} photo for #{@user_id} from flickr. Response code:" + e.code.to_s + "\n" + e.msg)
-        []
+        handle_flickr_error(e)
       end
     end
 
@@ -66,6 +66,15 @@ module Collectr
       {}.tap do |opts|
         opts[min_time_field] = since.to_i if since.present?
         opts[max_time_field] = before.to_i if before.present?
+      end
+    end
+
+    def handle_flickr_error(e)
+      if (Rails.env == 'test')
+        raise e
+      else
+        Rails.logger.error("failed sync #{@module} photo for #{@user_id} from flickr. Response code:" + e.code.to_s + "\n" + e.msg)
+        []
       end
     end
 
