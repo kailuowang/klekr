@@ -5,6 +5,9 @@
   __morePicturesPath__ = '#{@more_pictures_path}';
   __advance_by_progress__ = '#{@advance_by_progress}';
 
+- content_for(:top_right) do
+  = render partial: 'mode_switch'
+
 %img#spacer{src: '/assets/spacer.gif', height: '1px', width: '1280px'}
 
 = render partial: 'gridview'

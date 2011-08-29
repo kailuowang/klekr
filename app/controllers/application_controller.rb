@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  before_filter :navigation_setup
 
   def authenticate
 
@@ -54,4 +55,9 @@ class ApplicationController < ActionController::Base
     Settings.authentication
   end
 
+  def navigation_setup
+    @navigation_options = [{name: 'My Sources', path: flickr_streams_path},
+                           {name: 'My Collection', path: faves_slideshow_path},
+                           {name: 'Home', path:  slideshow_path} ]
+  end
 end

@@ -18,8 +18,12 @@ module ApplicationHelper
     end
   end
 
-  def navigation_links(links)
-    links.map{|name, path| navigation_link(name, path)}.compact.join(' | ').html_safe
+  def navigation_links()
+    if @navigation_options.present?
+      @navigation_options.map do |option|
+        navigation_link(option[:name], option[:path])
+      end.compact.join(' | ').html_safe
+    end
   end
 
   def icon(with_icon)

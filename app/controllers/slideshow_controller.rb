@@ -8,6 +8,7 @@ class SlideshowController < ApplicationController
     @more_pictures_path = pictures_flickr_stream_path(id)
     @alternative_stream = @stream.alternative_stream
     @empty_message = "#{@stream} has no pictures."
+    @navigation_options = @navigation_options.insert(0, name: @stream.alternative_stream.to_s, path: flickr_stream_path(@stream.alternative_stream))
   end
 
   def show

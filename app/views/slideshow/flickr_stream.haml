@@ -10,8 +10,4 @@
       = @stream.type_display
     %h5
       = render partial: 'stream_panel'
-- content_for(:top_right) do
-  %h4.inline
-    = link_to @stream.alternative_stream.to_s, flickr_stream_path(@stream.alternative_stream)
-    |
 =render partial: 'slideshow'
