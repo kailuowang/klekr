@@ -45,7 +45,7 @@ class ApplicationController < ActionController::Base
   end
 
   def js_ok
-    render_json([])
+    render_json(['success'])
   end
 
   private

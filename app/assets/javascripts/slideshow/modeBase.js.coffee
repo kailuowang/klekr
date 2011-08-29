@@ -3,7 +3,8 @@ class window.ModeBase extends Events
     keyShortcuts.addShortcuts(this.shortcuts())
 
   active: =>
-    gallery.currentMode is this
+    gallery.currentMode is this and !gallery.isEmpty()
+
 
   shortcuts: =>
     @_shortcuts ?= this._createShortcuts()

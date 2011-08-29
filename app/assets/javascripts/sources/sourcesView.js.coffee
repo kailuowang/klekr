@@ -7,6 +7,9 @@ class window.SourcesView extends ViewBase
 
     @expandLink.click(=> this._toggleManagementPanel(); false)
 
+  clear: =>
+    @container.empty()
+
   loadSources: (star, sources)=>
     newStarCategory = @template.clone()
     this._updateStar(newStarCategory, star)

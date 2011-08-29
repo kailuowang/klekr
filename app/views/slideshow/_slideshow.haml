@@ -9,6 +9,14 @@
 
 = render partial: 'gridview'
 
+#empty-gallery-message.container.hidden
+  #empty-gallery-message.well
+    - if @empty_message_partial.present?
+      = render partial: @empty_message_partial
+    - else
+      %h2
+        = @empty_message
+
 #slide{style: 'width:90%; text-align: center;'}
   .center{style: 'position: absolute; top: 35px; left: 0px; width: 100%; text-align: center;'}
     #pictureArea.hidden

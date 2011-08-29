@@ -33,8 +33,8 @@ class window.ContactsImporter extends ViewBase
     this._importContacts();
 
   _importContacts: =>
+    this._reportProgress()
     if(@contacts.length > 0)
-      this._reportProgress()
       contact = @contacts.shift()
       this._import contact, this._importContacts
     else

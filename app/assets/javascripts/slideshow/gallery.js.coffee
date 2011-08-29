@@ -1,7 +1,6 @@
 class window.Gallery
 
   constructor: ->
-
     @cacheSize = gridview.size * 2
     [@grid, @slide] = modes = [new Grid, new Slide]
     for mode in modes
@@ -19,15 +18,18 @@ class window.Gallery
   init: =>
     @currentPage = 0
     @pictures = []
-    this._retrieveMorePictures @currentMode.onFirstBatchOfPicturesLoaded
+    this._retrieveMorePictures this._firstBatchRetrieved
     this._alternativeView().off()
-    @currentMode.on()
+    @currentMode.off()
 
   findIndex: (picId)=>
     (i for picture, i in @pictures when picture.id is picId)[0]
 
   size: =>
     @pictures.length
+
+  isEmpty: =>
+    this.size() is 0
 
   toggleMode: =>
     progress = this._currentProgress()
@@ -50,9 +52,18 @@ class window.Gallery
       @retriever = new PictureRetriever(@currentPage, @cacheSize, this._filterOpts())
       @retriever.bind('batch-retrieved', this._addPictures)
       @retriever.bind('first-batch-retrieved', somePicturesReady) if somePicturesReady?
-      @retriever.bind('done-retrieving', => @retriever = null)
+      @retriever.bind('done-retrieving', this._onRetrieverFinished)
       @retriever.retrieve()
       @currentPage += 1 unless @advanceByProgress
+
+  _firstBatchRetrieved: =>
+    @currentMode.on()
+    @currentMode.onFirstBatchOfPicturesLoaded?()
+
+  _onRetrieverFinished: =>
+    @retriever = null
+    if this.isEmpty()
+      generalView.showEmptyGalleryMessage()
 
   _applyRatingFilter: (rating) =>
     @_ratingFilter = rating

@@ -9,6 +9,7 @@ class window.MySources
       this._display(allSources)
 
   _display: (sources) =>
+    @view.clear()
     sourcesByGroup = _.groupBy sources, (s) -> s.rating
     keys = _.keys(sourcesByGroup)
     for star in (_.sortBy keys, (r) -> -r)

@@ -3,11 +3,10 @@ class window.PictureRetriever extends Events
     @_numOfSubBatches = 2
     @morePicturesPath = __morePicturesPath__
 
-
   retrieve: =>
     this._retrieveBatch 1, (retrievedInFirst) =>
-      this.trigger('first-batch-retrieved')
       if retrievedInFirst.length > 0
+        this.trigger('first-batch-retrieved')
         this._retrieveBatch 2, (retrievedInSecond) =>
           this._preload(retrievedInFirst, retrievedInSecond)
           this.trigger('done-retrieving')
@@ -18,7 +17,8 @@ class window.PictureRetriever extends Events
     opts = this._batchOpts( @_numOfSubBatches * @pageNumber + batchNum )
     server.post @morePicturesPath, opts, (data) =>
       pictures = ( new Picture(picData) for picData in data )
-      this.trigger('batch-retrieved', pictures)
+      if pictures.length > 0
+        this.trigger('batch-retrieved', pictures)
       success?(pictures)
 
   _batchOpts: (page)=>

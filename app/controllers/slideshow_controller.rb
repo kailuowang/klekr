@@ -7,15 +7,18 @@ class SlideshowController < ApplicationController
     @stream = FlickrStream.find(id)
     @more_pictures_path = pictures_flickr_stream_path(id)
     @alternative_stream = @stream.alternative_stream
+    @empty_message = "#{@stream} has no pictures."
   end
 
   def show
     @advance_by_progress = true #contrast to progress by paging
     @more_pictures_path = new_pictures_slideshow_path
+    @empty_message_partial = 'no_new_pictures'
   end
 
   def faves
     @more_pictures_path = fave_pictures_slideshow_path
+    @empty_message = "You haven't collect any pictures yet"
   end
 
   def fave_pictures

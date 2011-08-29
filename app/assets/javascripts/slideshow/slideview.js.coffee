@@ -57,10 +57,10 @@ class window.Slideview extends ViewBase
 
   adjustImageFrame: ->
     displayHeight = generalView.displayHeight
-    $('#imageFrameInner').css('height', (displayHeight - 80) + 'px')
-    $('#bottomBanner').css('top',(displayHeight + 20) + 'px' )
-    @bottomLeft.css('top', (displayHeight - 5 ) + 'px' )
-    @bottomRight.css('top', (displayHeight - 5 ) + 'px' )
+    $('#imageFrameInner').css('height', (displayHeight - 40) + 'px')
+    $('#bottomBanner').css('top',(displayHeight + 50) + 'px' )
+    @bottomLeft.css('top', (displayHeight + 24 ) + 'px' )
+    @bottomRight.css('top', (displayHeight + 24 ) + 'px' )
 
   switchVisible: (showing) =>
     this.setVisible @bottomLeft, showing

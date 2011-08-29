@@ -10,7 +10,7 @@ class Server
 
   ajax: (url, data, type, callback) ->
     $.ajax(
-            url: url,
+            url: url + '.js',
             dataType: 'json',
             data: data,
             type: type

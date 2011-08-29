@@ -119,7 +119,6 @@ class FlickrStream < ActiveRecord::Base
     end
   end
 
-
   def user_url
     "http://www.flickr.com/photos/#{user_id}/"
   end

@@ -14,12 +14,16 @@ class window.GeneralView extends ViewBase
   nextClick: (listener) ->
     $('#right').click(listener)
 
+  showEmptyGalleryMessage: =>
+    $('.sideNav').hide()
+    $('#empty-gallery-message').show()
+
   previousClick: (listener) ->
     $('#left').click(listener)
 
   _calculateDimensions: ->
     [@windowWidth, @windowHeight] = this.honeycombAdjustedDimension()
-    [@displayWidth, @displayHeight] = [@windowWidth - 80, @windowHeight - 40]
+    [@displayWidth, @displayHeight] = [@windowWidth - 80, @windowHeight - 68]
 
 
   _adjustSpacerWidth: ->
