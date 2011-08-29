@@ -169,11 +169,11 @@ class FlickrStream < ActiveRecord::Base
   end
 
   def star_rating
-    if rating < 0.03
+    if rating < 0.02
       1
     elsif rating < 0.05
       2
-    elsif rating < 0.1
+    elsif rating < 0.12
       3
     elsif rating < 0.2
       4
