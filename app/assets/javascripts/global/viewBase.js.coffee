@@ -36,7 +36,7 @@ class window.ViewBase extends Events
 
   honeycombAdjustedDimension:  =>
     if this.isHoneycomb()
-      [1280, 756]
+      [1280, 800] #the real size of browser is less than that, but we can tollerate a bit scroll bar in honeycomb.
     else
       [$(window).width(), $(window).height()]
 
