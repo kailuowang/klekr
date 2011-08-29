@@ -3,10 +3,13 @@ class FlickrStreamsController < ApplicationController
   before_filter :authenticate, :load_stream
 
   def index
+    @sources_path = my_sources_flickr_streams_path
+    @contacts_path = contacts_users_path
+    @import_contact_path = flickr_streams_path
+  end
+
+  def my_sources
     respond_to do |format|
-      format.html do
-        @sources_path = flickr_streams_path
-      end
       format.js do
         streams = FlickrStream.collected_by(current_collector).includes(:monthly_scores)
         render json: data_for_streams(streams)
@@ -23,14 +26,19 @@ class FlickrStreamsController < ApplicationController
     end
   end
 
+  def create
+    Collectr::ContactsImporter.new(@current_collector).import(params)
+    js_ok
+  end
+
   def subscribe
     @flickr_stream.subscribe
-    render_json([])
+    js_ok
   end
 
   def unsubscribe
     @flickr_stream.unsubscribe
-    render_json([])
+    js_ok
   end
 
   def pictures
@@ -52,14 +60,14 @@ class FlickrStreamsController < ApplicationController
   def adjust_rating
     respond_to do |format|
       params[:adjustment] == 'up' ? @flickr_stream.bump_rating : @flickr_stream.trash_rating
-      render_json([])
+      js_ok
     end
   end
 
   #PUT /flickr_stream/1/mark_all_as_read
   def mark_all_as_read
     @flickr_stream.mark_all_as_read
-    render_json([])
+    js_ok
   end
 
   #POST /flickr_streams/import

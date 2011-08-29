@@ -45,9 +45,7 @@ class ApplicationController < ActionController::Base
   end
 
   def js_ok
-    respond_to do |format|
-      format.js  { render :json => {} }
-    end
+    render_json([])
   end
 
   private

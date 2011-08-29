@@ -1,20 +1,19 @@
 require 'spec_helper'
 
 describe FlickrStreamsController do
-  describe "get index" do
-
+  describe "get my_sources" do
 
     it "assigns flickr streams that has collecting flag as true" do
       stream = Factory(:fave_stream, collecting: true, collector: Factory(:collector))
       controller.stub!(:current_collector).and_return stream.collector
-      get "index", format: :js
+      get "my_sources", format: :js
       response.body.should include(stream.user_id)
     end
 
     it "not assigns flickr streams that has collecting flag as false" do
       stream = Factory(:fave_stream, collecting: false, collector: Factory(:collector))
       controller.stub!(:current_collector).and_return stream.collector
-      get "index", format: :js
+      get "my_sources", format: :js
       response.body.should_not include(stream.user_id)
 
     end

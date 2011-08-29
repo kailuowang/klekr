@@ -3,7 +3,7 @@
 
 - content_for(:top_left) do
   .fleft
-    = icon(@stream)
+    = link_to(icon(@stream), @stream.user_url, target: '_blank')
   .fleft
     %h4
       #{link_to(@stream.username, @stream.user_url, target: '_blank')}'s

@@ -6,7 +6,7 @@ Collectr::Application.routes.draw do
     end
   end
 
-  resources :flickr_streams, :only => [:index, :show] do
+  resources :flickr_streams, :only => [:index, :show, :create] do
     member do
       get 'sync'
       put 'adjust_rating'
@@ -18,6 +18,7 @@ Collectr::Application.routes.draw do
 
     collection do
       post 'import'
+      get 'my_sources'
     end
 
   end
@@ -40,6 +41,7 @@ Collectr::Application.routes.draw do
     end
     collection do
       post 'search'
+      get 'contacts'
     end
   end
 

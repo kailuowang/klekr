@@ -1,6 +1,7 @@
 class window.MySources
-  constructor: (@sourcesPath)->
+  constructor: (@sourcesPath, @contactImporter)->
     @view = new SourcesView
+    @contactImporter.bind 'imported', this.init
 
   init: =>
     server.get @sourcesPath, {}, (data) =>
@@ -12,8 +13,12 @@ class window.MySources
     keys = _.keys(sourcesByGroup)
     for star in (_.sortBy keys, (r) -> -r)
       @view.loadSources(star, sourcesByGroup[star])
+    @view.setVisibleEmptySourceSection(sources.length is 0)
     @view.showManagementSection()
 
+
 $ ->
-  window.mySources = new MySources(__sourcesPath__)
+  contactImporter = new ContactsImporter(__contactsPath__, __importContactPath__)
+  window.mySources = new MySources(__sourcesPath__, contactImporter)
+
   mySources.init()

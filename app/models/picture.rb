@@ -59,6 +59,10 @@ class Picture < ActiveRecord::Base
     end
   end
 
+  def owner_id
+    pic_info.owner.is_a?(String) ? pic_info.owner : pic_info.owner['nsid']
+  end
+
   def unfave
     if faved?
       update_attribute(:rating, 0)

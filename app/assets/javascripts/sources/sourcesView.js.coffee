@@ -4,7 +4,8 @@ class window.SourcesView extends ViewBase
     @container = $('#sources-list')
     @expandLink = $('#expand-management')
     @importPanel = $('#sources-import-panel')
-    @expandLink.click this._toggleManagementPanel
+
+    @expandLink.click(=> this._toggleManagementPanel(); false)
 
   loadSources: (star, sources)=>
     newStarCategory = @template.clone()
@@ -14,7 +15,14 @@ class window.SourcesView extends ViewBase
     newStarCategory.show()
 
   showManagementSection: =>
+    @importPanel.hide()
     $('#sources-management').show()
+
+  setVisibleEmptySourceSection: (visible)=>
+    this.setVisible($('#empty-sources'), visible)
+
+  showContacts: =>
+    contacts-list
 
   _updateStar: (categoryDiv, star) =>
     label = categoryDiv.find('.stars-label').first()
@@ -42,4 +50,5 @@ class window.SourcesView extends ViewBase
       @importPanel.slideUp()
     else
       @importPanel.slideDown()
+
 

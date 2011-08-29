@@ -2,6 +2,7 @@
   = javascript_include_tag 'sources.js'
   :javascript
     __sourcesPath__ = '#{@sources_path}';
+    __contactsPath__ = '#{@contacts_path}';
 
 - content_for(:top_left) do
   %h3
@@ -22,9 +23,29 @@
           .source-type.text-shadow
             works
 
+  #empty-sources.well.hidden
+    %h2
+      Darn! I have no sources.  ↓
+
   #sources-management.well.hidden
-    %h2#expand-management.pointer
-      I want more sources!
+    %h2.pointer
+      %a#expand-management{src: '#'}
+        I want more sources!
     #sources-import-panel.hidden
-      %h4
-        Add all my flickr contacts as my sources!
+
+      .row
+        .cell.import-method.well
+          %h4.pointer
+            %a#add-contracts-link{href: '#'}
+              Add all my flickr contacts as my sources.
+        .cell.import-method.well
+          %h4= link_to 'Add source by user', users_path
+      .row
+        .cell.import-method.well
+          %h4 Import from my google reader subscription (coming soon)
+        .cell.import-method.well
+          %h4 Guess sources from your faves
+          %h4 (coming soon)
+
+
+= render partial: 'import_contacts'

@@ -1,4 +1,4 @@
-class window.ViewBase
+class window.ViewBase extends Events
   @showingPopup: false
   $.fx.interval = 50;
   @isHoneycomb: $(window).width() is 980

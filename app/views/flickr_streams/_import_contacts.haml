@@ -1,0 +1,21 @@
+:javascript
+  __importContactPath__ = '#{@import_contact_path}'
+
+#import-popup.modal-popup
+  #loading-contacts
+    Loading contacts from flickr
+    = image_tag '/assets/loading.gif'
+  #display-contacts.hidden
+    %h4
+      You have
+      %span#num-of-contacts
+      contacts on flickr:
+    %span#contacts-list
+
+    %h3.mt20
+      %a#do-import-contacts{href: '#'}
+        Yes! Add them!
+
+  #import-progress.hidden
+    %h4 Adding contacts
+    #progress-bar

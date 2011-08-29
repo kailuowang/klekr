@@ -7,10 +7,13 @@ class UsersController < ApplicationController
     redirect_to(action: :flickr_stream, type: FlickrStream::DEFAULT_TYPE)
   end
 
-
   def flickr_stream
     stream = FlickrStream.find_or_create(user_id: params[:id], collector: current_collector, type: params[:type])
     redirect_to(action: :show, controller: :flickr_streams, id: stream.id)
+  end
+
+  def contacts
+    render_json Collectr::ContactsImporter.new(@current_collector).contacts
   end
 
   def index
