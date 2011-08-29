@@ -12,7 +12,7 @@ class window.Slideview extends ViewBase
     @imageCaption = $('#imageCaption')
     @bottomLeft = $('#bottomLeft')
     @bottomRight = $('#bottomRight')
-    this.adjustImageFrame()
+    this._adjustImageFrame()
 
   display: (picture) ->
     if @pictureArea.is(':visible')
@@ -28,7 +28,6 @@ class window.Slideview extends ViewBase
   updateDOM: (picture) ->
     @interestingness.text(picture.data.interestingness)
     @mainImg.attr('src', picture.url())
-    @imageCaption.css('width', picture.width + 'px')
     @titleLink.attr('href', picture.data.flickrPageUrl)
     @titleLink.text picture.displayTitle()
     @ownerLink.attr('href', picture.data.ownerPath)
@@ -55,12 +54,12 @@ class window.Slideview extends ViewBase
       listener()
       false
 
-  adjustImageFrame: ->
+  _adjustImageFrame: ->
     displayHeight = generalView.displayHeight
     $('#imageFrameInner').css('height', (displayHeight - 40) + 'px')
     $('#bottomBanner').css('top',(displayHeight + 50) + 'px' )
-    @bottomLeft.css('top', (displayHeight + 24 ) + 'px' )
-    @bottomRight.css('top', (displayHeight + 24 ) + 'px' )
+    @bottomLeft.css('top', (displayHeight + 25 ) + 'px' )
+    @bottomRight.css('top', (displayHeight + 36 ) + 'px' )
 
   switchVisible: (showing) =>
     this.setVisible @bottomLeft, showing

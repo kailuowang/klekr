@@ -87,7 +87,8 @@ class window.Picture extends Events
 
   largerVersionWithinWindow: (image) ->
     [largeWidth, largeHeight] = this.guessLargeSize(image.width, image.height)
-    largeWidth < generalView.displayWidth and largeHeight < generalView.displayHeight - 41
+    captionHeight = 20
+    largeWidth < generalView.displayWidth and largeHeight < generalView.displayHeight - captionHeight
 
   guessLargeSize: (smallerWidth, smallerHeight) ->
     longEdge = Math.max(smallerWidth, smallerHeight)

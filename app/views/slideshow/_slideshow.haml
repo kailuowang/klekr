@@ -18,22 +18,19 @@
         = @empty_message
 
 #slide{style: 'width:90%; text-align: center;'}
-  .center{style: 'position: absolute; top: 35px; left: 0px; width: 100%; text-align: center;'}
+  .center{style: 'position: absolute; top: 55px; left: 0px; width: 100%; text-align: center;'}
     #pictureArea.hidden
       #imageFrameOuter{style: 'display: table; width: 100%'}
         #imageFrameInner{style: 'display: table-cell; vertical-align: middle;'}
-          #imageFrame{align: 'center'}
-            %img#picture{style: 'vertical-align: middle;'}
-            #imageCaption
-              .fleft
-                %h5
-                  %a#title{target: '_blank'}
-                  %b by:
-                  %a#owner
-              .fright
-                %h5
-                  %span#fromTitle Sources:
-                  #fromStreams{style: 'display:inline'}
+          %img#picture{style: 'vertical-align: middle;'}
+          #imageCaption
+            %h5
+              %a#title{target: '_blank'}
+              by:
+              %a#owner
+              %span#fromTitle
+                Sources:
+                %span#fromStreams
 
 #left.sideNav{style: 'position: absolute; top: 60px; left: 0px;'}
   %h2.arrow#leftArrow{style: 'text-align:left; padding-left: 5px;'}
