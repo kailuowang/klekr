@@ -35,6 +35,12 @@ describe FlickrStream do
     end
 
     describe "#find_or_create" do
+      it "creates one stream " do
+        collector = Factory(:collector)
+        FlickrStream.find_or_create(user_id: 'a_user_id', collector: collector, type: 'UploadStream')
+        UploadStream.count.should == 1
+      end
+
       it "creates a stream that is not collecting if the stream does not exist yet" do
         collector = Factory(:collector)
         Factory(:fave_stream, user_id: 'a_user_id', collector: collector)
@@ -50,6 +56,8 @@ describe FlickrStream do
         FlickrStream.find_or_create(user_id: 'a_user_id', collector: collector, type: 'FaveStream').should == stream
         stream.reload.should be_collecting
       end
+
+
     end
 
     describe "#sync_all" do
@@ -309,9 +317,21 @@ describe FlickrStream do
         Collectr::FlickrPictureRetriever.stub(:new).and_return(@retriever)
       end
 
-      it "does not save pictures to db" do
+      it "does not save pictures to db when not collecting" do
+        @flickr_stream.collecting = false
         @flickr_stream.get_pictures(3)
         Picture.count.should == 0
+      end
+
+      it "does save pictures to db when collecting" do
+        @flickr_stream.collecting = true
+        @flickr_stream.get_pictures(3)
+        Picture.count.should == 3
+        @flickr_stream.reload.pictures.count.should == 3
+      end
+      it "does return pictures when collecting" do
+        @flickr_stream.collecting = true
+        @flickr_stream.get_pictures(1).first.should be_a(Picture)
       end
 
     end
