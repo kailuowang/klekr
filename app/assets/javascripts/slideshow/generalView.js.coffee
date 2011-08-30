@@ -17,11 +17,10 @@ class window.GeneralView extends ViewBase
   updateModeIndicator: (isGrid) =>
     @_indicatorPanel.show()
     left = if isGrid then 36 else 1
-    unless "#{left}px" is @_indicator.css('left')
+    
+    unless alreadyInPosition = "#{left}px" is @_indicator.css('left')
       animation = if (left is 36) then '+=35' else '-=35'
-      @_indicator.animate({
-        left: animation
-      }, 100)
+      @_indicator.animate {left: animation}, ViewBase.duration
 
   toggleModeClick: (listener) ->
     @_indicatorPanel.click listener
