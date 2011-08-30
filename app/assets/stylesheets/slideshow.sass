@@ -2,37 +2,38 @@
   .source-icon-placeholder
     margin-right: 5px
 
-#top-banner
+#mode-indicator
+  cursor: pointer
+
   #indicator-frm
     margin-right: 10px
-    width: 77px
-    height: 35px
+    width: 71px
     margin-bottom: 0px
-    padding: 3px
-    background: #151515
+    padding: 2px
+    background: #050505
 
     #slide-mode-icon
-      background: #252525
-      width: 29px
-      height: 29px
-      margin-top: 3px
-      margin-left: 4px
+      background: #353535
+      width: 27px
+      height: 27px
+      margin-top: 4px
+      margin-left: 5px
     #grid-mode-icon
-      width: 32px
-      height: 32px
-      margin-top: 0px
-      margin-left: 8px
+      width: 30px
+      height: 30px
+      margin-top: 1px
+      margin-left: 5px
       .grid-mode-square
-        background: #252525
-        width: 13px
-        height: 13px
+        background: #353535
+        width: 12px
+        height: 12px
         margin-top: 3px
         margin-left: 3px
 
     #indicator
       position: relative
       border-radius: 3px
-      border: 1px solid #555
+      border: 1px solid #353535
       top: 0px
       left: 1px
       width: 33px
@@ -41,7 +42,7 @@
 
 
 #empty-gallery-message
-  margin-top: 200px
+  margin-top: 150px
 
 .gridPicture
   float: left
@@ -88,10 +89,19 @@
   width: 100px
   height: 23px
 
-.sideNav
+.side-nav
+  display: none
   width: 50px
   vertical-align: middle
   cursor: pointer
+  position: absolute
+  top: 60px
+  &.right
+    right: 0px
+  &.left
+    left: 0px
+  .arrow
+    display: none
 
 #slide
   #imageFrameInner
@@ -99,4 +109,3 @@
     margin-right: auto
     #imageCaption
       text-align: center
-

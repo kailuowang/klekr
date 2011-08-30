@@ -2,7 +2,6 @@ class window.Slide extends ModeBase
   constructor: ->
     @currentIndex = 0
     @favePanel = new FavePanel(this.currentPicture)
-    slideview.toGridLinkClick this.backToGrid
     super()
 
   displayCurrentPicture: =>

@@ -15,7 +15,7 @@ class window.Slideview extends ViewBase
     this._adjustImageFrame()
 
   display: (picture) ->
-    if @pictureArea.is(':visible')
+    if this.showing(@pictureArea)
       this.fadeInOut @pictureArea, false, =>
         this._fadeInto(picture)
     else
@@ -48,11 +48,6 @@ class window.Slideview extends ViewBase
 
   largeWindow: ->
     generalView.displayWidth > 1024 and generalView.displayHeight > 1024
-
-  toGridLinkClick: (listener) ->
-    $('#toGridLink').click ->
-      listener()
-      false
 
   _adjustImageFrame: ->
     displayHeight = generalView.displayHeight

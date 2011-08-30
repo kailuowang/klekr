@@ -49,9 +49,6 @@ class window.SourcesView extends ViewBase
     cell.find('.source-type').text(source.type)
 
   _toggleManagementPanel: () =>
-    if @importPanel.is(':visible')
-      @importPanel.slideUp()
-    else
-      @importPanel.slideDown()
+    @importPanel.slideToggle()
 
 

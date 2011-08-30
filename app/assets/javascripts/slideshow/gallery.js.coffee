@@ -10,6 +10,7 @@ class window.Gallery
     @advanceByProgress = __advance_by_progress__ #vs progress by paging
     generalView.nextClick => @currentMode.navigateToNext?()
     generalView.previousClick => @currentMode.navigateToPrevious?()
+    generalView.toggleModeClick this.toggleMode
     @ratingFilterView = new RatingFilterView(@grid)
     @typeFilterView = new TypeFilterView(@grid)
     @ratingFilterView.filterChange this._applyRatingFilter
@@ -37,6 +38,7 @@ class window.Gallery
     @currentMode = this._alternativeView()
     @currentMode.on()
     @currentMode.updateProgress(progress)
+    this._updateModeIndicatorInView()
 
   isLoading: =>
     @retriever?
@@ -59,6 +61,11 @@ class window.Gallery
   _firstBatchRetrieved: =>
     @currentMode.on()
     @currentMode.onFirstBatchOfPicturesLoaded?()
+    this._updateProgressInView()
+    this._updateModeIndicatorInView()
+
+  _updateModeIndicatorInView: =>
+    generalView.updateModeIndicator(@currentMode is @grid)
 
   _onRetrieverFinished: =>
     @retriever = null
