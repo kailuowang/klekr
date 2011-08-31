@@ -47,15 +47,12 @@ class window.Gridview extends ViewBase
     item
 
   _boarderClasses: (index) =>
+    isTop =  (index) => index < @columns
+    isLeft =  (index) => index % @columns is 0
+
     _([]).tap (classes) =>
-      classes.push('top') if this._isTop(index)
-      classes.push('left') if this._isLeft(index)
-
-  _isTop: (index) =>
-    index < @columns
-
-  _isLeft: (index) =>
-    index % @columns is 0
+      classes.push('top') if isTop(index)
+      classes.push('left') if isLeft(index)
 
   _itemClickHandler: (e) =>
     clickedDiv = $(e.currentTarget)
