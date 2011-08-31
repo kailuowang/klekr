@@ -31,6 +31,10 @@ describe Collectr::Editor do
       @editor.recommendation_streams_for(@collector).map(&:collector).uniq.should == [@collector]
     end
 
+    it 'creates streams that are collecting' do
+      @editor.recommendation_streams_for(@collector).all?(&:collecting).should be_true
+    end
+
     it 'create the same streams with 4+ star rating streams of the editor collector' do
       editor_stream = Factory(:fave_stream, collector: @editor.editor_collector)
       editor_stream.bump_rating(4)
