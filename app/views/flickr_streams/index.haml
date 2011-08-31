@@ -45,10 +45,12 @@
           %h4= link_to 'Add source by user', users_path
       .row
         .cell.import-method.well
-          %h4 Import from my google reader subscription (coming soon)
+          %h4.pointer
+            %a#add-editor-streams-link{href: '#'}
+              Add editorial choice of sources.
         .cell.import-method.well
-          %h4 Guess sources from your faves
-          %h4 (coming soon)
+          %h4 Import from my google reader subscription (coming soon)
+        
 
 
 = render partial: 'import_contacts'
