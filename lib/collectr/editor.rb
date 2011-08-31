@@ -28,8 +28,6 @@ module Collectr
       stream
     end
 
-
-
     def recommendation_streams_for(collector)
       [editorial_collection_stream_for(collector)] + create_recommendation_streams_for(collector)
     end
