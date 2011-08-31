@@ -5,8 +5,11 @@
     __contactsPath__ = '#{@contacts_path}';
 
 - content_for(:top_left) do
-  %h3
-    My Sources
+  .fleft
+    = icon(@current_collector)  
+  .fleft
+    %h3
+      My Sources
 
 #sources.container
   #sources-list
