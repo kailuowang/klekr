@@ -153,8 +153,10 @@ class FlickrStream < ActiveRecord::Base
     score_for(source_date).add(to_add)
   end
 
-  def bump_rating
-    adjust_rating(:bump)
+  def bump_rating(to = star_rating + 1)
+    while(star_rating < to) do
+      adjust_rating(:bump)
+    end
   end
 
   def trash_rating

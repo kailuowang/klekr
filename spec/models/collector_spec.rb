@@ -4,20 +4,21 @@ describe Collector do
   before do
     stub_retriever
   end
+
   describe '.from_new_user' do
-    it "should create a new flickr stream when a default stream user id is set" do
-      Settings.stub(:default_stream_userid).and_return('defaultstream_user_id')
+    it "should create a new flickr stream when editor is ready" do
+      Settings.stub(:editor_user_id).and_return('defaultstream_user_id')
+      Settings.stub(:editor_name).and_return('Mel Gibson')
+      Collectr::Editor.new.ensure_editor_collector
       auth = mock( user: mock(
                       nsid: 'auersid',
                       username: 'a new user',
                       fullname: 'newusers full'),
                    token: 'a_token')
 
-      FlickrStream.should_receive(:get_user_from_flickr).with('defaultstream_user_id', anything).
-              and_return(mock(username: 'defaultstream username', photosurl: 'someuser url'))
       collector = Collector.from_new_user(auth)
       FlickrStream.first.collector.should == collector
-      FlickrStream.first.username.should == 'defaultstream username'
+      FlickrStream.first.username.should == Settings.editor_name
     end
   end
 
