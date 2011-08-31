@@ -13,15 +13,17 @@ class window.Gridview extends ViewBase
     @grid.children().size()
 
   highlightPicture: (picture) ->
-    $('.gridPicture').css('background', '')
+    $('.grid-picture').css('background', '')
     this._highlightPictureDiv $('#' + this._picId(picture)) if picture?
 
   loadPictures: (pictures) ->
     @grid.empty()
-    this.load picture for picture in pictures
+    index = 0
+    for picture in pictures
+      this._load picture, index++
 
-  load: (picture) ->
-    newItem = this._createPictureItem(picture)
+  _load: (picture, index) ->
+    newItem = this._createPictureItem(picture, index)
     @grid.append(newItem)
     newItem.show()
 
@@ -33,8 +35,9 @@ class window.Gridview extends ViewBase
     @rows ?= Math.floor( generalView.displayHeight /  270 )
     @size = @columns * @rows
 
-  _createPictureItem: (picture)=>
+  _createPictureItem: (picture, index)=>
     item = @template.clone()
+    item.addClass(c) for c in this._boarderClasses(index)
     item.attr('id', this._picId(picture))
     item.attr('data', picture.id)
     img = item.find('#imgItem')
@@ -42,6 +45,17 @@ class window.Gridview extends ViewBase
     this._updateRating(picture, item)
     item.click this._itemClickHandler
     item
+
+  _boarderClasses: (index) =>
+    _([]).tap (classes) =>
+      classes.push('top') if this._isTop(index)
+      classes.push('left') if this._isLeft(index)
+
+  _isTop: (index) =>
+    index < @columns
+
+  _isLeft: (index) =>
+    index % @columns is 0
 
   _itemClickHandler: (e) =>
     clickedDiv = $(e.currentTarget)
@@ -62,8 +76,8 @@ class window.Gridview extends ViewBase
     'pic-' + picture.id
 
   _adjustWidth: =>
-    $('#gridPictures').css('width', @columns * 260 + 'px')
-    $('#gridPictures').css('height', @rows * 270 + 'px')
+    $('#gridPictures').css('width', (@columns * 260 + 1) + 'px')
+    $('#gridPictures').css('height',(@rows * 270 + 1) + 'px')
     $('#gridInner').css('height', (generalView.displayHeight - 80) + 'px')
 
   switchVisible: (showing)=>

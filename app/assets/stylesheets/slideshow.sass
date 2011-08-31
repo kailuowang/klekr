@@ -45,15 +45,23 @@
 #empty-gallery-message
   margin-top: 150px
 
-.gridPicture
-  float: left
-  display: none
-  cursor: pointer
-  width: 259px
-  height: 269px
-  text-align: center
-  border-right: 1px solid #303030
-  border-bottom: 1px solid #303030
+#gridview
+  #gridPictures
+    margin-left: auto
+    margin-right: auto
+    .grid-picture
+      float: left
+      display: none
+      cursor: pointer
+      width: 259px
+      height: 269px
+      text-align: center
+      border-right: 1px solid #303030
+      border-bottom: 1px solid #303030
+      &.top
+        border-top: 1px solid #303030
+      &.left
+        border-left: 1px solid #303030
 
 #bottomLeft
   text-align: left
