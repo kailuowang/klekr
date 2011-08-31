@@ -49,6 +49,8 @@ class window.SourcesView extends ViewBase
     cell.find('.source-type').text(source.type)
 
   _toggleManagementPanel: () =>
-    @importPanel.slideToggle()
+    @importPanel.slideToggle =>
+      if this.showing(@importPanel)
+        $(window).scrollTop @importPanel.offset().top
 
 
