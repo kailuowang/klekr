@@ -19,7 +19,7 @@ module Collectr
       new_streams = [ FlickrStream.find_or_create(opts.merge(type: FaveStream.name)),
                       FlickrStream.find_or_create(opts.merge(type: UploadStream.name))]
       new_streams.each do |stream|
-        stream.sync(1.month.ago, Collectr::FlickrPictureRetriever::FLICKR_PHOTOS_PER_PAGE)
+        stream.sync(1.month.ago, Collectr::FlickrPictureRetriever::FLICKR_PHOTOS_PER_PAGE / 4)
       end
     end
   end
