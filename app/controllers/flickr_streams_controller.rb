@@ -1,11 +1,10 @@
 class FlickrStreamsController < ApplicationController
   include Collectr::PictureControllerHelper
+  include Collectr::FlickrStreamsControllerHelper
+
   before_filter :authenticate, :load_stream
 
   def index
-    @sources_path = my_sources_flickr_streams_path
-    @contacts_path = contacts_users_path
-    @import_contact_path = flickr_streams_path
   end
 
   def my_sources
@@ -48,12 +47,10 @@ class FlickrStreamsController < ApplicationController
   end
 
 
-  #GET /flickr_stream/1/sync
+  #PUT /flickr_stream/1/sync
   def sync
-    respond_to do |format|
-      synced = @flickr_stream.sync
-      format.html { redirect_to(:back, :notice => "#{synced} new pictures were synced from #{@flickr_stream} @#{DateTime.now.to_s(:short)} " ) }
-    end
+    @flickr_stream.sync
+    js_ok
   end
 
   #PUT /flickr_stream/1/bump_rating
@@ -83,16 +80,4 @@ class FlickrStreamsController < ApplicationController
     @flickr_stream = FlickrStream.find(params[:id].to_i) if params[:id]
   end
 
-  def data_for_streams(streams)
-    streams.map do |stream|
-      {
-        id: stream.id,
-        iconUrl: stream.icon_url,
-        ownerName: stream.username,
-        type: stream.type_display,
-        slideUrl: flickr_stream_path(stream),
-        rating: stream.star_rating
-      }
-    end
-  end
 end

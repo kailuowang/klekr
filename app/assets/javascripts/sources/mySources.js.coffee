@@ -1,7 +1,8 @@
 class window.MySources
-  constructor: (@sourcesPath, @contactImporter)->
-    @view = new SourcesView
+  constructor: (@sourcesPath, @contactImporter, @editorStreamsImporter)->
+    @view = new MySourcesView
     @contactImporter.bind 'imported', this.init
+    @editorStreamsImporter.bind 'imported', this.init
 
   init: =>
     server.get @sourcesPath, {}, (data) =>
@@ -20,6 +21,7 @@ class window.MySources
 
 $ ->
   contactImporter = new ContactsImporter(__contactsPath__, __importContactPath__)
-  window.mySources = new MySources(__sourcesPath__, contactImporter)
+  editorStreamsImporter = new EditorStreamsImporter(__editorStreamsPath__, __createRecommendationStreamsPath__, __syncStreamPath__)
+  window.mySources = new MySources(__sourcesPath__, contactImporter, editorStreamsImporter)
 
   mySources.init()

@@ -6,9 +6,11 @@ Collectr::Application.routes.draw do
     end
   end
 
+  resources :editor_recommendations, :only => [:index, :create]
+
   resources :flickr_streams, :only => [:index, :show, :create] do
     member do
-      get 'sync'
+      put 'sync'
       put 'adjust_rating'
       put 'mark_all_as_read'
       post 'pictures'

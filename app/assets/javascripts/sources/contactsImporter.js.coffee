@@ -6,7 +6,7 @@ class window.ContactsImporter extends ViewBase
     @importPopup = $('#import-popup')
     @progressBar = $('#progress-bar')
     @importLink = $('#do-import-contacts')
-    @importLink.click this._startImport
+    @importLink.click => this._startImport(); false
 
     $('#add-contracts-link').click =>
       @importLink.show()

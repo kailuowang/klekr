@@ -1,5 +1,6 @@
 :javascript
-  __importContactPath__ = '#{@import_contact_path}'
+  __contactsPath__ = '#{contacts_users_path}';
+  __importContactPath__ = '#{flickr_streams_path}'
 
 #import-popup.modal-popup
   #loading-contacts
@@ -18,4 +19,4 @@
 
   #import-progress.hidden
     %h4 Adding contacts and some of their pictures
-    #progress-bar
+    #progress-bar.progress-bar

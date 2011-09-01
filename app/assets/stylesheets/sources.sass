@@ -1,3 +1,19 @@
+
+.sources-grid
+  margin-top: 10px
+  .source-cell
+    text-align: center
+    margin-left: 14px
+    padding-top: 10px
+    padding-bottom: 5px
+    width: 111px
+    height: 110px
+    .source-name
+      color: #7f7f7f
+    .source-type
+    .source-icon-placeholder
+      margin-bottom: 5px
+
 #sources
   margin-top: 50px
   #sources-list
@@ -8,20 +24,7 @@
         font-size: 2em
         color: #202020
         text-shadow: 0 1px 0 #101010
-      .sources-grid
-        margin-top: 10px
-        .source-cell
-          text-align: center
-          margin-left: 14px
-          padding-top: 10px
-          padding-bottom: 5px
-          width: 111px
-          height: 110px
-          .source-name
-            color: #7f7f7f
-          .source-type
-          .source-icon-placeholder
-            margin-bottom: 5px
+
   #sources-management
     margin-top: 30px
     text-align: center
@@ -35,9 +38,18 @@
           margin-left: 20px
   #empty-sources
     text-align: center
+
 #import-popup
   width: 600px
   #contacts-list
     margin-left: 20px
     max-height: 100px
+    overflow-y: auto
+
+#import-editor-streams-popup
+  width: 700px
+  #streams-list
+    background: #202020
+    width: 655px
+    max-height: 300px
     overflow-y: auto

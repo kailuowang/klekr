@@ -53,7 +53,7 @@ module Collectr
     end
 
     def editor_high_rating_streams
-      @editor_collector.flickr_streams.select do |stream|
+      @editor_collector.flickr_streams.includes(:monthly_scores).select do |stream|
         stream.star_rating > 3
       end
     end

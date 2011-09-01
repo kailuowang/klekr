@@ -1,0 +1,22 @@
+:javascript
+  __editorStreamsPath__ = '#{editor_recommendations_path}'
+  __createRecommendationStreamsPath__ = '#{editor_recommendations_path}'
+  __syncStreamPath__ = '#{sync_flickr_stream_path(1)}'
+
+#import-editor-streams-popup.modal-popup
+  #loading-streams
+    Loading editor choices
+    = image_tag '/assets/loading.gif'
+  #display-streams.hidden
+    %h4
+      Current Editorial Choices
+    #streams-list.row.well
+      = render partial: 'streams_grid'
+
+    %h3.mt20
+      %a#do-import-streams{href: '#'}
+        Yes! Add them!
+
+  #import-streams-progress.hidden
+    %h4 Adding editor choices and some of their pictures
+    #streams-progress-bar.progress-bar

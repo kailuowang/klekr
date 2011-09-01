@@ -1,4 +1,4 @@
-class window.SourcesView extends ViewBase
+class window.MySourcesView extends ViewBase
   constructor: ->
     @template = $('#star-category-template')
     @container = $('#sources-list')
@@ -33,20 +33,8 @@ class window.SourcesView extends ViewBase
     label.text(starText)
 
   _loadCategory: (category, sources) =>
-    cellTemplate = category.find('.source-cell').first()
     cellGrid = category.find('.sources-grid').first()
-    for source in sources
-      newCell = cellTemplate.clone()
-      this._loadSource(newCell, source)
-      cellGrid.append(newCell)
-      newCell.show()
-    cellTemplate.hide()
-
-  _loadSource: (cell, source)=>
-    cell.find('.source-icon').attr('src', source.iconUrl)
-    cell.find('.source-icon-link').attr('href', source.slideUrl)
-    cell.find('.source-name').text(source.ownerName + "'s")
-    cell.find('.source-type').text(source.type)
+    new SourcesGridview(cellGrid).load(sources)
 
   _toggleManagementPanel: () =>
     @importPanel.slideToggle =>
