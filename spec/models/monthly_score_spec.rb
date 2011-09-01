@@ -8,6 +8,7 @@ describe MonthlyScore do
     end
 
     it "should be divided by log of months from now" do
+      four_month_ago = Time.now.months_ago(4)
       MonthlyScore.new(month: 4.month.ago.month, year: 4.month.ago.year).time_weight.should == 0.5
       MonthlyScore.new(month: 16.month.ago.month, year: 16.month.ago.year).time_weight.should == 0.25
     end

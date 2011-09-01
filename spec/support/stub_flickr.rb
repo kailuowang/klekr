@@ -6,6 +6,6 @@ def stub_flickr instance, module_name
   mock_module
 end
 
-def stub_retriever
-  Collectr::FlickrPictureRetriever.stub(:new).and_return(mock(get: [], get_all: []))
+def stub_retriever( results = [] )
+  Collectr::FlickrPictureRetriever.stub(:new).and_return(mock(get: results, get_all: results))
 end

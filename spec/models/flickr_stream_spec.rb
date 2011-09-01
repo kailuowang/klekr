@@ -247,10 +247,9 @@ describe FlickrStream do
         @module.stub!(@flickr_method).and_return([])
       end
 
-      it "should only sync photos faved upto the last sync time or max to 200 by default" do
-        last_sync = DateTime.new(2010,1,2)
+      it "should only sync photos faved upto the last sync time by default" do
         @flickr_stream.last_sync = DateTime.new(2010,1,2)
-        @flickr_stream.retriever.should_receive(:get_all).with(last_sync, 200).and_return([])
+        @flickr_stream.retriever.should_receive(:get_all).with(@flickr_stream.last_sync, anything).and_return([])
         @flickr_stream.sync
       end
 
@@ -284,18 +283,15 @@ describe FlickrStream do
 
       it "should create one picture with multiple linked flickr_streams if the picture get synced by muitiple flickr_streams(from the same collector)" do
         a_pic_info = Factory.next(:pic_info)
+        stub_retriever([a_pic_info])
+        flickr_stream1 = @flickr_stream.class.create!(user_id: 'one_user', collector: @flickr_stream.collector, collecting: true)
         flickr_stream2 = @flickr_stream.class.create!(user_id: 'another_user', collector: @flickr_stream.collector, collecting: true)
 
-        @module.should_receive(@flickr_method).and_return([a_pic_info])
-        @module.should_receive(@flickr_method).and_return([])
-        flickr_module2 = stub_flickr(flickr_stream2.retriever, @flickr_module_name)
-        flickr_module2.should_receive(@flickr_method).and_return([a_pic_info])
-        flickr_module2.should_receive(@flickr_method).and_return([])
-        @flickr_stream.sync
+        flickr_stream1.sync
         flickr_stream2.sync
 
         Picture.count.should == 1
-        Picture.first.flickr_streams.should == [@flickr_stream, flickr_stream2]
+        Picture.first.flickr_streams.should == [flickr_stream1, flickr_stream2]
       end
 
       it "should add the picture synced to the collector this stream belongs to" do
