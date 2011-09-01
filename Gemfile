@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.0.rc4'
+gem 'rails', '~> 3.1.0'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -10,7 +10,7 @@ gem 'flickraw'
 
 gem "jquery-rails"
 gem 'capistrano'
-gem 'will_paginate', '~> 3.0pre4'
+gem 'will_paginate', '~> 3.0.0'
 gem "rails_config"
 gem 'delayed_job'
 gem 'whenever', :require => false
