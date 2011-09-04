@@ -2,7 +2,7 @@ class window.SourcesGridview extends ViewBase
   constructor: (@grid) ->
 
   load: (sources) =>
-    cellTemplate = @grid.find('.source-cell').first()
+    cellTemplate = @grid.find('.source-cell:first')
     @grid.empty()
     for source in sources
       newCell = cellTemplate.clone()

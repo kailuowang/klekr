@@ -1,4 +1,4 @@
-class window.Gallery
+class window.Gallery extends Events
 
   constructor: ->
     @cacheSize = gridview.size * 2
@@ -22,9 +22,9 @@ class window.Gallery
     this._retrieveMorePictures this._firstBatchRetrieved
     this._alternativeView().off()
     @currentMode.off()
+    @grid.init(this)
 
-  findIndex: (picId)=>
-    (i for picture, i in @pictures when picture.id is picId)[0]
+  indexOf: (picture) => @pictures.indexOf(picture)
 
   size: =>
     @pictures.length
@@ -92,10 +92,8 @@ class window.Gallery
       opts.type = @_typeFilter if @_typeFilter?
 
   _addPictures: (newPictures) =>
-    unless @addingPictures
-      @addingPictures = true
-      Picture.uniqConcat(@pictures, newPictures)
-      @addingPictures = false
+    addedPictures = Picture.uniqConcat(@pictures, newPictures)
+    this.trigger('new-pictures-added', addedPictures) if addedPictures.length > 0
 
   _unseenPictures: ->
     @pictures[this._currentProgress()...@pictures.length]

@@ -28,12 +28,12 @@ class window.MySourcesView extends ViewBase
     contacts-list
 
   _updateStar: (categoryDiv, star) =>
-    label = categoryDiv.find('.stars-label').first()
+    label = categoryDiv.find('.stars-label:first')
     starText =('★' for i in [0...star]).join('')
     label.text(starText)
 
   _loadCategory: (category, sources) =>
-    cellGrid = category.find('.sources-grid').first()
+    cellGrid = category.find('.sources-grid:first')
     new SourcesGridview(cellGrid).load(sources)
 
   _toggleManagementPanel: () =>

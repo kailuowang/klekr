@@ -1,7 +1,7 @@
 class window.EditorStreamsImporter extends ViewBase
   constructor: (@editorStreamsPath, @createRecommendationStreamsPath, @syncStreamPath) ->
     @_popup = $('#import-editor-streams-popup')
-    streams_grid = @_popup.find('.sources-grid').first()
+    streams_grid = @_popup.find('.sources-grid:first')
     @_streams_gridview = new SourcesGridview(streams_grid)
     @_loading = $('#loading-streams')
     @_doImportLink = $('#do-import-streams')

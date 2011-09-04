@@ -8,8 +8,8 @@ describe 'Picture', ->
       data = {id: 1}
       original = [new Picture(data)]
       newOnes = [new Picture(data), new Picture({id: 2})]
-
-      expect( Picture.uniqConcat(original, newOnes).length ).toEqual(2)
+      Picture.uniqConcat(original, newOnes)
+      expect( original.length ).toEqual(2)
 
 
   describe '#guessLargeSize', ->

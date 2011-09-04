@@ -3,8 +3,11 @@ class window.Picture extends Events
   @uniqConcat: (original, newOnes) ->
     h = {}
     h[p.id] = 1 for p in original
-    original.push newP for newP in newOnes when not h[newP.id]?
-    original
+    added = []
+    for newP in newOnes when not h[newP.id]?
+      original.push newP
+      added.push newP
+    added
 
   @allGetViewed: (pictures) ->
     unviewedPictures = _(pictures).select (pic) -> !pic.data.viewed and pic.data.collected

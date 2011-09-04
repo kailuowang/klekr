@@ -3,7 +3,11 @@ class window.Grid extends ModeBase
   constructor: ->
     super()
     @selectedIndex = 0
-    gridview.itemSelect this._onPictureSelect
+
+  init: (gallery) =>
+    gallery.bind 'new-pictures-added', (pictures) =>
+      for pic in pictures
+        pic.bind 'clicked', this._onPictureSelect
 
   currentPageOfPictures:  =>
     [pageStart, pageEnd] = this._currentPageRange()
@@ -93,8 +97,8 @@ class window.Grid extends ModeBase
     pageEnd = Math.min(pageStart + gridview.size - 1, gallery.size() - 1)
     [pageStart, pageEnd]
 
-  _onPictureSelect: (picId) =>
-    picIndex = gallery.findIndex(picId)
+  _onPictureSelect: (picture) =>
+    picIndex = gallery.indexOf(picture)
     @selectedIndex = picIndex
     this.switchToSlide()
 
