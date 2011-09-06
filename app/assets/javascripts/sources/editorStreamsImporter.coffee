@@ -33,26 +33,24 @@ class window.EditorStreamsImporter extends ViewBase
   _doImport: =>
     @_doImportLink.hide()
     @_importProgress.fadeIn()
+    this._reportProgress(0, 1)
     server.post @createRecommendationStreamsPath, {}, (data) =>
       createdStreams = (new Source(d) for d in data)
       this._startSync(createdStreams)
 
   _startSync: (streams) =>
-    this._sync(streams, streams.length)
+    new quefee.CollectionWorkQ(
+      collection: streams
+      operation: this._sync
+      onProgress: (p) => this._reportProgress(p, streams.length )
+      onFinish: this._finish
+    ).start()
 
-  _sync: (streams, total) =>
-    if streams.length > 0
-      stream = streams.shift()
-      server.put sync_flickr_stream_path(stream), {}, =>
-        this._reportProgress(streams.length, total)
-        this._sync(streams, total)
-    else
-      this._finish()
+  _sync: (stream, callback) =>
+    server.put sync_flickr_stream_path(stream), {}, callback
 
-  _reportProgress: (left, total) =>
-    progress = ( total - left ) * 100 / total
-    @_progressBar.reportprogress(progress)
-
+  _reportProgress: (progress, total) =>
+    @_progressBar.reportprogress(progress * 100 / total)
 
   _finish: =>
     this.closePopup(@_popup)

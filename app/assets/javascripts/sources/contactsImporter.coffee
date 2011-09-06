@@ -33,16 +33,16 @@ class window.ContactsImporter extends ViewBase
     this._importContacts();
 
   _importContacts: =>
-    this._reportProgress()
-    if(@contacts.length > 0)
-      contact = @contacts.shift()
-      this._import contact, this._importContacts
-    else
-      this._finish()
+    this._reportProgress(0)
+    new quefee.CollectionWorkQ(
+      collection: @contacts
+      operation: this._import
+      onProgress: this._reportProgress
+      onFinish: this._finish
+    ).start()
 
-  _reportProgress: =>
-    progress = ( @total - @contacts.length ) * 100 / @total
-    @progressBar.reportprogress(progress)
+  _reportProgress: (progress)=>
+    @progressBar.reportprogress(progress * 100 / @contacts.length)
 
   _import: (contact, callback) =>
     server.post @importContactPath, contact, callback
