@@ -60,13 +60,13 @@ class window.KeyShortcut
     "#{keysStrings.join(', ')} : #{@desc}"
 
   _keyDisplay: (stringKey) =>
-    switch stringKey
-      when 'up' then '↑'
-      when 'down' then '↓'
-      when 'left' then '←'
-      when 'right' then '→'
-      else
-        stringKey
+    (
+      switch stringKey
+        when 'up' then '↑'
+        when 'down' then '↓'
+        else
+          stringKey
+    ).replace('left', '←').replace('right', '→')
 
   onKeydown: =>
     unless keyShortcuts.locked #this ensures that for one key stroke only one action is fired (needed to prevent chain reaction)

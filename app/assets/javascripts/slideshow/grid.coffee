@@ -69,8 +69,8 @@ class window.Grid extends ModeBase
       [ 'right', this.moveRight, 'move right' ]
       [ 'down', this.moveDown, 'move down' ]
       [ 'left', this.moveLeft, 'move left' ]
-      [ [ 'pagedown', ']' ], this.navigateToNext, 'next page' ]
-      [ [ 'pageup', '[' ], this.navigateToPrevious, 'previous page' ]
+      [ [ 'pagedown', 'shift+right' ], this.navigateToNext, 'next page' ]
+      [ [ 'pageup', 'shift+left' ], this.navigateToPrevious, 'previous page' ]
       [ [ 'return', 'space' ], this.switchToSlide, "go to the selected picture" ]
     ]
 
