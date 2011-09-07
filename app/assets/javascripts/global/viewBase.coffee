@@ -2,9 +2,11 @@ class window.ViewBase extends Events
   @showingPopup: false
   $.fx.interval = 40
   @duration = $.fx.interval * 3
-  @isHoneycomb: $(window).width() is 980
-  $.fx.off = @isHoneycomb
-  isHoneycomb: -> ViewBase.isHoneycomb
+
+  @isHoneycomb: ->
+    $(window).width() is 980
+
+  isHoneycomb: -> ViewBase.isHoneycomb()
 
   setVisible: (element, visible) ->
     if(visible)
@@ -42,3 +44,6 @@ class window.ViewBase extends Events
       element.fadeIn(ViewBase.duration, callback)
     else
       element.fadeOut(ViewBase.duration, callback)
+
+$ ->
+  $.fx.off = ViewBase.isHoneycomb()

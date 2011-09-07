@@ -1,7 +1,7 @@
 class window.Gallery extends Events
 
   constructor: ->
-    @cacheSize = gridview.size * 2
+    @cacheSize = this.pageSize() * 2
     [@grid, @slide] = modes = [new Grid, new Slide]
     for mode in modes
       mode.bind('progressed', this._ensurePictureCache)
@@ -17,20 +17,24 @@ class window.Gallery extends Events
     @typeFilterView.filterChange this._applyTypeFilter
 
   init: =>
-    @currentPage = 0
+    @pageToRetrieve = 0
     @pictures = []
     this._retrieveMorePictures this._firstBatchRetrieved
     this._alternativeView().off()
     @currentMode.off()
     @grid.init(this)
 
-  indexOf: (picture) => @pictures.indexOf(picture)
+  size: => @pictures.length
 
-  size: =>
-    @pictures.length
+  isEmpty: => this.size() is 0
 
-  isEmpty: =>
-    this.size() is 0
+  currentPicture: => @pictures[this._currentProgress()]
+
+  currentPage: => this.pageOf(this.currentPicture())
+
+  pageOf: (picture) => Math.floor( picture.index / this.pageSize() )
+
+  inGrid: => @currentMode is @grid
 
   toggleMode: =>
     progress = this._currentProgress()
@@ -40,8 +44,10 @@ class window.Gallery extends Events
     @currentMode.updateProgress(progress)
     this._updateModeIndicatorInView()
 
-  isLoading: =>
-    @retriever?
+
+  pageSize: => gridview.size
+
+  isLoading: => @retriever?
 
   _updateProgressInView: =>
     generalView.displayProgress(this.currentMode.atTheLast(), this.currentMode.atTheBegining())
@@ -51,12 +57,12 @@ class window.Gallery extends Events
 
   _retrieveMorePictures: (somePicturesReady) =>
     unless this.isLoading()
-      @retriever = new PictureRetriever(@currentPage, @cacheSize, this._filterOpts())
+      @retriever = new PictureRetriever(@pageToRetrieve, @cacheSize, this._filterOpts())
       @retriever.bind('batch-retrieved', this._addPictures)
       @retriever.bind('first-batch-retrieved', somePicturesReady) if somePicturesReady?
       @retriever.bind('done-retrieving', this._onRetrieverFinished)
       @retriever.retrieve()
-      @currentPage += 1 unless @advanceByProgress
+      @pageToRetrieve += 1 unless @advanceByProgress
 
   _firstBatchRetrieved: =>
     @currentMode.on()
@@ -65,7 +71,7 @@ class window.Gallery extends Events
     this._updateModeIndicatorInView()
 
   _updateModeIndicatorInView: =>
-    generalView.updateModeIndicator(@currentMode is @grid)
+    generalView.updateModeIndicator(this.inGrid())
 
   _onRetrieverFinished: =>
     @retriever = null
@@ -92,7 +98,10 @@ class window.Gallery extends Events
       opts.type = @_typeFilter if @_typeFilter?
 
   _addPictures: (newPictures) =>
+    startPosition = @pictures.length
     addedPictures = Picture.uniqConcat(@pictures, newPictures)
+    for newPic in addedPictures
+      newPic.index = startPosition++
     this.trigger('new-pictures-added', addedPictures) if addedPictures.length > 0
 
   _unseenPictures: ->
@@ -113,7 +122,7 @@ class window.Gallery extends Events
     console.debug "cache size: " + @cacheSize
     console.debug "pictures in cache: " + @pictures.length
     console.debug "pictures preloaded: " + readyPictures.length
-    console.debug "current flickr page: " + @currentPage
+    console.debug "current flickr page: " + @pageToRetrieve
     console.debug "gridview size: " + gridview.size
     console.debug "pictures size: " + @pictures.length
     console.debug "current progress: " + this._currentProgress()

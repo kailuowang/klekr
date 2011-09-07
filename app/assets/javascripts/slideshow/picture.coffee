@@ -22,6 +22,7 @@ class window.Picture extends Events
     @width = 640
     @canUseLargeVersion = slideview.largeWindow()
     @ready = false
+    @index = null
 
   displayTitle:  =>
     t = @data.title

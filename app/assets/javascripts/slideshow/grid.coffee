@@ -98,8 +98,7 @@ class window.Grid extends ModeBase
     [pageStart, pageEnd]
 
   _onPictureSelect: (picture) =>
-    picIndex = gallery.indexOf(picture)
-    @selectedIndex = picIndex
+    @selectedIndex = picture.index
     this.switchToSlide()
 
   _pageIncomplete: =>

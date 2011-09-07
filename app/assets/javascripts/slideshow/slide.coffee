@@ -19,7 +19,6 @@ class window.Slide extends ModeBase
       this.displayCurrentPicture()
       this.trigger('progressed')
 
-
   navigateToPrevious: =>
     unless this.atTheBegining()
       @currentIndex -= 1
