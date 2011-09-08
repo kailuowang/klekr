@@ -7,6 +7,10 @@ class window.PicturePreloader
       @worker = new quefee.Worker(@q)
       @worker.start()
 
+  clear: => @q.clear()
+
+  rePrioritize: => @q.reorder()
+
   preload: (pictures) =>
     jobs = _(this._createJobs(pic) for pic in pictures).flatten()
     @q.enqueue(jobs...)

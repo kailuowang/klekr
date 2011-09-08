@@ -5,9 +5,10 @@ class window.Gallery extends Events
     [@grid, @slide] = modes = [new Grid, new Slide]
     for mode in modes
       mode.bind('progressed', this._ensurePictureCache)
-      mode.bind('progress-changed', this._updateProgressInView)
+      mode.bind('progress-changed', this._progressChanged)
     @currentMode = if __gridMode__? then @grid else @slide
     @advanceByProgress = __advance_by_progress__ #vs progress by paging
+    @picturePreloader = new PicturePreloader(this)
     generalView.nextClick => @currentMode.navigateToNext?()
     generalView.previousClick => @currentMode.navigateToPrevious?()
     generalView.toggleModeClick this.toggleMode
@@ -17,6 +18,8 @@ class window.Gallery extends Events
     @typeFilterView.filterChange this._applyTypeFilter
 
   init: =>
+    @picturePreloader.clear()
+    @picturePreloader.start()
     @pageToRetrieve = 0
     @pictures = []
     this._retrieveMorePictures this._firstBatchRetrieved
@@ -43,11 +46,16 @@ class window.Gallery extends Events
     @currentMode.on()
     @currentMode.updateProgress(progress)
     this._updateModeIndicatorInView()
+    @picturePreloader.rePrioritize()
 
 
   pageSize: => gridview.size
 
   isLoading: => @retriever?
+
+  _progressChanged: =>
+    this._updateProgressInView()
+    @picturePreloader.rePrioritize()
 
   _updateProgressInView: =>
     generalView.displayProgress(this.currentMode.atTheLast(), this.currentMode.atTheBegining())
@@ -102,6 +110,7 @@ class window.Gallery extends Events
     addedPictures = Picture.uniqConcat(@pictures, newPictures)
     for newPic in addedPictures
       newPic.index = startPosition++
+    @picturePreloader.preload(addedPictures)
     this.trigger('new-pictures-added', addedPictures) if addedPictures.length > 0
 
   _unseenPictures: ->

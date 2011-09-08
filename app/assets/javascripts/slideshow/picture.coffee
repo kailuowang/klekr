@@ -1,6 +1,6 @@
 class window.Picture extends Events
 
-  @uniqConcat: (original, newOnes) ->
+  @uniqConcat: (original, newOnes) =>
     h = {}
     h[p.id] = 1 for p in original
     added = []
@@ -9,7 +9,7 @@ class window.Picture extends Events
       added.push newP
     added
 
-  @allGetViewed: (pictures) ->
+  @allGetViewed: (pictures) =>
     unviewedPictures = _(pictures).select (pic) -> !pic.data.viewed and pic.data.collected
     if unviewedPictures.length > 0
       updatePath = unviewedPictures[0].data.getAllViewedPath
@@ -31,13 +31,13 @@ class window.Picture extends Events
     else
       'Untitled'
 
-  url: ->
+  url: =>
     if @canUseLargeVersion
       @data.largeUrl
     else
       @data.mediumUrl
 
-  smallUrl: ->
+  smallUrl: =>
     @data.smallUrl
 
   fave: (rating, onSuccess) =>
@@ -53,7 +53,7 @@ class window.Picture extends Events
   faved: =>
     @data.rating > 0
 
-  preload: ->
+  preload: =>
     this.preloadSmall this.preloadLarge
 
   preloadSmall: (callback)=>
@@ -62,16 +62,19 @@ class window.Picture extends Events
       this.trigger('small-version-ready')
       callback?()
 
-  preloadLarge: ->
+  preloadLarge: (callback)=>
     imageUrl = if @canUseLargeVersion then @data.largeUrl else @data.mediumUrl
-    this._preloadImage imageUrl, this._updateSize
+    this._preloadImage imageUrl, (image)=>
+      this._updateSize(image)
+      callback?()
 
-  getViewed: ->
+  getViewed: =>
     unless @data.viewed
       server.put(@data.getViewedPath) if @data.getViewedPath
       @data.viewed = true
 
-  _preloadImage: (url, onload) ->
+  _preloadImage: (url, onload) =>
+    console.debug('preloading ' + this.index + ' ' + url)
     image = new Image()
     image.src = url
     $(image).load => onload(image) if onload?
@@ -89,12 +92,12 @@ class window.Picture extends Events
         this._preloadImage @data.mediumUrl, this._updateSize
         true
 
-  largerVersionWithinWindow: (image) ->
+  largerVersionWithinWindow: (image) =>
     [largeWidth, largeHeight] = this.guessLargeSize(image.width, image.height)
     captionHeight = 20
     largeWidth < generalView.displayWidth and largeHeight < generalView.displayHeight - captionHeight
 
-  guessLargeSize: (smallerWidth, smallerHeight) ->
+  guessLargeSize: (smallerWidth, smallerHeight) =>
     longEdge = Math.max(smallerWidth, smallerHeight)
     ratio = 1024 / longEdge
     [smallerWidth * ratio, smallerHeight * ratio]
