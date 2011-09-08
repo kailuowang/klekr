@@ -6,6 +6,5 @@
 //= require jquery
 //= require jquery_ujs
 //= require ./global/lib/underscore-min
-//= require ./global/lib/quefee/quefee
 //= require_tree ./global/lib
 //= require_directory ./global

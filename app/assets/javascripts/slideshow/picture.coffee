@@ -74,7 +74,6 @@ class window.Picture extends Events
       @data.viewed = true
 
   _preloadImage: (url, onload) =>
-    console.debug('preloading ' + this.index + ' ' + url)
     image = new Image()
     image.src = url
     $(image).load => onload(image) if onload?

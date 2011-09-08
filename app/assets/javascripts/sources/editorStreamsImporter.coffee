@@ -39,7 +39,7 @@ class window.EditorStreamsImporter extends ViewBase
       this._startSync(createdStreams)
 
   _startSync: (streams) =>
-    new quefee.CollectionWorkQ(
+    new queffee.CollectionWorkQ(
       collection: streams
       operation: this._sync
       onProgress: (p) => this._reportProgress(p, streams.length )

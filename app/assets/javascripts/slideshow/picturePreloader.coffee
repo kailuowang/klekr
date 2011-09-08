@@ -1,10 +1,12 @@
 class window.PicturePreloader
+  @timeout: 10000
+
   constructor: (@gallery)->
-    @q = new quefee.Q
+    @q = new queffee.Q
 
   start: =>
     unless @worker?
-      @worker = new quefee.Worker(@q)
+      @worker = new queffee.Worker(@q)
       @worker.start()
 
   clear: => @q.clear()
@@ -17,7 +19,17 @@ class window.PicturePreloader
 
   _createJobs: (picture) =>
     priority = new PicturePreloadPriority(picture, @gallery)
-    [ new quefee.Job(picture.preloadSmall, priority.small),
-      new quefee.Job(picture.preloadLarge, priority.large)]
+    [ this._createJob(picture, 'Small', priority), this._createJob(picture, 'Large', priority)]
 
+
+  _createJob: (picture, size, priority) =>
+    priorityFn =  priority[size.toLowerCase()]
+    preloadFn = (callback) =>
+      console.debug("preloading #{size} # #{picture.index} priority: #{priorityFn()}"  )
+      picture['preload' + size](callback)
+
+    new queffee.Job( preloadFn, priorityFn, PicturePreloader.timeout)
+
+
+  _log: (picture, size) =>
 

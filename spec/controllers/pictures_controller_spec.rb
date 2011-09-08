@@ -7,17 +7,25 @@ describe PicturesController do
 
     it "should mark the picture as faved" do
       pic = Factory(:picture)
-      Picture.stub!(:find).with(pic.id).and_return(pic)
+      Picture.stub!(:find).with(pic.id.to_s).and_return(pic)
+      pic.should_receive(:fave)
+      put 'fave', format: :json, id: pic.id
+    end
+
+    it "faves picture that is not collected yet (in db)" do
+      pic = Factory(:picture)
+      Picture.stub!(:find).with(pic.id.to_s).and_return(pic)
       pic.should_receive(:fave)
       put 'fave', format: :json, id: pic.id
     end
 
     it "should mark the picture as viewed" do
       pic = Factory(:picture)
-      Picture.stub!(:find).with(pic.id).and_return(pic)
-      pic.should_receive(:get_viewed)
-      pic.stub!(:fave)
-      put 'fave', format: :json, id: pic.id
+      repo = Collectr::PictureRepo.new(nil)
+      Collectr::PictureRepo.stub(:new).and_return(repo)
+      repo.stub(:find_by_flickr_id).with('fakeflickr_photoid').and_return(pic)
+      pic.should_receive(:fave)
+      put 'fave', format: :json, id: 'fakeflickr_photoid'
     end
   end
 

@@ -34,7 +34,7 @@ class window.ContactsImporter extends ViewBase
 
   _importContacts: =>
     this._reportProgress(0)
-    new quefee.CollectionWorkQ(
+    new queffee.CollectionWorkQ(
       collection: @contacts
       operation: this._import
       onProgress: this._reportProgress
