@@ -23,15 +23,10 @@ class window.PicturePreloader
     priority = new PicturePreloadPriority(picture, @gallery)
     [ this._createJob(picture, 'Small', priority), this._createJob(picture, 'Large', priority)]
 
-
   _createJob: (picture, size, priority) =>
     priorityFn =  priority[size.toLowerCase()]
     preloadFn = (callback) =>
-      console.debug("preloading #{size} # #{picture.index} priority: #{priorityFn()}"  )
+#      console.debug("preloading #{size} # #{picture.index} priority: #{priorityFn()}"  )
       picture['preload' + size](callback)
 
     new queffee.Job( preloadFn, priorityFn, PicturePreloader.timeout)
-
-
-  _log: (picture, size) =>
-
