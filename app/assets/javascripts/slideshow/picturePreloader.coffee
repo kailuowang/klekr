@@ -1,15 +1,17 @@
 class window.PicturePreloader
   @timeout: 10000
+  @numOfWorkers: 2
 
   constructor: (@gallery)->
     @q = new queffee.Q
 
   start: =>
-    unless @worker?
-      @worker = new queffee.Worker(@q)
-      @worker.start()
+    unless @workers?
+      @workers = (new queffee.Worker(@q) for i in [0...PicturePreloader.numOfWorkers])
+      worker.start() for worker in @workers
 
-  clear: => @q.clear()
+  clear: =>
+    @q.clear()
 
   rePrioritize: => @q.reorder()
 
