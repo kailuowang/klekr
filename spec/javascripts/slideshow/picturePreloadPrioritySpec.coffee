@@ -44,10 +44,10 @@ describe 'PicturePreloadPriority', ->
         for nextPage in [20..29]
           expect(small(nextPage)).toBeGreaterThan(large(currentPage))
 
-    it 'large for next 3 pictures higher than all other smalls exept the next 3 pictures when not in grid', ->
+    it 'large for next 6 pictures higher than all other smalls exept the next 6 pictures when not in grid', ->
       gallery._inGrid = false
-      for next3 in [12..14]
-        for allOther in [0..49] when allOther < 12 or allOther > 14
+      for next3 in [12..17]
+        for allOther in [0..49] when allOther < 12 or allOther > 17
             expect(large(next3)).toBeGreaterThan(small(allOther))
 
 

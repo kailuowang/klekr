@@ -1,28 +1,40 @@
 class window.PictureRetriever extends Events
-  constructor: (@pageNumber, @pageSize, @filterOpts) ->
-    @_numOfSubBatches = 2
-    @morePicturesPath = __morePicturesPath__
 
-  retrieve: =>
-    this._retrieveBatch 1, (retrievedInFirst) =>
-      if retrievedInFirst.length > 0
-        this.trigger('first-batch-retrieved')
-        this._retrieveBatch 2, (retrievedInSecond) =>
-          this.trigger('done-retrieving')
-      else
-        this.trigger('done-retrieving')
+  constructor: (@_filterOptsFn, @pageSize, @_retrievePath) ->
+    @_retrievedCount = 0
+    @_currentPage = 1
+    @_q = new queffee.Q
+    @_worker = new queffee.Worker(@_q)
+    @_worker.start()
+    @_worker.onIdle = this._onWorkerDone
 
-  _retrieveBatch: (batchNum, success) =>
-    opts = this._batchOpts( @_numOfSubBatches * @pageNumber + batchNum )
-    server.post @morePicturesPath, opts, (data) =>
+  busy: => !@_worker.idle()
+
+  retrieve: (numOfPages = 3) =>
+    @_q.enqueue(this._createJobs(numOfPages)...)
+
+  _createJobs: (numOfPages) =>
+    for i in [0...numOfPages]
+      this._proceed()
+      this._createJob()
+
+  _createJob: =>
+    pageOpts = this._pageOpts()
+    perform = (callback) => this._retrievePage(pageOpts, callback)
+    priority = -@_currentPage
+    new queffee.Job(perform, priority, 30000)
+
+  _onWorkerDone: =>
+    this.trigger('done-retrieving', @_retrievedCount)
+    @_retrievedCount = 0
+
+  _retrieveOpts: (pageOpts) =>
+    $.extend(pageOpts, @_filterOptsFn())
+
+  _retrievePage: (pageOpts, callback) =>
+    server.post @_retrievePath, this._retrieveOpts(pageOpts), (data) =>
       pictures = ( new Picture(picData) for picData in data )
       if pictures.length > 0
         this.trigger('batch-retrieved', pictures)
-      success?(pictures)
-
-  _batchOpts: (page)=>
-    batchSize = @pageSize / @_numOfSubBatches
-    $.extend({ num: batchSize , page: page }, @filterOpts)
-
-
-
+        @_retrievedCount += pictures.length
+      callback()

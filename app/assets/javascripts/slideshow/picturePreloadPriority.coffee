@@ -29,7 +29,7 @@ class window.PicturePreloadPriority
     @gallery.pageOf(@picture)  - @gallery.currentPage()
 
   _positionAdjustment: =>
-    if !@gallery.inGrid() and 0 <= this._ahead() <= 2
+    if !@gallery.inGrid() and 0 <= this._ahead() <= 5
       1000
     else
       0

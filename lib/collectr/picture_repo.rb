@@ -26,19 +26,18 @@ module Collectr
     end
 
     def new_pictures(opts = {})
-      scope = Picture.collected_by(@collector).desc.unviewed.includes(:flickr_streams)
-      if opts[:excluded_ids].present?
-        pictures = Picture.arel_table
-        scope = scope.where(pictures[:id].not_in(opts[:excluded_ids]))
-      end
-      scope = scope.paginate(page: opts[:page].to_i,
-                             per_page: opts[:per_page].to_i) if opts[:page].present?
+      default_opts = {limit: 10, offset: 0}
+      opts.reverse_merge!(default_opts)
+      scope = Picture.desc.unviewed.collected_by(@collector).
+              limit(opts[:limit].to_i).
+              offset(opts[:offset].to_i).
+              includes(:flickr_streams)
 
       if opts[:type].present?
-        scope = scope.includes(:flickr_streams).where("#{::FlickrStream.table_name}.type = ?", opts[:type])
+        scope.where("#{::FlickrStream.table_name}.type = ?", opts[:type])
+      else
+        scope
       end
-      scope
-
     end
 
     private
