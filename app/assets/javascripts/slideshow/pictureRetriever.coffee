@@ -2,7 +2,7 @@ class window.PictureRetriever extends Events
 
   constructor: (@_filterOptsFn, @pageSize, @_retrievePath) ->
     @_retrievedCount = 0
-    @_currentPage = 1
+    @_currentPage = 0
     @_q = new queffee.Q
     @_worker = new queffee.Worker(@_q)
     @_worker.start()
