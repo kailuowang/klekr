@@ -23,6 +23,7 @@ class window.Gallery extends Events
 
   init: =>
     @waitingForPictures = true
+    @retriever.reset()
     @picturePreloader.clear()
     @picturePreloader.start()
     @pictures = []

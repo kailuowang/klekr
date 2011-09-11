@@ -8,6 +8,10 @@ class window.PictureRetriever extends Events
     @_worker.start()
     @_worker.onIdle = this._onWorkerDone
 
+  reset: =>
+    @_q.clear()
+    @_currentPage = 0
+
   busy: => !@_worker.idle()
 
   retrieve: (numOfPages = 3) =>
