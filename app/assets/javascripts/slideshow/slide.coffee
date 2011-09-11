@@ -1,8 +1,11 @@
 class window.Slide extends ModeBase
   constructor: ->
-    @currentIndex = 0
+    this.reset()
     @favePanel = new FavePanel(this.currentPicture)
     super()
+
+  reset: =>
+    @currentIndex = 0
 
   displayCurrentPicture: =>
     slideview.display(this.currentPicture())

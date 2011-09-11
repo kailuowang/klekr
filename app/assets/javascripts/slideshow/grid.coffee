@@ -2,6 +2,9 @@ class window.Grid extends ModeBase
 
   constructor: ->
     super()
+    this.reset()
+
+  reset: =>
     @selectedIndex = 0
 
   init: (gallery) =>

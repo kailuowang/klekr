@@ -2,8 +2,8 @@ class window.Gallery extends Events
 
   constructor: ->
     @cacheSize = 5
-    [@grid, @slide] = modes = [new Grid, new Slide]
-    for mode in modes
+    [@grid, @slide] = @modes = [new Grid, new Slide]
+    for mode in @modes
       mode.bind('progressed', this._ensurePictureCache)
       mode.bind('progress-changed', this._progressChanged)
     @currentMode = if __gridMode__? then @grid else @slide
@@ -31,7 +31,12 @@ class window.Gallery extends Events
 
   currentPicture: => @pictures[this._currentProgress()]
 
-  currentPage: => this.pageOf(this.currentPicture())
+  currentPage: =>
+    cp = this.currentPicture()
+    if(cp?)
+      this.pageOf(cp)
+    else
+      1
 
   pageOf: (picture) => Math.floor( picture.index / this.pageSize() )
 
@@ -40,7 +45,7 @@ class window.Gallery extends Events
   toggleMode: =>
     progress = this._currentProgress()
     @currentMode.off()
-    @currentMode = this._alternativeView()
+    @currentMode = this._alternativeMode()
     @currentMode.on()
     @currentMode.updateProgress(progress)
     this._updateModeIndicatorInView()
@@ -54,11 +59,12 @@ class window.Gallery extends Events
     @waitingForPictures = true
     @retriever.reset()
     @picturePreloader.clear()
-    @picturePreloader.start()
     @pictures = []
-    this._retrieveMorePictures(@cacheSize)
-    this._alternativeView().off()
+    this._alternativeMode().off()
     @currentMode.off()
+    m.reset() for m in @modes
+    @picturePreloader.start()
+    this._retrieveMorePictures(@cacheSize)
 
   _progressChanged: =>
     this._updateProgressInView()
@@ -67,7 +73,7 @@ class window.Gallery extends Events
   _updateProgressInView: =>
     generalView.displayProgress(this.currentMode.atTheLast(), this.currentMode.atTheBegining())
 
-  _alternativeView: =>
+  _alternativeMode: =>
     if @currentMode is @grid then @slide else @grid
 
   _retrieveMorePictures: (pages = 1)=> @retriever.retrieve(pages)
