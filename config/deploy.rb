@@ -49,6 +49,7 @@ namespace :deploy do
     run_in_app "#{rails_env} script/delayed_job stop"
 
     rake "db:migrate"
+    deploy.prepare_assets
     whenever.update_crontab
     run_in_app "#{try_sudo} touch tmp/restart.txt"
     deploy.start_delayed_job
@@ -56,6 +57,13 @@ namespace :deploy do
     deploy.warm_server
 
   end
+
+  task :prepare_assets do
+    rake "assets:clean"
+    rake "assets:precompile"
+    run_in_app 'cp -r app/assets/images/* public/assets/'
+  end
+
 
   task :warm_server do
     system "curl #{ec2_server}"
