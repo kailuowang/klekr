@@ -23,16 +23,12 @@ class window.PictureCellView extends ViewBase
     this._initRating()
 
   _initRating:  =>
-    if @picture.faved()
-      template = @cellDiv.find('#ratingStarTemplate:first')
-      @ratingDiv.append(template.clone()) for i in [1..@picture.data.rating]
-      template.remove()
-    else
-      @ratingDiv.empty()
+    ratingText = ('★' for i in [0...@picture.data.rating]).join('')
+    @ratingDiv.text(ratingText)
 
   _picId: =>
     'pic-' + @picture.id
 
   _highlight: =>
-    @cellDiv.css('background', '#606060')
+    @cellDiv.addClass('highlighted')
 

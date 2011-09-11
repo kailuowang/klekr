@@ -10,7 +10,7 @@ class window.Gridview extends ViewBase
     @grid.children().size()
 
   highlightPicture: (picture) ->
-    $('.grid-picture').css('background', '')
+    $('.grid-picture').removeClass('highlighted')
     picture.trigger('highlighted')
 
   loadPictures: (pictures) ->
