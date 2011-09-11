@@ -22,14 +22,7 @@ class window.Gallery extends Events
     @retriever.bind('done-retrieving', this._onRetrieverFinished)
 
   init: =>
-    @waitingForPictures = true
-    @retriever.reset()
-    @picturePreloader.clear()
-    @picturePreloader.start()
-    @pictures = []
-    this._retrieveMorePictures(@cacheSize)
-    this._alternativeView().off()
-    @currentMode.off()
+    this._reset()
     @grid.init(this)
 
   size: => @pictures.length
@@ -56,6 +49,16 @@ class window.Gallery extends Events
   pageSize: => gridview.size
 
   isLoading: => @retriever and @retriever.busy()
+
+  _reset: =>
+    @waitingForPictures = true
+    @retriever.reset()
+    @picturePreloader.clear()
+    @picturePreloader.start()
+    @pictures = []
+    this._retrieveMorePictures(@cacheSize)
+    this._alternativeView().off()
+    @currentMode.off()
 
   _progressChanged: =>
     this._updateProgressInView()
@@ -111,7 +114,7 @@ class window.Gallery extends Events
 
   _reinitToGrid: =>
     @currentMode = @grid
-    this.init()
+    this._reset()
 
   _filterOpts: =>
     _.tap {}, (opts) =>
