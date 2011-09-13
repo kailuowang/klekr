@@ -15,9 +15,14 @@ module Collectr
     end
 
     def import(params)
-      opts = params.slice(:user_id, :username).merge(collecting: true, collector: @collector)
-      new_streams = [ FlickrStream.find_or_create(opts.merge(type: FaveStream.name)),
-                      FlickrStream.find_or_create(opts.merge(type: UploadStream.name))]
+      opts = params.slice(:user_id, :username, :type).merge(collecting: true, collector: @collector)
+      new_streams =
+        if(opts[:type])
+          [FlickrStream.find_or_create(opts)]
+        else
+          [ FlickrStream.find_or_create(opts.merge(type: FaveStream.name)),
+            FlickrStream.find_or_create(opts.merge(type: UploadStream.name))]
+        end
       new_streams.each do |stream|
         stream.sync
       end

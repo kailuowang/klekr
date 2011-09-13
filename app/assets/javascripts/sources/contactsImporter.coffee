@@ -4,13 +4,14 @@ class window.ContactsImporter extends ViewBase
     @displayContacts = $('#display-contacts')
     @loading = $('#loading-contacts')
     @importPopup = $('#import-popup')
-    @progressBar = $('#progress-bar')
+    @progressBar = $('#import-popup #progress-bar')
+    @importProgress = $('#import-popup #import-progress')
     @importLink = $('#do-import-contacts')
     @importLink.click => this._startImport(); false
 
     $('#add-contracts-link').click =>
       @importLink.show()
-      $('#import-progress').hide()
+      @importProgress.hide()
       this.popup @importPopup
       this._getContacts()
       false
@@ -29,7 +30,7 @@ class window.ContactsImporter extends ViewBase
 
   _startImport: =>
     @importLink.hide()
-    $('#import-progress').fadeIn()
+    @importProgress.fadeIn()
     this._importContacts();
 
   _importContacts: =>

@@ -3,6 +3,8 @@ class window.MySources
     @view = new MySourcesView
     @contactImporter.bind 'imported', this.init
     @editorStreamsImporter.bind 'imported', this.init
+    @googleReaderImporter = new GoogleReaderImporter
+    @googleReaderImporter.bind 'imported', this.init
 
   init: =>
     server.get @sourcesPath, {}, (data) =>
