@@ -6,19 +6,15 @@ class window.GoogleReaderImporter extends ViewBase
     @progressPanel = @_popup.find('#import-progress')
     @progressBar = @_popup.find('#progress-bar')
     @startImportLink = $('#import-google-reader-link')
-    @startImportLink.click =>
-      this._init()
-      false
-
-    @doImportLink.click =>
-      this._import()
-      false
+    @hintPanel = @_popup.find('#hint')
+    this._registerEvents()
 
   _init: =>
     @progressPanel.hide()
     this.popup @_popup
 
   _import: =>
+    @hintPanel.hide()
     f = @file[0].files[0];
     if f?
       reader = new FileReader()
@@ -26,6 +22,11 @@ class window.GoogleReaderImporter extends ViewBase
         subscriptions = this._importText(e.target.result.toString())
         this._importSubscriptions(subscriptions)
       reader.readAsText(f)
+
+  _registerEvents: =>
+    @startImportLink.click( => this._init(); false)
+    @doImportLink.click(=> this._import(); false)
+    @_popup.find('#hint-link').click( => @hintPanel.slideToggle(); false)
 
   _importText: (text) =>
     reg = /title="(.+)"\s.+\n.+photos\_(.+)\.gne\?.?.?id=(\d+@...)&amp/gm;

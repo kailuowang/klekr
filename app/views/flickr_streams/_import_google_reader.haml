@@ -1,11 +1,23 @@
 #import-google-reader-popup.modal-popup
-  #import-file
-    %h3 Import from my google reader subscriptions.
-    %input#google-reader-file.mt20{type: 'file'}
-    %h4.inline
-      %a#do-import{href: '#'}
-        Import!
+  %h3 Import from my Google reader subscriptions.
+  %input#google-reader-file.mt20{type: 'file', title: 'select Google reader OPML file'}
 
+  %h4.inline
+    %a#do-import{href: '#'}
+      Import!
   #import-progress.hidden
     %h4 Adding google reader subscriptions and some of their pictures
     #progress-bar.progress-bar
+
+  %h4.mt20
+    %a#hint-link{href: '#'}
+      Awkward... I don't know what to do here.
+  #hint.hidden.well
+    An OPML file of your Google reader subscriptions is needed here.
+    %br
+    Click
+    %a{href: 'http://www.google.com/reader/subscriptions/export?hl=en', target: '_blank'}
+      here to download it.
+    %br
+    Or go to the "import/export" tab on your google reader setting page and you should be able to find the export subscriptions link.
+
