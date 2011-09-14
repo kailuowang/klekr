@@ -49,7 +49,6 @@ class window.GoogleReaderImporter extends ViewBase
     title.replace('Uploads from ', '').replace("s' favorites", '').replace("'s favorites", '')
 
   _importSubscriptions: (subs) =>
-
     @progressPanel.show()
     this._reportProgress(0, subs.length)
     new queffee.CollectionWorkQ(

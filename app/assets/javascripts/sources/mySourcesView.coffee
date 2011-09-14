@@ -4,7 +4,8 @@ class window.MySourcesView extends ViewBase
     @container = $('#sources-list')
     @expandLink = $('#expand-management')
     @importPanel = $('#sources-import-panel')
-
+    @newSourcesAddedPanel = $('#new-sources-added')
+    $('#close-new-sources-added').click => @newSourcesAddedPanel.slideUp()
     @expandLink.click this._toggleManagementPanel
 
   clear: =>
@@ -26,6 +27,13 @@ class window.MySourcesView extends ViewBase
 
   showContacts: =>
     contacts-list
+
+  showNewSourcesAddedPanel: (collectorInfo) =>
+    @newSourcesAddedPanel.find('#num-of-pictures').text(collectorInfo.pictures)
+    @newSourcesAddedPanel.find('#num-of-sources').text(collectorInfo.sources)
+    $(window).scrollTop 0
+    @newSourcesAddedPanel.show()
+    @newSourcesAddedPanel.slideDown()
 
   _updateStar: (categoryDiv, star) =>
     label = categoryDiv.find('.stars-label:first')

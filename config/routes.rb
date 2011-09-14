@@ -8,6 +8,13 @@ Collectr::Application.routes.draw do
 
   resources :editor_recommendations, :only => [:index, :create]
 
+  resources :collectors, :only => [] do
+    member do
+      get 'info'
+    end
+  end
+
+
   resources :flickr_streams, :only => [:index, :show, :create] do
     member do
       put 'sync'

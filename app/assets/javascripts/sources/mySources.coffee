@@ -1,15 +1,21 @@
 class window.MySources
   constructor: (@sourcesPath, @contactImporter, @editorStreamsImporter)->
     @view = new MySourcesView
-    @contactImporter.bind 'imported', this.init
-    @editorStreamsImporter.bind 'imported', this.init
+    @contactImporter.bind 'imported', this._newSourcesImported
+    @editorStreamsImporter.bind 'imported', this._newSourcesImported
     @googleReaderImporter = new GoogleReaderImporter
-    @googleReaderImporter.bind 'imported', this.init
+    @googleReaderImporter.bind 'imported', this._newSourcesImported
 
-  init: =>
+  init: (onInit)=>
     server.get @sourcesPath, {}, (data) =>
       allSources = (new Source(d) for d in data)
       this._display(allSources)
+      onInit?()
+
+  _newSourcesImported: =>
+    server.get info_collector_path({id: 'current'}), {}, (data)=>
+      this.init =>
+        @view.showNewSourcesAddedPanel(data)
 
   _display: (sources) =>
     @view.clear()

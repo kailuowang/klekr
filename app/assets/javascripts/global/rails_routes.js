@@ -1,6 +1,7 @@
 function validate_authentications_path(params){ return '/authentications/validate'}
 function authentications_path(params){ return '/authentications'}
 function editor_recommendations_path(params){ return '/editor_recommendations'}
+function info_collector_path(params){ return '/collectors/' + params.id + '/info'}
 function sync_flickr_stream_path(params){ return '/flickr_streams/' + params.id + '/sync'}
 function adjust_rating_flickr_stream_path(params){ return '/flickr_streams/' + params.id + '/adjust_rating'}
 function mark_all_as_read_flickr_stream_path(params){ return '/flickr_streams/' + params.id + '/mark_all_as_read'}
