@@ -1,6 +1,6 @@
 class window.PicturePreloader
   @timeout: 10000
-  @numOfWorkers: 2
+  @numOfWorkers: 3
 
   constructor: (@gallery)->
     @q = new queffee.Q
