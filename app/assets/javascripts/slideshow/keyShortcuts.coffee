@@ -32,9 +32,7 @@ class window.KeyShortcuts extends ViewBase
     $(document).unbind('keydown', shortcut.onKeydown)
 
   _registerHelpPopup: ->
-    $('#keyShortcutsLink').click =>
-      this._popupHelp()
-      false
+    $('#keyShortcutsLink').click this._popupHelp
 
   _popupHelp: =>
     this._updateHelp()

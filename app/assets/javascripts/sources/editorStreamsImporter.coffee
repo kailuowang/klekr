@@ -8,12 +8,8 @@ class window.EditorStreamsImporter extends ViewBase
     @_importProgress = $('#import-streams-progress')
     @_progressBar = @_popup.find('#streams-progress-bar')
     @_streamsDisplay = $('#display-streams')
-    $('#add-editor-streams-link').click =>
-      this._init()
-      false
-    @_doImportLink.click =>
-      this._doImport()
-      false
+    $('#add-editor-streams-link').click this._init
+    @_doImportLink.click this._doImport
 
   _init: =>
     this.popup @_popup

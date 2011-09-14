@@ -24,9 +24,9 @@ class window.GoogleReaderImporter extends ViewBase
       reader.readAsText(f)
 
   _registerEvents: =>
-    @startImportLink.click( => this._init(); false)
-    @doImportLink.click(=> this._import(); false)
-    @_popup.find('#hint-link').click( => @hintPanel.slideToggle(); false)
+    @startImportLink.click this._init
+    @doImportLink.click this._import
+    @_popup.find('#hint-link').click => @hintPanel.slideToggle()
 
   _importText: (text) =>
     reg = /title="(.+)"\s.+\n.+photos\_(.+)\.gne\?.?.?id=(\d+@...)&amp/gm;

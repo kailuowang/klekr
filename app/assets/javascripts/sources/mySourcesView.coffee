@@ -5,7 +5,7 @@ class window.MySourcesView extends ViewBase
     @expandLink = $('#expand-management')
     @importPanel = $('#sources-import-panel')
 
-    @expandLink.click(=> this._toggleManagementPanel(); false)
+    @expandLink.click this._toggleManagementPanel
 
   clear: =>
     @container.empty()
