@@ -26,8 +26,8 @@ class FlickrStreamsController < ApplicationController
   end
 
   def create
-    Collectr::ContactsImporter.new(@current_collector).import(params)
-    js_ok
+    new_streams = Collectr::ContactsImporter.new(@current_collector).import(params)
+    render_json data_for_streams(new_streams)
   end
 
   def subscribe

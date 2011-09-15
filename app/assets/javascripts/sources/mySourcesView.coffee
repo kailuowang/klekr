@@ -12,11 +12,12 @@ class window.MySourcesView extends ViewBase
     @container.empty()
 
   loadSources: (star, sources)=>
-    newStarCategory = @template.clone()
-    this._updateStar(newStarCategory, star)
-    this._loadCategory(newStarCategory, sources)
-    @container.append(newStarCategory)
-    newStarCategory.show()
+    newStarCategory = this._createCategory(star)
+    this._sourcesGridView(newStarCategory).load(sources)
+
+  addSource: (source, star = 1) =>
+    categoryDiv = this._ensureCategory(star)
+    this._sourcesGridView(categoryDiv).addSource(source)
 
   showManagementSection: =>
     @importPanel.hide()
@@ -32,17 +33,30 @@ class window.MySourcesView extends ViewBase
     @newSourcesAddedPanel.find('#num-of-pictures').text(collectorInfo.pictures)
     @newSourcesAddedPanel.find('#num-of-sources').text(collectorInfo.sources)
     $(window).scrollTop 0
-    @newSourcesAddedPanel.show()
     @newSourcesAddedPanel.slideDown()
+
+  _createCategory: (star) =>
+    newStarCategory = @template.clone()
+    newStarCategory.attr('id', 'star' + star)
+    this._updateStar(newStarCategory, star)
+    @container.append(newStarCategory)
+    newStarCategory.show()
+
+  _ensureCategory: (star) =>
+    category = $('#star' + star)
+    if(category.length > 0 )
+      category
+    else
+      this._createCategory(star)
 
   _updateStar: (categoryDiv, star) =>
     label = categoryDiv.find('.stars-label:first')
     starText =('★' for i in [0...star]).join('')
     label.text(starText)
 
-  _loadCategory: (category, sources) =>
-    cellGrid = category.find('.sources-grid:first')
-    new SourcesGridview(cellGrid).load(sources)
+  _sourcesGridView: (categoryDiv) =>
+    cellGrid = categoryDiv.find('.sources-grid:first')
+    new SourcesGridview(cellGrid)
 
   _toggleManagementPanel: () =>
     @importPanel.slideToggle =>

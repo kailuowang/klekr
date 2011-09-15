@@ -1,10 +1,13 @@
 class window.MySources
   constructor: (@sourcesPath, @contactImporter, @editorStreamsImporter)->
     @view = new MySourcesView
-    @contactImporter.bind 'imported', this._newSourcesImported
-    @editorStreamsImporter.bind 'imported', this._newSourcesImported
+    @contactImporter.bind 'import-finished', this._sourcesImportDone
+    @contactImporter.bind 'sources-imported', this._sourcesImported
+    @editorStreamsImporter.bind 'import-finished', this._sourcesImportDone
+    @editorStreamsImporter.bind 'sources-imported', this._sourcesImported
     @googleReaderImporter = new GoogleReaderImporter
-    @googleReaderImporter.bind 'imported', this._newSourcesImported
+    @googleReaderImporter.bind 'import-finished', this._sourcesImportDone
+    @googleReaderImporter.bind 'sources-imported', this._sourcesImported
 
   init: (onInit)=>
     server.get @sourcesPath, {}, (data) =>
@@ -12,10 +15,14 @@ class window.MySources
       this._display(allSources)
       onInit?()
 
-  _newSourcesImported: =>
+  _sourcesImportDone: =>
     server.get info_collector_path({id: 'current'}), {}, (data)=>
       this.init =>
         @view.showNewSourcesAddedPanel(data)
+
+  _sourcesImported: (sources) =>
+    @view.setVisibleEmptySourceSection(false)
+    @view.addSource(source) for source in sources
 
   _display: (sources) =>
     @view.clear()

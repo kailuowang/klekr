@@ -1,4 +1,4 @@
-class window.GoogleReaderImporter extends ViewBase
+class window.GoogleReaderImporter extends StreamImporterBase
   constructor: ->
     @_popup = $('#import-google-reader-popup')
     @file = @_popup.find('#google-reader-file')
@@ -13,7 +13,7 @@ class window.GoogleReaderImporter extends ViewBase
     @progressPanel.hide()
     this.popup @_popup
 
-  _import: =>
+  _importAll: =>
     @hintPanel.hide()
     f = @file[0].files[0];
     if f?
@@ -25,7 +25,7 @@ class window.GoogleReaderImporter extends ViewBase
 
   _registerEvents: =>
     @startImportLink.click this._init
-    @doImportLink.click this._import
+    @doImportLink.click this._importAll
     @_popup.find('#hint-link').click => @hintPanel.slideToggle()
 
   _importText: (text) =>
@@ -53,18 +53,12 @@ class window.GoogleReaderImporter extends ViewBase
     this._reportProgress(0, subs.length)
     new queffee.CollectionWorkQ(
       collection: subs
-      operation: this._importSubscription
+      operation: (streamInfo, callback) => this._import(streamInfo, callback)
+      onFinish: => this._finish()
       onProgress: (progress) =>
         this._reportProgress(progress, subs.length)
-      onFinish: this._finish
     ).start()
 
   _reportProgress: (progress, total)=>
     @progressBar.reportprogress(progress * 100 / total)
 
-  _importSubscription: (subscription, callback) =>
-    server.post flickr_streams_path(), subscription, callback
-
-  _finish: =>
-    this.closePopup(@_popup)
-    this.trigger('imported')

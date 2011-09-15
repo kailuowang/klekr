@@ -43,14 +43,16 @@ class window.EditorStreamsImporter extends ViewBase
     ).start()
 
   _sync: (stream, callback) =>
-    server.put sync_flickr_stream_path(stream), {}, callback
+    server.put sync_flickr_stream_path(stream), {}, =>
+      this.trigger('sources-imported', [stream])
+      callback()
 
   _reportProgress: (progress, total) =>
     @_progressBar.reportprogress(progress * 100 / total)
 
   _finish: =>
     this.closePopup(@_popup)
-    this.trigger('imported')
+    this.trigger('import-finished')
 
 
 

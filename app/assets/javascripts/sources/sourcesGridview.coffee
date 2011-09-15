@@ -1,15 +1,17 @@
 class window.SourcesGridview extends ViewBase
   constructor: (@grid) ->
+    @cellTemplate = @grid.find('.source-cell:first')
 
   load: (sources) =>
-    cellTemplate = @grid.find('.source-cell:first')
     @grid.empty()
-    for source in sources
-      newCell = cellTemplate.clone()
-      this._loadSource(newCell, source)
-      @grid.append(newCell)
-      newCell.show()
-    cellTemplate.hide()
+    this.addSource(source) for source in sources
+    @cellTemplate.hide()
+
+  addSource: (source) =>
+    newCell = @cellTemplate.clone()
+    this._loadSource(newCell, source)
+    @grid.append(newCell)
+    newCell.show()
 
   _loadSource: (cell, source)=>
     cell.find('.source-icon').attr('src', source.iconUrl)

@@ -26,6 +26,7 @@ module Collectr
       new_streams.each do |stream|
         stream.sync
       end
+      new_streams
     end
   end
 end

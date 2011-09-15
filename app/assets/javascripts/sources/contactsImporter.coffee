@@ -1,9 +1,9 @@
-class window.ContactsImporter extends ViewBase
+class window.ContactsImporter extends StreamImporterBase
   constructor: (@contactsPath, @importContactPath)->
     @contactsList = $('#contacts-list')
     @displayContacts = $('#display-contacts')
     @loading = $('#loading-contacts')
-    @importPopup = $('#import-popup')
+    @_popup = $('#import-popup')
     @progressBar = $('#import-popup #progress-bar')
     @importProgress = $('#import-popup #import-progress')
     @importLink = $('#do-import-contacts')
@@ -12,7 +12,7 @@ class window.ContactsImporter extends ViewBase
     $('#add-contracts-link').click =>
       @importLink.show()
       @importProgress.hide()
-      this.popup @importPopup
+      this.popup @_popup
       this._getContacts()
 
   _getContacts: =>
@@ -36,17 +36,11 @@ class window.ContactsImporter extends ViewBase
     this._reportProgress(0)
     new queffee.CollectionWorkQ(
       collection: @contacts
-      operation: this._import
+      operation: (streamInfo, callback) => this._import(streamInfo, callback)
       onProgress: this._reportProgress
-      onFinish: this._finish
+      onFinish: => this._finish()
     ).start()
 
   _reportProgress: (progress)=>
     @progressBar.reportprogress(progress * 100 / @contacts.length)
 
-  _import: (contact, callback) =>
-    server.post @importContactPath, contact, callback
-
-  _finish: =>
-    this.closePopup(@importPopup)
-    this.trigger('imported')
