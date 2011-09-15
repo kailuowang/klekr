@@ -15,9 +15,9 @@ module Collectr
     end
 
     def editor_streams
-       [collection_stream = FlickrStream.find_or_create(
+      [collection_stream = FlickrStream.find_or_create(
          editor_collection_stream_opts.merge(collector: @editor_collector)
-       )] + editor_high_rating_streams
+      )] + editor_high_rating_streams
     end
 
     def editorial_collection_stream_for(collector)

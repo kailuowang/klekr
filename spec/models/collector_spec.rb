@@ -5,23 +5,6 @@ describe Collector do
     stub_retriever
   end
 
-  describe '.from_new_user' do
-    it "should create a new flickr stream when editor is ready" do
-      Settings.stub(:editor_user_id).and_return('defaultstream_user_id')
-      Settings.stub(:editor_name).and_return('Mel Gibson')
-      Collectr::Editor.new.ensure_editor_collector
-      auth = mock( user: mock(
-                      nsid: 'auersid',
-                      username: 'a new user',
-                      fullname: 'newusers full'),
-                   token: 'a_token')
-
-      collector = Collector.from_new_user(auth)
-      FlickrStream.first.collector.should == collector
-      FlickrStream.first.username.should == Settings.editor_name
-    end
-  end
-
   describe '.find_or_create_by_auth' do
     it 'does not create a new collector or stream if there is already one with the same user id' do
       collector = Factory(:collector)

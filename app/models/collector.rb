@@ -8,10 +8,7 @@ class Collector < ActiveRecord::Base
   def self.from_new_user(auth)
     user = auth.user
     user_id = user.nsid
-    collector = create(user_id: user_id, auth_token: auth.token, user_name: user.username, full_name: user.fullname)
-    editor = Collectr::Editor.new
-    editor.editorial_collection_stream_for(collector) if editor.ready?
-    collector
+    create(user_id: user_id, auth_token: auth.token, user_name: user.username, full_name: user.fullname)
   end
 
   def self.find_or_create_by_auth(auth)
