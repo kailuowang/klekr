@@ -1,9 +1,10 @@
 class window.KeyShortcuts extends ViewBase
   constructor: ->
     @shortcuts = []
+    @_popup =  $('#keyShortcuts')
     this._registerHelpPopup()
     @helpList = $('#shortcuts')
-    this.addShortcuts new KeyShortcut('k', this._popupHelp, 'Show all keyboard shortcuts' )
+    this.addShortcuts new KeyShortcut('k', this._popupHelp, 'Show all keyboard shortcuts', this._canShowHelp )
 
   disable: =>
     $(document).unbind('keydown', this._clearLock)
@@ -36,7 +37,10 @@ class window.KeyShortcuts extends ViewBase
 
   _popupHelp: =>
     this._updateHelp()
-    this.popup($('#keyShortcuts'))
+    this.popup(@_popup)
+
+  _canShowHelp: =>
+    !this.showing(@_popup)
 
   _updateHelp: ->
     @helpList.empty()
