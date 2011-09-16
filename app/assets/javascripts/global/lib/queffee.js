@@ -225,6 +225,7 @@ queffee.Q = (function() {
     if (jobs == null) {
       jobs = [];
     }
+    this._newJobsAdded = __bind(this._newJobsAdded, this);
     this._initHeap = __bind(this._initHeap, this);
     this.clear = __bind(this.clear, this);
     this.size = __bind(this.size, this);
@@ -232,10 +233,14 @@ queffee.Q = (function() {
     this.dequeue = __bind(this.dequeue, this);
     this.enQ = __bind(this.enQ, this);
     this.enqueue = __bind(this.enqueue, this);
+    this.jobsAdded = __bind(this.jobsAdded, this);
     this.Q = __bind(this.Q, this);
     this._initHeap(jobs);
-    this.onNewJobAdded = null;
+    this.newJobsAddedHandler = [];
   }
+  Q.prototype.jobsAdded = function(handler) {
+    return this.newJobsAddedHandler.push(handler);
+  };
   Q.prototype.enqueue = function() {
     var job, jobs, _i, _len;
     jobs = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
@@ -243,7 +248,7 @@ queffee.Q = (function() {
       job = jobs[_i];
       this._heap.insert(job);
     }
-    return typeof this.onNewJobAdded === "function" ? this.onNewJobAdded() : void 0;
+    return this._newJobsAdded();
   };
   Q.prototype.enQ = function(performFn, priorityFn, timeout) {
     return this.enqueue(new queffee.Job(performFn, priorityFn, timeout));
@@ -263,6 +268,16 @@ queffee.Q = (function() {
   Q.prototype._initHeap = function(jobs) {
     return this._heap = new queffee.Heap(jobs, queffee.Q._compareJob);
   };
+  Q.prototype._newJobsAdded = function() {
+    var handler, _i, _len, _ref, _results;
+    _ref = this.newJobsAddedHandler;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      handler = _ref[_i];
+      _results.push(handler());
+    }
+    return _results;
+  };
   return Q;
 })();
 queffee.Worker = (function() {
@@ -272,23 +287,27 @@ queffee.Worker = (function() {
     this._onJobDone = __bind(this._onJobDone, this);
     this._work = __bind(this._work, this);
     this.idle = __bind(this.idle, this);
+    this.stop = __bind(this.stop, this);
     this.start = __bind(this.start, this);
-    this.idle_ = true;
-    this.q.onNewJobAdded = __bind(function() {
-      return this._work();
-    }, this);
+    this._idle = true;
+    this.q.jobsAdded(this._work);
+    this._stopped = false;
   }
   Worker.prototype.start = function() {
+    this._stopped = false;
     return this._work();
   };
+  Worker.prototype.stop = function() {
+    return this._stopped = true;
+  };
   Worker.prototype.idle = function() {
-    return this.idle_;
+    return this._idle;
   };
   Worker.prototype._work = function() {
     var job;
-    if (this.idle_) {
+    if (this._idle && !this._stopped) {
       job = this.q.dequeue();
-      if (this.idle_ = !(job != null)) {
+      if (this._idle = !(job != null)) {
         return typeof this.onIdle === "function" ? this.onIdle() : void 0;
       } else {
         return job.perform(this._onJobDone);
@@ -296,7 +315,7 @@ queffee.Worker = (function() {
     }
   };
   Worker.prototype._onJobDone = function() {
-    this.idle_ = true;
+    this._idle = true;
     return this._work();
   };
   return Worker;
