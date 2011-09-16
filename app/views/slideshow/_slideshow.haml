@@ -5,9 +5,6 @@
   __morePicturesPath__ = '#{@more_pictures_path}';
   __advance_by_progress__ = '#{@advance_by_progress}';
 
-- content_for(:top_right) do
-  = render partial: 'mode_switch'
-
 %img#spacer{src: '/assets/spacer.gif', height: '1px', width: '1280px'}
 
 = render partial: 'gridview'
@@ -51,10 +48,11 @@
   = render partial: 'fave_panel'
 
 #bottomRight
-  #interestingessPanel.fright.hidden
-    %h4
-      Interestingness:
-      %span#interestingness
-        ?
-  #ratingDisplayPanel.hidden.fright.pointer
-    #ratingDisplay
+  .fright
+    = render partial: 'mode_switch'
+  #bottom-right-pic-info.fright
+    #interestingessPanel.hidden
+      %h4
+        Interestingness:
+        %span#interestingness
+          ?

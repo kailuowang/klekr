@@ -9,7 +9,6 @@ class window.FavePanel  extends ViewBase
     @faveRatingPanel = $('#faveRatingPanel')
     @ratingDisplayPanel = $('#ratingDisplayPanel')
     @ratingDisplay = $('#ratingDisplay')
-    @interestingessPanel = $('#interestingessPanel')
     this._registerEvents()
     this._initRaty(@faveRating)
     this._initRaty(@ratingDisplay)
@@ -33,7 +32,6 @@ class window.FavePanel  extends ViewBase
     this.setVisible(@faved, faved)
     this._updateRating(picture.data.rating)
     this.setVisible(@ratingDisplayPanel, faved)
-    this.setVisible(@interestingessPanel, !faved and picture.data.collected )
 
   _registerEvents: =>
     @faveLink.click_ this.fave

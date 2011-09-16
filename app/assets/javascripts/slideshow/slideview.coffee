@@ -5,6 +5,7 @@ class window.Slideview extends ViewBase
     @pictureArea = $('#pictureArea')
     @slide = $('#slide')
     @interestingness = $('#interestingness')
+    @interestingessPanel = $('#interestingessPanel')
     @titleLink = $('#title')
     @ownerLink = $('#owner')
     @fromStreamsDiv = $('#fromStreams')
@@ -12,6 +13,7 @@ class window.Slideview extends ViewBase
     @imageCaption = $('#imageCaption')
     @bottomLeft = $('#bottomLeft')
     @bottomRight = $('#bottomRight')
+    @bottomRightPicInfo = $('#bottom-right-pic-info')
     this._adjustImageFrame()
 
   display: (picture) ->
@@ -32,6 +34,7 @@ class window.Slideview extends ViewBase
     @titleLink.text picture.displayTitle()
     @ownerLink.attr('href', picture.data.ownerPath)
     @ownerLink.text(picture.data.ownerName)
+    this.setVisible(@interestingessPanel, picture.data.collected )
     this._updateSources(picture.data.fromStreams)
 
   pictureClick: (callback) =>
@@ -57,11 +60,11 @@ class window.Slideview extends ViewBase
     $('#imageFrameInner').css('height', (displayHeight - 40) + 'px')
     $('#bottomBanner').css('top',(displayHeight + 28) + 'px' )
     @bottomLeft.css('top', (displayHeight + 22 ) + 'px' )
-    @bottomRight.css('top', (displayHeight + 36 ) + 'px' )
+    @bottomRight.css('top', (displayHeight + 30 ) + 'px' )
 
   switchVisible: (showing) =>
     this.setVisible @bottomLeft, showing
-    this.setVisible @bottomRight, showing
+    this.setVisible @bottomRightPicInfo, showing
     this.setVisible @slide, showing
     this.setVisible(@pictureArea, false) unless showing
 
