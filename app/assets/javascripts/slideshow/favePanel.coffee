@@ -36,8 +36,8 @@ class window.FavePanel  extends ViewBase
     this.setVisible(@interestingessPanel, !faved and picture.data.collected )
 
   _registerEvents: =>
-    @faveLink.click this.fave
-    @removeFaveLink.click this.unfave
+    @faveLink.click_ this.fave
+    @removeFaveLink.click_ this.unfave
 
   _changingFavedStatus: ->
     @faveWaiting.show()

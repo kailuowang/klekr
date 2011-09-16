@@ -7,9 +7,9 @@ class window.ContactsImporter extends StreamImporterBase
     @progressBar = $('#import-popup #progress-bar')
     @importProgress = $('#import-popup #import-progress')
     @importLink = $('#do-import-contacts')
-    @importLink.click this._startImport
+    @importLink.click_ this._startImport
 
-    $('#add-contracts-link').click =>
+    $('#add-contracts-link').click_ =>
       @importLink.show()
       @importProgress.hide()
       this.popup @_popup
