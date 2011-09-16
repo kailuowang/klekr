@@ -4,6 +4,7 @@ class window.StreamPanel
     @stopCollectingLink = $('#stopCollecting')
     @noncollectingOperationDiv = $('#noncollectingStreamOperations')
     @collectingOperationDiv = $('#collectingStreamOperations')
+    @rating = @collectingOperationDiv.find('#rating')
 
     @startCollectingLink.bind 'ajax:success', =>
       @noncollectingOperationDiv.hide()
@@ -12,3 +13,6 @@ class window.StreamPanel
     @stopCollectingLink.bind 'ajax:success', =>
       @noncollectingOperationDiv.show()
       @collectingOperationDiv.hide()
+
+    @collectingOperationDiv.find('.rating-adjustment-link').bind 'ajax:success', (e, newRating) =>
+      @rating.text(newRating)

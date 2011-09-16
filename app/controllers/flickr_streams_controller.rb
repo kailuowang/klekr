@@ -53,12 +53,10 @@ class FlickrStreamsController < ApplicationController
     js_ok
   end
 
-  #PUT /flickr_stream/1/bump_rating
+  #PUT /flickr_stream/1/adjust_rating
   def adjust_rating
-    respond_to do |format|
-      params[:adjustment] == 'up' ? @flickr_stream.bump_rating : @flickr_stream.trash_rating
-      js_ok
-    end
+    params[:adjustment] == 'up' ? @flickr_stream.bump_rating : @flickr_stream.trash_rating
+    render_json @flickr_stream.star_rating
   end
 
   #PUT /flickr_stream/1/mark_all_as_read

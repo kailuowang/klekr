@@ -16,7 +16,7 @@ module Collectr
         collected:        !picture.new_record? && picture.collected?,
         ownerPath:        user_path(picture.owner_id),
         fromStreams:      picture.flickr_streams.map do |stream|
-                            data_for_stream(stream)
+                            data_for_stream_info(stream)
                           end
       }.merge action_paths_for(picture)
     end
@@ -30,10 +30,6 @@ module Collectr
       end
     end
 
-    def data_for_stream(stream)
-      { username: stream.username, type: stream.type_display, path: flickr_stream_path(stream)}
-    end
-
     def data_list_for(pictures)
       pictures.map do |picture|
         data_for(picture)
@@ -43,5 +39,11 @@ module Collectr
     def render_json_pictures(pictures)
       render_json data_list_for(pictures)
     end
+
+    private
+    def data_for_stream_info(stream)
+      { username: stream.username, type: stream.type_display, path: flickr_stream_path(stream)}
+    end
+
   end
 end
