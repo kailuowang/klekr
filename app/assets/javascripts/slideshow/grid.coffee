@@ -16,9 +16,14 @@ class window.Grid extends ModeBase
     [pageStart, pageEnd] = this._currentPageRange()
     gallery.pictures[pageStart..pageEnd]
 
+  clear: =>
+    this.reset()
+    this._loadGridview()
+
   _loadGridview: =>
-    gridview.loadPictures(this.currentPageOfPictures())
-    this._updateHighlight()
+    pictures = this.currentPageOfPictures()
+    gridview.loadPictures(pictures)
+    this._updateHighlight() if pictures.length > 0
     this.trigger('progress-changed')
 
   atTheLast: =>

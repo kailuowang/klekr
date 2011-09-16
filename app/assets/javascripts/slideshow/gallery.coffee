@@ -61,7 +61,6 @@ class window.Gallery extends Events
     @picturePreloader.clear()
     @pictures = []
     this._alternativeMode().off()
-    @currentMode.off()
     m.reset() for m in @modes
     @picturePreloader.start()
     this._retrieveMorePictures(@cacheSize)
@@ -107,7 +106,10 @@ class window.Gallery extends Events
 
   _onRetrieverFinished: (numOfRetrieved)=>
     if this.isEmpty()
-      generalView.showEmptyGalleryMessage()
+      if this._noActiveFilter()
+        generalView.showEmptyGalleryMessage()
+      else
+        @currentMode.clear?()
     else if numOfRetrieved > 0
      this._ensurePictureCache()
 
@@ -118,6 +120,9 @@ class window.Gallery extends Events
   _applyTypeFilter: (type) =>
     @_typeFilter = type
     this._reinitToGrid()
+
+  _noActiveFilter: =>
+    !@_typeFilter? and !@_ratingFilter
 
   _reinitToGrid: =>
     @currentMode = @grid
