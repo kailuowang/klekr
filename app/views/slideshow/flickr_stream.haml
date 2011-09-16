@@ -5,9 +5,13 @@
   .fleft
     = link_to(icon(@stream), @stream.user_url, target: '_blank')
   .fleft
-    %h4
+    %h4.inline
       #{link_to(@stream.username, @stream.user_url, target: '_blank')}'s
       = @stream.type_display
+
+    (
+    = link_to "artist's " + @stream.alternative_stream.type_display.downcase, flickr_stream_path(@stream.alternative_stream)
+    )
     %h5
       = render partial: 'stream_panel'
 =render partial: 'slideshow'

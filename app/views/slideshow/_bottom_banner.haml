@@ -1,10 +1,10 @@
 #bottomBanner
-  = render partial: 'general/copyright'
-  |
   = link_to "Feedback",  'mailto:kailuo.wang@gmail.com'
   |
   %a#keyShortcutsLink{href: '#'}
     Key Shortcuts
+  .copyrights
+    = render partial: 'general/copyright'
 
   #debugInfo.inline
 
