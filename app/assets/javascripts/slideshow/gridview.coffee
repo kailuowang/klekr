@@ -3,6 +3,7 @@ class window.Gridview extends ViewBase
     @template = $('#template')
     @grid = $('#gridPictures')
     @gridview = $('#gridview')
+    @loading = @gridview.find('#grid-loading')
     this._calculateSize()
     this._adjustWidth()
 
@@ -13,8 +14,14 @@ class window.Gridview extends ViewBase
     $('.grid-picture').removeClass('highlighted')
     picture.trigger('highlighted')
 
-  loadPictures: (pictures) ->
+  showLoading: =>
+    @loading.show()
+    @grid.hide()
+
+  loadPictures: (pictures) =>
     @grid.empty()
+    @loading.hide()
+    @grid.show()
     index = 0
     for picture in pictures
       this._load picture, index++

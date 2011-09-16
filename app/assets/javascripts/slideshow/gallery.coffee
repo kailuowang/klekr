@@ -56,6 +56,7 @@ class window.Gallery extends Events
   isLoading: => @retriever and @retriever.busy()
 
   _reset: =>
+    this.trigger('pre-reset')
     @waitingForPictures = true
     @retriever.reset()
     @picturePreloader.clear()

@@ -11,6 +11,8 @@ class window.Grid extends ModeBase
     gallery.bind 'new-pictures-added', (pictures) =>
       for pic in pictures
         pic.bind 'clicked', this._onPictureSelect
+    gallery.bind 'pre-reset', =>
+      this.view().showLoading()
 
   currentPageOfPictures:  =>
     [pageStart, pageEnd] = this._currentPageRange()
