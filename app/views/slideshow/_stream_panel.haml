@@ -1,9 +1,7 @@
 #noncollectingStreamOperations{class: hidden_class(@stream.collecting?)}
-  = link_to 'Add to my sources', subscribe_flickr_stream_path(@stream), remote: true, :method => :put, id: 'startCollecting'
+  = link_to 'Add', subscribe_flickr_stream_path(@stream), remote: true, :method => :put, id: 'startCollecting', class: 'btn primary', title: "Add #{@stream.to_s} to my sources"
 #collectingStreamOperations{class: hidden_class(!@stream.collecting?)}
   Rating:
   = rating_display(@stream)
-  |
-  = link_to 'Mark all as viewed', mark_all_as_read_flickr_stream_path(@stream), remote: true, confirm: 'Are you sure? This will mark all unviewed pictures from this source as viewed.', :method => :put
-  |
-  = link_to 'Remove from my sources', unsubscribe_flickr_stream_path(@stream), remote: true, method: :put, id: 'stopCollecting'
+  = link_to 'Mark all as viewed', mark_all_as_read_flickr_stream_path(@stream), remote: true, confirm: 'Are you sure? This will mark all unviewed pictures from this source as viewed.', method: :put, class: 'btn'
+  = link_to 'Remove from my sources', unsubscribe_flickr_stream_path(@stream), remote: true, method: :put, id: 'stopCollecting',  class: 'btn'

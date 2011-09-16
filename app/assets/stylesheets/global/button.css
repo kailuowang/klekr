@@ -1,21 +1,22 @@
 .btn {
   cursor: pointer;
   display: inline-block;
-  background-color: #e6e6e6;
+  background-color: #969696;
   background-repeat: no-repeat;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), color-stop(0.25, #ffffff), to(#e6e6e6));
-  background-image: -webkit-linear-gradient(#ffffff, #ffffff 0.25, #e6e6e6);
-  background-image: -moz-linear-gradient(#ffffff, #ffffff 0.25, #e6e6e6);
-  background-image: -ms-linear-gradient(#ffffff, #ffffff 0.25, #e6e6e6);
-  background-image: -o-linear-gradient(#ffffff, #ffffff 0.25, #e6e6e6);
-  background-image: linear-gradient(#ffffff, #ffffff 0.25, #e6e6e6);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#AAAAAA), color-stop(0.25, #AAAAAA), to(#969696));
+  background-image: -webkit-linear-gradient(#AAAAAA, #AAAAAA 0.25, #969696);
+  background-image: -moz-linear-gradient(#AAAAAA, #AAAAAA 0.25, #969696);
+  background-image: -ms-linear-gradient(#AAAAAA, #AAAAAA 0.25, #969696);
+  background-image: -o-linear-gradient(#AAAAAA, #AAAAAA 0.25, #969696);
+  background-image: linear-gradient(#AAAAAA, #AAAAAA 0.25, #969696);
   padding: 4px 14px;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-  color: #333;
+  color: #222;
   font-size: 13px;
   line-height: 18px;
-  border: 1px solid #ccc;
-  border-bottom-color: #bbb;
+  font-weight: bold;
+  border: 1px solid #777;
+  border-bottom-color: #888;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -28,27 +29,27 @@
 }
 .btn:hover {
   background-position: 0 -15px;
-  color: #333;
+  color: #000;
   text-decoration: none;
 }
 .btn.primary, .btn.danger {
-  color: #fff;
+  color: #DDD;
 }
 .btn.primary:hover, .btn.danger:hover {
-  color: #fff;
+  color: #EEE;
 }
 .btn.primary {
-  background-color: #0064cd;
+  background-color: #9A4E3F;
   background-repeat: repeat-x;
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#049cdb), to(#0064cd));
-  background-image: -moz-linear-gradient(#049cdb, #0064cd);
-  background-image: -ms-linear-gradient(#049cdb, #0064cd);
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #049cdb), color-stop(100%, #0064cd));
-  background-image: -webkit-linear-gradient(#049cdb, #0064cd);
-  background-image: -o-linear-gradient(#049cdb, #0064cd);
-  background-image: linear-gradient(#049cdb, #0064cd);
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#CA7E5F), to(#9A4E3F));
+  background-image: -moz-linear-gradient(#CA7E5F, #9A4E3F);
+  background-image: -ms-linear-gradient(#CA7E5F, #9A4E3F);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #CA7E5F), color-stop(100%, #9A4E3F));
+  background-image: -webkit-linear-gradient(#CA7E5F, #9A4E3F);
+  background-image: -o-linear-gradient(#CA7E5F, #9A4E3F);
+  background-image: linear-gradient(#CA7E5F, #9A4E3F);
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-  border-color: #0064cd #0064cd #003f81;
+  border-color: #9A4E3F #9A4E3F #DA8E7F;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 .btn.danger {

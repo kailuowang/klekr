@@ -2,13 +2,12 @@
   %span#faved.hidden
     %h3.inline
       In Collection
-    %h4.inline
-      %a#removeFaveLink{href: '#'}
+    .inline
+      %a#removeFaveLink.btn{href: '#'}
         remove
   %img#faveWaiting.hidden{src: '/assets/loading.gif'}
-  %a#faveLink.hidden{href: '#'}
-    %h3
-      Collect it!
+  %a#faveLink.btn.primary.large.hidden{href: '#'}
+    Collect it!
 
 #faveRatingPanel.modal-popup{style: 'margin: 40px'}
   %h3

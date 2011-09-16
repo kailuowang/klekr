@@ -10,12 +10,13 @@
   #display-streams.hidden
     %h4
       Current Editorial Choices
-    #streams-list.row.well
+    #streams-list.row.well.mt20
       = render partial: 'streams_grid'
 
-    %h3.mt20
-      %a#do-import-streams{href: '#'}
-        Yes! Add them!
+    .fright
+      %h3
+        %a#do-import-streams.btn.large.primary{href: '#'}
+          Yes! Add them!
 
   #import-streams-progress.hidden
     %h4 Adding editor choices and some of their pictures
