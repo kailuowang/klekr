@@ -2,6 +2,7 @@ class window.Slide extends ModeBase
   constructor: ->
     this.reset()
     @favePanel = new FavePanel(this.currentPicture)
+    slideview.pictureClick this.backToGrid
     super()
 
   reset: =>

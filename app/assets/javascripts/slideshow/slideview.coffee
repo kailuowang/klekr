@@ -34,6 +34,9 @@ class window.Slideview extends ViewBase
     @ownerLink.text(picture.data.ownerName)
     this._updateSources(picture.data.fromStreams)
 
+  pictureClick: (callback) =>
+    @mainImg.click(callback)
+
   gotoOwner: =>
     window.location = @ownerLink.attr('href')
 
