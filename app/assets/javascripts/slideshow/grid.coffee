@@ -21,7 +21,9 @@ class window.Grid extends ModeBase
     this._updateHighlight()
     this.trigger('progress-changed')
 
-  atTheLast: => this._pageIncomplete()
+  atTheLast: =>
+    [pageStart, pageEnd] = this._currentPageRange()
+    pageEnd is gallery.size() - 1
 
   atTheBegining: =>
     [pageStart, pageEnd] = this._currentPageRange()
@@ -55,8 +57,9 @@ class window.Grid extends ModeBase
       this.trigger('progressed')
 
   navigateToPrevious: =>
-    [pageStart, pageEnd] = this._currentPageRange()
-    this._changePage(pageStart - 1)
+    unless this.atTheBegining()
+      [pageStart, pageEnd] = this._currentPageRange()
+      this._changePage(pageStart - 1)
 
   switchToSlide: =>
     gallery.toggleMode()

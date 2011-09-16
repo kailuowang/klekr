@@ -9,7 +9,8 @@ class window.Slide extends ModeBase
     @currentIndex = 0
 
   displayCurrentPicture: =>
-    slideview.display(this.currentPicture())
+    picture = this.currentPicture()
+    slideview.display(picture)
     @favePanel.updateFavedStatus()
     this.trigger('progress-changed')
 
@@ -29,7 +30,7 @@ class window.Slide extends ModeBase
       this.displayCurrentPicture()
 
   atTheLast: =>
-    @currentIndex == gallery.size() - 1 and !gallery.isLoading()
+     @currentIndex == gallery.size() - 1
 
   atTheBegining: =>
     @currentIndex == 0

@@ -71,7 +71,8 @@ class window.Gallery extends Events
     @picturePreloader.rePrioritize()
 
   _updateProgressInView: =>
-    generalView.displayProgress(this.currentMode.atTheLast(), this.currentMode.atTheBegining())
+    generalView.displayProgress(this.currentMode.atTheLast() and !gallery.isLoading(),
+                                this.currentMode.atTheBegining())
 
   _alternativeMode: =>
     if @currentMode is @grid then @slide else @grid
