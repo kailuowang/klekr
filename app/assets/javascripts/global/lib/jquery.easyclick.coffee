@@ -2,8 +2,8 @@
 	$.fn.click = (handler) ->
 		this.each ->
 		  element = $(this)
-		  element.bind 'click', ->
-		    retVal = handler()
+		  element.bind 'click', (e)->
+		    retVal = handler(e)
 		    retVal is true
 
 )(jQuery)

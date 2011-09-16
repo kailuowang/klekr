@@ -6,7 +6,7 @@ class window.TypeFilterView extends ViewBase
     attachedMode.bind 'off', this.hide
 
   filterChange: (handler) =>
-    @typeCheckBox.click? (e)=>
+    @typeCheckBox.change? (e)=>
       type = if e.currentTarget.checked then 'UploadStream' else null
       handler(type)
 
