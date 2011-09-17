@@ -32,6 +32,7 @@ namespace :deploy do
 end
 
 
+
 namespace :deploy do
   set :app_path, '/app/collectr'
   set :current_path, app_path
@@ -79,6 +80,10 @@ namespace :deploy do
 
   task :db_backup, :roles => :app do
    backup_db_to_local
+  end
+
+  task :report, :roles => :app do
+    rake 'admin:report:collectors'
   end
 
   def backup_db_to_local
