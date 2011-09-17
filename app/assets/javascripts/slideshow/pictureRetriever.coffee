@@ -41,4 +41,7 @@ class window.PictureRetriever extends Events
       if pictures.length > 0
         this.trigger('batch-retrieved', pictures)
         @_retrievedCount += pictures.length
+      else
+        @_q.clear()
+        this._onWorkerDone()
       callback()

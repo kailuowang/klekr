@@ -57,6 +57,7 @@ class window.Gallery extends Events
 
   _reset: =>
     this.trigger('pre-reset')
+    @allPicturesRetrieved = false
     @waitingForPictures = true
     @retriever.reset()
     @picturePreloader.clear()
@@ -83,7 +84,7 @@ class window.Gallery extends Events
     if @waitingForPictures
       this._firstBatchOfPicturesReady()
     else
-      this.trigger('more-pictures-loaded')
+      this.trigger('gallery-pictures-changed')
 
   _firstBatchOfPicturesReady: =>
     @waitingForPictures = false
@@ -102,17 +103,23 @@ class window.Gallery extends Events
     generalView.updateModeIndicator(this.inGrid())
 
   _ensurePictureCache: =>
-    if @pictures.length - this._currentProgress() < (@cacheSize * this.pageSize())
+    needMoreForCache = @pictures.length - this._currentProgress() < (@cacheSize * this.pageSize())
+    if needMoreForCache and !@allPicturesRetrieved
       this._retrieveMorePictures()
 
   _onRetrieverFinished: (numOfRetrieved)=>
     if this.isEmpty()
-      if this._noActiveFilter()
-        generalView.showEmptyGalleryMessage()
-      else
-        @currentMode.clear?()
+      this._emptyGallery()
     else if numOfRetrieved > 0
      this._ensurePictureCache()
+    else if numOfRetrieved == 0
+      @allPicturesRetrieved = true
+      this.trigger('gallery-pictures-changed')
+
+  _emptyGallery: =>
+    @currentMode.clear?()
+    if this._noActiveFilter()
+        generalView.showEmptyGalleryMessage()
 
   _applyRatingFilter: (rating) =>
     @_ratingFilter = rating

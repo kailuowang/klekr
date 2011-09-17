@@ -12,7 +12,7 @@ class window.Grid extends ModeBase
       for pic in pictures
         pic.bind 'clicked', this._onPictureSelect
     gallery.bind 'pre-reset', => gridview.showLoading()
-    gallery.bind 'more-pictures-loaded', this._tryCompleteCurrentPage
+    gallery.bind 'gallery-pictures-changed', this._tryCompleteCurrentPage
 
   currentPageOfPictures:  =>
     [pageStart, pageEnd] = this._currentPageRange()
@@ -55,7 +55,7 @@ class window.Grid extends ModeBase
         this.trigger('progressed')
       else if gallery.isLoading()
         gridview.showLoading()
-        gallery.bind 'more-pictures-loaded', this._navigateToNextPageWhenPicturesReady
+        gallery.bind 'gallery-pictures-changed', this._navigateToNextPageWhenPicturesReady
 
 
   navigateToPrevious: =>
@@ -89,7 +89,7 @@ class window.Grid extends ModeBase
     this.trigger('progress-changed')
 
   _navigateToNextPageWhenPicturesReady: =>
-      gallery.unbind 'more-pictures-loaded', this._navigateToNextPageWhenPicturesReady
+      gallery.unbind 'gallery-pictures-changed', this._navigateToNextPageWhenPicturesReady
       unless this.atTheLast()
         this.navigateToNext()
       else
