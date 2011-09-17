@@ -83,7 +83,7 @@ class window.Gallery extends Events
     if @waitingForPictures
       this._firstBatchOfPicturesReady()
     else
-      @currentMode.onMorePicturesLoaded?()
+      this.trigger('more-pictures-loaded')
 
   _firstBatchOfPicturesReady: =>
     @waitingForPictures = false

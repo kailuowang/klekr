@@ -11,8 +11,8 @@ class window.Grid extends ModeBase
     gallery.bind 'new-pictures-added', (pictures) =>
       for pic in pictures
         pic.bind 'clicked', this._onPictureSelect
-    gallery.bind 'pre-reset', =>
-      this.view().showLoading()
+    gallery.bind 'pre-reset', => gridview.showLoading()
+    gallery.bind 'more-pictures-loaded', this._tryCompleteCurrentPage
 
   currentPageOfPictures:  =>
     [pageStart, pageEnd] = this._currentPageRange()
@@ -21,12 +21,6 @@ class window.Grid extends ModeBase
   clear: =>
     this.reset()
     this._loadGridview()
-
-  _loadGridview: =>
-    pictures = this.currentPageOfPictures()
-    gridview.loadPictures(pictures)
-    this._updateHighlight() if pictures.length > 0
-    this.trigger('progress-changed')
 
   atTheLast: =>
     [pageStart, pageEnd] = this._currentPageRange()
@@ -42,12 +36,7 @@ class window.Grid extends ModeBase
   onFirstBatchOfPicturesLoaded: =>
     this.updateProgress(0)
 
-  onMorePicturesLoaded: =>
-    if this._pageIncomplete()
-      this._loadGridview()
-
-  view: ->
-    gridview
+  view: -> gridview
 
   currentProgress: =>
     @selectedIndex
@@ -60,8 +49,14 @@ class window.Grid extends ModeBase
     this._markCurrentPageAsViewed()
     unless this._pageIncomplete()
       [pageStart, pageEnd] = this._currentPageRange()
-      this._changePage(pageEnd + 1)
-      this.trigger('progressed')
+      newIndex = pageEnd + 1
+      if picturesReady = newIndex < gallery.size()
+        this._changePage(newIndex)
+        this.trigger('progressed')
+      else if gallery.isLoading()
+        gridview.showLoading()
+        gallery.bind 'more-pictures-loaded', this._navigateToNextPageWhenPicturesReady
+
 
   navigateToPrevious: =>
     unless this.atTheBegining()
@@ -87,11 +82,27 @@ class window.Grid extends ModeBase
       [ [ 'return', 'space' ], this.switchToSlide, "go to the selected picture" ]
     ]
 
+  _loadGridview: =>
+    pictures = this.currentPageOfPictures()
+    gridview.loadPictures(pictures)
+    this._updateHighlight() if pictures.length > 0
+    this.trigger('progress-changed')
+
+  _navigateToNextPageWhenPicturesReady: =>
+      gallery.unbind 'more-pictures-loaded', this._navigateToNextPageWhenPicturesReady
+      unless this.atTheLast()
+        this.navigateToNext()
+      else
+        this._loadGridview()
+
+  _tryCompleteCurrentPage: =>
+    if this._pageIncomplete()
+      this._loadGridview()
+
   _changePage: (newIndex)=>
     if 0 <= newIndex < gallery.size()
       @selectedIndex = newIndex
       this._loadGridview()
-
 
   _tryMoveTo: (newIndex, alternative) =>
     [pageStart, pageEnd] = this._currentPageRange()

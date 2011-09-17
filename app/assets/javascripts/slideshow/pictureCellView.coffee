@@ -1,18 +1,17 @@
 class window.PictureCellView extends ViewBase
   constructor: (@cellDiv, @picture) ->
     @ratingDiv = @cellDiv.find('#ratingInGrid:first')
-    @picture.bind 'highlighted', this._highlight
     @loadingIndicator = @cellDiv.find('#loading-indicator:first')
-    this._initDom()
     this._registerEvents()
+    this._initDom()
 
   setBoarderClasses: (boundaryTypes) =>
     @cellDiv.addClass(c) for c in boundaryTypes
 
   _registerEvents: =>
     @cellDiv.click => @picture.trigger('clicked', @picture)
-    @picture.bind 'fully-ready', =>
-      @loadingIndicator.hide()
+    @picture.bind 'fully-ready', => @loadingIndicator.hide()
+    @picture.bind 'highlighted', this._highlight
 
 
   _initDom: =>
