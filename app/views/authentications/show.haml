@@ -3,34 +3,41 @@
 
 :javascript
   __authUrl__ = '#{@auth_url}';
-.center
+.container
   .bigTopPadding
     %h2
       Welcome to klekr!
   .bigTopPadding{align: 'center'}
-    #welcome-message{style: 'width: 500px; text-align: left; border: 1px solid #303030; padding: 20px'}
-      %h5
-        %p
-          klekr requires flickr.com login and permission to collect pictures.
-        %p
-          After you login, you will see new pictures from your sources and be able to collect and rate them.
-        %p
-          You can also view and manage your picture collections. Add other people's collections and works to your sources.
 
-  .bigTopPadding
+
+  #welcome-message.well
     #countDownRedirect
       %h3
         Redirecting to flickr.com to login in
         %span#countdown
           5
         secs.
-      %h4 Click any place to stop.
-      %div{style: 'padding-top:5px'}
-        %h5{style:  'text-transform: none;'}
-          Click
-          = link_to 'here', @auth_url
-          if you are not redirected promptly
+        %a#help-title{href: '#'}
+          Wait, What?
+
+    #about-klekr-title.hidden
+      %h2
+        OK. Here is what klekr is about:
+
+    #about-klekr-panel.hidden
+      %h3.mt20
+        klekr helps you explore and collect photos of your own taste.
+      %h5
+        %p
+          With klekr, you can add other artists' works and collections as sources.
+          New pictures from these sources will be displayed in a single slideshow.
+          klekr remembers your preference over these sources by looking at how you collect pictures.
+          Thus klekr will be able to display the more interesting pictures first.
+      %h2
+        Now let's get started! ↓
+
     #stoppedRedirect.hidden
-      %h4
+      %h3.mt20
         = link_to 'Click here to login from Flickr.com', @auth_url
 
+      Klekr links with your flickr account so that you don't have to create another one. Also, pictures you collect on klekr will be faved on flickr too :)

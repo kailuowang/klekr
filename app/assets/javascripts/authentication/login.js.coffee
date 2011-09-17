@@ -1,6 +1,10 @@
 class window.Login
   constructor: (@authUrl) ->
-    this._registerBodyClick()
+    new CollapsiblePanel($('#about-klekr-panel'), $('#help-title'))
+    @helpTitle = $('#help-title')
+    @helpTitle.click_ =>
+      this._stopCountdown()
+      $('#about-klekr-title').show()
 
   redirectCountdown: (seconds)=>
     unless @stopCountdown
@@ -13,10 +17,9 @@ class window.Login
   _nextCountdown: (seconds) =>
     => this.redirectCountdown(seconds - 1)
 
-  _registerBodyClick: =>
-    $(window).click =>
-      this._switchToStoppedView()
-      @stopCountdown = true
+  _stopCountdown: =>
+    this._switchToStoppedView()
+    @stopCountdown = true
 
   _switchToStoppedView: =>
     $('#countDownRedirect').hide()
