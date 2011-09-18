@@ -53,7 +53,7 @@ class window.Gridview extends ViewBase
   _adjustWidth: =>
     $('#gridPictures').css('width', (@columns * 260 + 1) + 'px')
     $('#gridPictures').css('height',(@rows * 270 + 1) + 'px')
-    $('#gridInner').css('height', (generalView.displayHeight - 80) + 'px')
+    $('#gridInner').css('height', generalView.displayHeight + 'px')
 
   switchVisible: (showing)=>
     this.setVisible(@gridview, showing)

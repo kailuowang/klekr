@@ -12,7 +12,6 @@ class window.Slideview extends ViewBase
     @fromTitle = $('#fromTitle')
     @imageCaption = $('#imageCaption')
     @bottomLeft = $('#bottomLeft')
-    @bottomRight = $('#bottomRight')
     @bottomRightPicInfo = $('#bottom-right-pic-info')
     this._adjustImageFrame()
 
@@ -58,13 +57,9 @@ class window.Slideview extends ViewBase
   _adjustImageFrame: ->
     displayHeight = generalView.displayHeight
     $('#imageFrameInner').css('height', (displayHeight - 40) + 'px')
-    $('#bottomBanner').css('top',(displayHeight + 28) + 'px' )
-    @bottomLeft.css('top', (displayHeight + 22 ) + 'px' )
-    @bottomRight.css('top', (displayHeight + 30 ) + 'px' )
 
   switchVisible: (showing) =>
     this.setVisible @bottomLeft, showing
     this.setVisible @bottomRightPicInfo, showing
     this.setVisible @slide, showing
     this.setVisible(@pictureArea, false) unless showing
-

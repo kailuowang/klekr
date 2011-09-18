@@ -5,9 +5,13 @@ class window.GeneralView extends ViewBase
     @_spacer = $('#spacer')
     @_indicator = $('#indicator')
     @_indicatorPanel = $('#mode-indicator')
+    @bottomLeft = $('#bottomLeft')
+    @bottomRight = $('#bottomRight')
+
     this._calculateDimensions()
     this._adjustSpacerWidth()
     this._adjustArrowsPosition()
+    this._adjustFrames()
 
   displayProgress: (atLast, atBegining) =>
     $('.side-nav').show()
@@ -36,7 +40,7 @@ class window.GeneralView extends ViewBase
 
   _calculateDimensions: ->
     [@windowWidth, @windowHeight] = this.honeycombAdjustedDimension()
-    [@displayWidth, @displayHeight] = [@windowWidth - 80, @windowHeight - 68]
+    [@displayWidth, @displayHeight] = [@windowWidth - 80, @windowHeight - 93]
 
   _adjustSpacerWidth: ->
     if this.isHoneycomb()
@@ -48,4 +52,11 @@ class window.GeneralView extends ViewBase
     sideArrowHeight = ( @displayHeight - 150 )+ "px"
     @_leftArrow.css('line-height', sideArrowHeight)
     @_rightArrow.css('line-height', sideArrowHeight)
+
+  _adjustFrames: =>
+    bottomOffset = @displayHeight + 51
+    $('#bottomBanner').css('top',(bottomOffset + 10) + 'px' )
+    @bottomLeft.css('top', (bottomOffset) + 'px' )
+    @bottomRight.css('top', (bottomOffset + 5) + 'px' )
+
 
