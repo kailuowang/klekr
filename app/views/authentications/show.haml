@@ -5,8 +5,10 @@
   __authUrl__ = '#{@auth_url}';
 .container
   .bigTopPadding
-    %h2
+    %h2.site-title
       Welcome to klekr!
+    .beta-tag
+      BETA
   .bigTopPadding{align: 'center'}
 
 
@@ -18,7 +20,7 @@
           5
         secs.
         %a#help-title{href: '#'}
-          Wait, What?
+          Wait, what?
 
     #about-klekr-title.hidden
       %h2
@@ -34,7 +36,7 @@
           klekr remembers your preference over these sources by looking at how you collect pictures.
           Thus klekr will be able to display the more interesting pictures first.
       %h2
-        Now let's get started! ↓
+        Let's get started! ↓
 
     #stoppedRedirect.hidden
       %h3.mt20
