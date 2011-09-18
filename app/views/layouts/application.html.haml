@@ -22,6 +22,7 @@
         #top-banner-welcome.fright
           - if @current_collector
             Welcome #{@current_collector.user_name}!
+            = link_to 'log out', authentications_path, method: :delete
         .fright
           = yield(:top_right)
 

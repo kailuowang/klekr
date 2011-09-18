@@ -17,4 +17,11 @@ class AuthenticationsController < ApplicationController
     @auth_url = FlickRaw.auth_url(perms: 'write', frob: frob )
   end
 
+  #delete
+  def destroy
+    @disable_navigation = true
+    reset_session
+    render 'bye'
+  end
+
 end
