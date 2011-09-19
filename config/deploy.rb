@@ -56,7 +56,13 @@ namespace :deploy do
     deploy.start_delayed_job
     deploy.post_deploy
     deploy.warm_server
+  end
 
+  task :patch, :roles => :app do
+    run_in_app "git checkout ."
+    run_in_app "git pull"
+    run_in_app "#{try_sudo} touch tmp/restart.txt"
+    deploy.warm_server
   end
 
   task :prepare_assets do
