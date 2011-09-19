@@ -6,16 +6,21 @@
 .container
   .bigTopPadding
     %h2.site-title
-      Welcome to klekr!
+      Welcome to
+      %span.site-name klekr!
     .beta-tag
       BETA
+    %h4.site-subtitle
+      Discover photos of your own taste.
   .bigTopPadding{align: 'center'}
 
 
   #welcome-message.well
     #countDownRedirect
       %h3
-        Redirecting to flickr.com to login in
+        Redirecting to
+        = link_to 'flickr.com', @auth_url
+        to login in
         %span#countdown
           5
         secs.
@@ -28,7 +33,7 @@
 
     #about-klekr-panel.hidden
       %h3.mt20
-        klekr helps you explore and collect photos of your own taste.
+
       %h5
         %p
           With klekr, you can add other artists' works and collections as sources.
