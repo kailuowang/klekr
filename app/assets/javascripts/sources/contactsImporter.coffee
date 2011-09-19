@@ -8,12 +8,18 @@ class window.ContactsImporter extends StreamImporterBase
     @importProgress = $('#import-popup #import-progress')
     @importLink = $('#do-import-contacts')
     @importLink.click_ this._startImport
+    @noContacts = $('#no-contact')
 
-    $('#add-contracts-link').click_ =>
-      @importLink.show()
-      @importProgress.hide()
-      this.popup @_popup
-      this._getContacts()
+    $('#add-contracts-link').click_ this._start
+
+  _start: =>
+    @importLink.show()
+    @importProgress.hide()
+    @noContacts.hide()
+    @displayContacts.hide()
+    @loading.show()
+    this.popup @_popup
+    this._getContacts()
 
   _getContacts: =>
     server.get @contactsPath, {}, (data) =>
@@ -28,7 +34,7 @@ class window.ContactsImporter extends StreamImporterBase
       $('#num-of-contacts').text(names.length)
       @displayContacts.fadeIn()
     else
-      $('#no-contact').fadeIn()
+      @noContacts.fadeIn()
 
   _startImport: =>
     @importLink.hide()
