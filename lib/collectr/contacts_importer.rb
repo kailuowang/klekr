@@ -9,8 +9,13 @@ module Collectr
     end
 
     def contacts
-      flickr.contacts.getList.map do |fcontact|
-        {user_id: fcontact.nsid, username: fcontact.username}
+      response = flickr.contacts.getList
+      if response['total'] > 0
+        response.map do |fcontact|
+          {user_id: fcontact.nsid, username: fcontact.username}
+        end
+      else
+        []
       end
     end
 

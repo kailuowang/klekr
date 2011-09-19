@@ -8,7 +8,7 @@
     = image_tag '/assets/loading.gif'
   #display-contacts.hidden
     %h4
-      You have
+      I have
       %span#num-of-contacts
       contacts on flickr:
     #contacts-list.well.mt20
@@ -17,6 +17,9 @@
       %h3
         %a#do-import-contacts.btn.large.primary{href: '#'}
           Yes! Add them!
+  #no-contact.hidden
+    %h4
+      Hmmm... it seems that I don't have any flickr contacts yet.
 
   #import-progress.hidden
     %h4 Adding contacts and some of their pictures

@@ -22,10 +22,13 @@ class window.ContactsImporter extends StreamImporterBase
       @loading.fadeOut this._displayContacts
 
   _displayContacts: =>
-    names = (contact.username for contact in @contacts)
-    @contactsList.text(names.join(', '))
-    $('#num-of-contacts').text(names.length)
-    @displayContacts.fadeIn()
+    if @contacts.length > 0
+      names = (contact.username for contact in @contacts)
+      @contactsList.text(names.join(', '))
+      $('#num-of-contacts').text(names.length)
+      @displayContacts.fadeIn()
+    else
+      $('#no-contact').fadeIn()
 
   _startImport: =>
     @importLink.hide()
