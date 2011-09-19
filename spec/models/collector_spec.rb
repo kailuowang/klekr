@@ -53,7 +53,7 @@ describe Collector do
         earlest_faved = 1.month.ago
         Factory(:picture, collector: @collector, rating: 1, faved_at: earlest_faved)
         Factory(:picture, collector: @collector, rating: 1, faved_at: 1.week.ago)
-        Collectr::FaveImporter.should_receive(:new).with(@collector, earlest_faved).and_return(@importer)
+        Collectr::FaveImporter.should_receive(:new).with(@collector, earlest_faved - 5).and_return(@importer)
         @collector.collection(3, 1)
       end
     end

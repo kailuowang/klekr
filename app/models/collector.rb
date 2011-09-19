@@ -22,7 +22,7 @@ class Collector < ActiveRecord::Base
     if(pictures_in_db.size == per_page || min_rating > 1)
       pictures_in_db
     else
-      pictures_in_db.to_a + Collectr::FaveImporter.new(self, earlest_faved_in_db).import(per_page - pictures_in_db.size)
+      pictures_in_db.to_a + Collectr::FaveImporter.new(self, earlest_faved_in_db - 5).import(per_page - pictures_in_db.size)
     end
   end
 

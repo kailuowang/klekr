@@ -92,6 +92,12 @@ describe Collectr::FaveImporter do
         @importer.import(3)
         Picture.faved_by(@importer.collector, 1, 1, 3).map(&:title).should == pics.map(&:title)
       end
+
+      it 'does not do antything if no pic faved' do
+        @retriever.stub!(:get).and_return([])
+        @importer.import(3)
+        Picture.count.should == 0
+      end
     end
 
   end

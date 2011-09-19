@@ -11,7 +11,8 @@ module Collectr
 
     def import(num)
       pictures = fave_stream.get_pictures(num, 1, nil, @faved_before)
-      update_pictures_faved_at(pictures, earlest_faved_from_flickr(pictures))
+      update_pictures_faved_at(pictures) if (pictures.present?)
+      pictures
     end
 
     private
@@ -23,11 +24,8 @@ module Collectr
                                                type: 'FaveStream')
     end
 
-    def earlest_faved_from_flickr(pictures)
-      collector_faved_at(pictures.last.pic_info)
-    end
-
-    def update_pictures_faved_at(pictures, earlest_date)
+    def update_pictures_faved_at(pictures)
+      earlest_date = collector_faved_at(pictures.last.pic_info)
       pictures.each_with_index do |pic, index|
         offset = pictures.size - index - 1 #to retain the original sequence of fave without querying for fave date for all pictures
         pic.update_attributes(
@@ -51,7 +49,7 @@ module Collectr
     def find_fave_info_by_page(pic, page = 1)
       faves =
         begin
-         flickr.photos.getFavorites(photo_id: pic.id, secret: pic.secret, per_page: 50, page: page)
+          flickr.photos.getFavorites(photo_id: pic.id, secret: pic.secret, per_page: 50, page: page)
         rescue FlickRaw::FailedResponse => e; end
       if faves && faves.person.size > 0
         faves.person.find{ |p| p.nsid == @collector.user_id } || find_fave_info_by_page(pic, page + 1)

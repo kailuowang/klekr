@@ -38,8 +38,10 @@ class window.FavePanel  extends ViewBase
     @removeFaveLink.click_ this.unfave
 
   _changingFavedStatus: ->
-    @faveWaiting.show()
+    @ratingDisplayPanel.hide()
+    @removeFaveLink.hide()
     @faveLink.hide()
+    @faveWaiting.show()
 
   _updateRating: (rating) =>
     $.fn.raty.start(rating, '#faveRating');
