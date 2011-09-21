@@ -13,9 +13,8 @@ class window.Gallery extends Events
     generalView.previousClick => @currentMode.navigateToPrevious?()
     generalView.toggleModeClick this.toggleMode
     @ratingFilterView = new RatingFilterView(@grid)
-    @typeFilterView = new TypeFilterView(@grid)
     @ratingFilterView.filterChange this._applyRatingFilter
-    @typeFilterView.filterChange this._applyTypeFilter
+    new GalleryControlPanel(this)
 
     @retriever = this._createPictureRetriever()
     @retriever.bind('batch-retrieved', this._addPictures)
@@ -65,7 +64,7 @@ class window.Gallery extends Events
     this._alternativeMode().off()
     m.reset() for m in @modes
     @picturePreloader.start()
-    this._retrieveMorePictures(@cacheSize)
+    this.retrieveMorePictures(@cacheSize)
 
   _progressChanged: =>
     this._updateProgressInView()
@@ -78,7 +77,7 @@ class window.Gallery extends Events
   _alternativeMode: =>
     if @currentMode is @grid then @slide else @grid
 
-  _retrieveMorePictures: (pages = 1)=> @retriever.retrieve(pages)
+  retrieveMorePictures: (pages = 1)=> @retriever.retrieve(pages)
 
   _morePicturesReady: =>
     if @waitingForPictures
@@ -105,7 +104,7 @@ class window.Gallery extends Events
   _ensurePictureCache: =>
     needMoreForCache = @pictures.length - this._currentProgress() < (@cacheSize * this.pageSize())
     if needMoreForCache and !@allPicturesRetrieved
-      this._retrieveMorePictures()
+      this.retrieveMorePictures()
 
   _onRetrieverFinished: (numOfRetrieved)=>
     if this.isEmpty()
@@ -125,7 +124,7 @@ class window.Gallery extends Events
     @_ratingFilter = rating
     this._reinitToGrid()
 
-  _applyTypeFilter: (type) =>
+  applyTypeFilter: (type) =>
     @_typeFilter = type
     this._reinitToGrid()
 

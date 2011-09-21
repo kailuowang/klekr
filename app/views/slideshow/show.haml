@@ -1,9 +1,10 @@
 - content_for(:top_left) do
-  %h3
-    New pictures from
-    = link_to 'my sources', flickr_streams_path
-  #type-filter-panel.hidden
-    %h5
-      %input#type-filter-checkbox{type: 'checkbox', name: 'upload-only'}
-        show people's works only
-=render partial: 'slideshow'
+  .fleft
+    %h3
+      New pictures from
+      = link_to 'my sources', flickr_streams_path
+  #option-button.fleft
+    = image_tag('option.png')
+
+= render partial: 'slideshow'
+= render partial: 'slide_options'
