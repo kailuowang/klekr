@@ -54,6 +54,8 @@ class window.Gallery extends Events
 
   isLoading: => @retriever and @retriever.busy()
 
+  retrieveMorePictures: (pages = 1)=> @retriever.retrieve(pages)
+
   _reset: =>
     this.trigger('pre-reset')
     @allPicturesRetrieved = false
@@ -76,8 +78,6 @@ class window.Gallery extends Events
 
   _alternativeMode: =>
     if @currentMode is @grid then @slide else @grid
-
-  retrieveMorePictures: (pages = 1)=> @retriever.retrieve(pages)
 
   _morePicturesReady: =>
     if @waitingForPictures
@@ -157,11 +157,13 @@ class window.Gallery extends Events
   _currentProgress: =>
     @currentMode.currentProgress()
 
+  readyPictures: =>
+    _(@pictures).select (p) -> p.ready
+
   report: ->
-    readyPictures = _(@pictures).select (p) -> p.ready
     console.debug "cache size: " + @cacheSize
     console.debug "pictures in cache: " + @pictures.length
-    console.debug "pictures preloaded: " + readyPictures.length
+    console.debug "pictures preloaded: " + this.readyPictures().length
     console.debug "current flickr page: " + @pageToRetrieve
     console.debug "page size: " + gridview.size
     console.debug "pictures size: " + @pictures.length
