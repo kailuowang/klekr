@@ -6,6 +6,8 @@ Collectr::Application.routes.draw do
     end
   end
 
+  resource :health, :only => [:show]
+
   resources :editor_recommendations, :only => [:index, :create]
 
   resources :collectors, :only => [] do

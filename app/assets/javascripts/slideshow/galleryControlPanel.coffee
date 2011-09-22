@@ -8,6 +8,8 @@ class window.GalleryControlPanel
     $('#download-pictures').click_ this._downloadPictures
     new CollapsiblePanel($('#under-the-hood-panel'), $('#under-the-hood'))
     @gallery.bind 'new-pictures-added', this._registerPictureEvents
+    this._updateConnectionStatus()
+    klekr.Global.server.bind 'connection-status-changed', this._updateConnectionStatus
 
   _typeFilterChange: (e) =>
     type = if e.currentTarget.checked then 'UploadStream' else null
@@ -22,3 +24,8 @@ class window.GalleryControlPanel
 
   _registerPictureEvents: (pictures) =>
     pic.bind('fully-ready', this._updateGalleryInfo) for pic in pictures
+
+  _updateConnectionStatus: =>
+    @statusLabel ?= @panel.find('#connection-status-label')
+    status = if klekr.Global.server.onLine() then 'Online' else 'Offline'
+    @statusLabel.text(status)

@@ -1,5 +1,6 @@
 function validate_authentications_path(params){ return '/authentications/validate'}
 function authentications_path(params){ return '/authentications'}
+function health_path(params){ return '/health'}
 function editor_recommendations_path(params){ return '/editor_recommendations'}
 function info_collector_path(params){ return '/collectors/' + params.id + '/info'}
 function sync_flickr_stream_path(params){ return '/flickr_streams/' + params.id + '/sync'}

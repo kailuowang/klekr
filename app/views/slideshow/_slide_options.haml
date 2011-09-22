@@ -7,10 +7,13 @@
     %a#under-the-hood{href: '#'}
       under the hood
   #under-the-hood-panel.clearfix.hidden
-    #cache-info.fleft
-      %span#num-of-pics-in-cache
-        0
-      pictures ready in cache
-    .fright
-      %a#download-pictures.btn{href: '#'}
-        pre-fetch more
+    #system-status.clearfix
+      Connection Status:
+      %span#connection-status-label
+    #cache-panel
+      #cache-info.fleft
+        Pictures ready in cache:
+        %span#num-of-pics-in-cache 0
+      .fright
+        %a#download-pictures.btn{href: '#'}
+          pre-fetch more
