@@ -37,21 +37,22 @@ class window.Picture extends Events
     else
       @data.mediumUrl
 
-  smallUrl: =>
-    @data.smallUrl
+  smallUrl: => @data.smallUrl
 
-  fave: (rating, onSuccess) =>
-    server.put @data.favePath, {rating: rating}, =>
-      @data.rating = rating
-      onSuccess()
+  fave: (rating) =>
+    @data.rating = rating
+    server.put @data.favePath, {rating: rating}
 
-  unfave: (onSuccess) =>
-    server.put @data.unfavePath, {}, =>
-      @data.rating = 0
-      onSuccess()
+  unfave:  =>
+    @data.rating = 0
+    server.put @data.unfavePath, {}
 
-  faved: =>
-    @data.rating > 0
+  getViewed: =>
+    unless @data.viewed
+      server.put(@data.getViewedPath) if @data.getViewedPath
+      @data.viewed = true
+
+  faved: => @data.rating > 0
 
   preload: =>
     this.preloadSmall this.preloadLarge
@@ -68,10 +69,6 @@ class window.Picture extends Events
       this._updateSize(image)
       callback?()
 
-  getViewed: =>
-    unless @data.viewed
-      server.put(@data.getViewedPath) if @data.getViewedPath
-      @data.viewed = true
 
   _preloadImage: (url, onload) =>
     image = new Image()

@@ -3,7 +3,6 @@ class window.FavePanel  extends ViewBase
     @faveLink = $('#faveLink')
     @removeFaveLink = $('#removeFaveLink')
     @faved = $('#faved')
-    @faveWaiting = $('#faveWaiting')
     @faveArea = $('#faveArea')
     @faveRating = $('#faveRating')
     @faveRatingPanel = $('#faveRatingPanel')
@@ -20,12 +19,11 @@ class window.FavePanel  extends ViewBase
 
   unfave: =>
     if this.currentPicture().faved()
-      this._changingFavedStatus()
-      this.currentPicture().unfave(this.updateFavedStatus)
+      this.currentPicture().unfave()
+      this.updateFavedStatus()
 
   updateFavedStatus: =>
     picture = this.currentPicture()
-    @faveWaiting.hide()
     faved = picture.faved()
     this.setVisible(@faveArea, true)
     this.setVisible(@faveLink, !faved)
@@ -36,12 +34,6 @@ class window.FavePanel  extends ViewBase
   _registerEvents: =>
     @faveLink.click_ this.fave
     @removeFaveLink.click_ this.unfave
-
-  _changingFavedStatus: ->
-    @ratingDisplayPanel.hide()
-    @removeFaveLink.hide()
-    @faveLink.hide()
-    @faveWaiting.show()
 
   _updateRating: (rating) =>
     $.fn.raty.start(rating, '#faveRating');
@@ -57,10 +49,9 @@ class window.FavePanel  extends ViewBase
     })
 
   _changeRating: (rating)=>
-    this._changingFavedStatus()
     this.closePopup(@faveRatingPanel) if this._showingPopup()
-    this.currentPicture().fave rating, =>
-      this.updateFavedStatus()
+    this.currentPicture().fave rating
+    this.updateFavedStatus()
 
   _showingPopup: =>
     this.showing(@faveRatingPanel)
