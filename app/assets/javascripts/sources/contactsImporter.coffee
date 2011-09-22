@@ -22,7 +22,7 @@ class window.ContactsImporter extends StreamImporterBase
     this._getContacts()
 
   _getContacts: =>
-    server.get @contactsPath, {}, (data) =>
+    klekr.Global.server.get @contactsPath, {}, (data) =>
       @contacts = data
       @total = @contacts.length
       @loading.fadeOut this._displayContacts

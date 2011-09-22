@@ -36,7 +36,7 @@ class window.PictureRetriever extends Events
     $.extend(pageOpts, @_filterOptsFn())
 
   _retrievePage: (pageOpts, callback) =>
-    server.post @_retrievePath, this._retrieveOpts(pageOpts), (data) =>
+    klekr.Global.server.post @_retrievePath, this._retrieveOpts(pageOpts), (data) =>
       pictures = ( new Picture(picData) for picData in data )
       if pictures.length > 0
         this.trigger('batch-retrieved', pictures)

@@ -18,4 +18,5 @@ class Server
               callback(data) if callback?
     )
 
-this.server = new Server
+namespace 'klekr.Global', (n) ->
+  n.server = new Server

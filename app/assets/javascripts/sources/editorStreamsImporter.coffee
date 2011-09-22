@@ -16,7 +16,7 @@ class window.EditorStreamsImporter extends ViewBase
     @_loading.show()
     @_importProgress.hide()
     @_streamsDisplay.hide()
-    server.get @editorStreamsPath, {}, (data) =>
+    klekr.Global.server.get @editorStreamsPath, {}, (data) =>
       streams = (new Source(d) for d in data)
       this._showEditorStreams(streams)
 
@@ -30,7 +30,7 @@ class window.EditorStreamsImporter extends ViewBase
     @_doImportLink.hide()
     @_importProgress.fadeIn()
     this._reportProgress(0, 1)
-    server.post @createRecommendationStreamsPath, {}, (data) =>
+    klekr.Global.server.post @createRecommendationStreamsPath, {}, (data) =>
       createdStreams = (new Source(d) for d in data)
       this._startSync(createdStreams)
 
@@ -43,7 +43,7 @@ class window.EditorStreamsImporter extends ViewBase
     ).start()
 
   _sync: (stream, callback) =>
-    server.put sync_flickr_stream_path(stream), {}, =>
+    klekr.Global.server.put sync_flickr_stream_path(stream), {}, =>
       this.trigger('sources-imported', [stream])
       callback()
 

@@ -15,7 +15,7 @@ class window.Picture extends Events
       updatePath = unviewedPictures[0].data.getAllViewedPath
       pic.data.viewed = true for pic in unviewedPictures
       picIds = ( pic.id for pic in unviewedPictures )
-      server.post(updatePath, {ids: picIds})
+      klekr.Global.updater.post(updatePath, {ids: picIds})
 
   constructor: (@data) ->
     @id = @data.id
@@ -41,15 +41,15 @@ class window.Picture extends Events
 
   fave: (rating) =>
     @data.rating = rating
-    server.put @data.favePath, {rating: rating}
+    klekr.Global.updater.put @data.favePath, {rating: rating}
 
   unfave:  =>
     @data.rating = 0
-    server.put @data.unfavePath, {}
+    klekr.Global.updater.put @data.unfavePath
 
   getViewed: =>
     unless @data.viewed
-      server.put(@data.getViewedPath) if @data.getViewedPath
+      klekr.Global.updater.put(@data.getViewedPath) if @data.getViewedPath
       @data.viewed = true
 
   faved: => @data.rating > 0

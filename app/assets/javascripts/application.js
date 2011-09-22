@@ -8,5 +8,6 @@
 //= require ./global/lib/underscore-min
 //= require_tree ./global/lib
 //= require ./global/backboneHelper
+//= require ./global/server
 //= require ./global/viewBase
 //= require_directory ./global

@@ -10,13 +10,13 @@ class window.MySources
     @googleReaderImporter.bind 'sources-imported', this._sourcesImported
 
   init: (onInit)=>
-    server.get @sourcesPath, {}, (data) =>
+    klekr.Global.server.get @sourcesPath, {}, (data) =>
       allSources = (new Source(d) for d in data)
       this._display(allSources)
       onInit?()
 
   _sourcesImportDone: =>
-    server.get info_collector_path({id: 'current'}), {}, (data)=>
+    klekr.Global.server.get info_collector_path({id: 'current'}), {}, (data)=>
       this.init =>
         @view.showNewSourcesAddedPanel(data)
 

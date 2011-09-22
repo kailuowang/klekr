@@ -25,7 +25,8 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 
-*/var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __slice = Array.prototype.slice;
+*/
+var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __slice = Array.prototype.slice;
 this.queffee = {};
 queffee.Node = (function() {
   function Node(array, index, comp) {
@@ -227,6 +228,7 @@ queffee.Q = (function() {
     }
     this._newJobsAdded = __bind(this._newJobsAdded, this);
     this._initHeap = __bind(this._initHeap, this);
+    this._priorityBySequence = __bind(this._priorityBySequence, this);
     this.clear = __bind(this.clear, this);
     this.size = __bind(this.size, this);
     this.reorder = __bind(this.reorder, this);
@@ -250,8 +252,11 @@ queffee.Q = (function() {
     }
     return this._newJobsAdded();
   };
-  Q.prototype.enQ = function(performFn, priorityFn, timeout) {
-    return this.enqueue(new queffee.Job(performFn, priorityFn, timeout));
+  Q.prototype.enQ = function(performFn, priority, timeout) {
+    if (priority == null) {
+      priority = this._priorityBySequence();
+    }
+    return this.enqueue(new queffee.Job(performFn, priority, timeout));
   };
   Q.prototype.dequeue = function() {
     return this._heap.extractTop();
@@ -263,7 +268,10 @@ queffee.Q = (function() {
     return this._heap.size();
   };
   Q.prototype.clear = function() {
-    return this._heap = this._initHeap([]);
+    return this._initHeap([]);
+  };
+  Q.prototype._priorityBySequence = function() {
+    return -1 - this.size();
   };
   Q.prototype._initHeap = function(jobs) {
     return this._heap = new queffee.Heap(jobs, queffee.Q._compareJob);
@@ -281,17 +289,20 @@ queffee.Q = (function() {
   return Q;
 })();
 queffee.Worker = (function() {
-  function Worker(q, onIdle) {
+  function Worker(q, onIdle, _stopped) {
     this.q = q;
     this.onIdle = onIdle;
+    this._stopped = _stopped != null ? _stopped : false;
+    this._pickupJob = __bind(this._pickupJob, this);
+    this._kickOffJob = __bind(this._kickOffJob, this);
     this._onJobDone = __bind(this._onJobDone, this);
     this._work = __bind(this._work, this);
+    this.retry = __bind(this.retry, this);
     this.idle = __bind(this.idle, this);
     this.stop = __bind(this.stop, this);
     this.start = __bind(this.start, this);
-    this._idle = true;
+    this._job = null;
     this.q.jobsAdded(this._work);
-    this._stopped = false;
   }
   Worker.prototype.start = function() {
     this._stopped = false;
@@ -301,22 +312,32 @@ queffee.Worker = (function() {
     return this._stopped = true;
   };
   Worker.prototype.idle = function() {
-    return this._idle;
+    return !(this._job != null);
+  };
+  Worker.prototype.retry = function() {
+    if (!this.idle()) {
+      return this._kickOffJob();
+    }
   };
   Worker.prototype._work = function() {
-    var job;
-    if (this._idle && !this._stopped) {
-      job = this.q.dequeue();
-      if (this._idle = !(job != null)) {
+    if (this.idle() && !this._stopped) {
+      this._pickupJob();
+      if (this.idle()) {
         return typeof this.onIdle === "function" ? this.onIdle() : void 0;
       } else {
-        return job.perform(this._onJobDone);
+        return this._kickOffJob();
       }
     }
   };
   Worker.prototype._onJobDone = function() {
-    this._idle = true;
+    this._job = null;
     return this._work();
+  };
+  Worker.prototype._kickOffJob = function() {
+    return this._job.perform(this._onJobDone);
+  };
+  Worker.prototype._pickupJob = function() {
+    return this._job = this.q.dequeue();
   };
   return Worker;
 })();
