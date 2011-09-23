@@ -21,7 +21,7 @@ class Server extends Events
               this._setOffLine false
               callback(data) if callback?
             error: (XMLHttpRequest, textStatus, errorThrown) =>
-              this._setOffLine true if(textStatus == 'timeout')
+              this._setOffLine true
     )
 
   onLine: => !@_offLine
