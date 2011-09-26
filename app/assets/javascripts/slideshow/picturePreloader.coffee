@@ -1,9 +1,9 @@
 class window.PicturePreloader
-  @timeout: 10000
   @numOfWorkers: 3
 
   constructor: (@gallery)->
     @q = new queffee.Q
+    klekr.Global.server.bind('connection-status-changed', this._retry)
 
   start: =>
     unless @workers?
@@ -29,4 +29,11 @@ class window.PicturePreloader
   _createJob: (picture, size, priority) =>
     priorityFn =  priority[size.toLowerCase()]
     preloadFn = (callback) => picture['preload' + size](callback)
-    new queffee.Job( preloadFn, priorityFn, PicturePreloader.timeout)
+    new queffee.Job( preloadFn, priorityFn, this._timeout)
+
+  _timeout: =>
+    if klekr.Global.server.onLine() then 30000 else null
+
+  _retry: =>
+    if @workers?
+      worker.retry() for worker in @workers
