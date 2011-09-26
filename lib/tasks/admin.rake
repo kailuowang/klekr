@@ -2,7 +2,7 @@ namespace :admin do
   namespace :report do
     desc 'report collectors'
     task :collectors => :environment do
-      Collector.all.each do |c|
+      Collector.report.each do |c|
         puts "#{c.user_name}(#{c.full_name}) [ #{c.user_id} ]: "
         puts "Registered at: " + c.created_at.to_s
         puts "Last Login at: #{c.last_login}"

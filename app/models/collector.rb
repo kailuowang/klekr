@@ -4,7 +4,7 @@ class Collector < ActiveRecord::Base
 
   has_many :flickr_streams
   has_many :pictures
-
+  scope :report, order: {last_login: :asc}
   def self.from_new_user(auth)
     user = auth.user
     user_id = user.nsid
