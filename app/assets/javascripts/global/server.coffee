@@ -29,7 +29,7 @@ class Server extends Events
   _setOffLine: (value) =>
     if @_offLine isnt value
       @_offLine = value
-      this.trigger('connection-status-changed')
+      this.trigger('connection-status-changed', this.onLine())
       if @_offLine then this._startCheckConnection() else this._stopCheckConnection()
 
   _checkConnection: => this.get(health_path()) unless this.onLine()

@@ -7,6 +7,7 @@ class window.PictureRetriever extends Events
     @_worker = new queffee.Worker(@_q)
     @_worker.start()
     @_worker.onIdle = this._onWorkerDone
+    klekr.Global.server.bind('connection-status-changed', this._retry)
 
   reset: =>
     @_q.clear()
@@ -25,8 +26,7 @@ class window.PictureRetriever extends Events
   _createJob: =>
     pageOpts = this._pageOpts()
     perform = (callback) => this._retrievePage(pageOpts, callback)
-    priority = -@_currentPage
-    new queffee.Job(perform, priority, 30000)
+    new queffee.Job(perform)
 
   _onWorkerDone: =>
     this.trigger('done-retrieving', @_retrievedCount)
@@ -34,6 +34,9 @@ class window.PictureRetriever extends Events
 
   _retrieveOpts: (pageOpts) =>
     $.extend(pageOpts, @_filterOptsFn())
+
+  _retry: =>
+    @_worker.retry() if klekr.Global.server.onLine()
 
   _retrievePage: (pageOpts, callback) =>
     klekr.Global.server.post @_retrievePath, this._retrieveOpts(pageOpts), (data) =>

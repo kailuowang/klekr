@@ -43,5 +43,7 @@ class window.GalleryControlPanel extends ViewBase
 
   _updateConnectionStatus: =>
     @statusLabel ?= @panel.find('#connection-status-label')
-    status = if klekr.Global.server.onLine() then 'Online' else 'Offline'
+    online = klekr.Global.server.onLine()
+    status = if online then 'Online' else 'Offline'
     @statusLabel.text(status)
+    this.setVisible(@downloadButton, online)
