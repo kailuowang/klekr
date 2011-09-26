@@ -1,19 +1,30 @@
 #slide-options.popup
-  .filters
+  .header
+    .fleft
+      %h4
+        Slide Options
+    %a.close{href: "#"} ×
+    .clearfix
+  .filters.clearfix
     %h5
       %input#type-filter-checkbox{type: 'checkbox', name: 'upload-only'}
         show artists' works only
+
   .fright
     %a#under-the-hood{href: '#'}
-      under the hood
+      Go Offline!
   #under-the-hood-panel.clearfix.hidden
-    #system-status.clearfix
-      Connection Status:
-      %span#connection-status-label
-    #cache-panel
-      #cache-info.fleft
-        Pictures ready in cache:
+    .fleft
+      #system-status
+        Connection Status:
+        %span#connection-status-label
+      #cache-info
+        Pictures downloaded:
         %span#num-of-pics-in-cache 0
-      .fright
-        %a#download-pictures.btn{href: '#'}
-          pre-fetch more
+      #downloading-info
+        Pictures downloading:
+        %span#num-of-downloading-pics 0
+    #ops-buttons.fright
+      %a#download-pictures.btn{href: '#'}
+        Download more pictures!
+      = image_tag 'loading.gif', class: 'hidden', id: 'loading'

@@ -114,6 +114,7 @@ class window.Gallery extends Events
     else if numOfRetrieved == 0
       @allPicturesRetrieved = true
       this.trigger('gallery-pictures-changed')
+    this.trigger('idle')
 
   _emptyGallery: =>
     @currentMode.clear?()
