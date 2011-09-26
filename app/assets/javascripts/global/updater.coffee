@@ -15,20 +15,7 @@ class Updater
 
   _connectionStatusChanged: =>
     if @_server.onLine()
-      this._stopCheckConnection()
       @_worker.retry()
-    else
-      this._startCheckConnection()
-
-  _checkConnection: => @_server.get(health_path()) unless @_server.onLine()
-
-  _startCheckConnection: =>
-    @_connectionCheckingPId ?= setInterval(this._checkConnection, 5000)
-
-  _stopCheckConnection: =>
-    if @_connectionCheckingPId?
-      clearInterval(@_connectionCheckingPId)
-      @_connectionCheckingPId = null
 
 namespace 'klekr.Global', (n) ->
   n.updater = new Updater
