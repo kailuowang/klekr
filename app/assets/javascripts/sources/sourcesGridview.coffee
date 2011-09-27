@@ -16,5 +16,5 @@ class window.SourcesGridview extends ViewBase
   _loadSource: (cell, source)=>
     cell.find('.source-icon').attr('src', source.iconUrl)
     cell.find('.source-icon-link').attr('href', source.slideUrl)
-    cell.find('.source-name').text(source.ownerName + "'s")
-    cell.find('.source-type').text(source.type)
+    cell.find('.source-name').text(source.username + "'s")
+    cell.find('.source-type').text(source.typeDisplay)

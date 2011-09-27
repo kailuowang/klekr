@@ -43,7 +43,12 @@ class FlickrStream < ActiveRecord::Base
 
     def find_or_create(params)
       stream = of_user(params[:user_id]).where(collector_id: params[:collector]).type(params[:type]).first
-      stream || create_type(params)
+      if(stream)
+        stream.update_attributes(params)
+        stream
+      else
+        create_type(params)
+      end
     end
 
     def inherited(child)

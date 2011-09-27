@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  include Collectr::FlickrStreamsControllerHelper
   NUM_OF_PIX_TO_SHOW = 12
 
   before_filter :authenticate
@@ -19,7 +20,7 @@ class UsersController < ApplicationController
   def index
   end
 
-  # put users/search
+  # post users/search
   def search
     keyword = params[:keyword]
     begin
@@ -43,7 +44,16 @@ class UsersController < ApplicationController
           redirect_to(:back, :notice => "User not found")
         end
       end
+      format.js do
+        render_json user.present? ? data_for_streams(streams_for_user(user.nsid)) : []
+      end
     end
+  end
+
+  private
+  def streams_for_user user_id
+    [ FlickrStream.find_or_create(user_id: user_id, collector: current_collector, type: FaveStream.to_s),
+      FlickrStream.find_or_create(user_id: user_id, collector: current_collector, type: UploadStream.to_s)]
   end
 
 end

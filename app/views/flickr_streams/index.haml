@@ -44,8 +44,11 @@
             %a#add-contracts-link{href: '#'}
               Add all my flickr contacts as my sources.
         .cell.import-method.well
-          %h4= link_to 'Add source by user', users_path
+          %h4
+            %a#add-by-user-link{href: '#'}
+              Add source by user
 
 = render partial: 'import_editor_streams'
 = render partial: 'import_contacts'
 = render partial: 'import_google_reader'
+= render partial: 'import_user'

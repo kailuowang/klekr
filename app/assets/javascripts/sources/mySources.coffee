@@ -1,13 +1,17 @@
 class window.MySources
   constructor: (@sourcesPath, @contactImporter, @editorStreamsImporter)->
     @view = new MySourcesView
+    @addByUserImporter = new AddByUserImporter
+    @googleReaderImporter = new GoogleReaderImporter
+    @addByUserImporter.bind 'import-finished', this._sourcesImportDone
+    @addByUserImporter.bind 'sources-imported', this._sourcesImported
     @contactImporter.bind 'import-finished', this._sourcesImportDone
     @contactImporter.bind 'sources-imported', this._sourcesImported
     @editorStreamsImporter.bind 'import-finished', this._sourcesImportDone
     @editorStreamsImporter.bind 'sources-imported', this._sourcesImported
-    @googleReaderImporter = new GoogleReaderImporter
     @googleReaderImporter.bind 'import-finished', this._sourcesImportDone
     @googleReaderImporter.bind 'sources-imported', this._sourcesImported
+
 
   init: (onInit)=>
     klekr.Global.server.get @sourcesPath, {}, (data) =>

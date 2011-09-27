@@ -1,0 +1,25 @@
+#import-by-user.modal-popup
+  #search-user-form
+    %h4
+      Search by user id, username or Email
+    %input#keyword{type: :text}
+    %button#submit.btn.primary
+      Search!
+  #searching-user.hidden
+    %h4
+      Finding User On Flickr
+      = image_tag '/assets/loading.gif'
+  #not-found.hidden
+    %h4
+      User not found.
+  #search-result.hidden
+    %h4
+      Flickr User Found
+    .row
+      = render partial: 'streams_grid'
+    #adding-user.hidden
+      %h4
+        Adding
+        = image_tag '/assets/loading.gif'
+    %a#do-add.fright.btn.primary{href: '#'}
+      Add
