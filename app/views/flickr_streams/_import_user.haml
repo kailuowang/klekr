@@ -2,9 +2,10 @@
   #search-user-form
     %h4
       Search by user id, username or Email
-    %input#keyword{type: :text}
-    %button#submit.btn.primary
-      Search!
+    #search-input
+      %input#keyword{type: :text}
+      %a#submit.btn.primary{href: '#'}
+        Search!
   #searching-user.hidden
     %h4
       Finding User On Flickr
@@ -12,14 +13,16 @@
   #not-found.hidden
     %h4
       User not found.
-  #search-result.hidden
+  #search-result.well.hidden
     %h4
       Flickr User Found
     .row
       = render partial: 'streams_grid'
+      .clearfix
     #adding-user.hidden
       %h4
         Adding
         = image_tag '/assets/loading.gif'
-    %a#do-add.fright.btn.primary{href: '#'}
-      Add
+    .center
+      %a#do-add.btn.primary{href: '#'}
+        Add

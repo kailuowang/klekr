@@ -15,6 +15,7 @@ class window.AddByUserImporter extends StreamImporterBase
     @_popup.find('#submit').click_ this._doSearch
 
   show: =>
+    @_addButton.show()
     @_notFound.hide()
     this.popup(@_popup)
 
@@ -30,13 +31,13 @@ class window.AddByUserImporter extends StreamImporterBase
     @_loading.hide()
     @_form.show()
     @_results = data
-    if(@_results.length > 0 )
+    if( hasResults = @_results.length > 0 )
       @_streams_gridview.load(@_results)
       @_addingUser.hide()
-      @_resultsGrid.show()
-      @_addButton.show()
-    else
-      @_notFound.show()
+      @_resultsGrid.slideDown()
+
+    this.setVisible(@_notFound, !hasResults)
+
 
   _add: =>
     @_addingUser.show()
