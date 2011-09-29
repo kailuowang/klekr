@@ -4,15 +4,9 @@ class window.Slideview extends ViewBase
     @mainImg = $('#picture')
     @pictureArea = $('#pictureArea')
     @slide = $('#slide')
-    @interestingness = $('#interestingness')
-    @interestingessPanel = $('#interestingessPanel')
-    @titleLink = $('#title')
-    @ownerLink = $('#owner')
-    @fromStreamsDiv = $('#fromStreams')
-    @fromTitle = $('#fromTitle')
-    @imageCaption = $('#imageCaption')
     @bottomLeft = $('#bottomLeft')
-    @bottomRightPicInfo = $('#bottom-right-pic-info')
+    @label = new PictureLabel
+
     this._adjustImageFrame()
 
   display: (picture) ->
@@ -27,29 +21,14 @@ class window.Slideview extends ViewBase
     this.fadeInOut(@pictureArea, true)
 
   updateDOM: (picture) ->
-    @interestingness.text(picture.data.interestingness)
     @mainImg.attr('src', picture.url())
-    @titleLink.attr('href', picture.data.flickrPageUrl)
-    @titleLink.text picture.displayTitle()
-    @ownerLink.attr('href', picture.data.ownerPath)
-    @ownerLink.text(picture.data.ownerName)
-    this.setVisible(@interestingessPanel, picture.data.collected )
-    this._updateSources(picture.data.fromStreams)
+    @label.show(picture)
 
   pictureClick: (callback) =>
     @mainImg.click(callback)
 
   gotoOwner: =>
     window.location = @ownerLink.attr('href')
-
-  _updateSources: (streams) ->
-    @fromStreamsDiv.empty()
-    for stream in streams
-      @fromStreamsDiv.append($('<span>').text(', ')) if @fromStreamsDiv.children().length > 0
-      link = $('<a>').attr('href', stream.path).text(stream.username + "'s " + stream.type)
-      @fromStreamsDiv.append(link)
-
-    this.setVisible(@fromTitle, streams.length > 0 )
 
   largeWindow: ->
     generalView.displayWidth > 1024 and generalView.displayHeight > 1024
@@ -59,7 +38,10 @@ class window.Slideview extends ViewBase
     $('#imageFrameInner').css('height', (displayHeight - 40) + 'px')
 
   switchVisible: (showing) =>
-    this.setVisible @bottomLeft, showing
-    this.setVisible @bottomRightPicInfo, showing
+    @favePanel ?= $('#fave-panel')
+
+    this.setVisible @favePanel, showing
     this.setVisible @slide, showing
     this.setVisible(@pictureArea, false) unless showing
+    if showing then @label.show() else @label.hide()
+

@@ -56,7 +56,5 @@ class window.GeneralView extends ViewBase
   _adjustFrames: =>
     bottomOffset = @displayHeight + 51
     $('#bottomBanner').css('top',(bottomOffset + 10) + 'px' )
-    @bottomLeft.css('top', (bottomOffset) + 'px' )
-    @bottomRight.css('top', (bottomOffset + 5) + 'px' )
 
 

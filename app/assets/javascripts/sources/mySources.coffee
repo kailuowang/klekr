@@ -12,7 +12,6 @@ class window.MySources
     @googleReaderImporter.bind 'import-finished', this._sourcesImportDone
     @googleReaderImporter.bind 'sources-imported', this._sourcesImported
 
-
   init: (onInit)=>
     klekr.Global.server.get @sourcesPath, {}, (data) =>
       allSources = (new Source(d) for d in data)

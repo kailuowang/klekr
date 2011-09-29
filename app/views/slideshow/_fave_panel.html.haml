@@ -1,17 +1,18 @@
-#faveArea{style: 'margin: 8px'}
-  %span#faved.hidden
-    #ratingDisplayPanel.hidden.fleft
-      #ratingDisplay
-    .fleft
-      %a#removeFaveLink.btn{href: '#'}
-        remove
-  %a#faveLink.btn.large.hidden{href: '#'}
-    Collect it!
+#fave-panel
+  #faveArea{style: 'margin: 8px'}
+    %span#faved.hidden
+      #ratingDisplayPanel.hidden.fleft
+        #ratingDisplay
+      .fleft
+        %a#removeFaveLink.btn{href: '#'}
+          remove
+    %a#faveLink.btn.large.hidden{href: '#'}
+      Collect it!
 
-#faveRatingPanel.modal-popup{style: 'margin: 40px'}
-  %h3
-    Congratulations!
-  %h5
-    Your rating of this collection?
+  #faveRatingPanel.modal-popup{style: 'margin: 40px'}
+    %h3
+      Congratulations!
+    %h5
+      Your rating of this collection?
 
-  #faveRating
+    #faveRating

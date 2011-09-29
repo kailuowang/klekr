@@ -14,6 +14,7 @@ module Collectr
         rating:           picture.rating,
         viewed:           picture.viewed?,
         collected:        !picture.new_record? && picture.collected?,
+        dateUpload:        picture.date_upload,
         ownerPath:        user_path(picture.owner_id),
         fromStreams:      picture.flickr_streams.map do |stream|
                             data_for_stream_info(stream)

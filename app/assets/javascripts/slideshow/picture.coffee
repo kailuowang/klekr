@@ -19,6 +19,7 @@ class window.Picture extends Events
 
   constructor: (@data) ->
     @id = @data.id
+    _.defaults(this, @data)
     @width = 640
     @canUseLargeVersion = slideview.largeWindow()
     @ready = false
@@ -27,7 +28,7 @@ class window.Picture extends Events
   displayTitle:  =>
     t = @data.title
     if t? and t isnt '-' and t isnt '.' and t isnt ''
-      @data.title
+      '"' + @data.title + '"'
     else
       'Untitled'
 
