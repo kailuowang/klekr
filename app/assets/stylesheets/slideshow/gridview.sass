@@ -1,0 +1,41 @@
+#gridview
+
+  #grid-loading
+    margin-left: auto
+    margin-right: auto
+    text-align: center
+
+  #gridPictures
+    margin-left: auto
+    margin-right: auto
+    .grid-picture
+      float: left
+      display: none
+      cursor: pointer
+      width: 259px
+      height: 269px
+      text-align: center
+      border-right: 1px solid #303030
+      border-bottom: 1px solid #303030
+      &.top
+        border-top: 1px solid #303030
+      &.left
+        border-left: 1px solid #303030
+
+      .pic-cell-bottom
+        position: relative
+        top: -7px
+        #ratingInGrid
+          float: left
+          padding-left: 5px
+          color: #353535
+          font-size: 11px
+          padding-top: 2px
+        #loading-indicator
+          float: right
+          padding-right: 5px
+    .highlighted
+      background: #454545
+      .pic-cell-bottom
+        #ratingInGrid
+          color: #141414
