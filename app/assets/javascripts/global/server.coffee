@@ -35,7 +35,7 @@ class Server extends Events
   _checkConnection: => this.get(health_path()) unless this.onLine()
 
   _startCheckConnection: =>
-    @_connectionCheckingPId ?= setInterval(this._checkConnection, 5000)
+    @_connectionCheckingPId ?= setInterval(this._checkConnection, 10000)
 
   _stopCheckConnection: =>
     if @_connectionCheckingPId?
