@@ -18,11 +18,11 @@
         #top-banner-right.fright
           %h4.inline
             - unless @disable_navigation
+              |
               = navigation_links
         #top-banner-welcome.fright
           - if @current_collector
-            Hi! #{@current_collector.user_name}
-            = link_to 'log out', authentications_path, method: :delete
+            = render partial: '/general/user_info'
         .fright
           = yield(:top_right)
 

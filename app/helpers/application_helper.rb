@@ -15,6 +15,8 @@ module ApplicationHelper
   def navigation_link name, path
     if path != request.env['PATH_INFO']
       link_to name, path
+    else
+      name
     end
   end
 

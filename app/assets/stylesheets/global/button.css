@@ -1,14 +1,14 @@
 .btn {
   cursor: pointer;
   display: inline-block;
-  background-color: #969696;
+  background-color: #767676;
   background-repeat: no-repeat;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#AAAAAA), color-stop(0.25, #AAAAAA), to(#969696));
-  background-image: -webkit-linear-gradient(#AAAAAA, #AAAAAA 0.25, #969696);
-  background-image: -moz-linear-gradient(#AAAAAA, #AAAAAA 0.25, #969696);
-  background-image: -ms-linear-gradient(#AAAAAA, #AAAAAA 0.25, #969696);
-  background-image: -o-linear-gradient(#AAAAAA, #AAAAAA 0.25, #969696);
-  background-image: linear-gradient(#AAAAAA, #AAAAAA 0.25, #969696);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#999999), color-stop(0.25, #999999), to(#767676));
+  background-image: -webkit-linear-gradient(#999999, #999999 0.25, #767676);
+  background-image: -moz-linear-gradient(#999999, #999999 0.25, #767676);
+  background-image: -ms-linear-gradient(#999999, #999999 0.25, #767676);
+  background-image: -o-linear-gradient(#999999, #999999 0.25, #767676);
+  background-image: linear-gradient(#999999, #999999 0.25, #767676);
   padding: 4px 14px;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
   color: #222;
@@ -111,7 +111,7 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
   font-size: 20px;
   font-weight: bold;
   line-height: 13.5px;
-  text-shadow: 0 1px 0 #AAAAAA;
+  text-shadow: 0 1px 0 #999999;
   filter: alpha(opacity=50);
   -khtml-opacity: 0.5;
   -moz-opacity: 0.5;

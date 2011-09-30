@@ -11,9 +11,13 @@ class SlideshowController < ApplicationController
   end
 
   def show
+    if(@current_collector.flickr_streams.count == 0)
+      redirect_to(flickr_streams_path)
+    end
     @advance_by_progress = true #contrast to progress by paging
     @more_pictures_path = new_pictures_slideshow_path
     @empty_message_partial = 'no_new_pictures'
+
   end
 
   def faves

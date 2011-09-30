@@ -34,8 +34,6 @@ class window.MySources
     for star in (_.sortBy keys, (r) -> -r)
       @view.loadSources(star, sourcesByGroup[star])
     @view.setVisibleEmptySourceSection(sources.length is 0)
-    @view.showManagementSection()
-
 
 $ ->
   contactImporter = new ContactsImporter(__contactsPath__, __importContactPath__)

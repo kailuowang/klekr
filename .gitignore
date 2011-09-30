@@ -5,6 +5,7 @@ tmp/**/*
 tmp/*.jpg
 .idea/workspace.xml
 .idea/tasks.xml
+.idea/.rakeTasks
 config/flickr.yml
 .DS_Store
 .idea/dataSources.ids

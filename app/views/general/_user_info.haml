@@ -1,0 +1,23 @@
+.user-name
+  %a.dropdown-toggle{href: '#', 'data-dropdown' => "dropdown"}
+    Hi!
+    = @current_collector.user_name
+  #user-dropdown.dropdown-menu.hidden
+    #upper.inner
+      .fleft
+        = icon(@current_collector)
+      .fright
+        %h4#username
+          = @current_collector.full_name || @current_collector.user_name
+        #sources-count
+          = link_to @current_collector.flickr_streams.count, flickr_streams_path
+          sources.
+        #faved-count
+          = link_to @current_collector.pictures.faved.count, faves_slideshow_path
+          pictures collected.
+        #new-pictures-count
+          = link_to @current_collector.pictures.unviewed.count, slideshow_path
+          new pictures to see.
+      .clearfix
+    #bottom.inner
+      = link_to 'Sign out', authentications_path, method: :delete

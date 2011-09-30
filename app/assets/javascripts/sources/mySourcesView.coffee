@@ -19,12 +19,12 @@ class window.MySourcesView extends ViewBase
     categoryDiv = this._ensureCategory(star)
     this._sourcesGridView(categoryDiv).addSource(source)
 
-  showManagementSection: =>
-    @importPanel.hide()
-    $('#sources-management').show()
 
-  setVisibleEmptySourceSection: (visible)=>
-    this.setVisible($('#empty-sources'), visible)
+  setVisibleEmptySourceSection: (empty)=>
+    this.setVisible($('#empty-sources'), empty)
+    this.setVisible(@importPanel, empty)
+    this._setExpandLinkText(empty)
+    $('#sources-management').show()
 
   showContacts: =>
     contacts-list
@@ -59,8 +59,13 @@ class window.MySourcesView extends ViewBase
     new SourcesGridview(cellGrid)
 
   _toggleManagementPanel: () =>
+    this._setExpandLinkText(!this.showing(@importPanel))
     @importPanel.slideToggle =>
       if this.showing(@importPanel)
         $(window).scrollTop @importPanel.offset().top
+
+  _setExpandLinkText: (expanded) =>
+    text = if expanded then '4 ways of adding sources:' else 'I want more sources!'
+    @expandLink.text(text)
 
 
