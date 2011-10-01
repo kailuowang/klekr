@@ -8,7 +8,7 @@ Collectr::Application.routes.draw do
 
   resource :health, :only => [:show]
 
-  resources :editor_recommendations, :only => [:index, :create]
+  resources :editor_recommendations, :only => [:index]
 
   resources :collectors, :only => [] do
     member do

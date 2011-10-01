@@ -23,6 +23,7 @@ describe FlickrStreamsController do
     it "should sync the fave stream" do
 
       fave_stream = Factory(:fave_stream)
+      controller.stub!(:current_collector).and_return fave_stream.collector
 
       FlickrStream.stub!(:find).with(fave_stream.id).and_return(fave_stream)
 
@@ -35,10 +36,20 @@ describe FlickrStreamsController do
   describe "put adjust_rating" do
     it "should bump rating when adjustment is up" do
       fave_stream = Factory(:fave_stream)
+      controller.stub!(:current_collector).and_return fave_stream.collector
+
       FlickrStream.stub!(:find).with(fave_stream.id).and_return(fave_stream)
       request.env["HTTP_REFERER"] = ''
       fave_stream.should_receive(:bump_rating)
       put 'adjust_rating', id: fave_stream.id, adjustment: 'up'
+    end
+  end
+
+  describe 'security' do
+    it 'should forbid accessing other collector stream' do
+      controller.stub!(:current_collector).and_return Factory(:collector)
+      fave_stream = Factory(:fave_stream)
+      lambda{ get 'show', id: fave_stream.id }.should raise_exception
     end
   end
 end

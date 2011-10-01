@@ -1,5 +1,5 @@
 class window.EditorStreamsImporter extends ViewBase
-  constructor: (@editorStreamsPath, @createRecommendationStreamsPath, @syncStreamPath) ->
+  constructor: ->
     @_popup = $('#import-editor-streams-popup')
     streams_grid = @_popup.find('.sources-grid:first')
     @_streams_gridview = new SourcesGridview(streams_grid)
@@ -16,9 +16,9 @@ class window.EditorStreamsImporter extends ViewBase
     @_loading.show()
     @_importProgress.hide()
     @_streamsDisplay.hide()
-    klekr.Global.server.get @editorStreamsPath, {}, (data) =>
-      streams = (new Source(d) for d in data)
-      this._showEditorStreams(streams)
+    klekr.Global.server.get editor_recommendations_path(), {}, (data) =>
+      @recommendation_streams = (new Source(d) for d in data)
+      this._showEditorStreams(@recommendation_streams)
 
   _showEditorStreams: (streams) =>
     @_streams_gridview.load(streams)
@@ -30,9 +30,7 @@ class window.EditorStreamsImporter extends ViewBase
     @_doImportLink.hide()
     @_importProgress.fadeIn()
     this._reportProgress(0, 1)
-    klekr.Global.server.post @createRecommendationStreamsPath, {}, (data) =>
-      createdStreams = (new Source(d) for d in data)
-      this._startSync(createdStreams)
+    this._startSync(@recommendation_streams)
 
   _startSync: (streams) =>
     new queffee.CollectionWorkQ(
@@ -43,9 +41,10 @@ class window.EditorStreamsImporter extends ViewBase
     ).start()
 
   _sync: (stream, callback) =>
-    klekr.Global.server.put sync_flickr_stream_path(stream), {}, =>
-      this.trigger('sources-imported', [stream])
-      callback()
+    klekr.Global.server.put subscribe_flickr_stream_path(stream), {}, =>
+      klekr.Global.server.put sync_flickr_stream_path(stream), {}, =>
+        this.trigger('sources-imported', [stream])
+        callback()
 
   _reportProgress: (progress, total) =>
     @_progressBar.reportprogress(progress * 100 / total)

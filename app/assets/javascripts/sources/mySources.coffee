@@ -37,7 +37,7 @@ class window.MySources
 
 $ ->
   contactImporter = new ContactsImporter(__contactsPath__, __importContactPath__)
-  editorStreamsImporter = new EditorStreamsImporter(__editorStreamsPath__, __createRecommendationStreamsPath__, __syncStreamPath__)
+  editorStreamsImporter = new EditorStreamsImporter
   window.mySources = new MySources(__sourcesPath__, contactImporter, editorStreamsImporter)
 
   mySources.init()

@@ -31,8 +31,8 @@ describe Collectr::Editor do
       @editor.recommendation_streams_for(@collector).map(&:collector).uniq.should == [@collector]
     end
 
-    it 'creates streams that are collecting' do
-      @editor.recommendation_streams_for(@collector).all?(&:collecting).should be_true
+    it 'creates streams that are not collecting' do
+      @editor.recommendation_streams_for(@collector).all?(&:collecting).should be_false
     end
 
     it 'create the same streams with 4+ star rating streams of the editor collector' do
