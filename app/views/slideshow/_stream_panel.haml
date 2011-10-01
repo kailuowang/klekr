@@ -1,5 +1,5 @@
 #noncollectingStreamOperations{class: hidden_class(@stream.collecting?)}
-  = link_to 'Add', subscribe_flickr_stream_path(@stream), remote: true, :method => :put, id: 'startCollecting', class: 'btn primary', title: "Add #{@stream.to_s} to my sources"
+  = link_to 'Add', subscribe_flickr_stream_path(@stream), remote: true, :method => :put, id: 'startCollecting', class: 'btn primary glow', 'data-glowing' => 1000, title: "Add #{@stream.to_s} to my sources"
 #collectingStreamOperations{class: hidden_class(!@stream.collecting?)}
   #rating-display.fleft
     Rating:
