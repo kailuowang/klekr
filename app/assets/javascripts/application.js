@@ -6,6 +6,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require ./global/lib/underscore-min
+//= require ./global/lib/bootstrap-twipsy
 //= require_tree ./global/lib
 //= require ./global/backboneHelper
 //= require ./global/server

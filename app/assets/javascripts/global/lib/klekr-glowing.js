@@ -2,9 +2,8 @@
 !function( $ ){
 
   $(function () {
-    $('.glow[data-glowing]').glowing( )
-
-  })
+    $('.glow[data-glowing]').glowing();
+  });
 
   /* glowing PLUGIN DEFINITION
    * ========================== */
@@ -18,9 +17,13 @@
       }
       var glowingId = setInterval(toggleGlowing, self.attr('data-glowing'));
       self.attr('data-glowing-id', glowingId)
-      self.hover(function(){
-        clearInterval($(this).attr('data-glowing-id'));
-        $(this).removeClass('glow');
+      self.bind('mouseenter', function(){
+        var intervalId = $(this).attr('data-glowing-id');
+        if(intervalId){
+          clearInterval(intervalId);
+          $(this).removeAttr('data-glowing-id')
+          $(this).removeClass('glow');
+        }
       });
     })
   }

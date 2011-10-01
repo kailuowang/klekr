@@ -6,7 +6,7 @@
       .fleft
         %a#removeFaveLink.btn{href: '#'}
           remove
-    %a#faveLink.btn.large.hidden{href: '#'}
+    %a#faveLink.btn.large.hidden.has-popover{href: '#', 'data-content' => 'Add it to "My Collection" on klekr as well as fave on flickr.', title: 'Add to My Collection', 'data-popover' => 'right', 'data-popover-top-offset' => -20}
       Collect it!
 
   #faveRatingPanel.modal-popup{style: 'margin: 40px'}
