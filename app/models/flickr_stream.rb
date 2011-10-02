@@ -141,14 +141,13 @@ class FlickrStream < ActiveRecord::Base
   end
 
   def sync(since = last_sync || 1.month.ago, max_num = Collectr::FlickrPictureRetriever::FLICKR_PHOTOS_PER_PAGE / 4, verbose = false)
-    puts "syncing pictures since #{since} for #{self}." if(verbose)
     photos_synced = 0
     retriever.get_all(since, max_num).each do |pic_info|
       _, newly_synced = picture_repo.create_from_sync(pic_info, self)
       photos_synced += 1 if newly_synced
     end
     update_attribute(:last_sync, DateTime.now)
-    puts "#{self} was synced with #{photos_synced} new pictures." if verbose
+    puts "#{self} was synced with #{photos_synced} new pictures since #{since}." if verbose && photos_synced > 0
     photos_synced
   end
 
