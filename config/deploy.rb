@@ -58,6 +58,9 @@ namespace :deploy do
     deploy.warm_server
   end
 
+  task :get_logs, :roles => :app do
+    download "#{app_path}/log/cron.log", "log/cron.log"
+  end
   task :patch, :roles => :app do
     run_in_app "git checkout ."
     run_in_app "git pull"

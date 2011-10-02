@@ -64,10 +64,10 @@ class FlickrStream < ActiveRecord::Base
       flickr(collector).people.getInfo(user_id: user_id)
     end
 
-    def sync_all(collector = nil)
+    def sync_all(collector = nil, verbose = false)
       streams_to_sync = collector ? collected_by(collector).collecting : collecting
 
-      streams_to_sync.inject(0) {|total_synced, stream| total_synced + stream.sync(stream.last_sync, 200) }
+      streams_to_sync.inject(0) {|total_synced, stream| total_synced + stream.sync(stream.last_sync, 200, verbose) }
     end
 
     def import(data, collector)
@@ -140,13 +140,15 @@ class FlickrStream < ActiveRecord::Base
     Syncage.where(flickr_stream_id: id, picture_id: picture.id).present?
   end
 
-  def sync(since = last_sync || 1.month.ago, max_num = Collectr::FlickrPictureRetriever::FLICKR_PHOTOS_PER_PAGE / 4)
+  def sync(since = last_sync || 1.month.ago, max_num = Collectr::FlickrPictureRetriever::FLICKR_PHOTOS_PER_PAGE / 4, verbose = false)
+    puts "syncing pictures since #{since} for #{self}." if(verbose)
     photos_synced = 0
     retriever.get_all(since, max_num).each do |pic_info|
       _, newly_synced = picture_repo.create_from_sync(pic_info, self)
       photos_synced += 1 if newly_synced
     end
     update_attribute(:last_sync, DateTime.now)
+    puts "#{self} was synced with #{photos_synced} new pictures." if verbose
     photos_synced
   end
 
