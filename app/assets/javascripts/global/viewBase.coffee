@@ -6,6 +6,12 @@ class window.ViewBase extends Events
   @isHoneycomb: ->
     $(window).width() is 980
 
+  @adjustBottom: ->
+    if ViewBase.isHoneycomb()
+      $('.bottom').each ->
+        bottom = parseInt($(this).css('bottom').replace('px','')) - 220
+        $(this).css('bottom', bottom + 'px')
+
   isHoneycomb: -> ViewBase.isHoneycomb()
 
   setVisible: (element, visible) ->
@@ -47,3 +53,4 @@ class window.ViewBase extends Events
 
 $ ->
   $.fx.off = ViewBase.isHoneycomb()
+  ViewBase.adjustBottom()
