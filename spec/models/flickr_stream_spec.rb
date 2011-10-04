@@ -319,11 +319,11 @@ describe FlickrStream do
         Picture.count.should == 0
       end
 
-      it "does save pictures to db when collecting" do
+      it "does not save pictures to db when collecting" do
         @flickr_stream.collecting = true
         @flickr_stream.get_pictures(3)
-        Picture.count.should == 3
-        @flickr_stream.reload.pictures.count.should == 3
+        Picture.count.should == 0
+        @flickr_stream.reload.pictures.count.should == 0
       end
       it "does return pictures when collecting" do
         @flickr_stream.collecting = true

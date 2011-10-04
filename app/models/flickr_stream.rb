@@ -120,7 +120,7 @@ class FlickrStream < ActiveRecord::Base
 
   def get_pictures(num, page = 1, since = nil, before = nil )
     retriever.get(num, page, since, before).map do |pic_info|
-      collecting? ? picture_repo.create_from_sync(pic_info, self)[0] : picture_repo.build(pic_info)
+      picture_repo.build(pic_info)
     end
   end
 
