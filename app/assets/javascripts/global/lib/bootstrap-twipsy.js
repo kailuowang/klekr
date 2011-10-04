@@ -47,7 +47,12 @@
       }
     }
 
-  })
+  });
+
+  $(function(){
+            $('.hasTwipsy').twipsy();
+           }
+  );
 
 
  /* TWIPSY PUBLIC CLASS DEFINITION

@@ -39,6 +39,10 @@ class window.ViewBase extends Events
   showing: (elem) ->
     elem.is(':visible')
 
+  setArtistCollectionLink: (link, picture) =>
+    link.attr href: "#{picture.ownerPath}?type=FaveStream"
+    link.text "#{picture.ownerName}'s collection."
+
   honeycombAdjustedDimension:  =>
     if this.isHoneycomb()
       [1280, 800] #the real size of browser is less than that, but we can tollerate a bit scroll bar in honeycomb.

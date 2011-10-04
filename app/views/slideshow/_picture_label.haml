@@ -4,17 +4,26 @@
   #expand.fright
     %a#expand-link{href: '#'} [+]
   #title.clearfix
-    %a#title-link{target: '_blank'}>
+    %a#title-link.hasTwipsy{target: '_blank', title: 'Click title to go to the original flickr page.'}>
     %span#date
 
   #collapsible.hidden
     #description
 
-    #sources
-      %span.label From:
+    #sources.label
+      This picture is
+      %span.hasTwipsy{title: "klekr compiles pictures from your sources."} brought
+      to you by
       #sources-links.inline
-    %div
-      %span.label Interestingess:
-      %span#interestingess-num
+    #interestingness.label
+      It has an
+      %span.hasTwipsy{title: "Interestingess is based your preferences over the sources the picture comes from."}interestingess
+      of&nbsp;
+      %span#interestingess-num>
+      \.
+
+    #related-pictures.label
+      Like this picture? Checkout
+      %a#artist-collection
 
   #footer

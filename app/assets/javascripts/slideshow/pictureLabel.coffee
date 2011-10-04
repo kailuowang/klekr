@@ -18,20 +18,27 @@ class window.PictureLabel extends ViewBase
     @titleLink.text picture.displayTitle()
     @date ?= @panel.find('#title #date')
     @date.text(picture.dateUpload.substr(0,7).replace('-','/') )
-
+    @artistCollectionLink ?= @panel.find('#artist-collection')
+    this.setArtistCollectionLink(@artistCollectionLink, picture)
     @interestingess ?= @panel.find('#interestingess-num')
     @interestingess.text picture.interestingness
+    @interestingessDisplay ?= @panel.find('#interestingness')
+    this.setVisible @interestingessDisplay, (picture.interestingness isnt 0)
+
     this._updateSources(picture.fromStreams)
+
 
   _updateSources: (streams) ->
     @sources ?= @panel.find('#sources')
     @sourcesLinks ?= @sources.find('#sources-links')
     @sourcesLinks.empty()
-    for stream in streams
+    collectionStreams = (stream for stream in streams when stream.type is 'Collection')
+
+    for stream in collectionStreams
       @sourcesLinks.append($('<span>').text(', ')) if @sourcesLinks.children().length > 0
-      link = $('<a>').attr('href', stream.path).text(stream.username + "'s " + stream.type)
+      link = $('<a>').attr('href', stream.path).text(stream.username)
       @sourcesLinks.append(link)
-    this.setVisible(@sources, streams.length > 0 )
+    this.setVisible(@sources, collectionStreams.length > 0 )
 
 
 

@@ -5,7 +5,8 @@ class UsersController < ApplicationController
   before_filter :authenticate
 
   def show
-    redirect_to(action: :flickr_stream, type: FlickrStream::DEFAULT_TYPE)
+    type = params[:type] || FlickrStream::DEFAULT_TYPE
+    redirect_to(action: :flickr_stream, type: type)
   end
 
   def flickr_stream

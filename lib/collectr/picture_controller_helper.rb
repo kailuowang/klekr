@@ -10,6 +10,7 @@ module Collectr
         title:            picture.title,
         flickrPageUrl:    picture.url,
         ownerName:        picture.owner_name,
+        ownerId:          picture.owner_id,
         faved:            picture.faved?,
         rating:           picture.rating,
         viewed:           picture.viewed?,

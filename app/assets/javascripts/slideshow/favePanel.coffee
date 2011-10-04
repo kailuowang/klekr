@@ -16,6 +16,7 @@ class window.FavePanel  extends ViewBase
   fave: =>
     unless this.currentPicture().faved()
       this.popup(@faveRatingPanel)
+      this.setArtistCollectionLink(@faveRatingPanel.find('#artist-collection'), this.currentPicture())
 
   unfave: =>
     if this.currentPicture().faved()
