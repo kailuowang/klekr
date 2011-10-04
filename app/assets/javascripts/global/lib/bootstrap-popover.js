@@ -77,7 +77,7 @@
   $.fn.popover.defaults = $.extend({} , $.fn.twipsy.defaults, { content: 'data-content', placement: 'right'})
 
   $(function () {
-     $('a.has-popover[data-popover]').each(function(){
+     $('.has-popover[data-popover]').each(function(){
        var options ={offset: 10};
        options.placement =  $(this).attr('data-popover');
        options.topOffset =  $(this).attr('data-popover-top-offset');
