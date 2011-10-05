@@ -3,16 +3,23 @@
 
 - content_for(:top_left) do
   .fleft
-    = link_to(icon(@stream), @stream.user_url, target: '_blank')
-  .fleft
-    %h4.inline
-      #{link_to(@stream.username, @stream.user_url, target: '_blank')}'s
-      = @stream.type_display
+    =icon(@stream)
+  #stream-info.fleft
+    %a#stream-name.dropdown-toggle{href: '#', 'data-dropdown' => "dropdown"}
+      %h4.inline
+        = @stream.to_s
+    #alternative-stream.inline
+      Like these pictures? Checkout
+      = link_to @stream.alternative_stream.to_s, flickr_stream_path(@stream.alternative_stream)
 
-    (
-    the artist's
-    = link_to @stream.alternative_stream.type_display.downcase, flickr_stream_path(@stream.alternative_stream)
-    )
+    #stream-dropdown.dropdown-menu.hidden
+      %div
+        = @stream.username + "'s"
+        = link_to("flickr page", @stream.user_url, target: '_blank')
+      %div
+        = @stream.username + "'s"
+        = link_to @stream.alternative_stream.type_display.downcase, flickr_stream_path(@stream.alternative_stream)
+
     %h5
       = render partial: 'stream_panel'
 =render partial: 'slideshow'
