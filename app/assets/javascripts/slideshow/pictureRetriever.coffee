@@ -16,17 +16,17 @@ class window.PictureRetriever extends Events
   busy: => !@_worker.idle()
 
   retrieve: (numOfPages = 3) =>
-    @_q.enqueue(this._createJobs(numOfPages)...)
+    for work in this._createWorks(numOfPages)
+      @_q.enQ(work)
 
-  _createJobs: (numOfPages) =>
+  _createWorks: (numOfPages) =>
     for i in [0...numOfPages]
       this._proceed()
-      this._createJob()
+      this._createWork()
 
-  _createJob: =>
+  _createWork: =>
     pageOpts = this._pageOpts()
-    perform = (callback) => this._retrievePage(pageOpts, callback)
-    new queffee.Job(perform)
+    (callback) => this._retrievePage(pageOpts, callback)
 
   _onWorkerDone: =>
     this.trigger('done-retrieving', @_retrievedCount)

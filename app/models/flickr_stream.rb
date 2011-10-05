@@ -115,7 +115,7 @@ class FlickrStream < ActiveRecord::Base
   end
 
   def alternative_stream
-    FlickrStream.find_or_create(user_id: user_id, collector: collector, type: alternative_type)
+    @alternative_stream ||= FlickrStream.find_or_create(user_id: user_id, collector: collector, type: alternative_type)
   end
 
   def get_pictures(num, page = 1, since = nil, before = nil )
