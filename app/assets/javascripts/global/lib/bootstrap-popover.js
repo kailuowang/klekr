@@ -78,7 +78,7 @@
 
   $(function () {
      $('.has-popover[data-popover]').each(function(){
-       var options ={offset: 10};
+       var options ={offset: 5};
        options.placement =  $(this).attr('data-popover');
        options.topOffset =  $(this).attr('data-popover-top-offset');
        options.leftOffset =  $(this).attr('data-popover-left-offset');

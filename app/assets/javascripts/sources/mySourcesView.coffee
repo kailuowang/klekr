@@ -65,7 +65,7 @@ class window.MySourcesView extends ViewBase
         $(window).scrollTop @importPanel.offset().top
 
   _setExpandLinkText: (expanded) =>
-    text = if expanded then '4 ways of adding sources:' else 'I want more sources!'
+    text = if expanded then "It's easy! 4 ways of adding sources:" else 'I want more sources!'
     @expandLink.text(text)
 
 
