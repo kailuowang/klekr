@@ -3,13 +3,25 @@
     .fleft
       %h4
         Slide Options
-    %a.close{href: "#"} ×
+    %a.close-btn{href: "#"} ×
     .clearfix
   .filters.clearfix
-    %h5
-      %input#type-filter-checkbox{type: 'checkbox', name: 'upload-only'}
-        show artists' works only
-
+    #stream-type-filter-panel
+      %h5
+        %label
+          %input#type-filter-checkbox{type: 'checkbox', name: 'upload-only'}
+            show artists' works only
+    #rating-filter-panel
+      %h5.inline
+        rating higher or equal:
+      #rating-filter.inline
+        = select_tag 'rating_filter', options_for_select(['★', '★★', '★★★', '★★★★', '★★★★★'])
+    #faved-at-filter-panel
+      %h5.inline
+        collected before:
+      #faved-at-date-filter.inline
+        %input.datepicker{type: :text, name: 'faved-at-date'}
+  .clearfix
   .fright
     %a#under-the-hood{href: '#'}
       Go Offline!

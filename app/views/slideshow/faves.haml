@@ -1,5 +1,6 @@
 :javascript
   __gridMode__ = true;
+  klekr.Global.filtersOpts = { ratingTypeFilter: true, favedAtFilter: true }
 
 - content_for(:top_left) do
   .fleft
@@ -7,8 +8,9 @@
   .fleft
     %h3
       My Collection
-    #filtersPanel
-      %h4
-        filter by rating:
-        = select_tag 'rating_filter', options_for_select(['★', '★★', '★★★', '★★★★', '★★★★★'])
-=render partial: 'slideshow'
+  #option-button.fleft
+    = image_tag('option.png')
+
+
+= render partial: 'slideshow'
+= render partial: 'slide_options'

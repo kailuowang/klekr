@@ -1,7 +1,7 @@
 class window.RatingFilterView extends ViewBase
   constructor: (attachedMode)->
     @ratingFilter = $('#rating_filter')
-    @filtersPanel = $('#filtersPanel')
+    @filtersPanel = $('#rating-filter-panel')
     attachedMode.bind 'on', this.show
     attachedMode.bind 'off', this.hide
 

@@ -105,7 +105,7 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
 }
 
 
-.close {
+.close-btn {
   float: right;
   color: #000000;
   font-size: 20px;
@@ -117,7 +117,7 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
   -moz-opacity: 0.5;
   opacity: 0.5;
 }
-.close:hover {
+.close-btn:hover {
   color: #000000;
   text-decoration: none;
   filter: alpha(opacity=80);
