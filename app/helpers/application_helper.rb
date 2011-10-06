@@ -14,17 +14,17 @@ module ApplicationHelper
 
   def navigation_link name, path
     if path != request.env['PATH_INFO']
-      link_to name, path
+      link_to name, path, class: 'navigation-link'
     else
       name
     end
   end
 
-  def navigation_links()
+  def render_navigation_links()
     if @navigation_options.present?
       @navigation_options.map do |option|
         navigation_link(option[:name], option[:path])
-      end.compact.join(' | ').html_safe
+      end.compact.join.html_safe
     end
   end
 

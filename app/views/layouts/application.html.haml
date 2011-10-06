@@ -18,8 +18,7 @@
         #top-banner-right.fright
           %h4.inline
             - unless @disable_navigation
-              |
-              = navigation_links
+              = render_navigation_links
         #top-banner-welcome.fright
           - if @current_collector
             = render partial: '/general/user_info'
