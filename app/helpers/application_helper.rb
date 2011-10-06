@@ -16,7 +16,7 @@ module ApplicationHelper
     if path != request.env['PATH_INFO']
       link_to name, path, class: 'navigation-link'
     else
-      name
+      content_tag 'span', name, class: 'navigation-link'
     end
   end
 
