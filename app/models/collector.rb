@@ -16,10 +16,9 @@ class Collector < ActiveRecord::Base
   end
 
   def collection(per_page, page, filters = {})
-    min_rating = filters[:min_rating].to_i
-    min_rating = 1 if min_rating == 0
-    pictures_in_db = Picture.faved_by(self, {min_rating: min_rating} , page, per_page)
-    if(pictures_in_db.size == per_page || min_rating > 1)
+
+    pictures_in_db = Picture.faved_by(self, collection_conditions(filters) , page, per_page)
+    if(pictures_in_db.size == per_page || filters.present?)
       pictures_in_db
     else
       pictures_in_db.to_a + import_from_flickr(per_page - pictures_in_db.size)
@@ -44,6 +43,16 @@ class Collector < ActiveRecord::Base
   end
 
   private
+
+  def collection_conditions(filter_params)
+    {}.tap do |h|
+      h[:min_rating] = filter_params[:min_rating].to_i if filter_params[:min_rating].present?
+      if( filter_params[:faved_date].present? )
+        date = Date.strptime(filter_params[:faved_date], '%m/%d/%Y')
+        h[:max_faved_at] = date + 1 if date
+      end
+    end
+  end
   def earlest_faved_in_db
     earlest_fave = Picture.faved.collected_by(self).order('faved_at ASC').where('faved_at IS NOT NULL').first
     earlest_fave ? earlest_fave.faved_at : DateTime.now

@@ -8,7 +8,7 @@ class window.GalleryControlPanel extends ViewBase
     @panel.find('.close-btn').click_ => @panel.hide()
     @downloadButton = $('#download-pictures')
     @downloadButton.click_ this._downloadPictures
-    new CollapsiblePanel($('#under-the-hood-panel'), $('#under-the-hood'))
+    new CollapsiblePanel($('#under-the-hood-panel'), $('#under-the-hood'), ['Under The Hood ▼', 'Hide ▲'])
     @gallery.bind 'new-pictures-added', this._registerPictureEvents
     @gallery.bind 'idle', this._showDownloadButton
     this._updateConnectionStatus()

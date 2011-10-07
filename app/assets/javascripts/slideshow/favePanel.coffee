@@ -31,7 +31,7 @@ class window.FavePanel  extends ViewBase
     this.setVisible(@faved, faved)
     this._updateRating(picture.data.rating)
     this.setVisible(@ratingDisplayPanel, faved)
-
+    @removeFaveLink.attr('data-content', "This picture is added to my collection on #{picture.favedDate}. Click to remove it." )
   _registerEvents: =>
     @faveLink.click_ this.fave
     @removeFaveLink.click_ this.unfave

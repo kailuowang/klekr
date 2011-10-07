@@ -8,10 +8,14 @@
 .datepicker tfoot td { height: 18px; text-align: center; text-transform: capitalize; }
 .datepicker th, .datepicker tfoot td { background: #eee; font: 10px/18px Verdana, Arial, Helvetica, sans-serif; }
 .datepicker th span, .datepicker tfoot td span { font-weight: bold; }
-.datepicker select {width: 100px;}
+.datepicker select {
+  width: 89px;
+  height: 18px;
+  margin-top: 5px;
+}
 
 .datepicker tbody td { width: 24px; height: 24px; border: 1px solid #ccc; font: 11px/22px Arial, Helvetica, sans-serif; text-align: center; background: #fff; }
 .datepicker tbody td.date { cursor: pointer; }
 .datepicker tbody td.date.over { background-color: #99ffff; }
 .datepicker tbody td.date.chosen { font-weight: bold; background-color: #ccffcc; }
-input.datepicker {width: 89px !important; height: 16px !important; }
+input.datepicker {width: 90px !important; height: 16px !important; }

@@ -12,6 +12,7 @@ module Collectr
         ownerName:        picture.owner_name,
         ownerId:          picture.owner_id,
         faved:            picture.faved?,
+        favedDate:        picture.faved_at ? picture.faved_at.to_date.to_s(:long) : nil,
         rating:           picture.rating,
         viewed:           picture.viewed?,
         collected:        !picture.new_record? && picture.collected?,

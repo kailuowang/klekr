@@ -10,7 +10,7 @@
       %h5
         %label
           %input#type-filter-checkbox{type: 'checkbox', name: 'upload-only'}
-            Show only pictures from
+            Only pictures from
             %span.hasTwipsy{title: "Sources of artists' works."}direct sources
     #rating-filter-panel
       %h5.inline
@@ -22,7 +22,7 @@
         collected before:
       #faved-at-date-filter.inline
         %input#fave-at-date.datepicker{type: :text, name: 'faved-at-date'}
-  .clearfix
+  #lower.clearfix
   .fright
     %a#under-the-hood{href: '#'}
       Go Offline!

@@ -27,11 +27,12 @@ class Picture < ActiveRecord::Base
     end
 
     def faved_by(collector, filters, page, per_page)
-      collected_by(collector).
-          where('rating >= ?', filters[:min_rating]).
+      scope = faved.collected_by(collector).
           order('faved_at DESC, updated_at DESC').
-          includes(:flickr_streams).
-          paginate(page: page, per_page: per_page )
+          includes(:flickr_streams)
+      scope = scope.where('rating >= ?', filters[:min_rating]) if filters[:min_rating]
+      scope = scope.where('faved_at <= ?', filters[:max_faved_at]) if filters[:max_faved_at]
+      scope.paginate(page: page, per_page: per_page )
     end
   end
 

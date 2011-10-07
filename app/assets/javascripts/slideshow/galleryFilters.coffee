@@ -1,5 +1,5 @@
 class window.GalleryFilters extends ViewBase
-  constructor: (attachedMode)->
+  constructor: ->
     @panel = $('#slide-options .filters')
     @ratingFilter = $('#rating-filter-select')
     @typeCheckBox = $('#type-filter-checkbox')
@@ -7,8 +7,6 @@ class window.GalleryFilters extends ViewBase
     @typeCheckBox.change? this._filterChanged
     @ratingFilter.change? this._filterChanged
     @faveDateBox.bind('change', this._filterChanged)
-    attachedMode.bind 'on', this.show
-    attachedMode.bind 'off', this.hide
     this._setFiltersVisibility(klekr.Global.filtersOpts || {})
     @panel.find('.datepicker').simpleDatepicker()
 
@@ -24,7 +22,7 @@ class window.GalleryFilters extends ViewBase
   filterSettings: =>
     {
       type: if @typeCheckBox.attr('checked') then 'UploadStream' else null
-      rating: @ratingFilter[0].selectedIndex + 1
+      rating: if @ratingFilter[0].selectedIndex > 0 then @ratingFilter[0].selectedIndex + 1 else null
       faveDate: @faveDateBox.val()
     }
 

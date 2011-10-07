@@ -12,7 +12,7 @@ class window.Gallery extends Events
     generalView.nextClick => @currentMode.navigateToNext?()
     generalView.previousClick => @currentMode.navigateToPrevious?()
     generalView.toggleModeClick this.toggleMode
-    @filters = new GalleryFilters(@grid)
+    @filters = new GalleryFilters
     @filters.bind('changed', this._applyFilters)
     new GalleryControlPanel(this)
 
@@ -138,6 +138,7 @@ class window.Gallery extends Events
     _.tap {}, (opts) =>
       opts.offset = this._unseenPictures().length if @advanceByProgress
       opts.min_rating = @_ratingFilter if @_ratingFilter?
+      opts.faved_date = @_favedDateFilter if @_favedDateFilter?
       opts.type = @_typeFilter if @_typeFilter?
 
   _addPictures: (newPictures) =>

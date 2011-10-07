@@ -2,15 +2,20 @@
 
 #slide-options
   @extend .popup
+  opacity: 0.95
+
   position: absolute
   top: 33px
   left: 4px
-  width: 340px
+  width: 285px
   background: #353535
   color: #707070
   .header
     margin-bottom: 5px
     border-bottom: 1px solid #505050
+  #lower
+    border-top: 1px solid #505050
+    padding-top: 4px
   .filters
     .hasTwipsy
       color: #807050
@@ -19,13 +24,12 @@
     #faved-at-filter-panel
       margin-bottom: 10px
       height: 30px
+      margin-left: 40px
       #faved-at-date-filter
-        margin-left: 108px
-
+        margin-left: 4px
     #rating-filter-panel
       margin-bottom: 10px
       #rating-filter
-        margin-left: 62px
         #rating-filter-select
           width: 100px
   #under-the-hood
