@@ -29,14 +29,16 @@ class Collector < ActiveRecord::Base
     Collectr::FaveImporter.new(self, earlest_faved_in_db - 5).import(num)
   end
 
-  def import_all_from_flickr
+  def import_all_from_flickr(verbose = false)
     unless self.collection_synced?
       per_page = 200
       done = false
       until done
         imported_num = import_from_flickr(per_page).size
-        Rails.logger.info("#{imported_num} fave pictures imported for #{self.user_name}")
-        done = imported_num < per_page
+        msg = "#{imported_num} fave pictures imported for #{self.user_name}"
+        Rails.logger.info(msg)
+        puts msg if verbose
+        done = imported_num < (per_page / 2)
       end
       update_attributes(collection_synced: true)
     end

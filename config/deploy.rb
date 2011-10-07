@@ -60,6 +60,7 @@ namespace :deploy do
 
   task :get_logs, :roles => :app do
     download "#{app_path}/log/cron.log", "log/cron.log"
+    download "#{app_path}/log/production.log", "log/production.log"
   end
   task :patch, :roles => :app do
     run_in_app "git checkout ."

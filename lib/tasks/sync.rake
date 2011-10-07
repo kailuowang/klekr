@@ -15,7 +15,9 @@ namespace :sync do
 
   desc "sync collection for all collector that hasn't yet"
   task :collections => :environment do
-    Collector.where(collection_synced: false).each(&:import_all_from_flickr)
+    Collector.where(collection_synced: false).each do |collector|
+      collector.import_all_from_flickr(true)
+    end
   end
 end
 
