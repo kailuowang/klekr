@@ -214,8 +214,10 @@
       // remove the table element from the DOM
       // indicate that there is no datepicker for the currently matched input element
     function closeIt(el, datepicker, dateObj) {
-      if (dateObj && dateObj.constructor == Date)
+      if (dateObj && dateObj.constructor == Date){
         el.val(jQuery.fn.simpleDatepicker.formatOutput(dateObj));
+        el.trigger('change')
+      }
       datepicker.remove();
       datepicker = null;
       jQuery.data(el.get(0), "simpleDatepicker", { hasDatepicker : false });

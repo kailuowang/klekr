@@ -6,8 +6,6 @@ class window.GalleryControlPanel extends ViewBase
     @loadingIndicator = @panel.find('#loading')
     @optionButton.click => @panel.toggle()
     @panel.find('.close-btn').click_ => @panel.hide()
-    @typeCheckBox = $('#type-filter-checkbox')
-    @typeCheckBox.change? this._typeFilterChange
     @downloadButton = $('#download-pictures')
     @downloadButton.click_ this._downloadPictures
     new CollapsiblePanel($('#under-the-hood-panel'), $('#under-the-hood'))
@@ -15,22 +13,11 @@ class window.GalleryControlPanel extends ViewBase
     @gallery.bind 'idle', this._showDownloadButton
     this._updateConnectionStatus()
     klekr.Global.server.bind 'connection-status-changed', this._updateConnectionStatus
-    this._setFiltersVisibility(klekr.Global.filtersOpts || {})
-    @panel.find('.datepicker').simpleDatepicker()
-
-  _typeFilterChange: (e) =>
-    type = if e.currentTarget.checked then 'UploadStream' else null
-    @gallery.applyTypeFilter(type)
 
   _downloadPictures: =>
     @gallery.retrieveMorePictures(20)
     @loadingIndicator.show()
     @downloadButton.hide()
-
-  _setFiltersVisibility: (opts)=>
-    this.setVisible($('#stream-type-filter-panel', opts.streamTypeFilter))
-    this.setVisible($('#rating-filter-panel', opts.ratingFilter))
-    this.setVisible($('#faved-at-filter-panel', opts.favedAtFilter))
 
   _showDownloadButton: =>
     this._updateGalleryInfo()

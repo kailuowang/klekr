@@ -90,7 +90,7 @@ describe Collectr::FaveImporter do
         pics = 3.pics
         @retriever.stub!(:get).and_return(pics)
         @importer.import(3)
-        Picture.faved_by(@importer.collector, 1, 1, 3).map(&:title).should == pics.map(&:title)
+        Picture.faved_by(@importer.collector, {min_rating: 1}, 1, 3).map(&:title).should == pics.map(&:title)
       end
 
       it 'does not do antything if no pic faved' do

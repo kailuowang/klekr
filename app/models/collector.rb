@@ -18,7 +18,7 @@ class Collector < ActiveRecord::Base
   def collection(per_page, page, filters = {})
     min_rating = filters[:min_rating].to_i
     min_rating = 1 if min_rating == 0
-    pictures_in_db = Picture.faved_by(self, min_rating , page, per_page)
+    pictures_in_db = Picture.faved_by(self, {min_rating: min_rating} , page, per_page)
     if(pictures_in_db.size == per_page || min_rating > 1)
       pictures_in_db
     else

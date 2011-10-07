@@ -12,8 +12,8 @@ class window.Gallery extends Events
     generalView.nextClick => @currentMode.navigateToNext?()
     generalView.previousClick => @currentMode.navigateToPrevious?()
     generalView.toggleModeClick this.toggleMode
-    @ratingFilterView = new RatingFilterView(@grid)
-    @ratingFilterView.filterChange this._applyRatingFilter
+    @filters = new GalleryFilters(@grid)
+    @filters.bind('changed', this._applyFilters)
     new GalleryControlPanel(this)
 
     @retriever = this._createPictureRetriever()
@@ -121,12 +121,10 @@ class window.Gallery extends Events
     if this._noActiveFilter()
         generalView.showEmptyGalleryMessage()
 
-  _applyRatingFilter: (rating) =>
-    @_ratingFilter = rating
-    this._reinitToGrid()
-
-  applyTypeFilter: (type) =>
-    @_typeFilter = type
+  _applyFilters: (filterSettings) =>
+    @_ratingFilter = filterSettings.rating
+    @_typeFilter = filterSettings.type
+    @_favedDateFilter = filterSettings.faveDate
     this._reinitToGrid()
 
   _noActiveFilter: =>

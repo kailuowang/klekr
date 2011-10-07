@@ -26,9 +26,9 @@ class Picture < ActiveRecord::Base
       unviewed.each(&:reset_stream_rating)
     end
 
-    def faved_by(collector, min_rating, page, per_page)
+    def faved_by(collector, filters, page, per_page)
       collected_by(collector).
-          where('rating >= ?', min_rating).
+          where('rating >= ?', filters[:min_rating]).
           order('faved_at DESC, updated_at DESC').
           includes(:flickr_streams).
           paginate(page: page, per_page: per_page )
