@@ -1,0 +1,23 @@
+:javascript
+  __gridMode__ = true;
+  klekr.Global.filtersOpts = { ratingFilter: true, favedAtFilter: false}
+  klekr.Global.readonly = true
+
+- content_for(:top_left) do
+  .fleft
+    = icon(@collector)
+  .fleft
+    %h3
+      = @collector.user_name + "'s"
+      klekr collection
+  #option-button.fleft
+    = image_tag('option.png')
+
+- content_for(:top_right) do
+  - if @current_collector.blank?
+    %h3
+      = link_to  'Start your own klekr collection now!', slideshow_path
+
+
+= render partial: 'slideshow'
+= render partial: 'slide_options'
