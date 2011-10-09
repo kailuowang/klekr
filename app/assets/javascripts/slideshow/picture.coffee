@@ -28,7 +28,7 @@ class window.Picture extends Events
   displayTitle:  =>
     t = @data.title
     if t? and t isnt '-' and t isnt '.' and t isnt ''
-      '"' + @data.title + '"'
+      @data.title
     else
       'Untitled'
 

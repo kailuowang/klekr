@@ -1,6 +1,6 @@
 class SlideshowController < ApplicationController
   include Collectr::PictureControllerHelper
-  before_filter :authenticate
+  before_filter :authenticate, except: [:exhibit, :exhibit_pictures]
 
   def flickr_stream
     id = params[:id].to_i
@@ -25,8 +25,19 @@ class SlideshowController < ApplicationController
     @empty_message = "You haven't collect any pictures yet"
   end
 
+  def exhibit
+    @disable_navigation = current_collector.blank?
+    @collector = ::Collector.find(params[:collector_id])
+    @more_pictures_path = exhibit_pictures_slideshow_path(params.slice(:collector_id))
+    @empty_message = "This collection has no pictures"
+  end
+
+  def exhibit_pictures
+    render_fave_pictures ::Collector.find(params[:collector_id])
+  end
+
   def fave_pictures
-    render_json_pictures current_collector.collection( params[:num].to_i, params[:page].to_i, params.slice(:min_rating, :faved_date))
+    render_fave_pictures current_collector
   end
 
   def new_pictures
@@ -35,5 +46,10 @@ class SlideshowController < ApplicationController
     render_json_pictures(new_pictures)
   end
 
+  private
+
+  def render_fave_pictures(collector)
+    render_json_pictures collector.collection( params[:num].to_i, params[:page].to_i, params.slice(:min_rating, :faved_date))
+  end
 
 end

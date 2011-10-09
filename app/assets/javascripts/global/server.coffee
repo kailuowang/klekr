@@ -13,7 +13,7 @@ class Server extends Events
 
   ajax: (url, data, type, callback) ->
     $.ajax(
-            url: url + '.js'
+            url: this._jsUrl(url)
             dataType: 'json'
             data: data
             type: type
@@ -41,6 +41,12 @@ class Server extends Events
     if @_connectionCheckingPId?
       clearInterval(@_connectionCheckingPId)
       @_connectionCheckingPId = null
+
+  _jsUrl: (url) ->
+    if url.indexOf('?') >= 0
+      url.replace('?', '.js?')
+    else
+      url + '.js'
 
 
 namespace 'klekr.Global', (n) ->

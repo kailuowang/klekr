@@ -31,8 +31,6 @@ namespace :deploy do
    end
 end
 
-
-
 namespace :deploy do
   set :app_path, '/app/collectr'
   set :current_path, app_path

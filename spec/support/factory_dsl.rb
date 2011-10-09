@@ -5,9 +5,9 @@ class Fixnum
     end
   end
 
-  def pictures
+  def pictures(opts = {})
     self.times.map do
-      Factory(:picture)
+      Factory(:picture, opts)
     end
   end
   alias :pic :pics

@@ -32,6 +32,7 @@ class window.FavePanel  extends ViewBase
     this._updateRating(picture.data.rating)
     this.setVisible(@ratingDisplayPanel, faved)
     @removeFaveLink.attr('data-content', "This picture is added to my collection on #{picture.favedDate}. Click to remove it." )
+
   _registerEvents: =>
     @faveLink.click_ this.fave
     @removeFaveLink.click_ this.unfave
@@ -60,7 +61,7 @@ class window.FavePanel  extends ViewBase
   _shortcuts: ->
     @mShortcuts ?=
       (this._createRatingShortcut(i) for i in [1..5]).concat([
-        new KeyShortcut(['f','c'], this.fave, 'collect the picture', => gallery.slide.active())
+        new KeyShortcut(['f','c'], this.fave, 'collect the picture', => gallery.slide.active() and !klekr.Global.readonly)
         new KeyShortcut('u', this.unfave, 'remove the picture from collection', => this.showing(@removeFaveLink))
       ])
 

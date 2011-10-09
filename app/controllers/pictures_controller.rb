@@ -23,7 +23,10 @@ class PicturesController < ApplicationController
   end
 
   def all_viewed
-    Picture.find(params[:ids]).map(&:get_viewed)
+    Picture.find(params[:ids]).each do |p|
+      check_picture_access p
+      p.get_viewed
+    end
     js_ok
   end
 
@@ -42,10 +45,17 @@ class PicturesController < ApplicationController
       end
     end
   end
-
+                                                      ``
   private
   def load_picture
-    @picture = Collectr::PictureRepo.new(@current_collector).find(params[:id]) if params[:id].present?
+    @picture = Collectr::PictureRepo.new(current_collector).find(params[:id]) if params[:id].present?
+    check_picture_access(@picture)
+  end
+
+  def check_picture_access picture
+    if(current_collector && picture && picture.collector != current_collector)
+      raise ActionController::RoutingError.new('Access not permitted')
+    end
   end
 
 end

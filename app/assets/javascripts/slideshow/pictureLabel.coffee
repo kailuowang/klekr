@@ -1,7 +1,9 @@
 class window.PictureLabel extends ViewBase
   constructor: ->
     @panel = $('#picture-label')
-    new CollapsiblePanel(@panel.find('#collapsible'), @panel.find('#expand-link'), ['[+]', '[-]'])
+    @expandLink =  @panel.find('#expand-link')
+    this.setVisible(@expandLink, !klekr.Global.readonly)
+    new CollapsiblePanel(@panel.find('#collapsible'), @expandLink, ['[+]', '[-]'])
 
   show: (picture)=>
     this._updateDom(picture) if picture?

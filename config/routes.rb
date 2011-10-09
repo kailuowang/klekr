@@ -59,7 +59,9 @@ Collectr::Application.routes.draw do
   resource :slideshow, :only => [:show], :controller => :slideshow do
     post 'new_pictures'
     post 'fave_pictures'
+    post 'exhibit_pictures'
     get 'faves'
+    get 'exhibit'
     get 'flickr_stream'
   end
 

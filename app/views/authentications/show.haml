@@ -27,24 +27,25 @@
           5
         secs.
         %a#help-title{href: '#'}
-          Wait, what?
+          Wait...what?
 
-    #about-klekr-title.hidden
-      %h2
-        OK. Here is what klekr is about:
+    #detail-info.hidden
+      #about-klekr-title
+        %h2
+          OK. Here is what klekr is about:
 
-    #about-klekr-panel.hidden
-      %h5
-        %p
-          With klekr, you can add other artists' works and collections as sources.
-          New pictures from these sources will be displayed in a single slideshow.
-          klekr remembers your preference over these sources by looking at how you collect pictures.
-          Thus klekr will be able to display the more interesting pictures first.
-      %h2
-        Let's get started! ↓
+      #about-klekr-panel
+        %h5
+          %p
+            With klekr, you can add other artists' works and collections as sources.
+            New pictures from these sources will be displayed in a single slideshow.
+            klekr remembers your preference over these sources by looking at how you collect pictures.
+            Thus klekr will be able to display the more interesting pictures first.
+        %h2
+          Let's get started! ↓
 
-    #stoppedRedirect.hidden
-      %h3.mt20
-        = link_to 'Click here to login from Flickr.com', @auth_url
+      #stoppedRedirect
+        %h3.mt20
+          = link_to 'Click here to login from Flickr.com', @auth_url
 
-      Klekr links with your flickr account so that you don't have to create another one. Also, pictures you collect on klekr will be faved on flickr too :)
+        Klekr links with your flickr account so that you don't have to create another one. Also, pictures you collect on klekr will be faved on flickr too :)
