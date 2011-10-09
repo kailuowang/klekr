@@ -13,7 +13,9 @@ class window.Gallery extends Events
     generalView.previousClick => @currentMode.navigateToPrevious?()
     generalView.toggleModeClick this.toggleMode
     @filters = new GalleryFilters
-    @filters.bind('changed', this._applyFilters)
+    @filters.bind('changed', this._reinitToGrid)
+    @filters.bind('changed', generalView.updateShareLink)
+
     new GalleryControlPanel(this)
 
     @retriever = this._createPictureRetriever()
@@ -121,25 +123,21 @@ class window.Gallery extends Events
     if this._noActiveFilter()
         generalView.showEmptyGalleryMessage()
 
-  _applyFilters: (filterSettings) =>
-    @_ratingFilter = filterSettings.rating
-    @_typeFilter = filterSettings.type
-    @_favedDateFilter = filterSettings.faveDate
-    this._reinitToGrid()
-
   _noActiveFilter: =>
-    !@_typeFilter? and !@_ratingFilter
+    filterSettings = @filters.filterSettings()
+    _(filterSettings).size() is 0
 
   _reinitToGrid: =>
     @currentMode = @grid
     this._reset()
 
   _filterOpts: =>
+    filterSettings = @filters.filterSettings()
     _.tap {}, (opts) =>
       opts.offset = this._unseenPictures().length if @advanceByProgress
-      opts.min_rating = @_ratingFilter if @_ratingFilter?
-      opts.faved_date = @_favedDateFilter if @_favedDateFilter?
-      opts.type = @_typeFilter if @_typeFilter?
+      opts.min_rating = filterSettings.rating if filterSettings.rating
+      opts.faved_date = filterSettings.faveDate if filterSettings.faveDate
+      opts.type = filterSettings.type if filterSettings.type
 
   _addPictures: (newPictures) =>
     startPosition = @pictures.length

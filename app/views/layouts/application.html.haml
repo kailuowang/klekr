@@ -5,6 +5,9 @@
       klekr
     = stylesheet_link_tag 'application'
     = javascript_include_tag 'application'
+    - if @current_collector
+      :javascript
+        klekr.Global.currentCollector = {id: #{@current_collector.id}};
     = yield(:head)
     = csrf_meta_tag
   %body

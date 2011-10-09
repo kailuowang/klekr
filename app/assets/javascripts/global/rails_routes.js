@@ -26,7 +26,9 @@ function users_path(params){ return '/users'}
 function user_path(params){ return '/users/' + params.id + ''}
 function new_pictures_slideshow_path(params){ return '/slideshow/new_pictures'}
 function fave_pictures_slideshow_path(params){ return '/slideshow/fave_pictures'}
+function exhibit_pictures_slideshow_path(params){ return '/slideshow/exhibit_pictures'}
 function faves_slideshow_path(params){ return '/slideshow/faves'}
+function exhibit_slideshow_path(params){ return '/slideshow/exhibit'}
 function flickr_stream_slideshow_path(params){ return '/slideshow/flickr_stream'}
 function slideshow_path(params){ return '/slideshow'}
 function jasminerice_path(params){ return '/jasmine'}

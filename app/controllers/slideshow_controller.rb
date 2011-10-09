@@ -30,6 +30,7 @@ class SlideshowController < ApplicationController
     @collector = ::Collector.find(params[:collector_id])
     @more_pictures_path = exhibit_pictures_slideshow_path(params.slice(:collector_id))
     @empty_message = "This collection has no pictures"
+    @defaultFilters = defaultFilters
   end
 
   def exhibit_pictures
@@ -50,6 +51,11 @@ class SlideshowController < ApplicationController
 
   def render_fave_pictures(collector)
     render_json_pictures collector.collection( params[:num].to_i, params[:page].to_i, params.slice(:min_rating, :faved_date))
+  end
+
+  def defaultFilters
+    filtersParams = params.slice(:rating)
+    filtersParams.to_json if (filtersParams.present?)
   end
 
 end

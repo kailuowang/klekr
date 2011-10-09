@@ -3,6 +3,10 @@
   klekr.Global.filtersOpts = { ratingFilter: true, favedAtFilter: false}
   klekr.Global.readonly = true
 
+- if @defaultFilters
+  :javascript
+    klekr.Global.defaultFilters = #{@defaultFilters}
+
 - content_for(:top_left) do
   .fleft
     = icon(@collector)

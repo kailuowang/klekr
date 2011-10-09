@@ -28,7 +28,7 @@ class window.Slideview extends ViewBase
     @mainImg.click(callback)
 
   gotoOwner: =>
-    window.location = @ownerLink.attr('href')
+    window.location = @label.artistLink.attr('href')
 
   largeWindow: ->
     generalView.displayWidth > 1024 and generalView.displayHeight > 1024

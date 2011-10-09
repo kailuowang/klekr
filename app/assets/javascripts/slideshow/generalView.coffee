@@ -12,6 +12,7 @@ class window.GeneralView extends ViewBase
     this._adjustSpacerWidth()
     this._adjustArrowsPosition()
     this._adjustFrames()
+    this.updateShareLink()
 
   displayProgress: (atLast, atBegining) =>
     $('.side-nav').show()
@@ -37,6 +38,13 @@ class window.GeneralView extends ViewBase
 
   previousClick: (listener) ->
     $('#left').click(listener)
+
+  updateShareLink: (filterSettings = {}) =>
+    @_shareLink ?= $('#top-banner-left #share-link')
+    if @_shareLink.length > 0
+      params = _.extend({collector_id: klekr.Global.currentCollector.id}, filterSettings)
+      url = exhibit_slideshow_path() + '?' + $.param(params)
+      @_shareLink.attr href: url
 
   _calculateDimensions: ->
     [@windowWidth, @windowHeight] = this.honeycombAdjustedDimension()
