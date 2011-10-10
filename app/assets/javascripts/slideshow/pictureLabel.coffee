@@ -29,6 +29,8 @@ class window.PictureLabel extends ViewBase
 
     this._updateSources(picture.fromStreams)
 
+  expand: =>
+    @expandLink.trigger('click')
 
   _updateSources: (streams) ->
     @sources ?= @panel.find('#sources')

@@ -55,7 +55,7 @@ class window.Slide extends ModeBase
     [
       [ ['right', 'space'], this.navigateToNext, 'next picture' ]
       [ 'left', this.navigateToPrevious, 'previous picture' ]
-      [ 'up', this.backToGrid, 'go to grid mode' ]
-      [ 'o', slideview.gotoOwner, "go to photographer's page" ]
-      [ ['g', 'return'], this.backToGrid, "go to grid mode" ]
-    ]
+      [ 'o', slideview.gotoOwner, "go to artist's page" ]
+      [ 'shift+o', (=> slideview.gotoOwner(true)), "open artist's page in new tab" ]
+      [ ['g', 'return', 'up'], this.backToGrid, "go to grid mode" ]
+    ].concat(unless klekr.Global.readonly then [[ 'l', slideview.label.expand, "expand picture label" ]] else [])
