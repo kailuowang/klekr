@@ -21,8 +21,10 @@
     #countDownRedirect
       %h3
         Redirecting to
-        = link_to 'flickr.com', @auth_url
-        to login in
+        = link_to 'flickr.com', 'http://flickr.com'
+        to 
+        = link_to 'login in', @auth_url
+        
         %span#countdown
           5
         secs.
