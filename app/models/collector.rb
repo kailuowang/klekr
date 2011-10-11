@@ -16,7 +16,7 @@ class Collector < ActiveRecord::Base
   end
 
   def collection(per_page, page, opts = {})
-    pictures_in_db = Picture.faved_by(self, collection_opts(opts) , page, per_page)
+    pictures_in_db = Picture.faved_by(self, collection_opts(opts), page, per_page)
     if(pictures_in_db.size == per_page || opts.present?)
       pictures_in_db
     else
@@ -46,14 +46,17 @@ class Collector < ActiveRecord::Base
   private
 
   def collection_opts(opts_params)
-    opts_params.slice(:order).tap do |h|
+    opts_params.to_options!
+    {}.tap do |h|
       h[:min_rating] = opts_params[:min_rating].to_i if opts_params[:min_rating].present?
       if( opts_params[:faved_date].present? )
         date = Date.strptime(opts_params[:faved_date], '%m/%d/%Y')
         h[:max_faved_at] = date + 1 if date
       end
+      h[:order] = opts_params[:order] if opts_params[:order]
     end
   end
+
   def earlest_faved_in_db
     earlest_fave = Picture.faved.collected_by(self).order('faved_at ASC').where('faved_at IS NOT NULL').first
     earlest_fave ? earlest_fave.faved_at : DateTime.now

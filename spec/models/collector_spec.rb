@@ -59,4 +59,12 @@ describe Collector do
     end
 
   end
+
+  describe "#collection_opts" do
+    it 'should translate params into fave opts' do
+      collector = Factory(:collector)
+      collector.collection_opts({'min_rating' => '2'}).should == {min_rating: 2}
+    end
+  end
+
 end
