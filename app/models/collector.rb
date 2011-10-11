@@ -15,10 +15,9 @@ class Collector < ActiveRecord::Base
     find_by_user_id(auth.user.nsid) || from_new_user(auth)
   end
 
-  def collection(per_page, page, filters = {})
-
-    pictures_in_db = Picture.faved_by(self, collection_conditions(filters) , page, per_page)
-    if(pictures_in_db.size == per_page || filters.present?)
+  def collection(per_page, page, opts = {})
+    pictures_in_db = Picture.faved_by(self, collection_opts(opts) , page, per_page)
+    if(pictures_in_db.size == per_page || opts.present?)
       pictures_in_db
     else
       pictures_in_db.to_a + import_from_flickr(per_page - pictures_in_db.size)
@@ -46,11 +45,11 @@ class Collector < ActiveRecord::Base
 
   private
 
-  def collection_conditions(filter_params)
-    {}.tap do |h|
-      h[:min_rating] = filter_params[:min_rating].to_i if filter_params[:min_rating].present?
-      if( filter_params[:faved_date].present? )
-        date = Date.strptime(filter_params[:faved_date], '%m/%d/%Y')
+  def collection_opts(opts_params)
+    opts_params.slice(:order).tap do |h|
+      h[:min_rating] = opts_params[:min_rating].to_i if opts_params[:min_rating].present?
+      if( opts_params[:faved_date].present? )
+        date = Date.strptime(opts_params[:faved_date], '%m/%d/%Y')
         h[:max_faved_at] = date + 1 if date
       end
     end

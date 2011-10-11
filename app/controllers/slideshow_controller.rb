@@ -34,7 +34,7 @@ class SlideshowController < ApplicationController
   end
 
   def exhibit_pictures
-    render_fave_pictures ::Collector.find(params[:collector_id])
+    render_fave_pictures ::Collector.find(params[:collector_id]), order: 'owner_name'
   end
 
   def fave_pictures
@@ -49,8 +49,10 @@ class SlideshowController < ApplicationController
 
   private
 
-  def render_fave_pictures(collector)
-    render_json_pictures collector.collection( params[:num].to_i, params[:page].to_i, params.slice(:min_rating, :faved_date))
+  def render_fave_pictures(collector, opts = {})
+    render_json_pictures collector.collection( params[:num].to_i,
+                                               params[:page].to_i,
+                                               opts.merge(params.slice(:min_rating, :faved_date)))
   end
 
   def defaultFilters
