@@ -7,10 +7,6 @@ class window.ViewBase extends Events
     $(window).width() is 980
 
   @adjustBottom: ->
-    if ViewBase.isHoneycomb()
-      $('.bottom').each ->
-        bottom = parseInt($(this).css('bottom').replace('px','')) - 220
-        $(this).css('bottom', bottom + 'px')
 
   isHoneycomb: -> ViewBase.isHoneycomb()
 
@@ -44,10 +40,7 @@ class window.ViewBase extends Events
     link.text "#{picture.ownerName}'s collection."
 
   honeycombAdjustedDimension:  =>
-    if this.isHoneycomb()
-      [1280, 800] #the real size of browser is less than that, but we can tollerate a bit scroll bar in honeycomb.
-    else
-      [$(window).width(), $(window).height()]
+    [$(window).width(), $(window).height()]
 
   _animateVisible: (element, visible, callback) ->
     if(visible)
