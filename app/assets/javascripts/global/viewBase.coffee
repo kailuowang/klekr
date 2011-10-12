@@ -3,12 +3,12 @@ class window.ViewBase extends Events
   $.fx.interval = 40
   @duration = $.fx.interval * 3
 
-  @isHoneycomb: ->
-    $(window).width() is 980
+  @isMobile: ->
+    /iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase())
 
   @adjustBottom: ->
 
-  isHoneycomb: -> ViewBase.isHoneycomb()
+  isMobile: -> ViewBase.isMobile()
 
   setVisible: (element, visible) ->
     if(visible)
@@ -39,7 +39,7 @@ class window.ViewBase extends Events
     link.attr href: "#{picture.ownerPath}?type=FaveStream"
     link.text "#{picture.ownerName}'s collection."
 
-  honeycombAdjustedDimension:  =>
+  windowDimension:  =>
     [$(window).width(), $(window).height()]
 
   _animateVisible: (element, visible, callback) ->
@@ -49,5 +49,5 @@ class window.ViewBase extends Events
       element.fadeOut(ViewBase.duration, callback)
 
 $ ->
-  $.fx.off = ViewBase.isHoneycomb()
+  $.fx.off = ViewBase.isMobile()
   ViewBase.adjustBottom()

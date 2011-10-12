@@ -2,14 +2,12 @@ class window.GeneralView extends ViewBase
   constructor: ->
     @_leftArrow = $('#leftArrow')
     @_rightArrow = $('#rightArrow')
-    @_spacer = $('#spacer')
     @_indicator = $('#indicator')
     @_indicatorPanel = $('#mode-indicator')
     @bottomLeft = $('#bottomLeft')
     @bottomRight = $('#bottomRight')
 
     this._calculateDimensions()
-    this._adjustSpacerWidth()
     this._adjustArrowsPosition()
     this._adjustFrames()
     this.updateShareLink()
@@ -47,14 +45,9 @@ class window.GeneralView extends ViewBase
       @_shareLink.attr href: url
 
   _calculateDimensions: ->
-    [@windowWidth, @windowHeight] = this.honeycombAdjustedDimension()
+    [@windowWidth, @windowHeight] = this.windowDimension()
     [@displayWidth, @displayHeight] = [@windowWidth - 80, @windowHeight - 93]
 
-  _adjustSpacerWidth: ->
-    if this.isHoneycomb()
-      @_spacer.attr('width', @windowWidth + 'px')
-    else
-      @_spacer.hide()
 
   _adjustArrowsPosition: ->
     sideArrowHeight = ( @displayHeight - 150 )+ "px"
