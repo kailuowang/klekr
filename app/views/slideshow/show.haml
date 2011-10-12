@@ -3,9 +3,12 @@
 
 - content_for(:top_left) do
   .fleft
-    %h3.has-popover{'data-content' => 'New pictures from all sources are congregated to display here.', title: 'About the new pictures page' , 'data-popover' => 'below', 'data-popover-left-offset' => '40'}
-      New pictures from
+    %h3.inline
+      My Stream
+    %h5#my-stream-subtitle.inline
+      (new pictures from
       = link_to 'my sources', flickr_streams_path
+      )
   #option-button.fleft
     = image_tag('option.png')
 

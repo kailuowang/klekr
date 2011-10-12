@@ -2,9 +2,9 @@ class window.Login
   constructor: (@authUrl) ->
     @helpTitle = $('#help-title')
     @helpTitle.click_ =>
-
       this._stopCountdown()
       $('#welcome-message #detail-info').slideDown()
+    new CollapsiblePanel($('#more-reasons-expand'), $('#more-reason-link'), ['Not convinced? Here is more reasons to use klekr.', 'Reasons to use klekr: '])
 
   redirectCountdown: (seconds)=>
     unless @stopCountdown

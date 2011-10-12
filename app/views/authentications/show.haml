@@ -1,6 +1,6 @@
 - content_for(:head) do
   = javascript_include_tag 'authentication.js'
-
+  = stylesheet_link_tag 'login'
 :javascript
   __authUrl__ = '#{@auth_url}';
 .container
@@ -29,7 +29,7 @@
           5
         secs.
         %a#help-title{href: '#'}
-          Wait...what?
+          Wait...
 
     #detail-info.hidden
       #about-klekr-title
@@ -40,14 +40,35 @@
         %h5
           %p
             With klekr, you can add other artists' works and collections as sources.
-            New pictures from these sources will be displayed in a single slideshow.
+            New pictures from these sources will be displayed in a single slideshow called My Stream.
             klekr remembers your preference over these sources by looking at how you collect pictures.
             Thus klekr will be able to display the more interesting pictures first.
-        %h2
+        #more-reasons.well
+          %h5
+            %a#more-reason-link{href: '#'}
+              Not convinced? Here is more reasons to use klekr.
+
+          #more-reasons-expand.hidden
+            %ul
+              %li
+                Personalized stream that displays not only the pictures taken by your favorite artists but also their favorite pictures.
+              %li
+                Pictures in My Stream are prioritized based your own pereferences over the sources they come from, so that everyday you can see the possibly more interesting pictures first.
+              %li
+                Super fast and easy-to-use picture viewer.
+              %li
+                Collecting pictures with your own personal ratings.
+              %li
+                Be able to browse pictures off-line.
+
+
+        %h2#get-started
           Let's get started! ↓
 
       #stoppedRedirect
         %h3.mt20
           = link_to 'Click here to login from Flickr.com', @auth_url
 
+        #why-login
+          Why login from flickr?
         Klekr links with your flickr account so that you don't have to create another one. Also, pictures you collect on klekr will be faved on flickr too :)

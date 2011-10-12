@@ -58,6 +58,6 @@ class ApplicationController < ActionController::Base
   def navigation_setup
     @navigation_options = [{name: 'My Sources', path: flickr_streams_path},
                            {name: 'My Collection', path: faves_slideshow_path},
-                           {name: 'New Pictures', path:  slideshow_path} ]
+                           {name: 'My Stream', path:  slideshow_path} ]
   end
 end
