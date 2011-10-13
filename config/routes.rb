@@ -65,11 +65,9 @@ Collectr::Application.routes.draw do
     get 'flickr_stream'
   end
 
-
-
   if ["development", "test"].include? Rails.env
     mount Jasminerice::Engine => "/jasmine"
   end
 
-  root to: 'slideshow#show'
+  match "/" => redirect("/slideshow")
 end
