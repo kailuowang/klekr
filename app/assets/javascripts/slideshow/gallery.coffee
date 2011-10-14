@@ -7,7 +7,7 @@ class window.Gallery extends Events
       mode.bind('progress-changed', this._progressChanged)
     @currentMode = if __gridMode__? then @grid else @slide
     this._updateModeIndicatorInView()
-
+    window.location.hash = ''
     @advanceByProgress = __advance_by_progress__ #vs progress by paging
     @picturePreloader = new PicturePreloader(this)
     generalView.nextClick => @currentMode.navigateToNext?()
@@ -69,8 +69,9 @@ class window.Gallery extends Events
 
   _listenHashChange: =>
     $(window).bind 'hashchange', (e) =>
-      [mode, index] = $.param.fragment().split('-')
-      return unless mode?
+      hash = $.param.fragment()
+      return unless hash.length > 0
+      [mode, index] = hash.split('-')
       index = parseInt(index)
       newMode = this[mode]
       modeChanged = newMode isnt @currentMode
