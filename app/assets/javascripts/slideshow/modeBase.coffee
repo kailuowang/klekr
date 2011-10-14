@@ -1,5 +1,5 @@
 class window.ModeBase extends Events
-  constructor: ->
+  constructor: (@name)->
     keyShortcuts.addShortcuts(this.shortcuts())
 
   active: =>
@@ -16,6 +16,9 @@ class window.ModeBase extends Events
   off: =>
     this.view().switchVisible(false)
     this.trigger('off')
+
+  goToIndex: (index) =>
+    window.location = '#' + "#{this.name}-#{index}"
 
   _createShortcuts: =>
     this._createShortcut(setting) for setting in this.shortcutsSettings()

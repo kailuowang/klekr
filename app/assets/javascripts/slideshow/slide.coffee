@@ -3,7 +3,7 @@ class window.Slide extends ModeBase
     this.reset()
     @favePanel = new FavePanel(this.currentPicture)
     slideview.pictureClick this.backToGrid
-    super()
+    super('slide')
 
   reset: =>
     @currentIndex = 0
@@ -20,14 +20,12 @@ class window.Slide extends ModeBase
   navigateToNext: =>
     this.currentPicture().getViewed()
     unless this.atTheLast()
-      @currentIndex += 1
-      this.displayCurrentPicture()
+      this.goToIndex((@currentIndex + 1))
       this.trigger('progressed')
 
   navigateToPrevious: =>
     unless this.atTheBegining()
-      @currentIndex -= 1
-      this.displayCurrentPicture()
+      this.goToIndex((@currentIndex - 1))
 
   atTheLast: =>
      @currentIndex == gallery.size() - 1
@@ -35,8 +33,6 @@ class window.Slide extends ModeBase
   atTheBegining: =>
     @currentIndex == 0
 
-  onFirstBatchOfPicturesLoaded: =>
-    this.displayCurrentPicture()
 
   currentProgress: =>
     @currentIndex

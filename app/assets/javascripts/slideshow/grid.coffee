@@ -1,7 +1,7 @@
 class window.Grid extends ModeBase
 
   constructor: ->
-    super()
+    super('grid')
     this.reset()
 
   reset: =>
@@ -33,9 +33,6 @@ class window.Grid extends ModeBase
   selectedPicture: =>
     gallery.pictures[@selectedIndex]
 
-  onFirstBatchOfPicturesLoaded: =>
-    this.updateProgress(0)
-
   view: -> gridview
 
   currentProgress: =>
@@ -64,6 +61,7 @@ class window.Grid extends ModeBase
       this._changePage(pageStart - 1)
 
   switchToSlide: =>
+    this.goToIndex(@selectedIndex) #simply to update history
     gallery.toggleMode()
 
   moveUp: => this._tryMoveTo(@selectedIndex - gridview.columns)
@@ -101,8 +99,7 @@ class window.Grid extends ModeBase
 
   _changePage: (newIndex)=>
     if 0 <= newIndex < gallery.size()
-      @selectedIndex = newIndex
-      this._loadGridview()
+      this.goToIndex(newIndex)
 
   _tryMoveTo: (newIndex, alternative) =>
     [pageStart, pageEnd] = this._currentPageRange()

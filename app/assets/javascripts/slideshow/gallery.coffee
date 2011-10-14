@@ -1,5 +1,4 @@
 class window.Gallery extends Events
-
   constructor: ->
     @cacheSize = 5
     [@grid, @slide] = @modes = [new Grid, new Slide]
@@ -7,6 +6,8 @@ class window.Gallery extends Events
       mode.bind('progressed', this._ensurePictureCache)
       mode.bind('progress-changed', this._progressChanged)
     @currentMode = if __gridMode__? then @grid else @slide
+    this._updateModeIndicatorInView()
+
     @advanceByProgress = __advance_by_progress__ #vs progress by paging
     @picturePreloader = new PicturePreloader(this)
     generalView.nextClick => @currentMode.navigateToNext?()
@@ -21,6 +22,8 @@ class window.Gallery extends Events
     @retriever = this._createPictureRetriever()
     @retriever.bind('batch-retrieved', this._addPictures)
     @retriever.bind('done-retrieving', this._onRetrieverFinished)
+
+    this._listenHashChange()
 
   init: =>
     this._reset()
@@ -44,13 +47,7 @@ class window.Gallery extends Events
   inGrid: => @currentMode is @grid
 
   toggleMode: =>
-    progress = this._currentProgress()
-    @currentMode.off()
-    @currentMode = this._alternativeMode()
-    @currentMode.on()
-    @currentMode.updateProgress(progress)
-    this._updateModeIndicatorInView()
-    @picturePreloader.rePrioritize()
+    this._alternativeMode().goToIndex(this._currentProgress())
 
   pageSize: => gridview.size
 
@@ -61,7 +58,7 @@ class window.Gallery extends Events
   _reset: =>
     this.trigger('pre-reset')
     @allPicturesRetrieved = false
-    @waitingForPictures = true
+    @blank = true
     @retriever.reset()
     @picturePreloader.clear()
     @pictures = []
@@ -69,6 +66,23 @@ class window.Gallery extends Events
     m.reset() for m in @modes
     @picturePreloader.start()
     this.retrieveMorePictures(@cacheSize)
+
+  _listenHashChange: =>
+    $(window).bind 'hashchange', (e) =>
+      [mode, index] = $.param.fragment().split('-')
+      return unless mode?
+      index = parseInt(index)
+      newMode = this[mode]
+      modeChanged = newMode isnt @currentMode
+      if(modeChanged)
+        @currentMode.off()
+        @currentMode = newMode
+        @currentMode.on()
+        this._updateModeIndicatorInView()
+      if(index != this._currentProgress() or @blank or modeChanged )
+        @blank = false
+        @currentMode.updateProgress(index)
+
 
   _progressChanged: =>
     this._updateProgressInView()
@@ -82,17 +96,15 @@ class window.Gallery extends Events
     if @currentMode is @grid then @slide else @grid
 
   _morePicturesReady: =>
-    if @waitingForPictures
+    if @blank
       this._firstBatchOfPicturesReady()
     else
       this.trigger('gallery-pictures-changed')
 
   _firstBatchOfPicturesReady: =>
-    @waitingForPictures = false
     @currentMode.on()
-    @currentMode.onFirstBatchOfPicturesLoaded?()
-    this._updateProgressInView()
-    this._updateModeIndicatorInView()
+    @currentMode.goToIndex(0)
+
 
   _createPictureRetriever: =>
     if @advanceByProgress
@@ -175,4 +187,3 @@ $(document).ready ->
   window.gallery = new Gallery
   new StreamPanel
   gallery.init()
-
