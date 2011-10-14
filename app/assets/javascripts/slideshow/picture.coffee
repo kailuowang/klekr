@@ -21,7 +21,7 @@ class window.Picture extends Events
     @id = @data.id
     _.defaults(this, @data)
     @width = 640
-    @canUseLargeVersion = slideview.largeWindow()
+    @canUseLargeVersion = false
     @ready = false
     @index = null
 

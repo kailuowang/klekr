@@ -34,9 +34,6 @@ class window.Slideview extends ViewBase
     else
       window.location = ownerUrl
 
-  largeWindow: ->
-    generalView.displayWidth > 1024 and generalView.displayHeight > 1024
-
   _adjustImageFrame: ->
     displayHeight = generalView.displayHeight
     $('#imageFrameInner').css('height', (displayHeight - 40) + 'px')
