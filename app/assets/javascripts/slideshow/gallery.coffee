@@ -7,7 +7,6 @@ class window.Gallery extends Events
       mode.bind('progress-changed', this._progressChanged)
     @currentMode = if __gridMode__? then @grid else @slide
     this._updateModeIndicatorInView()
-    window.location.hash = ''
     @advanceByProgress = __advance_by_progress__ #vs progress by paging
     @picturePreloader = new PicturePreloader(this)
     generalView.nextClick => @currentMode.navigateToNext?()
@@ -57,6 +56,8 @@ class window.Gallery extends Events
 
   _reset: =>
     this.trigger('pre-reset')
+    window.location.hash = ''
+
     @allPicturesRetrieved = false
     @blank = true
     @retriever.reset()
