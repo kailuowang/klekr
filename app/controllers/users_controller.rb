@@ -45,7 +45,7 @@ class UsersController < ApplicationController
           redirect_to(:back, :notice => "User not found")
         end
       end
-      format.js do
+      format.json do
         render_json user.present? ? data_for_streams(streams_for_user(user.nsid)) : []
       end
     end

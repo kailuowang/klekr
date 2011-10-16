@@ -44,9 +44,9 @@ class Server extends Events
 
   _jsUrl: (url) ->
     if url.indexOf('?') >= 0
-      url.replace('?', '.js?')
+      url.replace('?', '.json?')
     else
-      url + '.js'
+      url + '.json'
 
 
 namespace 'klekr.Global', (n) ->

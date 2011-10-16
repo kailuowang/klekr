@@ -6,14 +6,14 @@ describe FlickrStreamsController do
     it "assigns flickr streams that has collecting flag as true" do
       stream = Factory(:fave_stream, collecting: true, collector: Factory(:collector))
       controller.stub!(:current_collector).and_return stream.collector
-      get "my_sources", format: :js
+      get "my_sources", format: :json
       response.body.should include(stream.user_id)
     end
 
     it "not assigns flickr streams that has collecting flag as false" do
       stream = Factory(:fave_stream, collecting: false, collector: Factory(:collector))
       controller.stub!(:current_collector).and_return stream.collector
-      get "my_sources", format: :js
+      get "my_sources", format: :json
       response.body.should_not include(stream.user_id)
 
     end

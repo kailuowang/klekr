@@ -9,7 +9,7 @@ class FlickrStreamsController < ApplicationController
 
   def my_sources
     respond_to do |format|
-      format.js do
+      format.json do
         streams = FlickrStream.collected_by(current_collector).includes(:monthly_scores)
         render json: data_for_streams(streams)
       end

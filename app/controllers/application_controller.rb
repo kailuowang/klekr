@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
 
   def render_json(data)
     respond_to do |f|
-      f.js { render :json => data }
+      f.json { render :json => data }
     end
   end
 
