@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111006024816) do
+ActiveRecord::Schema.define(:version => 20111016183937) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -105,13 +105,14 @@ ActiveRecord::Schema.define(:version => 20111006024816) do
     t.datetime "date_upload"
     t.string   "url"
     t.text     "pic_info_dump"
-    t.boolean  "viewed",        :default => false
+    t.boolean  "viewed",          :default => false
     t.string   "owner_name"
     t.float    "stream_rating"
-    t.integer  "rating",        :default => 0
+    t.integer  "rating",          :default => 0
     t.integer  "collector_id"
     t.boolean  "collected"
     t.datetime "faved_at"
+    t.boolean  "no_longer_valid"
   end
 
   add_index "pictures", ["collector_id"], :name => "index_pictures_on_collector_id"

@@ -40,6 +40,7 @@ Collectr::Application.routes.draw do
     end
     member do
       put 'fave'
+      put 'resync'
       put 'unfave'
       put 'viewed'
     end

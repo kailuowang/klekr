@@ -12,6 +12,7 @@ class window.PictureCellView extends ViewBase
     @cellDiv.click => @picture.trigger('clicked', @picture)
     @picture.bind 'fully-ready', => @loadingIndicator.hide()
     @picture.bind 'highlighted', this._highlight
+    @picture.bind 'data-updated', this._initDom
 
 
   _initDom: =>

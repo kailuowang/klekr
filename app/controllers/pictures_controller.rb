@@ -22,6 +22,11 @@ class PicturesController < ApplicationController
     js_ok
   end
 
+  def resync
+    @picture.resync
+    render :json => data_for(@picture)
+  end
+
   def all_viewed
     Picture.find(params[:ids]).each do |p|
       check_picture_access p

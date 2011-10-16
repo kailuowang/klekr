@@ -50,7 +50,7 @@ class window.Picture extends Events
 
   getViewed: =>
     unless @data.viewed
-      klekr.Global.updater.put(@data.getViewedPath) if @data.getViewedPath
+      klekr.Global.updater.put(@data.getViewedPath) if this._inKlekr
       @data.viewed = true
 
   faved: => @data.rating > 0
@@ -60,9 +60,30 @@ class window.Picture extends Events
 
   preloadSmall: (callback)=>
     this._preloadImage @data.smallUrl, (image) =>
-      @canUseLargeVersion = this.largerVersionWithinWindow(image)
-      this.trigger('small-version-ready')
-      callback?()
+      if this._smallVersionInValid(image) and this._updatable()
+        this._updateData =>
+          this.preloadSmall callback
+      else
+        @canUseLargeVersion = this.largerVersionWithinWindow(image)
+        this.trigger('small-version-ready')
+        callback?()
+
+  _smallVersionInValid: (image) =>
+    image.width is 240 and image.height is 180
+
+  _updatable: =>
+    !@alreadyUpdated and this._inKlekr
+
+  _inKlekr: =>
+    @data.getViewedPath?
+
+  _updateData: (callback) =>
+    unless @alreadyUpdated
+      @alreadyUpdated = true
+      klekr.Global.server.put resync_picture_path(id: @id), {}, (newData) =>
+        @data = newData
+        this.trigger('data-updated')
+        callback?
 
   preloadLarge: (callback)=>
     imageUrl = if @canUseLargeVersion then @data.largeUrl else @data.mediumUrl

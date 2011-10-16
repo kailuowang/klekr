@@ -47,10 +47,7 @@ module Collectr
       Picture.where(collector_id: @collector, url: url).includes(:flickr_streams).first ||
         Picture.new.tap do |picture|
           picture.url = url
-          picture.title = pic_info.title
-          picture.date_upload = get_upload_date(pic_info)
-          picture.owner_name = pic_info['ownername'] || pic_info['owner']['username']
-          picture.pic_info_dump = pic_info.marshal_dump
+          picture.pic_info = pic_info
           picture.collector = @collector
         end
     end
@@ -59,10 +56,6 @@ module Collectr
       string_id.to_s.include?('_')
     end
 
-    def get_upload_date(pic_info)
-      rawdate = pic_info['dateupload'] || pic_info['dateuploaded']
-      Time.at(rawdate.to_i).to_datetime
-    end
 
     def find_by_flickr_id(string_id)
       fid, secret = string_id.split('_')

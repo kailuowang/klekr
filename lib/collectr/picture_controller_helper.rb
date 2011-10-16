@@ -11,11 +11,13 @@ module Collectr
         flickrPageUrl:    picture.url,
         ownerName:        picture.owner_name,
         ownerId:          picture.owner_id,
+        noLongerValid:    picture.no_longer_valid?,
         faved:            picture.faved?,
         favedDate:        picture.faved_at ? picture.faved_at.to_date.to_s(:long) : nil,
         rating:           picture.rating,
         viewed:           picture.viewed?,
         collected:        !picture.new_record? && picture.collected?,
+        inKlekr:          !picture.new_record?,
         dateUpload:        picture.date_upload,
         ownerPath:        user_path(picture.owner_id),
         fromStreams:      picture.flickr_streams.map do |stream|

@@ -15,6 +15,7 @@ function flickr_streams_path(params){ return '/flickr_streams'}
 function flickr_stream_path(params){ return '/flickr_streams/' + params.id + ''}
 function all_viewed_pictures_path(params){ return '/pictures/all_viewed'}
 function fave_picture_path(params){ return '/pictures/' + params.id + '/fave'}
+function resync_picture_path(params){ return '/pictures/' + params.id + '/resync'}
 function unfave_picture_path(params){ return '/pictures/' + params.id + '/unfave'}
 function viewed_picture_path(params){ return '/pictures/' + params.id + '/viewed'}
 function picture_path(params){ return '/pictures/' + params.id + ''}
@@ -32,5 +33,4 @@ function exhibit_slideshow_path(params){ return '/slideshow/exhibit'}
 function flickr_stream_slideshow_path(params){ return '/slideshow/flickr_stream'}
 function slideshow_path(params){ return '/slideshow'}
 function jasminerice_path(params){ return '/jasmine'}
-function root_path(params){ return '/'}
 function rails_info_properties_path(params){ return '/rails/info/properties'}

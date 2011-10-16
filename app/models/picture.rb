@@ -56,6 +56,17 @@ class Picture < ActiveRecord::Base
     self
   end
 
+  def resync
+    new_secret =
+      begin
+        flickr.photos.getInfo(photo_id: pic_info.id).secret
+      rescue FlickRaw::FailedResponse
+        update_attributes(no_longer_valid: true)
+        nil
+      end
+    update_secret(new_secret) if new_secret.present?
+  end
+
   def fave(new_rating = 1)
     if (old_rating = rating) != new_rating
       update_attributes(rating: new_rating, collected: true )
@@ -82,6 +93,19 @@ class Picture < ActiveRecord::Base
 
   def pic_info
     @pic_info ||= FlickRaw::Response.new *pic_info_dump
+  end
+
+  def pic_info= pi
+    self.title = pi.title
+    self.date_upload = get_upload_date(pi)
+    self.owner_name = pi['ownername'] || pi['owner']['username']
+    self.pic_info_dump = pi.marshal_dump
+    @pic_info = pi
+  end
+
+  def get_upload_date(pic_info)
+    rawdate = pic_info['dateupload'] || pic_info['dateuploaded']
+    Time.at(rawdate.to_i).to_datetime
   end
 
   def flickr_url size
@@ -132,4 +156,11 @@ class Picture < ActiveRecord::Base
     end
   end
 
+  def update_secret(new_secret)
+    if (new_secret != pic_info.secret)
+      pic_info.to_hash['secret'] = new_secret
+      self.pic_info = pic_info
+      save!
+    end
+  end
 end

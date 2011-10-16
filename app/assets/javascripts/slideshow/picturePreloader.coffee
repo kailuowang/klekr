@@ -16,7 +16,7 @@ class window.PicturePreloader
   rePrioritize: => @q.reorder()
 
   preload: (pictures) =>
-    jobs = _(this._createJobs(pic) for pic in pictures).flatten()
+    jobs = _(this._createJobs(pic) for pic in pictures when !pic.noLongerValid).flatten()
     @q.enqueue(jobs...)
 
   _createWorkers: =>
