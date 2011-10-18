@@ -50,7 +50,7 @@ class window.Picture extends Events
 
   getViewed: =>
     unless @data.viewed
-      klekr.Global.updater.put(@data.getViewedPath) if this._inKlekr
+      klekr.Global.updater.put(@data.getViewedPath) if this._inKlekr()
       @data.viewed = true
 
   faved: => @data.rating > 0
@@ -70,7 +70,7 @@ class window.Picture extends Events
     image.width is 240 and image.height is 180
 
   _updatable: =>
-    !@alreadyUpdated and this._inKlekr
+    !@alreadyUpdated and this._inKlekr()
 
   _inKlekr: =>
     @data.getViewedPath?
