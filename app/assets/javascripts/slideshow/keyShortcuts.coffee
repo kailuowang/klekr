@@ -46,7 +46,7 @@ class window.KeyShortcuts extends ViewBase
     @helpList.empty()
     for shortcut in @shortcuts when shortcut.enable()
       @helpList.append(
-        $('<li>').text(shortcut.text())
+        $('<li>').html(shortcut.text())
       )
 
   _clearLock: =>
@@ -59,16 +59,11 @@ class window.KeyShortcut
 
   text: =>
     keysStrings = (this._keyDisplay(key) for key in @keys)
-    "#{keysStrings.join(', ')} : #{@desc}"
+    "#{keysStrings.join(', ')} <span class='key-desc'>#{@desc}</span>"
 
   _keyDisplay: (stringKey) =>
-    (
-      switch stringKey
-        when 'up' then '↑'
-        when 'down' then '↓'
-        else
-          stringKey
-    ).replace('left', '←').replace('right', '→')
+    keyWithDirection =  stringKey.replace('up', '↑').replace('down', '↓').replace('left', '←').replace('right', '→')
+    "<span class='key-name'>#{keyWithDirection}</span>"
 
   onKeydown: =>
     unless keyShortcuts.locked #this ensures that for one key stroke only one action is fired (needed to prevent chain reaction)
