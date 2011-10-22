@@ -3,6 +3,7 @@ class window.Grid extends ModeBase
   constructor: ->
     super('grid')
     this.reset()
+    generalView.bind('layout-changed', this._onLayoutChange)
 
   reset: =>
     @selectedIndex = 0
@@ -127,3 +128,9 @@ class window.Grid extends ModeBase
 
   _markCurrentPageAsViewed: =>
     Picture.allGetViewed(this.currentPageOfPictures())
+
+  _onLayoutChange: =>
+    [original_rows, original_columns] = [gridview.rows, gridview.columns]
+    gridview.initLayout()
+    if (original_rows isnt gridview.rows) or (original_columns isnt gridview.columns)
+      this._loadGridview()

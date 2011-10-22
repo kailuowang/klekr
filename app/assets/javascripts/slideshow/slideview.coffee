@@ -8,6 +8,7 @@ class window.Slideview extends ViewBase
     @label = new PictureLabel
 
     this._adjustImageFrame()
+    generalView.bind('layout-changed', this._adjustImageFrame)
 
   display: (picture) ->
     if this.showing(@pictureArea)

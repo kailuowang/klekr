@@ -6,11 +6,15 @@ class window.GeneralView extends ViewBase
     @_indicatorPanel = $('#mode-indicator')
     @bottomLeft = $('#bottomLeft')
     @bottomRight = $('#bottomRight')
+    $(window).resize(this.initLayout)
+    this.initLayout()
+    this.updateShareLink()
 
+  initLayout: =>
     this._calculateDimensions()
     this._adjustArrowsPosition()
     this._adjustFrames()
-    this.updateShareLink()
+    this.trigger('layout-changed' )
 
   displayProgress: (atLast, atBegining) =>
     $('.side-nav').show()
