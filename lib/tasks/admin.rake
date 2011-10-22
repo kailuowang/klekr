@@ -12,6 +12,8 @@ namespace :admin do
         puts "Total Pictures Faved: " + c.pictures.faved.count.to_s
         puts "========================================="
       end
+      puts "#{Collector.count} collectors."
+      puts "#{Picture.count} pictures."
     end
   end
 
