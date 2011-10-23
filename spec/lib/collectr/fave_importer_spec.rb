@@ -52,6 +52,13 @@ describe Collectr::FaveImporter do
       @importer.import(1)
     end
 
+    context 'viewed' do
+      it "mark new fave imported as viewed" do
+         @flickr.should_receive(:getFavorites).with(hash_including(page: 1)).and_return(mock_fave_info)
+         @importer.import(1).last.should be_viewed
+       end
+
+    end
     context "faved_at" do
       it "use flickr to get the earlest faved date from the result" do
         _, last_pic = (pics = 2.pics)

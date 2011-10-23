@@ -31,7 +31,8 @@ module Collectr
         pic.update_attributes(
           faved_at: Time.at(earlest_date + offset).to_datetime,
           rating: 1,
-          collected: true
+          collected: true,
+          viewed: true
         )
       end
     end
