@@ -17,19 +17,29 @@
   .bigTopPadding{align: 'center'}
 
 
+
   #welcome-message.well
-    #countDownRedirect
-      %h3
-        Redirecting to
-        = link_to 'flickr.com', 'http://flickr.com'
-        to 
-        = link_to 'login in', @auth_url
-        
-        %span#countdown
-          5
-        secs.
-        %a#help-title{href: '#'}
-          Wait...
+    #basic-info
+      #countDownRedirect
+        %h3
+          Redirecting to
+          = link_to 'flickr.com', 'http://flickr.com'
+          to
+          = link_to 'login in', @auth_url
+
+          %span#countdown
+            5
+          secs.
+          %a.help-title{href: '#'}
+            Wait...
+      #redirect-link.hidden
+        %h4
+          Auto redirection stopped.
+          = link_to 'Click here to login from Flickr.com', @auth_url
+        %h3.mt20
+          %a.help-title{href: '#'}
+            Want to know more about klekr?
+
 
     #detail-info.hidden
       #about-klekr-title
@@ -46,7 +56,7 @@
         #more-reasons.well
           %h5
             %a#more-reason-link{href: '#'}
-              Not convinced? Here is more reasons to use klekr.
+              Want to know more? Here are more reasons to use klekr.
 
           #more-reasons-expand.hidden
             %ul
@@ -73,3 +83,5 @@
         #why-login
           Why login from flickr?
         Klekr links with your flickr account so that you don't have to create another one. Also, pictures you collect on klekr will be faved on flickr too :)
+
+  .tweet
