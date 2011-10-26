@@ -73,7 +73,7 @@ class window.Gallery extends Events
       hash = $.param.fragment()
       return unless hash.length > 0
       [mode, index] = hash.split('-')
-      index = parseInt(index)
+      index = Math.min(parseInt(index), this.size() - 1)
       newMode = this[mode]
       modeChanged = newMode isnt @currentMode
       if(modeChanged)

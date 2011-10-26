@@ -18,7 +18,7 @@ module Collectr
         viewed:           picture.viewed?,
         collected:        !picture.new_record? && picture.collected?,
         inKlekr:          !picture.new_record?,
-        dateUpload:        picture.date_upload,
+        dateUpload:       picture.date_upload,
         ownerPath:        user_path(picture.owner_id),
         fromStreams:      picture.flickr_streams.map do |stream|
                             data_for_stream_info(stream)

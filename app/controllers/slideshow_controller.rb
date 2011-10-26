@@ -5,8 +5,8 @@ class SlideshowController < ApplicationController
   def flickr_stream
     id = params[:id].to_i
     @stream = FlickrStream.find(id)
+    check_stream_access(@stream)
     @more_pictures_path = pictures_flickr_stream_path(id)
-
     @empty_message = "#{@stream} has no pictures."
   end
 
@@ -53,6 +53,12 @@ class SlideshowController < ApplicationController
     render_json_pictures collector.collection( params[:num].to_i,
                                                params[:page].to_i,
                                                opts.merge(params.slice(:min_rating, :faved_date)))
+  end
+
+  def check_stream_access(stream)
+    if(stream.collector != current_collector)
+      redirect_to user_path(stream.user_id, type: stream.class.name)
+    end
   end
 
   def defaultFilters
