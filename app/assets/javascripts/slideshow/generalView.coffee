@@ -42,11 +42,11 @@ class window.GeneralView extends ViewBase
     $('#left').click(listener)
 
   updateShareLink: (filterSettings = {}) =>
-    @_shareLink ?= $('#top-banner-left #share-link')
+    @_shareLink ?= $('#top-banner-left .addthis_toolbox')
     if @_shareLink.length > 0
       params = _.extend({collector_id: klekr.Global.currentCollector.id}, filterSettings)
       url = exhibit_slideshow_path() + '?' + $.param(params)
-      @_shareLink.attr href: url
+      @_shareLink.attr 'addthis:url': window.location.hostname + url
 
   _calculateDimensions: ->
     [@windowWidth, @windowHeight] = this.windowDimension()

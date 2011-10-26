@@ -11,8 +11,6 @@
   #option-button.fleft
     = image_tag('option.png')
   .fleft
-    %a#share-link
-      sharable link
-
+    = render partial: '/general/add_this', locals: {title: "Checkout my klekr collection: "}
 = render partial: 'slideshow'
 = render partial: 'slide_options'
