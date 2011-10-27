@@ -15,7 +15,9 @@ class window.MySources
   init: (onInit)=>
     klekr.Global.server.get @sourcesPath, {}, (data) =>
       allSources = (new Source(d) for d in data)
+      @view.clear()
       this._display(allSources)
+      @view.setVisibleEmptySourceSection(allSources.length is 0)
       onInit?()
 
   _sourcesImportDone: =>
@@ -25,15 +27,10 @@ class window.MySources
 
   _sourcesImported: (sources) =>
     @view.setVisibleEmptySourceSection(false)
-    @view.addSource(source) for source in sources
+    this._display sources
 
   _display: (sources) =>
-    @view.clear()
-    sourcesByGroup = _.groupBy sources, (s) -> s.rating
-    keys = _.keys(sourcesByGroup)
-    for star in (_.sortBy keys, (r) -> -r)
-      @view.loadSources(star, sourcesByGroup[star])
-    @view.setVisibleEmptySourceSection(sources.length is 0)
+    @view.addSource(source) for source in sources
 
 $ ->
   contactImporter = new ContactsImporter(__contactsPath__, __importContactPath__)

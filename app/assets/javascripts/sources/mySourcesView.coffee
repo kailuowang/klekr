@@ -11,10 +11,6 @@ class window.MySourcesView extends ViewBase
   clear: =>
     @container.empty()
 
-  loadSources: (star, sources)=>
-    newStarCategory = this._createCategory(star)
-    this._sourcesGridView(newStarCategory).load(sources)
-
   addSource: (source) =>
     categoryDiv = this._ensureCategory(source.rating)
     this._sourcesGridView(categoryDiv).addSource(source)
