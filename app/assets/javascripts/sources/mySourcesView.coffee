@@ -4,22 +4,25 @@ class window.MySourcesView extends ViewBase
     @container = $('#sources-list')
     @expandLink = $('#expand-management')
     @importPanel = $('#sources-import-panel')
+    @indicator = $('#loading-sources-indicator')
     @newSourcesAddedPanel = $('#new-sources-added')
     $('#close-new-sources-added').click_ => @newSourcesAddedPanel.slideUp()
     @expandLink.click_ this._toggleManagementPanel
 
   clear: =>
     @container.empty()
+    @indicator.show()
 
   addSource: (source) =>
     categoryDiv = this._ensureCategory(source.rating)
     this._sourcesGridView(categoryDiv).addSource(source)
 
-  setVisibleEmptySourceSection: (empty)=>
+  onAllSourcesLoaded: (empty)=>
     this.setVisible($('#empty-sources'), empty)
     this.setVisible(@importPanel, empty)
     this._setExpandLinkText(empty)
     $('#sources-management').show()
+    @indicator.hide()
 
   showContacts: =>
     contacts-list

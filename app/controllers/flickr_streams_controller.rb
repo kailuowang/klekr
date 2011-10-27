@@ -11,6 +11,7 @@ class FlickrStreamsController < ApplicationController
     respond_to do |format|
       format.json do
         streams = FlickrStream.collected_by(current_collector).includes(:monthly_scores)
+        streams = streams.paginate(params.slice(:page, :per_page)) if params[:page].present?
         render json: data_for_streams(streams)
       end
       format.yaml do

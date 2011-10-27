@@ -1,5 +1,5 @@
 class window.MySources
-  constructor: (@sourcesPath, @contactImporter, @editorStreamsImporter)->
+  constructor: ( @contactImporter, @editorStreamsImporter)->
     @view = new MySourcesView
     @addByUserImporter = new AddByUserImporter
     @googleReaderImporter = new GoogleReaderImporter
@@ -13,12 +13,19 @@ class window.MySources
     @googleReaderImporter.bind 'sources-imported', this._sourcesImported
 
   init: (onInit)=>
-    klekr.Global.server.get @sourcesPath, {}, (data) =>
-      allSources = (new Source(d) for d in data)
-      @view.clear()
-      this._display(allSources)
-      @view.setVisibleEmptySourceSection(allSources.length is 0)
+    @view.clear()
+    this._loadSource 1, (hasSources) =>
+      @view.onAllSourcesLoaded(!hasSources)
       onInit?()
+
+  _loadSource: (page, onFinish) =>
+    klekr.Global.server.get my_sources_flickr_streams_path(), {page: page, per_page: 50}, (data) =>
+      sources = (new Source(d) for d in data)
+      this._display(sources)
+      if sources.length > 0
+        this._loadSource(page + 1, onFinish)
+      else
+        onFinish?(page > 1)
 
   _sourcesImportDone: =>
     klekr.Global.server.get info_collector_path({id: 'current'}), {}, (data)=>
@@ -26,7 +33,7 @@ class window.MySources
         @view.showNewSourcesAddedPanel(data)
 
   _sourcesImported: (sources) =>
-    @view.setVisibleEmptySourceSection(false)
+    @view.onAllSourcesLoaded(false)
     this._display sources
 
   _display: (sources) =>
@@ -35,6 +42,6 @@ class window.MySources
 $ ->
   contactImporter = new ContactsImporter(__contactsPath__, __importContactPath__)
   editorStreamsImporter = new EditorStreamsImporter
-  window.mySources = new MySources(__sourcesPath__, contactImporter, editorStreamsImporter)
+  window.mySources = new MySources(contactImporter, editorStreamsImporter)
 
   mySources.init()
