@@ -15,10 +15,9 @@ class window.MySourcesView extends ViewBase
     newStarCategory = this._createCategory(star)
     this._sourcesGridView(newStarCategory).load(sources)
 
-  addSource: (source, star = 1) =>
-    categoryDiv = this._ensureCategory(star)
+  addSource: (source) =>
+    categoryDiv = this._ensureCategory(source.rating)
     this._sourcesGridView(categoryDiv).addSource(source)
-
 
   setVisibleEmptySourceSection: (empty)=>
     this.setVisible($('#empty-sources'), empty)

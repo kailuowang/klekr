@@ -16,9 +16,8 @@ module Collectr
 
     def editorial_collection_stream_for(collector)
       stream = FlickrStream.find_or_create(
-         editor_collection_stream_opts.merge(collector: collector, collecting: false)
+        editor_collection_stream_opts.merge(collector: collector)
       )
-      stream.sync(1.month.ago, 40)
       stream
     end
 
@@ -40,7 +39,6 @@ module Collectr
           user_id: editor_stream.user_id,
           username: editor_stream.username,
           type: editor_stream.type,
-          collecting: false,
           collector: collector
         )
       end
