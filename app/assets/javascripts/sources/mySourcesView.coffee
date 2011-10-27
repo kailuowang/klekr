@@ -38,6 +38,7 @@ class window.MySourcesView extends ViewBase
     newStarCategory.attr('id', 'star' + star)
     this._updateStar(newStarCategory, star)
     @container.append(newStarCategory)
+    this._sortCategories()
     newStarCategory.show()
 
   _ensureCategory: (star) =>
@@ -51,6 +52,13 @@ class window.MySourcesView extends ViewBase
     label = categoryDiv.find('.stars-label:first')
     starText =('★' for i in [0...star]).join('')
     label.text(starText)
+
+  _sortCategories: =>
+    categories = $('.star-category')
+    sorted_categories = (_(categories).sortBy (c) -> c.id).reverse()
+    @container.empty()
+    @container.append(category) for category in sorted_categories
+
 
   _sourcesGridView: (categoryDiv) =>
     cellGrid = categoryDiv.find('.sources-grid:first')
