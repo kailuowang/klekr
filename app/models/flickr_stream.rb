@@ -160,13 +160,17 @@ class FlickrStream < ActiveRecord::Base
   end
 
   def bump_rating(to = star_rating + 1)
-    while(star_rating < to) do
-      adjust_rating(:bump)
+    if(to <= 5 )
+      while(star_rating < to) do
+        adjust_rating(:bump)
+      end
     end
   end
 
   def trash_rating
-    adjust_rating(:trash)
+    if(star_rating > 1)
+      adjust_rating(:trash)
+    end
   end
 
   def destroy
