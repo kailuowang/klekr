@@ -3,24 +3,30 @@
 #slide-options
   @extend .popup
   opacity: 0.95
-
+  padding: 0px
   position: absolute
   top: 33px
   left: 4px
-  width: 290px
+  width: 300px
+
   background: #353535
   color: #707070
   .header
-    margin-bottom: 5px
     border-bottom: 1px solid #505050
-  #lower
-    border-top: 1px solid #505050
-    padding-top: 4px
+    padding-left: 10px
+    padding-right: 5px
+    padding-top: 5px
+    padding-bottom: 5px
+    background: #252525
+
   .filters
+    padding-left: 10px
+    padding-top: 5px
+    padding-bottom: 5px
+    background: #252525
+
     .hasTwipsy
       color: #807050
-    margin-top: 10px
-    padding-bottom: 5px
     #faved-at-filter-panel
       margin-bottom: 10px
       height: 30px
@@ -34,18 +40,26 @@
       #rating-filter
         #rating-filter-select
           width: 100px
-  #under-the-hood
-    margin-top: 10px
-  #under-the-hood-panel
-    padding-top: 8px
-    margin-left: 5px
+  #lower
+    border-top: 1px solid #505050
+    padding: 10px
 
-    #cache-info
+    #under-the-hood
+      height: 20px
+    #under-the-hood-panel
+      padding-top: 8px
+      margin-left: 5px
+      .label
+        color: #606060
+        text-shadow: 0 1px 0 #000
       line-height: 26px
-      vertical-align: middle
-    #system-status
-      margin-top: 5px
-      margin-bottom: 5px
-    #ops-buttons
-      margin-top: 10px
-      margin-bottom: 5px
+      #cache-info
+        vertical-align: middle
+      #system-status
+      #ops-buttons
+        margin-top: 10px
+        margin-bottom: 10px
+
+      #loading
+        width: 150px
+        text-align: right

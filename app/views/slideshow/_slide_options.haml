@@ -22,22 +22,24 @@
         collected before:
       #faved-at-date-filter.inline
         %input#fave-at-date.datepicker{type: :text, name: 'faved-at-date'}
-  #lower.clearfix
-  .fright
-    %a#under-the-hood{href: '#'}
-      Go Offline!
-  #under-the-hood-panel.clearfix.hidden
-    .fleft
-      #system-status
-        Current Status:
-        %span#connection-status-label
-      #cache-info
-        Pictures downloaded:
-        %span#num-of-pics-in-cache 0
-      #downloading-info
-        Pictures downloading:
-        %span#num-of-downloading-pics 0
-    #ops-buttons.fright
-      %a#download-pictures.btn{href: '#'}
-        Download more pictures!
-      = image_tag 'loading.gif', class: 'hidden', id: 'loading'
+  #lower
+    .fright
+      %a.btn#under-the-hood{href: '#'}
+        Go Offline!
+    .clearfix
+    #under-the-hood-panel.hidden
+      .fleft
+        #system-status
+          %span.label Current Status:
+          %span#connection-status-label
+        #cache-info
+          %span.label New Pictures Ready to View:
+          %span#num-of-pics-in-cache 0
+        #downloading-info
+          %span.label Pictures Scheduled to Download:
+          %span#num-of-downloading-pics 0
+      #ops-buttons.fright
+        %a#download-pictures.btn{href: '#'}
+          Schedule More Pictures to Download
+        #loading.hidden
+          = image_tag 'loading.gif'

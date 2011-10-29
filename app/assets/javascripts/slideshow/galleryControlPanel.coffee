@@ -8,7 +8,7 @@ class window.GalleryControlPanel extends ViewBase
     @panel.find('.close-btn').click_ => @panel.hide()
     @downloadButton = $('#download-pictures')
     @downloadButton.click_ this._downloadPictures
-    new CollapsiblePanel($('#under-the-hood-panel'), $('#under-the-hood'), ['Under The Hood ▼', 'Hide ▲'])
+    new CollapsiblePanel($('#under-the-hood-panel'), $('#under-the-hood'), ['Go Offline ▼', 'Hide ▲'])
     @gallery.bind 'new-pictures-added', this._registerPictureEvents
     @gallery.bind 'idle', this._showDownloadButton
     this._updateConnectionStatus()
@@ -27,13 +27,15 @@ class window.GalleryControlPanel extends ViewBase
   _updateGalleryInfo: =>
     @numLabel ?= $('#num-of-pics-in-cache')
     @numDownloadingLabel ?= $('#num-of-downloading-pics')
-    @numLabel.text(@gallery.readyPictures().length)
+    @numLabel.text(@gallery.readyNewPictures().length)
     downloading = @gallery.size() - @gallery.readyPictures().length
     @numDownloadingLabel.text(downloading)
     this.setVisible(@downloadingInfo ?= $('#downloading-info'), downloading > 0)
 
   _registerPictureEvents: (pictures) =>
-    pic.bind('fully-ready', this._updateGalleryInfo) for pic in pictures
+    for pic in pictures
+      pic.bind 'fully-ready', this._updateGalleryInfo
+      pic.bind 'viewed', this._updateGalleryInfo
 
   _updateConnectionStatus: =>
     @statusLabel ?= @panel.find('#connection-status-label')

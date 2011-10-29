@@ -13,7 +13,7 @@ class window.Picture extends Events
     unviewedPictures = _(pictures).select (pic) -> !pic.data.viewed and pic.data.collected
     if unviewedPictures.length > 0
       updatePath = unviewedPictures[0].data.getAllViewedPath
-      pic.data.viewed = true for pic in unviewedPictures
+      pic._setAsViewed() for pic in unviewedPictures
       picIds = ( pic.id for pic in unviewedPictures )
       klekr.Global.updater.post(updatePath, {ids: picIds})
 
@@ -51,7 +51,11 @@ class window.Picture extends Events
   getViewed: =>
     unless @data.viewed
       klekr.Global.updater.put(@data.getViewedPath) if this._inKlekr()
-      @data.viewed = true
+      this._setAsViewed()
+
+  _setAsViewed: =>
+    @data.viewed = true
+    this.trigger('viewed')
 
   faved: => @data.rating > 0
 

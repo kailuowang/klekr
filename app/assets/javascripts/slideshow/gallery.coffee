@@ -172,6 +172,9 @@ class window.Gallery extends Events
   readyPictures: =>
     _(@pictures).select (p) -> p.ready
 
+  readyNewPictures: =>
+    _(@pictures).select (p) -> p.ready and !p.data.viewed
+
   report: ->
     console.debug "cache size: " + @cacheSize
     console.debug "pictures in cache: " + @pictures.length
