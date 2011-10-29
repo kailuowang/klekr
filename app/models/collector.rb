@@ -45,14 +45,17 @@ class Collector < ActiveRecord::Base
 
   private
 
+  def parse_date(date_string)
+    Date.strptime(date_string, '%m/%d/%Y') if date_string.present?
+  end
+
   def collection_opts(opts_params)
     opts_params.to_options!
     {}.tap do |h|
       h[:min_rating] = opts_params[:min_rating].to_i if opts_params[:min_rating].present?
-      if( opts_params[:faved_date].present? )
-        date = Date.strptime(opts_params[:faved_date], '%m/%d/%Y')
-        h[:max_faved_at] = date + 1 if date
-      end
+      before_date = parse_date(opts_params[:faved_date])
+      h[:max_faved_at] = before_date + 1 if before_date
+      h[:min_faved_at] = parse_date(opts_params[:faved_date_after])
       h[:order] = opts_params[:order] if opts_params[:order]
     end
   end

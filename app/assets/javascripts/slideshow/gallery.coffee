@@ -151,6 +151,7 @@ class window.Gallery extends Events
       opts.offset = this._unseenPictures().length if @advanceByProgress
       opts.min_rating = filterSettings.rating if filterSettings.rating
       opts.faved_date = filterSettings.faveDate if filterSettings.faveDate
+      opts.faved_date_after = filterSettings.faveDateAfter if filterSettings.faveDateAfter
       opts.type = filterSettings.type if filterSettings.type
 
   _addPictures: (newPictures) =>

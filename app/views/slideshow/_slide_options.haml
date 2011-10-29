@@ -14,14 +14,21 @@
             %span.hasTwipsy{title: "Sources of artists' works."}direct sources
     #rating-filter-panel
       %h5.inline
-        rating higher or equal:
+        Rating Higher or Equal:
       #rating-filter.inline
         = select_tag 'rating_filter', options_for_select(['★', '★★', '★★★', '★★★★', '★★★★★']), id: 'rating-filter-select'
     #faved-at-filter-panel
-      %h5.inline
-        collected before:
-      #faved-at-date-filter.inline
-        %input#fave-at-date.datepicker{type: :text, name: 'faved-at-date'}
+      #after
+        %h5.inline
+          Collected After:
+        #faved-at-date-filter.inline
+          %input#fave-at-date-after.datepicker{type: :text, name: 'faved-at-date-after'}
+      #before
+        %h5.inline
+          Collected Before:
+        #faved-at-date-filter.inline
+          %input#fave-at-date.datepicker{type: :text, name: 'faved-at-date'}
+
   #lower
     .fright
       %a.btn#under-the-hood{href: '#'}

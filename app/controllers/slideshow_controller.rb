@@ -52,7 +52,7 @@ class SlideshowController < ApplicationController
   def render_fave_pictures(collector, opts = {})
     render_json_pictures collector.collection( params[:num].to_i,
                                                params[:page].to_i,
-                                               opts.merge(params.slice(:min_rating, :faved_date)))
+                                               opts.merge(params.slice(:min_rating, :faved_date, :faved_date_after)))
   end
 
   def check_stream_access(stream)
