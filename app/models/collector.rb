@@ -55,7 +55,8 @@ class Collector < ActiveRecord::Base
       h[:min_rating] = opts_params[:min_rating].to_i if opts_params[:min_rating].present?
       before_date = parse_date(opts_params[:faved_date])
       h[:max_faved_at] = before_date + 1 if before_date
-      h[:min_faved_at] = parse_date(opts_params[:faved_date_after])
+      after_date = parse_date(opts_params[:faved_date_after])
+      h[:min_faved_at] = after_date if after_date
       h[:order] = opts_params[:order] if opts_params[:order]
     end
   end

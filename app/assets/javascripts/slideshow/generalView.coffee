@@ -46,7 +46,9 @@ class window.GeneralView extends ViewBase
     if @_shareLink.length > 0
       params = _.extend({collector_id: klekr.Global.currentCollector.id}, filterSettings)
       url = exhibit_slideshow_path() + '?' + $.param(params)
-      @_shareLink.attr 'addthis:url': window.location.hostname + url
+      url = window.location.hostname + url
+      @_shareLink.attr 'addthis:url': url
+      addthis.update('share', 'url', url) if addthis?
 
   _calculateDimensions: ->
     [@windowWidth, @windowHeight] = this.windowDimension()
