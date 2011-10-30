@@ -24,7 +24,7 @@ describe PicturesController do
     it "should mark the picture as faved" do
       pic = create_picture
       Picture.stub!(:find).with(pic.id.to_s).and_return(pic)
-      pic.should_receive(:fave)
+      pic.should_receive(:fave).with(1)
       put 'fave', format: :json, id: pic.id
     end
 
@@ -44,8 +44,14 @@ describe PicturesController do
       put 'fave', format: :json, id: 'fakeflickr_photoid'
     end
 
-    it "should forbid from changing pic from other collector" do
-      should_raise_exception_for_pictures_from_other_collector(:put, 'fave', id: Factory(:picture, collector: Factory(:collector)).id)
+    it "should not change pic from other collector" do
+      stub_current
+      others_pic = Factory(:picture, collector: Factory(:collector))
+      FlickRaw::Flickr.stub_chain(:new, :favorites, :add)
+      put 'fave', format: :json, id: others_pic.id
+      others_pic.reload
+      others_pic.should_not be_faved
+      @collector.pictures.faved.count.should == 1
     end
 
   end

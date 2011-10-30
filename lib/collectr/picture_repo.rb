@@ -10,7 +10,7 @@ module Collectr
       if is_flickr_id?(string_id)
         find_by_flickr_id(string_id)
       else
-        Picture.find(string_id)
+        find_by_db_id(string_id)
       end
     end
 
@@ -41,6 +41,16 @@ module Collectr
     end
 
     private
+
+    def find_by_db_id(string_id)
+      pic = Picture.find(string_id)
+      if(pic.collector == @collector)
+        pic
+      else
+        find_or_initialize_from_pic_info(pic.pic_info)
+      end
+    end
+
 
     def find_or_initialize_from_pic_info(pic_info)
       url = FlickRaw.url_photopage(pic_info)

@@ -6,7 +6,8 @@ class PicturesController < ApplicationController
   #PUT /pictures/1/fave
   def fave
     @picture.get_viewed
-    @picture.fave(params[:rating].to_i)
+    new_rating = params[:rating].present? ? params[:rating].to_i : 1
+    @picture.fave(new_rating)
     js_ok
   end
 

@@ -128,6 +128,20 @@ describe Collectr::PictureRepo do
         pic.title.should == @pic_info.title
       end
     end
+
+    context "find by other user's pictures' db id" do
+
+      it 'should find the corresponding picture for the current collector' do
+        pic_info = Factory.next(:pic_info)
+
+        pic_from_other_user = Collectr::PictureRepo.new(Factory(:collector)).build(pic_info)
+        pic_from_other_user.save
+        pic = @repo.build(pic_info)
+        pic.save
+        @repo.find(pic_from_other_user.id).should == pic
+      end
+    end
+
   end
 
 end
