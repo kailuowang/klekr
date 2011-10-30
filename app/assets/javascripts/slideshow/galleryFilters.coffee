@@ -27,7 +27,9 @@ class window.GalleryFilters extends ViewBase
 
   _applyDefaultFitlers: =>
     if klekr.Global.defaultFilters?
-       @ratingFilter[0].selectedIndex = klekr.Global.defaultFilters.rating - 1
+      @ratingFilter[0].selectedIndex = klekr.Global.defaultFilters.rating - 1
+      @faveDateBox.val klekr.Global.defaultFilters.faveDate
+      @faveDateAfterBox.val klekr.Global.defaultFilters.faveDateAfter
 
 
   _setFiltersVisibility: (opts)=>
@@ -41,5 +43,3 @@ class window.GalleryFilters extends ViewBase
 
   show: => this.fadeInOut(@panel, true)
   hide: => this.fadeInOut(@panel, false)
-
-

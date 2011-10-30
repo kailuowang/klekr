@@ -17,7 +17,6 @@ class SlideshowController < ApplicationController
     @advance_by_progress = true #contrast to progress by paging
     @more_pictures_path = new_pictures_slideshow_path
     @empty_message_partial = 'no_new_pictures'
-
   end
 
   def faves
@@ -62,7 +61,7 @@ class SlideshowController < ApplicationController
   end
 
   def defaultFilters
-    filtersParams = params.slice(:rating)
+    filtersParams = params.slice(:rating, :faveDate, :faveDateAfter)
     filtersParams.to_json if (filtersParams.present?)
   end
 

@@ -85,7 +85,6 @@ class window.Gallery extends Events
         @blank = false
         @currentMode.updateProgress(index)
 
-
   _progressChanged: =>
     this._updateProgressInView()
     @picturePreloader.rePrioritize()
