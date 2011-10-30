@@ -50,7 +50,7 @@ class PicturesController < ApplicationController
       end
     end
   end
-                                                      ``
+
   private
   def load_picture
     @picture = Collectr::PictureRepo.new(current_collector).find(params[:id]) if params[:id].present?
