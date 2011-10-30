@@ -8,7 +8,8 @@
           remove
     %a#faveLink.btn.large.hidden.has-popover{href: '#', 'data-content' => 'Add it to "My Collection" on klekr as well as fave on flickr. This also helps klekr figure out your taste.', title: 'Add to My Collection', 'data-popover' => 'right', 'data-popover-top-offset' => -28}
       Collect it!
-
+  #reloading-picture.hidden
+    = image_tag('loading.gif')
   #faveRatingPanel.modal-popup{style: 'margin: 40px'}
     %h3
       Awesome!

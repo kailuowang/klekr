@@ -10,9 +10,8 @@ class Updater
   post: (url, data) => this._addJob('post', url, data)
 
   _addJob: (method, url, data) =>
-    unless klekr.Global.readonly
-      @_q.enQ (callback) =>
-        @_server.ajax(url, data, method, callback)
+    @_q.enQ (callback) =>
+      @_server.ajax(url, data, method, callback)
 
   _connectionStatusChanged: =>
     if @_server.onLine()

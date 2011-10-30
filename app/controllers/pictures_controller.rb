@@ -24,7 +24,7 @@ class PicturesController < ApplicationController
   end
 
   def resync
-    @picture.resync
+    @picture.resync unless params[:skip_flickr_resync]
     render :json => data_for(@picture)
   end
 

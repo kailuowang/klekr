@@ -8,32 +8,49 @@ class window.FavePanel  extends ViewBase
     @faveRatingPanel = $('#faveRatingPanel')
     @ratingDisplayPanel = $('#ratingDisplayPanel')
     @ratingDisplay = $('#ratingDisplay')
+    @reloading = $('#reloading-picture')
     this._registerEvents()
     this._initRaty(@faveRating)
     this._initRaty(@ratingDisplay)
     keyShortcuts.addShortcuts(this._shortcuts())
 
   fave: =>
-    unless @picture.faved()
+    if @picture.favable() and !@picture.faved()
       this.setArtistCollectionLink(@faveRatingPanel.find('#artist-collection'), @picture)
       this.popup(@faveRatingPanel)
 
   unfave: =>
-    if @picture.faved()
+    if @picture.favable() and @picture.faved()
       @picture.unfave()
       this._updateDom()
   
   updateWith: (picture) =>
     @picture = picture
-    this._updateDom()
-  
+    this._checkAccess()
+
+  _checkAccess: =>
+    if !@picture.favable() and klekr.Global.currentCollector?
+      @picture.bind 'data-updated', this._pictureUpdated
+      this._showLoading true
+      @picture.reloadForCurrentCollector()
+    else
+      this._updateDom()
+
+  _pictureUpdated: (picture)=>
+    if(picture is @picture)
+      this._checkAccess()
+
+  _showLoading: (loading)=>
+    this.setVisible @faveArea, !loading
+    this.setVisible @reloading, loading
+
   _updateDom: =>
     faved = @picture.faved()
-    this.setVisible(@faveArea, true)
+    this._showLoading false
     this.setVisible(@faveLink, !faved)
-    this.setVisible(@faved, faved)
     this._updateRating(@picture.data.rating)
     this.setVisible(@ratingDisplayPanel, faved)
+    this.setVisible(@faved, faved)
     @removeFaveLink.attr('data-content', "This picture is added to my collection on #{@picture.favedDate}. Click to remove it." )
 
   _registerEvents: =>
@@ -64,7 +81,7 @@ class window.FavePanel  extends ViewBase
   _shortcuts: ->
     @mShortcuts ?=
       (this._createRatingShortcut(i) for i in [1..5]).concat([
-        new KeyShortcut(['f','c'], this.fave, 'collect the picture', => gallery.slide.active() and !klekr.Global.readonly)
+        new KeyShortcut(['f','c'], this.fave, 'collect the picture', => gallery.slide.active() and @picture.favable())
         new KeyShortcut('u', this.unfave, 'remove the picture from collection', => this.showing(@removeFaveLink))
       ])
 

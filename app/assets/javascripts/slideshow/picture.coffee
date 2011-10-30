@@ -10,11 +10,12 @@ class window.Picture extends Events
     added
 
   @allGetViewed: (pictures) =>
-    unviewedPictures = _(pictures).select (pic) -> !pic.data.viewed and pic.data.collected
-    if unviewedPictures.length > 0
-      updatePath = unviewedPictures[0].data.getAllViewedPath
-      pic._setAsViewed() for pic in unviewedPictures
-      picIds = ( pic.id for pic in unviewedPictures )
+    toMarkPictures = _(pictures).select (pic) -> pic._viewedMarkable()
+    pic._setAsViewed() for pic in toMarkPictures
+
+    if toMarkPictures.length > 0
+      updatePath = toMarkPictures[0].data.getAllViewedPath
+      picIds = ( pic.id for pic in toMarkPictures )
       klekr.Global.updater.post(updatePath, {ids: picIds})
 
   constructor: (@data) ->
@@ -40,6 +41,9 @@ class window.Picture extends Events
 
   smallUrl: => @data.smallUrl
 
+  favable: =>
+    @data.ofCurrentCollector
+
   fave: (rating) =>
     @data.rating = rating
     klekr.Global.updater.put @data.favePath, {rating: rating}
@@ -49,13 +53,16 @@ class window.Picture extends Events
     klekr.Global.updater.put @data.unfavePath
 
   getViewed: =>
-    unless @data.viewed
-      klekr.Global.updater.put(@data.getViewedPath) if this._inKlekr()
+    if this._viewedMarkable()
+      klekr.Global.updater.put(@data.getViewedPath)
       this._setAsViewed()
 
   _setAsViewed: =>
     @data.viewed = true
     this.trigger('viewed')
+
+  _viewedMarkable: =>
+    !@data.viewed and this._inKlekr() and @data.ofCurrentCollector
 
   faved: => @data.rating > 0
 
@@ -69,6 +76,16 @@ class window.Picture extends Events
       this.trigger('small-version-ready')
       callback?()
 
+  reloadForCurrentCollector: =>
+    this._updateData(skip_flickr_resync: true)
+
+  _updateData: (opts = {}) =>
+    if this._updatable()
+      @alreadyUpdated = true
+      klekr.Global.server.put resync_picture_path(id: @id), opts, (newData) =>
+        @data = newData
+        this.trigger('data-updated', this)
+
 
   _smallVersionMightBeInvalid: (image) =>
     image.width is 240 and image.height is 180
@@ -79,13 +96,6 @@ class window.Picture extends Events
   _inKlekr: =>
     @data.getViewedPath?
 
-  _updateData: (callback) =>
-    if this._updatable()
-      @alreadyUpdated = true
-      klekr.Global.server.put resync_picture_path(id: @id), {}, (newData) =>
-        @data = newData
-        this.trigger('data-updated')
-        callback?
 
   preloadLarge: (callback)=>
     imageUrl = if @canUseLargeVersion then @data.largeUrl else @data.mediumUrl

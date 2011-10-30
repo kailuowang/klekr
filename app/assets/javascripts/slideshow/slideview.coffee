@@ -42,7 +42,7 @@ class window.Slideview extends ViewBase
   switchVisible: (showing) =>
     @favePanel ?= $('#fave-panel')
 
-    this.setVisible @favePanel, showing and !klekr.Global.readonly
+    this.setVisible @favePanel, showing
     this.setVisible @slide, showing
     this.setVisible(@pictureArea, false) unless showing
     if showing then @label.show() else @label.hide()

@@ -17,6 +17,7 @@ module Collectr
         rating:           picture.rating,
         viewed:           picture.viewed?,
         collected:        !picture.new_record? && picture.collected?,
+        ofCurrentCollector: picture.collector == current_collector,
         inKlekr:          !picture.new_record?,
         dateUpload:       picture.date_upload,
         ownerPath:        user_path(picture.owner_id),

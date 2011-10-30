@@ -23,7 +23,10 @@ class window.PictureCellView extends ViewBase
     this._initRating()
 
   _initRating:  =>
-    ratingText = ('★' for i in [0...@picture.data.rating]).join('')
+    ratingText = if @picture.favable()
+        ('★' for i in [0...@picture.data.rating]).join('')
+      else
+        ''
     @ratingDiv.text(ratingText)
 
   _picId: =>
