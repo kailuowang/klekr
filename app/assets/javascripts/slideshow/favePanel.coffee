@@ -1,5 +1,5 @@
 class window.FavePanel  extends ViewBase
-  constructor: (@currentPicture) ->
+  constructor:  ->
     @faveLink = $('#faveLink')
     @removeFaveLink = $('#removeFaveLink')
     @faved = $('#faved')
@@ -14,24 +14,27 @@ class window.FavePanel  extends ViewBase
     keyShortcuts.addShortcuts(this._shortcuts())
 
   fave: =>
-    unless this.currentPicture().faved()
+    unless @picture.faved()
+      this.setArtistCollectionLink(@faveRatingPanel.find('#artist-collection'), @picture)
       this.popup(@faveRatingPanel)
-      this.setArtistCollectionLink(@faveRatingPanel.find('#artist-collection'), this.currentPicture())
 
   unfave: =>
-    if this.currentPicture().faved()
-      this.currentPicture().unfave()
-      this.updateFavedStatus()
-
-  updateFavedStatus: =>
-    picture = this.currentPicture()
-    faved = picture.faved()
+    if @picture.faved()
+      @picture.unfave()
+      this._updateDom()
+  
+  updateWith: (picture) =>
+    @picture = picture
+    this._updateDom()
+  
+  _updateDom: =>
+    faved = @picture.faved()
     this.setVisible(@faveArea, true)
     this.setVisible(@faveLink, !faved)
     this.setVisible(@faved, faved)
-    this._updateRating(picture.data.rating)
+    this._updateRating(@picture.data.rating)
     this.setVisible(@ratingDisplayPanel, faved)
-    @removeFaveLink.attr('data-content', "This picture is added to my collection on #{picture.favedDate}. Click to remove it." )
+    @removeFaveLink.attr('data-content', "This picture is added to my collection on #{@picture.favedDate}. Click to remove it." )
 
   _registerEvents: =>
     @faveLink.click_ this.fave
@@ -52,8 +55,8 @@ class window.FavePanel  extends ViewBase
 
   _changeRating: (rating)=>
     this.closePopup(@faveRatingPanel) if this._showingPopup()
-    this.currentPicture().fave rating
-    this.updateFavedStatus()
+    @picture.fave rating
+    this._updateDom()
 
   _showingPopup: =>
     this.showing(@faveRatingPanel)

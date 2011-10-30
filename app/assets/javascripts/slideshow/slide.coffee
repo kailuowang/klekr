@@ -1,7 +1,7 @@
 class window.Slide extends ModeBase
   constructor: ->
     this.reset()
-    @favePanel = new FavePanel(this.currentPicture)
+    @favePanel = new FavePanel
     slideview.pictureClick this.backToGrid
     super('slide')
 
@@ -11,7 +11,7 @@ class window.Slide extends ModeBase
   displayCurrentPicture: =>
     picture = this.currentPicture()
     slideview.display(picture)
-    @favePanel.updateFavedStatus()
+    @favePanel.updateWith(picture)
     this.trigger('progress-changed')
 
   currentPicture: =>
