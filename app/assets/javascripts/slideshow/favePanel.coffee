@@ -9,6 +9,8 @@ class window.FavePanel  extends ViewBase
     @ratingDisplayPanel = $('#ratingDisplayPanel')
     @ratingDisplay = $('#ratingDisplay')
     @reloading = $('#reloading-picture')
+    @loginReminder = $('#login-reminder')
+
     this._registerEvents()
     this._initRaty(@faveRating)
     this._initRaty(@ratingDisplay)
@@ -31,27 +33,24 @@ class window.FavePanel  extends ViewBase
   _checkAccess: =>
     if !@picture.favable() and klekr.Global.currentCollector?
       @picture.bind 'data-updated', this._pictureUpdated
-      this._showLoading true
       @picture.reloadForCurrentCollector()
-    else
-      this._updateDom()
+    this._updateDom()
 
   _pictureUpdated: (picture)=>
     if(picture is @picture)
       this._checkAccess()
 
-  _showLoading: (loading)=>
-    this.setVisible @faveArea, !loading
-    this.setVisible @reloading, loading
-
   _updateDom: =>
-    faved = @picture.faved()
-    this._showLoading false
-    this.setVisible(@faveLink, !faved)
-    this._updateRating(@picture.data.rating)
-    this.setVisible(@ratingDisplayPanel, faved)
-    this.setVisible(@faved, faved)
-    @removeFaveLink.attr('data-content', "This picture is added to my collection on #{@picture.favedDate}. Click to remove it." )
+    this.setVisible @faveArea, @picture.favable()
+    this.setVisible @reloading, (!@picture.favable() and klekr.Global.currentCollector?)
+    this.setVisible @loginReminder, !klekr.Global.currentCollector?
+    if @picture.favable()
+      faved = @picture.faved()
+      this.setVisible(@faveLink, !faved)
+      this._updateRating(@picture.data.rating)
+      this.setVisible(@ratingDisplayPanel, faved)
+      this.setVisible(@faved, faved)
+      @removeFaveLink.attr('data-content', "This picture is added to my collection on #{@picture.favedDate}. Click to remove it." )
 
   _registerEvents: =>
     @faveLink.click_ this.fave

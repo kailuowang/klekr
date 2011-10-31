@@ -24,6 +24,10 @@ class SlideshowController < ApplicationController
     @empty_message = "You haven't collect any pictures yet"
   end
 
+  def exhibit_login
+    redirect_to(action: :exhibit)
+  end
+
   def exhibit
     @disable_navigation = current_collector.blank?
     @collector = ::Collector.find(params[:collector_id])
