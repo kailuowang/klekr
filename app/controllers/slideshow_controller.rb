@@ -25,7 +25,7 @@ class SlideshowController < ApplicationController
   end
 
   def exhibit_login
-    redirect_to(action: :exhibit)
+    redirect_to(exhibit_params.merge(action: :exhibit))
   end
 
   def exhibit
@@ -34,7 +34,7 @@ class SlideshowController < ApplicationController
     @more_pictures_path = exhibit_pictures_slideshow_path(params.slice(:collector_id))
     @empty_message = "This collection has no pictures"
     @defaultFilters = defaultFilters
-    @exhibit_params = params.slice(:collector_id, :rating, :faveDate, :faveDateAfter)
+    @exhibit_params = exhibit_params
   end
 
   def exhibit_pictures
@@ -52,6 +52,10 @@ class SlideshowController < ApplicationController
   end
 
   private
+
+  def exhibit_params
+    params.slice(:collector_id, :rating, :faveDate, :faveDateAfter)
+  end
 
   def filter_params
     params.slice(:min_rating, :faved_date, :faved_date_after)
