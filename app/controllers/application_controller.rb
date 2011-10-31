@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
       return true
     end
 
-    session[:return_to]= request.path
+    session[:return_to]= request.url
 
     redirect_to authentications_path
     false
