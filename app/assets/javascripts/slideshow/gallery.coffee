@@ -13,8 +13,10 @@ class window.Gallery extends Events
     generalView.previousClick => @currentMode.navigateToPrevious?()
     generalView.toggleModeClick this.toggleMode
     @filters = new GalleryFilters
+    generalView.updateShareLink(@filters.filterSettings())
     @filters.bind('changed', this._reinitToGrid)
     @filters.bind('changed', generalView.updateShareLink)
+
 
     new GalleryControlPanel(this)
 

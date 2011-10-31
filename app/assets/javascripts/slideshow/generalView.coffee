@@ -8,7 +8,6 @@ class window.GeneralView extends ViewBase
     @bottomRight = $('#bottomRight')
     $(window).resize(this.initLayout)
     this.initLayout()
-    this.updateShareLink()
 
   initLayout: =>
     this._calculateDimensions()
