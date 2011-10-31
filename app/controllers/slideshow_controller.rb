@@ -34,6 +34,7 @@ class SlideshowController < ApplicationController
     @more_pictures_path = exhibit_pictures_slideshow_path(params.slice(:collector_id))
     @empty_message = "This collection has no pictures"
     @defaultFilters = defaultFilters
+    @exhibit_params = params.slice(:collector_id, :rating, :faveDate, :faveDateAfter)
   end
 
   def exhibit_pictures
@@ -52,10 +53,14 @@ class SlideshowController < ApplicationController
 
   private
 
+  def filter_params
+    params.slice(:min_rating, :faved_date, :faved_date_after)
+  end
+
   def render_fave_pictures(collector, opts = {})
     render_json_pictures collector.collection( params[:num].to_i,
                                                params[:page].to_i,
-                                               opts.merge(params.slice(:min_rating, :faved_date, :faved_date_after)))
+                                               opts.merge(filter_params))
   end
 
   def check_stream_access(stream)

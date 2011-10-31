@@ -11,7 +11,8 @@
   #reloading-picture.hidden
     = image_tag('loading.gif')
   #login-reminder.hidden
-    %a.btn.has-popover{href: exhibit_login_slideshow_path, 'data-content' => 'Login to klekr so that you can collect the pictures here', title: 'Login', 'data-popover' => 'above', 'data-popover-left-offset' => 50}
+    %a.btn.has-popover{href: exhibit_login_slideshow_path(@exhibit_params),
+     'data-content' => 'Login to klekr so that you can collect the pictures here', title: 'Login', 'data-popover' => 'above', 'data-popover-left-offset' => 50}
       Login to Collect
   #faveRatingPanel.modal-popup{style: 'margin: 40px'}
     %h3
