@@ -12,7 +12,7 @@ class window.Login
     unless @stopCountdown
       if seconds > 0
         @countdownText.text seconds
-        this._flashStopLink()
+        this._flashStopLink() if seconds < 5
         setTimeout this._nextCountdown(seconds), 1000
       else
         window.location = @authUrl
