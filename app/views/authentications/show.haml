@@ -1,6 +1,6 @@
 - content_for(:head) do
   = javascript_include_tag 'authentication.js'
-  = stylesheet_link_tag 'login'
+  = stylesheet_link_tag 'authentication'
 :javascript
   __authUrl__ = '#{@auth_url}';
 .container
@@ -10,28 +10,27 @@
       %span.site-name klekr!
     .beta-tag
       BETA
-    %h4.site-subtitle
-      Discover photos of
-      %span
-        your own taste.
+
+    %h4.site-subtitle.animated
+      %a.help-title{herf: '#'}
+        Discover photos of your own taste.
   .bigTopPadding{align: 'center'}
-
-
 
   #welcome-message.well
     #basic-info
       #countDownRedirect
-        %h3
+        %h3.inline
           Redirecting to
           = link_to 'flickr.com', 'http://flickr.com'
           to
-          = link_to 'login in', @auth_url
-
+          = link_to 'login', @auth_url, class: 'hasTwipsy', title: "click here to login."
+          in
           %span#countdown
             5
           secs.
-          %a.help-title{href: '#'}
-            Wait...
+        %h4.inline
+          %a#stop-coundown.help-title{href: '#'}
+            ← Click here to stop.
       #redirect-link.hidden
         %h4
           Auto redirection stopped.

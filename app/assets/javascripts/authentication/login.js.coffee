@@ -4,15 +4,23 @@ class window.Login
     @helpTitle.click_ this._displayHelp
     new CollapsiblePanel($('#more-reasons-expand'), $('#more-reason-link'), ['Not convinced? Here is more reasons to use klekr.', 'Reasons to use klekr: '])
     this._loadAnnouncement()
+    $('.site-subtitle').addClass('fadeInRight')
 
 
   redirectCountdown: (seconds)=>
+    @countdownText ?= $("#countdown")
     unless @stopCountdown
       if seconds > 0
-        $("#countdown").text seconds
+        @countdownText.text seconds
+        this._flashStopLink()
         setTimeout this._nextCountdown(seconds), 1000
       else
         window.location = @authUrl
+
+  _flashStopLink: =>
+    @stopCountdownLink ?= $('#stop-coundown')
+    @stopCountdownLink.fadeOut 70, =>
+      @stopCountdownLink.fadeIn(250)
 
   _displayHelp: =>
     this._stopCountdown()
@@ -42,5 +50,5 @@ class window.Login
     @tweetPanel.click(this._stopCountdown)
 
 $ ->
-  new Login(__authUrl__).redirectCountdown(5)
+  new Login(__authUrl__).redirectCountdown(9)
 
