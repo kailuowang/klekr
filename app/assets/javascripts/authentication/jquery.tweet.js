@@ -203,7 +203,7 @@
       var list = $('<ul class="tweet_list">');
       var intro = '<p class="tweet_intro">'+s.intro_text+'</p>';
       var outro = '<p class="tweet_outro">'+s.outro_text+'</p>';
-      var loading = $('<p class="loading">'+s.loading_text+'</p>');
+      var loading = $('<span class="loading">'+s.loading_text+'</span>');
 
       if(s.username && typeof(s.username) == "string"){
         s.username = [s.username];
@@ -228,6 +228,7 @@
           if (s.refresh_interval) {
             window.setTimeout(function() { $(widget).trigger("tweet:load"); }, 1000 * s.refresh_interval);
           }
+          list.fadeIn();
         });
       }).trigger("tweet:load");
     });

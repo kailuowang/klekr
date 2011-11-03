@@ -3,9 +3,9 @@
   = stylesheet_link_tag 'authentication'
 :javascript
   __authUrl__ = '#{@auth_url}';
-.container
+.container.login
   .bigTopPadding
-    %h2.site-title
+    %h1.site-title
       Welcome to
       %span.site-name klekr!
     .beta-tag
@@ -16,71 +16,36 @@
         Discover photos of your own taste.
   .bigTopPadding{align: 'center'}
 
+  #countDownRedirect.hidden
+    %h3
+      Redirecting to
+      = link_to 'flickr.com', 'http://flickr.com'
+      to
+      = link_to 'login', @auth_url, class: 'hasTwipsy', title: "click here to login."
+      in
+      %span#countdown
+        5
+      secs...
+  #redirect-link
+    %h3
+      Auto redirection stopped.
+      = link_to 'Click here to login', @auth_url
+
+  .flickr-login-notes
+    *
+    %span.site-name klekr
+    links with your flickr account so that you don't have to create yet another account.
+
   #welcome-message.well
-    #basic-info
-      #countDownRedirect
-        %h3.inline
-          Redirecting to
-          = link_to 'flickr.com', 'http://flickr.com'
-          to
-          = link_to 'login', @auth_url, class: 'hasTwipsy', title: "click here to login."
-          in
-          %span#countdown
-            5
-          secs.
-        %h4.inline
-          %a#stop-coundown.help-title{href: '#'}
-            ← Click here to stop.
-      #redirect-link.hidden
-        %h4
-          Auto redirection stopped.
-          = link_to 'Click here to login from Flickr.com', @auth_url
-        %h3.mt20
-          %a.help-title{href: '#'}
-            Want to know more about klekr?
 
+    %h2.uppercase#stop-countdown-link
+      %a#stop-countdown.help-title{href: '#'}
+        Want to know more about&nbsp;
+        %span.site-name> klekr
+        ?
+    = render partial: 'more_about'
 
-    #detail-info.hidden
-      #about-klekr-title
-        %h2
-          OK. Here is what klekr is about:
-
-      #about-klekr-panel
-        %h5
-          %p
-            With klekr, you can add other artists' works and collections as sources.
-            New pictures from these sources will be displayed in a single slideshow called My Stream.
-            klekr remembers your preference over these sources by looking at how you collect pictures.
-            Thus klekr will be able to display the more interesting pictures first.
-        #more-reasons.well
-          %h5
-            %a#more-reason-link{href: '#'}
-              Want to know more? Here are more reasons to use klekr.
-
-          #more-reasons-expand.hidden
-            %ul
-              %li
-                Personalized 'My Stream' that displays not only the pictures taken by your favorite artists but also their favorite pictures.
-              %li
-                Pictures in 'My Stream' are prioritized based your own pereferences over the sources they come from, so that everyday you can see the possibly more interesting pictures first.
-              %li
-                Super fast and easy-to-use picture viewer.
-              %li
-                Collecting pictures with your own personal ratings.
-              %li
-                Be able to browse pictures offline.
-              %li 
-                Tablet friendly. klekr is carefully designed to be used on both desktops and tablets. 
-
-        %h2#get-started
-          Let's get started! ↓
-
-      #stoppedRedirect
-        %h3.mt20
-          = link_to 'Click here to login from Flickr.com', @auth_url
-
-        #why-login
-          Why login from flickr?
-        Klekr links with your flickr account so that you don't have to create another one. Also, pictures you collect on klekr will be faved on flickr too :)
+    .clearfix
 
   .tweet
+

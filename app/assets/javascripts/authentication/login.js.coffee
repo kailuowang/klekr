@@ -2,9 +2,14 @@ class window.Login
   constructor: (@authUrl) ->
     @helpTitle = $('.help-title')
     @helpTitle.click_ this._displayHelp
-    new CollapsiblePanel($('#more-reasons-expand'), $('#more-reason-link'), ['Not convinced? Here is more reasons to use klekr.', 'Reasons to use klekr: '])
     this._loadAnnouncement()
     $('.site-subtitle').addClass('fadeInRight')
+    $('.learn-more').click_ this._toggleMoreAbout
+    $('.back-to-about').click_ this._toggleMoreAbout
+
+  _toggleMoreAbout: =>
+    $('#about').slideToggle()
+    $('#more').slideToggle()
 
 
   redirectCountdown: (seconds)=>
@@ -18,13 +23,13 @@ class window.Login
         window.location = @authUrl
 
   _flashStopLink: =>
-    @stopCountdownLink ?= $('#stop-coundown')
+    @stopCountdownLink ?= $('.stop-countdown')
     @stopCountdownLink.fadeOut 70, =>
       @stopCountdownLink.fadeIn(250)
 
   _displayHelp: =>
     this._stopCountdown()
-    $('#basic-info').hide()
+    $('#stop-countdown-link').slideUp()
     $('#welcome-message #detail-info').slideDown()
 
   _nextCountdown: (seconds) =>
@@ -50,5 +55,5 @@ class window.Login
     @tweetPanel.click(this._stopCountdown)
 
 $ ->
-  new Login(__authUrl__).redirectCountdown(9)
+  new Login(__authUrl__)
 
