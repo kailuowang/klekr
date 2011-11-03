@@ -11,6 +11,6 @@
   #option-button.fleft
     = image_tag('option.png')
   .fleft
-    = render partial: '/general/add_this', locals: {title: "Checkout my klekr collection: "}
+    = render partial: '/general/add_this', locals: {title: "Checkout my klekr collection: ", :dynamic_url => true}
 = render partial: 'slideshow'
 = render partial: 'slide_options'

@@ -41,7 +41,7 @@ class window.GeneralView extends ViewBase
     $('#left').click(listener)
 
   updateShareLink: (filterSettings = {}) =>
-    @_shareLink ?= $('#top-banner-left .addthis_toolbox')
+    @_shareLink ?= $('#top-banner-left .addthis_toolbox[data-dynamic-url="true" ]')
     if @_shareLink.length > 0
       params = _.extend({collector_id: klekr.Global.currentCollector.id}, filterSettings)
       url = exhibit_slideshow_path() + '?' + $.param(params)
