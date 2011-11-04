@@ -13,8 +13,10 @@ class AuthenticationsController < ApplicationController
   #Get
   def show
     @disable_navigation = true
+    @redirected_to_login = redirected_for_login
     frob = flickr.auth.getFrob
     @auth_url = FlickRaw.auth_url(perms: 'write', frob: frob )
+    @show_detail = params[:show_detail].present?
   end
 
   #delete

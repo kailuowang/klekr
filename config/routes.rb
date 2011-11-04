@@ -71,5 +71,5 @@ Collectr::Application.routes.draw do
     mount Jasminerice::Engine => "/jasmine"
   end
 
-  match "/" => redirect("/slideshow")
+  root :to => "authentications#show"
 end

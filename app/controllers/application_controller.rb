@@ -26,8 +26,12 @@ class ApplicationController < ActionController::Base
       session[:return_to] = nil
       redirect_to(return_to)
     else
-      redirect_to('/')
+      redirect_to('/slideshow')
     end
+  end
+
+  def redirected_for_login
+    session[:return_to].present? && current_collector.blank?
   end
 
   def current_collector

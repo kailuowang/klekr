@@ -3,6 +3,9 @@
   = stylesheet_link_tag 'authentication'
 :javascript
   __authUrl__ = '#{@auth_url}';
+  klekr.Global.redirectedToLogin = #{@redirected_to_login};
+  klekr.Global.showDetail = #{@show_detail};
+
 .container.login
   .bigTopPadding
     %h1.site-title
@@ -15,30 +18,35 @@
       %a.help-title{herf: '#'}
         Discover photos of your own taste.
   .bigTopPadding{align: 'center'}
+  - if @current_collector.blank?
+    - unless @redirected_to_login
+      %h3
+        = link_to 'Login into My Stream through flickr.com', @auth_url
 
-  #countDownRedirect.hidden
+    #countDownRedirect.hidden
+      %h3
+        Redirecting to flickr.com
+        to
+        = link_to 'login', @auth_url, class: 'hasTwipsy', title: "click here to login."
+        in
+        %span#countdown
+          9
+        secs...
+    #redirect-link.hidden
+      %h3
+        Auto redirection stopped.
+        = link_to 'Click here to login', @auth_url
+
+    .flickr-login-notes
+      *
+      %span.site-name klekr
+      links with your flickr account so that you don't have to create yet another account.
+  - else
     %h3
-      Redirecting to
-      = link_to 'flickr.com', 'http://flickr.com'
-      to
-      = link_to 'login', @auth_url, class: 'hasTwipsy', title: "click here to login."
-      in
-      %span#countdown
-        5
-      secs...
-  #redirect-link
-    %h3
-      Auto redirection stopped.
-      = link_to 'Click here to login', @auth_url
-
-  .flickr-login-notes
-    *
-    %span.site-name klekr
-    links with your flickr account so that you don't have to create yet another account.
-
+      = link_to "<< Back to My Stream", slideshow_path
   #welcome-message.well
 
-    %h2.uppercase#stop-countdown-link
+    %h2.uppercase#want-more-link
       %a#stop-countdown.help-title{href: '#'}
         Want to know more about&nbsp;
         %span.site-name> klekr

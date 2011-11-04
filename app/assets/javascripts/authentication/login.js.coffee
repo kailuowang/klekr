@@ -1,4 +1,4 @@
-class window.Login
+class window.Login extends ViewBase
   constructor: (@authUrl) ->
     @helpTitle = $('.help-title')
     @helpTitle.click_ this._displayHelp
@@ -6,6 +6,12 @@ class window.Login
     $('.site-subtitle').addClass('fadeInRight')
     $('.learn-more').click_ this._toggleMoreAbout
     $('.back-to-about').click_ this._toggleMoreAbout
+    if klekr.Global.redirectedToLogin and !klekr.Global.showDetail
+      $('#countDownRedirect').show()
+      this.redirectCountdown(9)
+    if klekr.Global.showDetail
+      $('#want-more-link').hide()
+      $('#welcome-message #detail-info').show()
 
   _toggleMoreAbout: =>
     $('#about').slideToggle()
@@ -29,7 +35,7 @@ class window.Login
 
   _displayHelp: =>
     this._stopCountdown()
-    $('#stop-countdown-link').slideUp()
+    $('#want-more-link').slideUp()
     $('#welcome-message #detail-info').slideDown()
 
   _nextCountdown: (seconds) =>
@@ -37,8 +43,9 @@ class window.Login
 
   _stopCountdown: =>
     @stopCountdown = true
-    $('#redirect-link').show()
-    $('#countDownRedirect').hide()
+    if this.showing($('#countDownRedirect'))
+      $('#redirect-link').show()
+      $('#countDownRedirect').hide()
 
   _loadAnnouncement: =>
     @tweetPanel ?= $(".tweet")
