@@ -1,3 +1,5 @@
+@import '../global/global'
+
 #top-banner-left
   .source-icon-placeholder
     margin-right: 5px
@@ -63,7 +65,8 @@
   height: 244px
   line-height: 244px
 
-#bottomBanner 
+#bottomBanner
+  @include unselectable
   width: 100%
   text-align: center
   position: absolute
@@ -82,6 +85,7 @@
   height: 23px
 
 .side-nav
+  @include unselectable
   display: none
   width: 50px
   vertical-align: middle
@@ -93,7 +97,9 @@
   &.left
     left: 0px
   .arrow
+    @include unselectable
     display: none
+
   .arrow:hover
     color: #404040
 
@@ -107,6 +113,7 @@
     margin-right: auto
 
     #imageFrameInner
+      @include unselectable
       margin-left: auto
       margin-right: auto
       #imageCaption
