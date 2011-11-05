@@ -29,96 +29,65 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 /* originally authored by Nick Pettit - https://github.com/nickpettit/glide */
 
-@-webkit-keyframes pulse {
-    0% { -webkit-transform: scale(1); }	
-	50% { -webkit-transform: scale(1.1); }
-    100% { -webkit-transform: scale(1); }
-}
-@-moz-keyframes pulse {
-    0% { -moz-transform: scale(1); }	
-	50% { -moz-transform: scale(1.1); }
-    100% { -moz-transform: scale(1); }
-}
-@-ms-keyframes pulse {
-    0% { -ms-transform: scale(1); }	
-	50% { -ms-transform: scale(1.1); }
-    100% { -ms-transform: scale(1); }
-}
-@-o-keyframes pulse {
-    0% { -o-transform: scale(1); }	
-	50% { -o-transform: scale(1.1); }
-    100% { -o-transform: scale(1); }
-}
-@keyframes pulse {
-    0% { transform: scale(1); }	
-	50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}
 
-.pulse {
-	-webkit-animation-name: pulse;
-	-moz-animation-name: pulse;
-	-ms-animation-name: pulse;
-	-o-animation-name: pulse;
-	animation-name: pulse;
-}
 @-webkit-keyframes fadeInRight {
 	0% {
 		opacity: 0;
-		-webkit-transform: translateX(20px);
+		padding-left: 20px;
 	}
 	
 	100% {
 		opacity: 1;
-		-webkit-transform: translateX(0);
+		padding-left: 0px;
+
 	}
 }
 
 @-moz-keyframes fadeInRight {
 	0% {
 		opacity: 0;
-		-moz-transform: translateX(20px);
+		padding-left: 20px;
 	}
 	
 	100% {
 		opacity: 1;
-		-moz-transform: translateX(0);
+		padding-left: 0px;
 	}
 }
 
 @-ms-keyframes fadeInRight {
 	0% {
 		opacity: 0;
-		-ms-transform: translateX(20px);
+		padding-left: 20px;
 	}
 	
 	100% {
 		opacity: 1;
-		-ms-transform: translateX(0);
+		padding-left: 0px;
 	}
 }
 
 @-o-keyframes fadeInRight {
 	0% {
 		opacity: 0;
-		-o-transform: translateX(20px);
+		padding-left: 20px;
 	}
 	
 	100% {
 		opacity: 1;
-		-o-transform: translateX(0);
+		padding-left: 0px;
 	}
 }
 
 @keyframes fadeInRight {
 	0% {
 		opacity: 0;
-		transform: translateX(20px);
+		padding-left: 20px;
 	}
 	
 	100% {
 		opacity: 1;
-		transform: translateX(0);
+		padding-left: 0px;
 	}
 }
 

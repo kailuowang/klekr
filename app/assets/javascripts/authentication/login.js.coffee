@@ -2,8 +2,7 @@ class window.Login extends ViewBase
   constructor: (@authUrl) ->
     @helpTitle = $('.help-title')
     @helpTitle.click_ this._displayHelp
-    this._loadAnnouncement()
-    $('.site-subtitle').addClass('fadeInRight')
+
     $('.learn-more').click_ this._toggleMoreAbout
     $('.back-to-about').click_ this._toggleMoreAbout
     if klekr.Global.redirectedToLogin and !klekr.Global.showDetail
@@ -12,6 +11,7 @@ class window.Login extends ViewBase
     if klekr.Global.showDetail
       $('#want-more-link').hide()
       $('#welcome-message #detail-info').show()
+    this._loadAnnouncement()
 
   _toggleMoreAbout: =>
     $('#about').slideToggle()
@@ -57,7 +57,7 @@ class window.Login extends ViewBase
       loading_text: "loading announcements...",
       fetch: 20,
       filter: ((t) -> ! /^@\w+/.test(t["tweet_raw_text"])),
-      template: '{time}, {user}: {text}'
+      template: "<b>{user}</b>: {text} <span class='time'>{time}</span>"
     )
     @tweetPanel.click(this._stopCountdown)
 
