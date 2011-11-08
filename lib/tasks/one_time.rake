@@ -10,7 +10,7 @@ namespace :one_time do
       c.pictures.each do |pic|
         begin
           pi = flickr.photos.getInfo(photo_id: pic.pic_info.id)
-          pic.update_attribute(:description, pi.description) if pic.description.present?
+          pic.update_attribute(:description, pi.description) if pi.description.present?
           print '.'
         rescue
           pic.update_attributes(no_longer_valid: true)
