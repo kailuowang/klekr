@@ -1,11 +1,18 @@
-CREATE TABLE "collectors" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" varchar(255), "user_name" varchar(255), "full_name" varchar(255), "auth_token" varchar(255), "created_at" datetime, "updated_at" datetime);
+CREATE TABLE "active_admin_comments" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "resource_id" integer NOT NULL, "resource_type" varchar(255) NOT NULL, "author_id" integer, "author_type" varchar(255), "body" text, "created_at" datetime, "updated_at" datetime, "namespace" varchar(255));
+CREATE TABLE "admin_users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "email" varchar(255) DEFAULT '' NOT NULL, "encrypted_password" varchar(128) DEFAULT '' NOT NULL, "reset_password_token" varchar(255), "reset_password_sent_at" datetime, "remember_created_at" datetime, "sign_in_count" integer DEFAULT 0, "current_sign_in_at" datetime, "last_sign_in_at" datetime, "current_sign_in_ip" varchar(255), "last_sign_in_ip" varchar(255), "created_at" datetime, "updated_at" datetime);
+CREATE TABLE "collectors" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" varchar(255), "user_name" varchar(255), "full_name" varchar(255), "auth_token" varchar(255), "created_at" datetime, "updated_at" datetime, "last_login" datetime, "collection_synced" boolean DEFAULT 'f');
 CREATE TABLE "delayed_jobs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "priority" integer DEFAULT 0, "attempts" integer DEFAULT 0, "handler" text, "last_error" text, "run_at" datetime, "locked_at" datetime, "failed_at" datetime, "locked_by" varchar(255), "created_at" datetime, "updated_at" datetime);
-CREATE TABLE "flickr_streams" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" varchar(255), "last_sync" datetime, "created_at" datetime, "updated_at" datetime, "type" varchar(255), "username" varchar(255), "user_url" varchar(255), "collector_id" integer, "collecting" boolean DEFAULT 'f');
+CREATE TABLE "flickr_streams" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" varchar(255), "last_sync" datetime, "created_at" datetime, "updated_at" datetime, "type" varchar(255), "username" varchar(255), "collector_id" integer, "collecting" boolean DEFAULT 'f');
 CREATE TABLE "monthly_scores" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "month" integer, "year" integer, "score" float DEFAULT 0, "num_of_pics" integer DEFAULT 0, "flickr_stream_id" integer, "flickr_stream_type" varchar(255), "created_at" datetime, "updated_at" datetime);
-CREATE TABLE "pictures" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "created_at" datetime, "updated_at" datetime, "date_upload" datetime, "url" varchar(255), "pic_info_dump" text, "viewed" boolean DEFAULT 'f', "owner_name" varchar(255), "stream_rating" float, "rating" integer DEFAULT 0, "collector_id" integer, "collected" boolean, "faved_at" DateTime);
+CREATE TABLE "pictures" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "created_at" datetime, "updated_at" datetime, "date_upload" datetime, "url" varchar(255), "pic_info_dump" text, "viewed" boolean DEFAULT 'f', "owner_name" varchar(255), "stream_rating" float, "rating" integer DEFAULT 0, "collector_id" integer, "collected" boolean, "faved_at" DateTime, "no_longer_valid" boolean, "description" text);
 CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL);
 CREATE TABLE "syncages" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "picture_id" integer, "flickr_stream_id" integer, "created_at" datetime, "updated_at" datetime);
 CREATE INDEX "delayed_jobs_priority" ON "delayed_jobs" ("priority", "run_at");
+CREATE INDEX "index_active_admin_comments_on_author_type_and_author_id" ON "active_admin_comments" ("author_type", "author_id");
+CREATE INDEX "index_active_admin_comments_on_namespace" ON "active_admin_comments" ("namespace");
+CREATE INDEX "index_admin_notes_on_resource_type_and_resource_id" ON "active_admin_comments" ("resource_type", "resource_id");
+CREATE UNIQUE INDEX "index_admin_users_on_email" ON "admin_users" ("email");
+CREATE UNIQUE INDEX "index_admin_users_on_reset_password_token" ON "admin_users" ("reset_password_token");
 CREATE UNIQUE INDEX "index_collectors_on_user_id" ON "collectors" ("user_id");
 CREATE INDEX "index_flickr_streams_on_collector_id" ON "flickr_streams" ("collector_id");
 CREATE INDEX "index_pictures_on_collector_id" ON "pictures" ("collector_id");
@@ -13,6 +20,8 @@ CREATE INDEX "index_pictures_on_date_upload" ON "pictures" ("date_upload");
 CREATE INDEX "index_pictures_on_stream_rating" ON "pictures" ("stream_rating");
 CREATE INDEX "index_pictures_on_url" ON "pictures" ("url");
 CREATE INDEX "index_pictures_on_viewed" ON "pictures" ("viewed");
+CREATE INDEX "index_syncages_on_flickr_stream_id" ON "syncages" ("flickr_stream_id");
+CREATE INDEX "index_syncages_on_picture_id" ON "syncages" ("picture_id");
 CREATE INDEX "index_syncages_on_picture_id_and_flickr_stream_id" ON "syncages" ("picture_id", "flickr_stream_id");
 CREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version");
 INSERT INTO schema_migrations (version) VALUES ('20110301043936');
@@ -70,3 +79,21 @@ INSERT INTO schema_migrations (version) VALUES ('20110811211434');
 INSERT INTO schema_migrations (version) VALUES ('20110813213251');
 
 INSERT INTO schema_migrations (version) VALUES ('20110820042648');
+
+INSERT INTO schema_migrations (version) VALUES ('20110828011824');
+
+INSERT INTO schema_migrations (version) VALUES ('20110917183940');
+
+INSERT INTO schema_migrations (version) VALUES ('20110917183941');
+
+INSERT INTO schema_migrations (version) VALUES ('20110917223930');
+
+INSERT INTO schema_migrations (version) VALUES ('20110918025317');
+
+INSERT INTO schema_migrations (version) VALUES ('20111006024816');
+
+INSERT INTO schema_migrations (version) VALUES ('20111016183937');
+
+INSERT INTO schema_migrations (version) VALUES ('20111108002519');
+
+INSERT INTO schema_migrations (version) VALUES ('20111108002647');

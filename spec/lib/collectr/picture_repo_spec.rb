@@ -93,6 +93,14 @@ describe Collectr::PictureRepo do
       pic.save!
       @repo.find_or_initialize_from_pic_info(pic_info).should_not == pic
     end
+
+    it "create picture with description" do
+      pic_info = Factory.next(:pic_info)
+      pic_info.to_hash['description'] = "a description"
+      pic = Collectr::PictureRepo.new(Factory(:collector)).find_or_initialize_from_pic_info(pic_info)
+      pic.description.should == 'a description'
+      pic.pic_info.description.should be_blank
+    end
   end
 
   describe "#find" do

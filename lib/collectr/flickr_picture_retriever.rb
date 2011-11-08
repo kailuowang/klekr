@@ -16,7 +16,7 @@ module Collectr
 
 
     def get(per_page = nil, page_number = 1, since = nil, before = nil)
-      opts = {user_id: @user_id, extras: 'date_upload, owner_name'}.
+      opts = {user_id: @user_id, extras: 'date_upload, owner_name, description'}.
               merge(paging_opts(per_page, page_number)).
               merge(range_opts(since, before))
       begin

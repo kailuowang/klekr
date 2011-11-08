@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111016183937) do
+ActiveRecord::Schema.define(:version => 20111108002647) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -113,6 +113,7 @@ ActiveRecord::Schema.define(:version => 20111016183937) do
     t.boolean  "collected"
     t.datetime "faved_at"
     t.boolean  "no_longer_valid"
+    t.text     "description"
   end
 
   add_index "pictures", ["collector_id"], :name => "index_pictures_on_collector_id"
@@ -128,6 +129,8 @@ ActiveRecord::Schema.define(:version => 20111016183937) do
     t.datetime "updated_at"
   end
 
+  add_index "syncages", ["flickr_stream_id"], :name => "index_syncages_on_flickr_stream_id"
   add_index "syncages", ["picture_id", "flickr_stream_id"], :name => "index_syncages_on_picture_id_and_flickr_stream_id"
+  add_index "syncages", ["picture_id"], :name => "index_syncages_on_picture_id"
 
 end

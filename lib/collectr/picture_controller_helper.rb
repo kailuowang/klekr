@@ -8,6 +8,7 @@ module Collectr
         smallUrl:         picture.small_url,
         interestingness:  picture.stream_rating.to_i,
         title:            picture.title,
+        description:      picture.description,
         flickrPageUrl:    picture.url,
         ownerName:        picture.owner_name,
         ownerId:          picture.owner_id,

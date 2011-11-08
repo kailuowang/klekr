@@ -1,5 +1,5 @@
 require 'flickraw'
-
+#DEPRECATED
 module Collectr
   class FavDownloadr
 

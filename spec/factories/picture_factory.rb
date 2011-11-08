@@ -8,6 +8,7 @@ Factory.sequence :pic_info do |n|
                           "ispublic"  =>  1,
                           "isfriend"  =>  0,
                           "isfamily"  =>  0,
+                          'description' => 'this picture is taken in some really weird place',
                           "ownername"=>  'John Kim',
                           "dateupload"=>"1294841334"}, "photo")
 end
@@ -15,6 +16,7 @@ end
 Factory.define :picture, :class => Picture do |p|
   pic_info = Factory.next(:pic_info)
   p.title pic_info.title
+  p.description pic_info.description
   p.url FlickRaw.url_photopage(pic_info)
   p.pic_info_dump pic_info.marshal_dump
   p.date_upload  Time.at(pic_info.dateupload.to_i).to_datetime

@@ -58,6 +58,7 @@ module Collectr
         Picture.new.tap do |picture|
           picture.url = url
           picture.pic_info = pic_info
+          picture.description = pic_info.to_hash.delete('description')
           picture.collector = @collector
         end
     end

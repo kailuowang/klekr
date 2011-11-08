@@ -10,7 +10,7 @@ describe Collectr::FlickrPictureRetriever do
   describe "#get" do
     it "should sync with owner_name and date_upload" do
       @flickr.should_receive(:getList).
-          with(hash_including(extras: 'date_upload, owner_name')).and_return([])
+          with(hash_including(extras: 'date_upload, owner_name, description')).and_return([])
 
       @retriever.get()
     end

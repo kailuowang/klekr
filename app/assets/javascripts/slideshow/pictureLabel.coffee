@@ -18,6 +18,11 @@ class window.PictureLabel extends ViewBase
     @titleLink ?= @panel.find('#title-link')
     @titleLink.attr('href', picture.flickrPageUrl)
     @titleLink.text picture.displayTitle()
+
+    @description ?= @panel.find('#description')
+    @description.html(picture.description)
+    this.setVisible(@description, picture.description? and picture.description.length > 0)
+
     @date ?= @panel.find('#title #date')
     @date.text(picture.dateUpload.substr(0,7).replace('-','/') )
     @artistCollectionLink ?= @panel.find('#artist-collection')
