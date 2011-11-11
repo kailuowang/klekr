@@ -9,12 +9,6 @@ class window.SourcesGridview extends ViewBase
 
   addSource: (source) =>
     newCell = @cellTemplate.clone()
-    this._loadSource(newCell, source)
+    new SourceCell(newCell, source)
     @grid.append(newCell)
     newCell.show()
-
-  _loadSource: (cell, source)=>
-    cell.find('.source-icon').attr('src', source.iconUrl)
-    cell.find('.source-icon-link').attr('href', source.slideUrl)
-    cell.find('.source-name').text(source.username + "'s")
-    cell.find('.source-type').text(source.typeDisplay)

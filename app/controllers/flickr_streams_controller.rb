@@ -33,12 +33,12 @@ class FlickrStreamsController < ApplicationController
 
   def subscribe
     @flickr_stream.subscribe
-    js_ok
+    render_json data_for_stream(@flickr_stream)
   end
 
   def unsubscribe
     @flickr_stream.unsubscribe
-    js_ok
+    render_json data_for_stream(@flickr_stream)
   end
 
   def pictures

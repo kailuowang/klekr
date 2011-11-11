@@ -16,7 +16,8 @@ module Collectr
         type: stream.type,
         typeDisplay: stream.type_display,
         slideUrl: flickr_stream_path(stream),
-        rating: stream.star_rating
+        rating: stream.star_rating,
+        subscribed: stream.collecting
       }
     end
   end

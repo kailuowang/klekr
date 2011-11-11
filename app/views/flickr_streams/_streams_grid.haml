@@ -1,9 +1,14 @@
 .sources-grid
   .hidden
     .source-cell.cell
-      %a.source-icon-link{target: '_blank'}
+      .top-bar.fade-transition.invisible
+        %a#remove.button{href: '#'} ×
+        %a#add.button.hidden{href: '#'} +
+      .main-part
         .source-icon-placeholder
-
-          %img.source-icon.shadow
-        .source-name.text-shadow
-        .source-type.text-shadow
+          %a.source-icon-link{target: '_blank'}
+            %img.source-icon.shadow
+        %a.source-icon-link{target: '_blank'}
+          .source-name.text-shadow
+        %a.source-icon-link{target: '_blank'}
+          .source-type.text-shadow
