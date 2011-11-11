@@ -7,10 +7,13 @@ class window.SourceCell extends ViewBase
     @mainPart = @cell.find('.main-part')
     @removeBtn = @cell.find('#remove')
     @addBtn = @cell.find('#add')
+    @server = klekr.Global.server
+
+  registerEvents: =>
+    @cell.hover  (() => this._toggleTopBar(true)), (() => this._toggleTopBar(false))
     @removeBtn.click_ this._remove
     @addBtn.click_ this._add
-    @server = klekr.Global.server
-    @cell.hover  (() => this._toggleTopBar(true)), (() => this._toggleTopBar(false))
+
 
   _remove: =>
     @removeBtn.fadeOut()

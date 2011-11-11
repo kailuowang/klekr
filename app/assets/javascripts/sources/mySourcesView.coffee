@@ -8,14 +8,16 @@ class window.MySourcesView extends ViewBase
     @newSourcesAddedPanel = $('#new-sources-added')
     $('#close-new-sources-added').click_ => @newSourcesAddedPanel.slideUp()
     @expandLink.click_ this._toggleManagementPanel
+    @sourceCells = []
 
   clear: =>
     @container.empty()
     @indicator.show()
+    @sourceCells = []
 
   addSource: (source) =>
     categoryDiv = this._ensureCategory(source.rating)
-    this._sourcesGridView(categoryDiv).addSource(source)
+    @sourceCells.push this._sourcesGridView(categoryDiv).addSource(source)
 
   onAllSourcesLoaded: (empty)=>
     this.setVisible($('#empty-sources'), empty)
@@ -23,6 +25,8 @@ class window.MySourcesView extends ViewBase
     this._setExpandLinkText(empty)
     $('#sources-management').show()
     @indicator.hide()
+    unless empty
+      this._registerCellEvents()
 
   showContacts: =>
     contacts-list
@@ -32,6 +36,9 @@ class window.MySourcesView extends ViewBase
     @newSourcesAddedPanel.find('#num-of-sources').text(collectorInfo.sources)
     $(window).scrollTop 0
     @newSourcesAddedPanel.slideDown()
+
+  _registerCellEvents: =>
+    source.registerEvents() for source in @sourceCells
 
   _createCategory: (star) =>
     newStarCategory = @template.clone()

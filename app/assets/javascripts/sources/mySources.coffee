@@ -37,7 +37,8 @@ class window.MySources
     this._display sources
 
   _display: (sources) =>
-    @view.addSource(source) for source in sources
+    for source in sources
+      @view.addSource(source)
 
 $ ->
   contactImporter = new ContactsImporter(__contactsPath__, __importContactPath__)
