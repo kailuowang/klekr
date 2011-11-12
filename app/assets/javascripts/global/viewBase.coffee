@@ -51,3 +51,5 @@ class window.ViewBase extends Events
 $ ->
   $.fx.off = ViewBase.isMobile()
   ViewBase.adjustBottom()
+  if $.browser.msie
+    alert("Ooopz, we are still working on supporting Internet Explorer. For now, we highly recommend using Firefox or Chrome to browse klekr.")
