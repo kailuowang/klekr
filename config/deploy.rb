@@ -63,6 +63,7 @@ namespace :deploy do
   task :patch, :roles => :app do
     run_in_app "git checkout ."
     run_in_app "git pull"
+    deploy.prepare_assets
     run_in_app "#{try_sudo} touch tmp/restart.txt"
     deploy.warm_server
   end
