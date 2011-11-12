@@ -10,7 +10,10 @@ class window.Slide extends ModeBase
 
   displayCurrentPicture: =>
     picture = this.currentPicture()
-    slideview.display(picture)
+    if picture.sizeReady
+      slideview.display(picture)
+    else
+      this._monitorPictureReady(picture)
     @favePanel.updateWith(picture)
     this.trigger('progress-changed')
 
@@ -55,3 +58,9 @@ class window.Slide extends ModeBase
       [ 'shift+o', (=> slideview.gotoOwner(true)), "open artist's page in new tab" ]
       [ ['g', 'return', 'up'], this.backToGrid, "go to grid mode" ]
     ].concat(unless klekr.Global.readonly then [[ 'l', slideview.label.expand, "expand picture label" ]] else [])
+
+  _monitorPictureReady: (picture) =>
+    picture.bind 'size-ready', (pic) =>
+      if pic is this.currentPicture()
+        slideview.display(pic)
+

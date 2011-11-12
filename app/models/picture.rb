@@ -115,6 +115,8 @@ class Picture < ActiveRecord::Base
         FlickRaw.url_b(pic_info)
       when :medium
         FlickRaw.url_z(pic_info) + "?zz=1"
+      when :medium_small
+        FlickRaw.url(pic_info)
       when :small
         FlickRaw.url_m(pic_info)
       else
@@ -128,6 +130,10 @@ class Picture < ActiveRecord::Base
 
   def medium_url
     flickr_url(:medium)
+  end
+
+  def medium_small_url
+    flickr_url(:medium_small)
   end
 
   def small_url

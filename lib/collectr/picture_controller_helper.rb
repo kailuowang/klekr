@@ -5,6 +5,7 @@ module Collectr
         id:               picture.string_id,
         largeUrl:         picture.large_url,
         mediumUrl:        picture.medium_url,
+        mediumSmallUrl:   picture.medium_small_url,
         smallUrl:         picture.small_url,
         interestingness:  picture.stream_rating.to_i,
         title:            picture.title,

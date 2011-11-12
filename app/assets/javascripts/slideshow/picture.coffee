@@ -22,7 +22,9 @@ class window.Picture extends Events
     @id = @data.id
     _.defaults(this, @data)
     @width = 640
+    @sizeReady = false
     @canUseLargeVersion = false
+    @canUseMediumVersion = false
     @ready = false
     @index = null
 
@@ -36,8 +38,11 @@ class window.Picture extends Events
   url: =>
     if @canUseLargeVersion
       @data.largeUrl
-    else
+    else if @canUseMediumVersion
       @data.mediumUrl
+    else
+      @data.mediumSmallUrl
+
 
   smallUrl: => @data.smallUrl
 
@@ -71,13 +76,24 @@ class window.Picture extends Events
 
   preloadSmall: (callback)=>
     this._preloadImage @data.smallUrl, (image) =>
-      @canUseLargeVersion = this.largerVersionWithinWindow(image)
+      this._findVersionToDisplay(image)
       this._updateData() if this._smallVersionMightBeInvalid(image)
-      this.trigger('small-version-ready')
+      this.trigger('size-ready', this)
       callback?()
 
   reloadForCurrentCollector: =>
     this._updateData(skip_flickr_resync: true)
+
+  _findVersionToDisplay: (image) =>
+    [largeWidth, largeHeight] = this.guessLargeSize(image.width, image.height)
+    [mediumWidth, mediumHeight] = this.guessMediumSize(image.width, image.height)
+    @canUseLargeVersion = this._isSizeFit(largeWidth, largeHeight)
+    @canUseMediumVersion = this._isSizeFit(mediumWidth, mediumHeight)
+    @sizeReady = true
+
+  _isSizeFit: (width, height) =>
+    captionHeight = 20
+    width < generalView.displayWidth and height < generalView.displayHeight - captionHeight
 
   _updateData: (opts = {}) =>
     if this._updatable()
@@ -96,13 +112,10 @@ class window.Picture extends Events
   _inKlekr: =>
     @data.getViewedPath?
 
-
   preloadLarge: (callback)=>
-    imageUrl = if @canUseLargeVersion then @data.largeUrl else @data.mediumUrl
-    this._preloadImage imageUrl, (image)=>
+    this._preloadImage this.url(), (image)=>
       this._updateSize(image)
       callback?()
-
 
   _preloadImage: (url, onload) =>
     image = new Image()
@@ -113,7 +126,7 @@ class window.Picture extends Events
     unless this._largeVersionInvalid(image)
       @width = image.width
       @ready = true
-      this.trigger('fully-ready')
+      this.trigger('fully-ready', this)
 
   _largeVersionInvalid: (image) =>
     if @canUseLargeVersion
@@ -122,16 +135,15 @@ class window.Picture extends Events
         this._preloadImage @data.mediumUrl, this._updateSize
         true
 
-  largerVersionWithinWindow: (image) =>
-    [largeWidth, largeHeight] = this.guessLargeSize(image.width, image.height)
-    captionHeight = 20
-    largeWidth < generalView.displayWidth and largeHeight < generalView.displayHeight - captionHeight
 
   guessLargeSize: (smallerWidth, smallerHeight) =>
+    this._guessVersionSize(smallerWidth, smallerHeight, 1024)
+
+  guessMediumSize: (smallerWidth, smallerHeight) =>
+    this._guessVersionSize(smallerWidth, smallerHeight, 640)
+
+  _guessVersionSize: (smallerWidth, smallerHeight, versionLongEdge) =>
     longEdge = Math.max(smallerWidth, smallerHeight)
-    ratio = 1024 / longEdge
+    ratio = versionLongEdge / longEdge
     [smallerWidth * ratio, smallerHeight * ratio]
-
-
-
 
