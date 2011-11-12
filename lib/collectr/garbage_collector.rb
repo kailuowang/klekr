@@ -3,30 +3,21 @@ module Collectr
 
     def clean
       outdated_pics.delete_all
-      pics_from_temporary_sources.old(1).delete_all
       uncollected_streams.old(7).delete_all
     end
 
 
     def report
-      counts = <<EOF
+      <<EOF
       Total Pictures: #{Picture.count}
       Total Faved Pictures: #{Picture.faved.count}
       Total Viewed Pictures: #{Picture.viewed.count}
-      Temporary Pictures : #{pics_from_temporary_sources.count}
       Outdated Pictures : #{outdated_pics.count}
       Temporary Streams : #{uncollected_streams.count}
 EOF
-      counts + "\n" +
-        pics_from_temporary_sources.map do |pic|
-          pic.inspect
-        end.join("\n")
     end
 
     private
-    def pics_from_temporary_sources
-      Picture.where(collected: [false, nil]).unfaved
-    end
 
     def outdated_pics
       Picture.viewed.unfaved.old(7)
