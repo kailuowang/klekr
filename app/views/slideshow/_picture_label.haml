@@ -3,9 +3,16 @@
     %a#artist-link
   #expand.fright
     %a#expand-link{href: '#'} [+]
-  #title.clearfix
+  .clearfix
+  #title.fleft
     %a#title-link.hasTwipsy{target: '_blank', title: 'Click title to go to the original flickr page.'}>
     %span#date
+  .fright
+    %a#flickr-link.hasTwipsy{target: '_blank'}
+      = image_tag('url_icon.png')
+      flickr
+
+  .clearfix
 
   #collapsible.hidden
     #description

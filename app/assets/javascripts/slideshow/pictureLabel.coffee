@@ -18,6 +18,8 @@ class window.PictureLabel extends ViewBase
     @titleLink ?= @panel.find('#title-link')
     @titleLink.attr('href', picture.flickrPageUrl)
     @titleLink.text picture.displayTitle()
+    @flickrLink ?= @panel.find('#flickr-link')
+    @flickrLink.attr('href', picture.flickrPageUrl)
 
     @description ?= @panel.find('#description')
     @description.html(picture.description)
