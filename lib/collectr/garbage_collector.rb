@@ -20,7 +20,7 @@ EOF
     private
 
     def outdated_pics
-      Picture.viewed.unfaved.old(7)
+      Picture.viewed.unfaved.old(14)
     end
 
     def uncollected_streams
