@@ -20,9 +20,6 @@ class window.Gallery extends Events
 
     new GalleryControlPanel(this)
 
-    @retriever = this._createPictureRetriever()
-    @retriever.bind('batch-retrieved', this._addPictures)
-    @retriever.bind('done-retrieving', this._onRetrieverFinished)
 
     this._listenHashChange()
 
@@ -57,6 +54,10 @@ class window.Gallery extends Events
   retrieveMorePictures: (pages = 1)=> @retriever.retrieve(pages)
 
   _reset: =>
+    @retriever = this._createPictureRetriever()
+    @retriever.bind('batch-retrieved', this._addPictures)
+    @retriever.bind('done-retrieving', this._onRetrieverFinished)
+
     this.trigger('pre-reset')
     window.location.hash = ''
 
