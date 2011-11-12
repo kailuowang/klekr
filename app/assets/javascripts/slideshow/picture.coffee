@@ -76,7 +76,8 @@ class window.Picture extends Events
 
   preloadSmall: (callback)=>
     this._preloadImage @data.smallUrl, (image) =>
-      this._findVersionToDisplay(image)
+      [@smallWidth, @smallHeight] = [image.width, image.height]
+      this.calculateFitVersion()
       this._updateData() if this._smallVersionMightBeInvalid(image)
       this.trigger('size-ready', this)
       callback?()
@@ -84,9 +85,9 @@ class window.Picture extends Events
   reloadForCurrentCollector: =>
     this._updateData(skip_flickr_resync: true)
 
-  _findVersionToDisplay: (image) =>
-    [largeWidth, largeHeight] = this.guessLargeSize(image.width, image.height)
-    [mediumWidth, mediumHeight] = this.guessMediumSize(image.width, image.height)
+  calculateFitVersion: =>
+    [largeWidth, largeHeight] = this.guessLargeSize()
+    [mediumWidth, mediumHeight] = this.guessMediumSize()
     @canUseLargeVersion = this._isSizeFit(largeWidth, largeHeight)
     @canUseMediumVersion = this._isSizeFit(mediumWidth, mediumHeight)
     @sizeReady = true
@@ -136,14 +137,14 @@ class window.Picture extends Events
         true
 
 
-  guessLargeSize: (smallerWidth, smallerHeight) =>
-    this._guessVersionSize(smallerWidth, smallerHeight, 1024)
+  guessLargeSize: =>
+    this._guessVersionSize(1024)
 
-  guessMediumSize: (smallerWidth, smallerHeight) =>
-    this._guessVersionSize(smallerWidth, smallerHeight, 640)
+  guessMediumSize: =>
+    this._guessVersionSize(640)
 
-  _guessVersionSize: (smallerWidth, smallerHeight, versionLongEdge) =>
-    longEdge = Math.max(smallerWidth, smallerHeight)
+  _guessVersionSize: (versionLongEdge) =>
+    longEdge = Math.max(@smallWidth, @smallHeight)
     ratio = versionLongEdge / longEdge
-    [smallerWidth * ratio, smallerHeight * ratio]
+    [@smallWidth * ratio, @smallHeight * ratio]
 

@@ -3,6 +3,7 @@ class window.Slide extends ModeBase
     this.reset()
     @favePanel = new FavePanel
     slideview.pictureClick this.backToGrid
+    generalView.bind('layout-changed', this._redisplayPicture)
     super('slide')
 
   reset: =>
@@ -36,7 +37,6 @@ class window.Slide extends ModeBase
   atTheBegining: =>
     @currentIndex == 0
 
-
   currentProgress: =>
     @currentIndex
 
@@ -64,3 +64,8 @@ class window.Slide extends ModeBase
       if pic is this.currentPicture()
         slideview.display(pic)
 
+  _redisplayPicture: =>
+    picture = this.currentPicture()
+    if(picture? and picture.sizeReady)
+      picture.calculateFitVersion()
+      slideview.update(picture)

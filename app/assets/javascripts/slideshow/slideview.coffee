@@ -10,7 +10,7 @@ class window.Slideview extends ViewBase
     this._adjustImageFrame()
     generalView.bind('layout-changed', this._adjustImageFrame)
 
-  display: (picture) ->
+  display: (picture) =>
     if this.showing(@pictureArea)
       this.fadeInOut @pictureArea, false, =>
         this._fadeInto(picture)
@@ -18,10 +18,10 @@ class window.Slideview extends ViewBase
       this._fadeInto(picture)
 
   _fadeInto: (picture) =>
-    this.updateDOM(picture)
+    this.update(picture)
     this.fadeInOut(@pictureArea, true)
-
-  updateDOM: (picture) ->
+  
+  update: (picture) ->
     @mainImg.attr('src', picture.url())
     @label.show(picture)
 
