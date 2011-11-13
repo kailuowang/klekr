@@ -16,11 +16,7 @@ class window.Gallery extends Events
     generalView.updateShareLink(@filters.filterSettings())
     @filters.bind('changed', this._reinitToGrid)
     @filters.bind('changed', generalView.updateShareLink)
-
-
     new GalleryControlPanel(this)
-
-
     this._listenHashChange()
 
   init: =>
@@ -40,6 +36,9 @@ class window.Gallery extends Events
     else
       1
 
+  advanceOffset: =>
+    this._unseenPictures().length
+
   pageOf: (picture) => Math.floor( picture.index / this.pageSize() )
 
   inGrid: => @currentMode is @grid
@@ -54,22 +53,28 @@ class window.Gallery extends Events
   retrieveMorePictures: (pages = 1)=> @retriever.retrieve(pages)
 
   _reset: =>
-    @retriever = this._createPictureRetriever()
-    @retriever.bind('batch-retrieved', this._addPictures)
-    @retriever.bind('done-retrieving', this._onRetrieverFinished)
-
     this.trigger('pre-reset')
+    this._resetRetriever()
     window.location.hash = ''
 
     @allPicturesRetrieved = false
     @blank = true
-    @retriever.reset()
     @picturePreloader.clear()
     @pictures = []
     this._alternativeMode().off()
     m.reset() for m in @modes
     @picturePreloader.start()
     this.retrieveMorePictures(@cacheSize)
+
+  _resetRetriever: =>
+    if @retriever?
+      @retriever.reset()
+      @retriever.unbind('batch-retrieved')
+      @retriever.unbind('done-retrieving')
+
+    @retriever = this._createPictureRetriever()
+    @retriever.bind('batch-retrieved', this._addPictures)
+    @retriever.bind('done-retrieving', this._onRetrieverFinished)
 
   _listenHashChange: =>
     $(window).bind 'hashchange', (e) =>
@@ -112,7 +117,7 @@ class window.Gallery extends Events
 
   _createPictureRetriever: =>
     if @advanceByProgress
-      new PictureRetrieverByOffset( this._filterOpts, this.pageSize(), __morePicturesPath__)
+      new PictureRetrieverByOffset( this._filterOpts, this.pageSize(), __morePicturesPath__, this.advanceOffset)
     else
       new PictureRetrieverByPage( this._filterOpts, this.pageSize(), __morePicturesPath__)
 
@@ -150,11 +155,11 @@ class window.Gallery extends Events
   _filterOpts: =>
     filterSettings = @filters.filterSettings()
     _.tap {}, (opts) =>
-      opts.offset = this._unseenPictures().length if @advanceByProgress
       opts.min_rating = filterSettings.rating if filterSettings.rating
       opts.faved_date = filterSettings.faveDate if filterSettings.faveDate
       opts.faved_date_after = filterSettings.faveDateAfter if filterSettings.faveDateAfter
       opts.type = filterSettings.type if filterSettings.type
+
 
   _addPictures: (newPictures) =>
     startPosition = @pictures.length
