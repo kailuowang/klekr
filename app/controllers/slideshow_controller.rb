@@ -46,7 +46,7 @@ class SlideshowController < ApplicationController
   end
 
   def new_pictures
-    opts = params.to_hash.to_options.slice(:offset, :limit, :type)
+    opts = params.to_hash.to_options.slice(:offset, :limit, :type, :viewed)
     new_pictures = Collectr::PictureRepo.new(current_collector).new_pictures(opts)
     render_json_pictures(new_pictures)
   end

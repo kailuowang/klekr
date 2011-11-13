@@ -35,6 +35,9 @@ class window.PictureRetriever extends Events
   _retrieveOpts: (pageOpts) =>
     $.extend(pageOpts, @_filterOptsFn())
 
+  _proceed: =>
+    @_currentPage++
+
   _retry: =>
     @_worker.retry() if klekr.Global.server.onLine()
 

@@ -117,7 +117,9 @@ class window.Gallery extends Events
 
   _createPictureRetriever: =>
     if @advanceByProgress
-      new PictureRetrieverByOffset( this._filterOpts, this.pageSize(), __morePicturesPath__, this.advanceOffset)
+      offsetFn = unless @filters.filterSettings().viewed
+        this.advanceOffset
+      new PictureRetrieverByOffset( this._filterOpts, this.pageSize(), __morePicturesPath__, offsetFn)
     else
       new PictureRetrieverByPage( this._filterOpts, this.pageSize(), __morePicturesPath__)
 
@@ -159,6 +161,7 @@ class window.Gallery extends Events
       opts.faved_date = filterSettings.faveDate if filterSettings.faveDate
       opts.faved_date_after = filterSettings.faveDateAfter if filterSettings.faveDateAfter
       opts.type = filterSettings.type if filterSettings.type
+      opts.viewed = filterSettings.viewed
 
 
   _addPictures: (newPictures) =>
