@@ -5,11 +5,11 @@
   .fleft
     %h3.inline
       My Stream
-    %h5#my-stream-subtitle.inline
-      New Pictures from
-      = link_to 'My Sources', flickr_streams_path
+    %h5#my-stream-subtitle.gallery-option.inline
+      %a{href: '#'} New Pictures from
+      %a.my-source-link{href: flickr_streams_path} My Sources
 
-  #option-button.fleft
+  #option-button.gallery-option.fleft
     = image_tag('option.png')
 
 = render partial: 'slideshow'

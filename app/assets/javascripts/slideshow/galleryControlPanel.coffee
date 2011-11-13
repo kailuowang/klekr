@@ -1,6 +1,6 @@
 class window.GalleryControlPanel extends ViewBase
   constructor: (@gallery)->
-    @optionButton = $('#option-button')
+    @optionButton = $('.gallery-option')
     @panel = $('#slide-options')
 
     @loadingIndicator = @panel.find('#loading')

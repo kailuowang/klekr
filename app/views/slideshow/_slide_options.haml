@@ -9,9 +9,14 @@
     #stream-type-filter-panel
       %h5
         %label
+          %input#include-viewed-checkbox{type: 'checkbox', name: 'show-viewed'}
+            Show pictures already viewed as well
+      %h5
+        %label
           %input#type-filter-checkbox{type: 'checkbox', name: 'upload-only'}
-            Only pictures from
-            %span.hasTwipsy{title: "Sources of artists' works."}direct sources
+            Hide pictures from
+            %span.hasTwipsy{title: "photographers' faves rather than works."} collection sources
+
     #rating-filter-panel
       %h5.inline
         Rating Higher or Equal:

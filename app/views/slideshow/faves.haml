@@ -8,7 +8,7 @@
   .fleft
     %h3
       My Collection
-  #option-button.fleft
+  #option-button.gallery-option.fleft
     = image_tag('option.png')
   .fleft.has-popover{'data-content' => 'Chose your favorite social network to share. The shared collection will have the same filter settings your are using now.', title: 'Share Your Collection', 'data-popover' => 'below'}
     = render partial: '/general/add_this', locals: {title: "Checkout my klekr collection: ", :dynamic_url => true}
