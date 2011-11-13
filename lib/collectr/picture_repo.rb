@@ -28,11 +28,17 @@ module Collectr
     def new_pictures(opts = {})
       default_opts = {limit: 10, offset: 0}
       opts.reverse_merge!(default_opts)
-      scope = Picture.desc.collected_by(@collector).
+      scope = Picture.collected_by(@collector).
               limit(opts[:limit].to_i).
               offset(opts[:offset].to_i).
               includes(:flickr_streams)
-      scope = scope.unviewed unless opts[:viewed]
+
+      scope = unless opts[:viewed]
+        scope.unviewed.desc
+      else
+        scope.order('created_at DESC')
+      end
+
       if opts[:type].present?
         scope.where("#{::FlickrStream.table_name}.type = ?", opts[:type])
       else
