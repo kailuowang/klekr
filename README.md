@@ -32,7 +32,7 @@ it will display first the photos from the stream swhose photos you fave the most
 ### Expendable Sources of Photos ###
 
 With klekr, not only can you subscribe to someone's upload stream, you can also subscribe to her favorites stream.
-This way you can discover flickr artists that are discovered by your favorite flickr artists.
+This way you can discover flickr photographers that are discovered by your favorite flickr photographers.
 This is very important because it allows you to expand your list of sources of good photos.
 
 
