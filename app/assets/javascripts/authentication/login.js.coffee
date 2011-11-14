@@ -57,7 +57,7 @@ class window.Login extends ViewBase
       loading_text: "loading announcements...",
       fetch: 20,
       filter: ((t) -> ! /^@\w+/.test(t["tweet_raw_text"])),
-      template: "<b>{user}</b>: {text} <span class='time'>{time}</span>"
+      template: "<b>{user}</b>: {text} <span class='time'>{time}</span>  <a class='more' href='{user_url}'>MORE</a>"
     )
     @tweetPanel.click(this._stopCountdown)
 
