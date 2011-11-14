@@ -12,9 +12,10 @@
         #sources-count
           = link_to @current_collector.flickr_streams.count, flickr_streams_path
           sources.
-        #faved-count
-          = link_to @current_collector.pictures.faved.count, faves_slideshow_path
-          pictures collected.
+        - if @current_collector.collection_synced
+          #faved-count
+            = link_to @current_collector.pictures.faved.count, faves_slideshow_path
+            pictures collected.
         #new-pictures-count
           = link_to @current_collector.pictures.unviewed.count, slideshow_path
           new pictures to see.
