@@ -12,6 +12,7 @@ class window.Slide extends ModeBase
   displayCurrentPicture: =>
     picture = this.currentPicture()
     if picture.sizeReady
+      picture.calculateFitVersion()
       slideview.display(picture)
     else
       this._monitorPictureReady(picture)
@@ -65,7 +66,8 @@ class window.Slide extends ModeBase
         slideview.display(pic)
 
   _redisplayPicture: =>
-    picture = this.currentPicture()
-    if(picture? and picture.sizeReady)
-      picture.calculateFitVersion()
-      slideview.update(picture)
+    if this.active()
+      picture = this.currentPicture()
+      if(picture? and picture.sizeReady)
+        picture.calculateFitVersion()
+        slideview.update(picture)
