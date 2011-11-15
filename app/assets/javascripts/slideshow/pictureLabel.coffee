@@ -21,9 +21,7 @@ class window.PictureLabel extends ViewBase
     @flickrLink ?= @panel.find('#flickr-link')
     @flickrLink.attr('href', picture.flickrPageUrl)
 
-    @description ?= @panel.find('#description')
-    @description.html(picture.description)
-    this.setVisible(@description, picture.description? and picture.description.length > 0)
+    this._updateDescription(picture)
 
     @date ?= @panel.find('#title #date')
     @date.text(picture.dateUpload.substr(0,7).replace('-','/') )
@@ -38,6 +36,13 @@ class window.PictureLabel extends ViewBase
 
   expand: =>
     @expandLink.trigger('click')
+
+  _updateDescription: (picture) =>
+    @description ?= @panel.find('#description')
+    @description.html(picture.description)
+    this.setVisible(@description, picture.description? and picture.description.length > 1)
+
+
 
   _updateSources: (streams) ->
     @sources ?= @panel.find('#sources')
