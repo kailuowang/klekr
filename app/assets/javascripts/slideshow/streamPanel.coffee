@@ -1,4 +1,4 @@
-class window.StreamPanel
+class window.StreamPanel extends ViewBase
   constructor: ->
     @startCollectingLink = $('#startCollecting')
     @stopCollectingLink = $('#stopCollecting')
@@ -16,3 +16,7 @@ class window.StreamPanel
 
     @collectingOperationDiv.find('.rating-adjustment-link').bind 'ajax:success', (e, newRating) =>
       @rating.text(newRating)
+
+    @alternativeLink ?= $('#alternative-stream')
+    windowTooSmall =  @alternativeLink.width() >  ($(window).width() / 3.3)
+    this.setVisible(@alternativeLink, !windowTooSmall)
