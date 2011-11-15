@@ -24,6 +24,7 @@ class window.Picture extends Events
     @width = 640
     @sizeReady = false
     @canUseLargeVersion = false
+    @largeVersionAvailable = true
     @canUseMediumVersion = false
     @ready = false
     @index = null
@@ -88,7 +89,7 @@ class window.Picture extends Events
   calculateFitVersion: =>
     [largeWidth, largeHeight] = this.guessLargeSize()
     [mediumWidth, mediumHeight] = this.guessMediumSize()
-    @canUseLargeVersion = this._isSizeFit(largeWidth, largeHeight)
+    @canUseLargeVersion = @largeVersionAvailable and this._isSizeFit(largeWidth, largeHeight)
     @canUseMediumVersion = this._isSizeFit(mediumWidth, mediumHeight)
     @sizeReady = true
 
@@ -133,6 +134,7 @@ class window.Picture extends Events
     if @canUseLargeVersion
       if(image.width is 500 and image.height is 375)
         @canUseLargeVersion = false
+        @largeVersionAvailable = false
         this._preloadImage @data.mediumUrl, this._updateSize
         true
 
