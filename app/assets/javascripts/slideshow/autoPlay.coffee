@@ -7,14 +7,20 @@ class window.AutoPlay extends ViewBase
       @pauseButton = @panel.find('#pause-button')
       @startButton.click_ this._start
       @pauseButton.click_ this.pause
-      @slide.bind 'off', this.hide
-      @slide.bind 'on', this.show
+      this._bindToSlide()
 
   _start: =>
     unless @started
       @started = true
       this._schedule()
       this._updateStatus()
+
+  _bindToSlide: =>
+    @slide.bind 'off', this.hide
+    @slide.bind 'on', this.show
+    @slide.bind 'command-to-navigate', (commander)=>
+      unless commander is this
+        this.pause()
 
   hide: =>
     this.pause()
@@ -38,5 +44,5 @@ class window.AutoPlay extends ViewBase
 
   _goNext: =>
     if @started and @slide.active()
-     @started = true
+     @slide.navigateToNext(this)
      this._schedule()

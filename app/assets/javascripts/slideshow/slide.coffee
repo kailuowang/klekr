@@ -22,15 +22,18 @@ class window.Slide extends ModeBase
   currentPicture: =>
     gallery.pictures[@currentIndex]
 
-  navigateToNext: =>
+  navigateToNext: (commander)=>
     this.currentPicture().getViewed()
     unless this.atTheLast()
       this.goToIndex((@currentIndex + 1))
       this.trigger('progressed')
+      this.trigger('command-to-navigate', commander)
 
-  navigateToPrevious: =>
+  navigateToPrevious: (commander)=>
     unless this.atTheBegining()
       this.goToIndex((@currentIndex - 1))
+      this.trigger('command-to-navigate', commander)
+
 
   atTheLast: =>
      @currentIndex == gallery.size() - 1
