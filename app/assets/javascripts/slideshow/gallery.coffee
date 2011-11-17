@@ -16,6 +16,7 @@ class window.Gallery extends Events
     generalView.updateShareLink(@filters.filterSettings())
     @filters.bind('changed', this._reinitToGrid)
     @filters.bind('changed', generalView.updateShareLink)
+    @autoPlay = new AutoPlay(@slide)
     new GalleryControlPanel(this)
     this._listenHashChange()
 
@@ -56,7 +57,7 @@ class window.Gallery extends Events
     this.trigger('pre-reset')
     this._resetRetriever()
     window.location.hash = ''
-
+    @autoPlay.pause()
     @allPicturesRetrieved = false
     @blank = true
     @picturePreloader.clear()
