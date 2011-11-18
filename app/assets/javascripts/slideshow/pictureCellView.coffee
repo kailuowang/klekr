@@ -20,6 +20,7 @@ class window.PictureCellView extends ViewBase
     img = @cellDiv.find('#imgItem')
     img.attr('src', @picture.smallUrl())
     this.setVisible(@loadingIndicator, !@picture.ready)
+    @cellDiv.find('.hasTwipsy').twipsy();
     this._initRating()
 
   _initRating:  =>
