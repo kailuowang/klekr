@@ -10,7 +10,7 @@
 = render partial: 'gridview'
 
 #empty-gallery-message.container.hidden
-  #empty-gallery-message.well
+  .well
     - if @empty_message_partial.present?
       = render partial: @empty_message_partial
     - else

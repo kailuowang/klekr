@@ -25,6 +25,11 @@ class window.GalleryFilters extends ViewBase
     settings.faveDateAfter = this._getDate(@faveDateAfterBox)
     settings
 
+  hasActiveFilter: =>
+    for name, value of this.filterSettings()
+      return true if value?
+    false
+
   _getDate: (input) =>
     input.val() if input.length > 0 and input.val().length > 0
 

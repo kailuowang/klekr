@@ -144,12 +144,8 @@ class window.Gallery extends Events
 
   _emptyGallery: =>
     @currentMode.clear?()
-    if this._noActiveFilter()
+    unless @filters.hasActiveFilter()
         generalView.showEmptyGalleryMessage()
-
-  _noActiveFilter: =>
-    filterSettings = @filters.filterSettings()
-    _(filterSettings).size() is 0
 
   _reinitToGrid: =>
     @currentMode = @grid
