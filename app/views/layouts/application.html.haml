@@ -7,7 +7,7 @@
     = javascript_include_tag 'application'
     - if @current_collector
       :javascript
-        klekr.Global.currentCollector = {id: #{@current_collector.id}};
+        klekr.Global.currentCollector = {id: #{@current_collector.id}, name: #{@current_collector.user_name}, flickrId: #{@current_collector.user_id} };
     %meta{name: "viewport", content: "width=device-width, height=device-height, maximum-scale=1.4, initial-scale=1.0, user-scalable=yes"}
     = yield(:head)
     = csrf_meta_tag
