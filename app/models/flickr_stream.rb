@@ -90,13 +90,12 @@ class FlickrStream < ActiveRecord::Base
     end
 
     protected
-    def sync_uses(flickr_module, get_photo_method, related_time_field)
+    def sync_uses(opts)
       define_method(:retriever) do
-        @retriever ||= Collectr::FlickrPictureRetriever.new(module: flickr_module,
-                                                            method: get_photo_method,
-                                                            time_field: related_time_field,
-                                                            user_id: user_id,
-                                                            collector: collector)
+        @retriever ||= Collectr::FlickrPictureRetriever.new(opts.merge(
+                                                              user_id: user_id,
+                                                              collector: collector)
+                                                            )
       end
     end
 

@@ -10,17 +10,25 @@ module Collectr
       @method = params[:method]
       @time_field = params[:time_field]
       @user_id = params[:user_id]
+      @id_field = params[:id_field] || :user_id
       @collector = params[:collector]
       @default_per_page = params[:per_page] || FLICKR_PHOTOS_PER_PAGE
     end
 
+    def get_module
+      if @module.is_a?(Array)
+        @module.inject(flickr) { |pm, mname| pm.send(mname)}
+      else
+        flickr.send(@module)
+      end
+    end
 
     def get(per_page = nil, page_number = 1, since = nil, before = nil)
-      opts = {user_id: @user_id, extras: 'date_upload, owner_name, description'}.
+      opts = {@id_field => @user_id, extras: 'date_upload, owner_name, description'}.
               merge(paging_opts(per_page, page_number)).
               merge(range_opts(since, before))
       begin
-        flickr.send(@module).send(@method, opts)
+        get_module.send(@method, opts)
       rescue FlickRaw::FailedResponse => e
         handle_flickr_error(e)
       end
@@ -41,7 +49,6 @@ module Collectr
       end
       result
     end
-
 
     def time_field(prefix)
       (prefix + @time_field.to_s).to_sym
@@ -64,8 +71,10 @@ module Collectr
 
     def range_opts(since, before)
       {}.tap do |opts|
-        opts[min_time_field] = since.to_i if since.present?
-        opts[max_time_field] = before.to_i if before.present?
+        if(@time_field)
+          opts[min_time_field] = since.to_i if since.present?
+          opts[max_time_field] = before.to_i if before.present?
+        end
       end
     end
 
