@@ -14,8 +14,9 @@ Collectr::Application.routes.draw do
     member do
       get 'info'
     end
-  end
 
+    resources :group_streams, :only => [:index]
+  end
 
   resources :flickr_streams, :only => [:index, :show, :create] do
     member do

@@ -3,6 +3,7 @@ function authentications_path(params){ return '/authentications'}
 function health_path(params){ return '/health'}
 function editor_recommendations_path(params){ return '/editor_recommendations'}
 function info_collector_path(params){ return '/collectors/' + params.id + '/info'}
+function collector_group_streams_path(params){ return '/collectors/' + params.collector_id + '/group_streams'}
 function sync_flickr_stream_path(params){ return '/flickr_streams/' + params.id + '/sync'}
 function adjust_rating_flickr_stream_path(params){ return '/flickr_streams/' + params.id + '/adjust_rating'}
 function mark_all_as_read_flickr_stream_path(params){ return '/flickr_streams/' + params.id + '/mark_all_as_read'}
@@ -30,7 +31,9 @@ function fave_pictures_slideshow_path(params){ return '/slideshow/fave_pictures'
 function exhibit_pictures_slideshow_path(params){ return '/slideshow/exhibit_pictures'}
 function faves_slideshow_path(params){ return '/slideshow/faves'}
 function exhibit_slideshow_path(params){ return '/slideshow/exhibit'}
+function exhibit_login_slideshow_path(params){ return '/slideshow/exhibit_login'}
 function flickr_stream_slideshow_path(params){ return '/slideshow/flickr_stream'}
 function slideshow_path(params){ return '/slideshow'}
 function jasminerice_path(params){ return '/jasmine'}
+function root_path(params){ return '/'}
 function rails_info_properties_path(params){ return '/rails/info/properties'}
