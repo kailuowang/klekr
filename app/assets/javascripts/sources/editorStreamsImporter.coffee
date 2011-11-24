@@ -3,14 +3,14 @@ class window.EditorStreamsImporter extends ViewBase
     @_popup = $('#import-editor-streams-popup')
     streams_grid = @_popup.find('.sources-grid:first')
     @_streams_gridview = new SourcesGridview(streams_grid)
-    @_loading = $('#loading-streams')
-    @_doImportLink = $('#do-import-streams')
-    @_importProgress = $('#import-streams-progress')
+    @_loading = @_popup.find('#loading-streams')
+    @_doImportLink = @_popup.find('#do-import-streams')
+    @_importProgress = @_popup.find('#import-streams-progress')
     @_progressBar = @_popup.find('#streams-progress-bar')
-    @_streamsDisplay = $('#display-streams')
+    @_streamsDisplay = @_popup.find('#display-streams')
     $('#add-editor-streams-link').click_ this._init
     @_doImportLink.click_ this._doImport
-    $('.close-btn').click_ this._close
+    @_popup.find('.close-btn').click_ this._close
 
   _init: =>
     this.popup @_popup
