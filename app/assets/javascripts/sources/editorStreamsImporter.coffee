@@ -10,6 +10,7 @@ class window.EditorStreamsImporter extends ViewBase
     @_streamsDisplay = $('#display-streams')
     $('#add-editor-streams-link').click_ this._init
     @_doImportLink.click_ this._doImport
+    $('.close-btn').click_ this._close
 
   _init: =>
     this.popup @_popup
@@ -20,8 +21,12 @@ class window.EditorStreamsImporter extends ViewBase
       @recommendation_streams = (new Source(d) for d in data)
       this._showEditorStreams(@recommendation_streams)
 
+  _close: =>
+     @_popup.close()
+
   _showEditorStreams: (streams) =>
     @_streams_gridview.load(streams)
+    @_streams_gridview.registerEvents()
     @_loading.hide()
     @_doImportLink.show()
     @_streamsDisplay.fadeIn()

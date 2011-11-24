@@ -1,5 +1,7 @@
 #import-editor-streams-popup.modal-popup
-  #loading-streams
+  .fright
+    %a.close-btn{href: "#"} ×
+  #loading-streams.clearfix
     Loading klekr's recommendations
     = image_tag '/assets/loading.gif'
   #display-streams.hidden
@@ -8,11 +10,12 @@
     #streams-list.row.well.mt20
       = render partial: 'streams_grid'
 
-    .fright
+    .fright.tright
       %h3
         %a#do-import-streams.btn.large.primary{href: '#'}
-          Yes! Add them!
-
+          Yes! Add Them All!
+      %span#add-individually-note
+        Or, hover mouse on icons to add individually.
   #import-streams-progress.hidden
     %h4 Adding klekr recommended sources and some of their pictures
     #streams-progress-bar.progress-bar

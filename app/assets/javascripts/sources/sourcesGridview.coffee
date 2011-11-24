@@ -1,6 +1,7 @@
 class window.SourcesGridview extends ViewBase
   constructor: (@grid) ->
     @cellTemplate = @grid.find('.source-cell:first')
+    @cells = []
 
   load: (sources) =>
     @grid.empty()
@@ -11,4 +12,9 @@ class window.SourcesGridview extends ViewBase
     newCell = @cellTemplate.clone()
     @grid.append(newCell)
     newCell.show()
-    new SourceCell(newCell, source)
+    cell = new SourceCell(newCell, source)
+    @cells.push cell
+    cell
+
+  registerEvents: =>
+    cell.registerEvents() for cell in @cells

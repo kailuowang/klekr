@@ -8,6 +8,7 @@ class window.SourceCell extends ViewBase
     @removeBtn = @cell.find('#remove')
     @addBtn = @cell.find('#add')
     @server = klekr.Global.server
+    this._updateStatus()
 
   registerEvents: =>
     @cell.hover  (() => this._toggleTopBar(true)), (() => this._toggleTopBar(false))
@@ -17,14 +18,17 @@ class window.SourceCell extends ViewBase
 
   _remove: =>
     @removeBtn.fadeOut()
-    @server.put unsubscribe_flickr_stream_path(@source), {}, this._updateStatus
+    @server.put unsubscribe_flickr_stream_path(@source), {}, this._refreshFromData
 
   _add: =>
     @addBtn.fadeOut()
-    @server.put subscribe_flickr_stream_path(@source), {}, this._updateStatus
+    @server.put subscribe_flickr_stream_path(@source), {}, this._refreshFromData
 
-  _updateStatus: (data)=>
+  _refreshFromData: (data)=>
     @source = new Source(data)
+    this._updateStatus()
+
+  _updateStatus: =>
     this.setVisible @removeBtn, @source.subscribed
     this.setVisible @addBtn, !@source.subscribed
     @mainPart.toggleClass('removed', !@source.subscribed)

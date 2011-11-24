@@ -8,16 +8,14 @@ class window.MySourcesView extends ViewBase
     @newSourcesAddedPanel = $('#new-sources-added')
     $('#close-new-sources-added').click_ => @newSourcesAddedPanel.slideUp()
     @expandLink.click_ this._toggleManagementPanel
-    @sourceCells = []
 
   clear: =>
     @container.empty()
     @indicator.show()
-    @sourceCells = []
+    @categories = {}
 
   addSource: (source) =>
-    categoryDiv = this._ensureCategory(source.rating)
-    @sourceCells.push this._sourcesGridView(categoryDiv).addSource(source)
+    this._ensureCategory(source.rating).addSource(source)
 
   onAllSourcesLoaded: (empty)=>
     this.setVisible($('#empty-sources'), empty)
@@ -38,9 +36,9 @@ class window.MySourcesView extends ViewBase
     @newSourcesAddedPanel.slideDown()
 
   _registerCellEvents: =>
-    source.registerEvents() for source in @sourceCells
+    category.registerEvents() for category in _(@categories).values()
 
-  _createCategory: (star) =>
+  _createCategoryDiv: (star) =>
     newStarCategory = @template.clone()
     newStarCategory.attr('id', 'star' + star)
     this._updateStar(newStarCategory, star)
@@ -49,11 +47,8 @@ class window.MySourcesView extends ViewBase
     newStarCategory.show()
 
   _ensureCategory: (star) =>
-    category = $('#star' + star)
-    if(category.length > 0 )
-      category
-    else
-      this._createCategory(star)
+    @categories ?= {}
+    @categories[star] ?= this._sourcesGridView(this._createCategoryDiv(star))
 
   _updateStar: (categoryDiv, star) =>
     label = categoryDiv.find('.stars-label:first')
