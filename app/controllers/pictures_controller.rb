@@ -43,13 +43,7 @@ class PicturesController < ApplicationController
 
   #GET /pictures/1
   def show
-    respond_to do |format|
-      format.html { redirect_to action: :show, controller: :slideshow, id: params[:id] }
-      format.json do
-        picture = Picture.find(params[:id])
-        render :json => data_for(picture)
-      end
-    end
+    render_json(data_for(@picture))
   end
 
   private

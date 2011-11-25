@@ -19,6 +19,12 @@ class window.PictureRetriever extends Events
     for work in this._createWorks(numOfPages)
       @_q.enQ(work)
 
+  retrievePic: (picId) =>
+    @_q.enQ (callback) =>
+      klekr.Global.server.get picture_path(id: picId), {}, (data) =>
+        this._onPicturesRetrieved [new Picture(data)]
+        callback()
+
   _createWorks: (numOfPages) =>
     for i in [0...numOfPages]
       this._proceed()
@@ -45,9 +51,12 @@ class window.PictureRetriever extends Events
     klekr.Global.server.post @_retrievePath, this._retrieveOpts(pageOpts), (data) =>
       pictures = ( new Picture(picData) for picData in data )
       if pictures.length > 0
-        this.trigger('batch-retrieved', pictures)
-        @_retrievedCount += pictures.length
+        this._onPicturesRetrieved(pictures)
       else
         @_q.clear()
         this._onWorkerDone()
       callback()
+
+  _onPicturesRetrieved: (pictures)=>
+    this.trigger('batch-retrieved', pictures)
+    @_retrievedCount += pictures.length

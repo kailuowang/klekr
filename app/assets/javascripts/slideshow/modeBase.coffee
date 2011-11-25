@@ -18,7 +18,7 @@ class window.ModeBase extends Events
     this.trigger('off')
 
   goToIndex: (index) =>
-    window.location = '#' + "#{this.name}-#{index}"
+    window.location = '#' + "#{this.name}-#{index}-#{gallery.pictures[index].id}"
 
   _createShortcuts: =>
     this._createShortcut(setting) for setting in this.shortcutsSettings()

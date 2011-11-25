@@ -21,7 +21,8 @@ class window.Gallery extends Events
     this._listenHashChange()
 
   init: =>
-    this._reset()
+    [m, i, requestedPicId] = this._infoFromHash()
+    this._reset(requestedPicId)
     @grid.init(this)
 
   size: => @pictures.length
@@ -53,7 +54,8 @@ class window.Gallery extends Events
 
   retrieveMorePictures: (pages = 1)=> @retriever.retrieve(pages)
 
-  _reset: =>
+  _reset: (requestedPicId)=>
+    @currentMode = @slide if requestedPicId?
     this.trigger('pre-reset')
     this._resetRetriever()
     window.location.hash = ''
@@ -65,6 +67,7 @@ class window.Gallery extends Events
     this._alternativeMode().off()
     m.reset() for m in @modes
     @picturePreloader.start()
+    @retriever.retrievePic(requestedPicId) if requestedPicId?
     this.retrieveMorePictures(@cacheSize)
 
   _resetRetriever: =>
@@ -79,20 +82,28 @@ class window.Gallery extends Events
 
   _listenHashChange: =>
     $(window).bind 'hashchange', (e) =>
-      hash = $.param.fragment()
-      return unless hash.length > 0
-      [mode, index] = hash.split('-')
-      index = Math.min(parseInt(index), this.size() - 1)
-      newMode = this[mode]
-      modeChanged = newMode isnt @currentMode
-      if(modeChanged)
-        @currentMode.off()
-        @currentMode = newMode
-        @currentMode.on()
-        this._updateModeIndicatorInView()
-      if(index != this._currentProgress() or @blank or modeChanged )
-        @blank = false
-        @currentMode.updateProgress(index)
+      [mode, index] = this._infoFromHash()
+      this._updateModeAndLocation(mode, index) if mode? and index?
+
+  _updateModeAndLocation: (mode, index) =>
+    newIndex = Math.min(parseInt(index), this.size() - 1)
+    newMode = this[mode]
+    modeChanged = newMode isnt @currentMode
+    if(modeChanged)
+      @currentMode.off()
+      @currentMode = newMode
+      @currentMode.on()
+      this._updateModeIndicatorInView()
+    if(newIndex != this._currentProgress() or @blank or modeChanged )
+      @blank = false
+      @currentMode.updateProgress(newIndex)
+
+  _infoFromHash: =>
+    hash = $.param.fragment()
+    if hash.length > 0
+      hash.split('-')
+    else
+      []
 
   _progressChanged: =>
     this._updateProgressInView()
