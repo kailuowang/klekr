@@ -1,12 +1,11 @@
-#import-editor-streams-popup.modal-popup
+%div.modal-popup.flexible-streams-importer{id: popup_id}
   .fright
     %a.close-btn{href: "#"} ×
   #loading-streams.clearfix
-    Loading klekr recommended sources
+    Loading #{import_type}
     = image_tag '/assets/loading.gif'
   #display-streams.hidden
-    %h4
-      klekr recommended sources
+    %h4= import_type
     #streams-list.row.well.mt20
       = render partial: 'streams_grid'
 
@@ -17,5 +16,5 @@
       %span#add-individually-note
         Or, hover mouse on icons to add individually.
   #import-streams-progress.hidden
-    %h4 Adding klekr recommended sources and some of their pictures
+    %h4 Adding #{import_type} and some of their pictures
     #streams-progress-bar.progress-bar

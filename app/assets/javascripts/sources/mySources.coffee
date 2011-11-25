@@ -1,16 +1,12 @@
 class window.MySources
-  constructor: ( @contactImporter, @editorStreamsImporter)->
-    @view = new MySourcesView
+  constructor: ()->
+    @contactImporter = new ContactsImporter(__contactsPath__, __importContactPath__)
+    @editorStreamsImporter = new EditorStreamsImporter
+    @groupStreamsImporter = new klekr.GroupStreamsImporter
     @addByUserImporter = new AddByUserImporter
     @googleReaderImporter = new GoogleReaderImporter
-    @addByUserImporter.bind 'import-finished', this._sourcesImportDone
-    @addByUserImporter.bind 'sources-imported', this._sourcesImported
-    @contactImporter.bind 'import-finished', this._sourcesImportDone
-    @contactImporter.bind 'sources-imported', this._sourcesImported
-    @editorStreamsImporter.bind 'import-finished', this._sourcesImportDone
-    @editorStreamsImporter.bind 'sources-imported', this._sourcesImported
-    @googleReaderImporter.bind 'import-finished', this._sourcesImportDone
-    @googleReaderImporter.bind 'sources-imported', this._sourcesImported
+    @view = new MySourcesView
+    this._bindImporterEvents([@addByUserImporter, @contactImporter, @editorStreamsImporter, @googleReaderImporter, @groupStreamsImporter])
 
   init: (onInit)=>
     @view.clear()
@@ -40,9 +36,10 @@ class window.MySources
     for source in sources
       @view.addSource(source)
 
-$ ->
-  contactImporter = new ContactsImporter(__contactsPath__, __importContactPath__)
-  editorStreamsImporter = new EditorStreamsImporter
-  window.mySources = new MySources(contactImporter, editorStreamsImporter)
+  _bindImporterEvents: (importers)=>
+    for importer in importers
+      importer.bind 'import-finished', this._sourcesImportDone
+#      importer.bind 'sources-imported', this._sourcesImported #temporarily disabled due to scroll bar bug
 
-  mySources.init()
+$ ->
+  new MySources().init()
