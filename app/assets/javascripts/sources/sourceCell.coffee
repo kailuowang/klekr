@@ -2,7 +2,7 @@ class window.SourceCell extends ViewBase
   constructor: (@cell, @source) ->
     @cell.find('.source-icon').attr('src', @source.iconUrl)
     @cell.find('.source-icon-link').attr('href', @source.slideUrl)
-    @cell.find('.source-name').text(@source.username + "'s")
+    @cell.find('.source-name').text(@source.username)
     @cell.find('.source-type').text(@source.typeDisplay)
     @mainPart = @cell.find('.main-part')
     @removeBtn = @cell.find('#remove')

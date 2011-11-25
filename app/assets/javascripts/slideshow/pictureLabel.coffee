@@ -42,13 +42,11 @@ class window.PictureLabel extends ViewBase
     @description.html(picture.description)
     this.setVisible(@description, picture.description? and picture.description.length > 1)
 
-
-
   _updateSources: (streams) ->
     @sources ?= @panel.find('#sources')
     @sourcesLinks ?= @sources.find('#sources-links')
     @sourcesLinks.empty()
-    collectionStreams = (stream for stream in streams when stream.type is 'Collection')
+    collectionStreams = (stream for stream in streams when stream.type isnt 'Works')
 
     for stream in collectionStreams
       @sourcesLinks.append($('<span>').text(', ')) if @sourcesLinks.children().length > 0
