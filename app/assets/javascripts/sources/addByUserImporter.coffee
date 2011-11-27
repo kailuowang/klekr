@@ -11,7 +11,7 @@ class window.AddByUserImporter extends StreamImporterBase
     $('#add-by-user-link').click_ this.show
     @_addButton = @_popup.find('#do-add')
     @_addButton.click_ this._add
-
+    @_popup.find('.close-btn').click_ this._close
     @_popup.find('#submit').click_ this._doSearch
 
   show: =>
@@ -19,8 +19,11 @@ class window.AddByUserImporter extends StreamImporterBase
     @_notFound.hide()
     this.popup(@_popup)
 
+  _close: =>
+    @_popup.close()
+
   _doSearch: =>
-    keyword = @_popup.find('#keyword').val()
+    keyword = _.str.trim @_popup.find('#keyword').val()
     if keyword.length > 0
       @_loading.show()
       @_form.hide()
@@ -33,6 +36,7 @@ class window.AddByUserImporter extends StreamImporterBase
     @_results = data
     if( hasResults = @_results.length > 0 )
       @_streams_gridview.load(@_results)
+
       @_addingUser.hide()
       @_resultsGrid.slideDown()
 

@@ -7,6 +7,8 @@ class window.SourcesGridview extends ViewBase
     @grid.empty()
     this.addSource(source) for source in sources
     @cellTemplate.hide()
+    this.registerEvents()
+
 
   addSource: (source) =>
     newCell = @cellTemplate.clone()

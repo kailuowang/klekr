@@ -26,7 +26,6 @@ class klekr.FlexibleStreamsImporterBase extends ViewBase
 
   _showStreams: (streams) =>
     @_streams_gridview.load(streams)
-    @_streams_gridview.registerEvents()
     @_loading.hide()
     @_doImportLink.show()
     @_streamsDisplay.fadeIn()
