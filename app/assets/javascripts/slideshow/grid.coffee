@@ -40,8 +40,12 @@ class window.Grid extends ModeBase
     @selectedIndex
 
   updateProgress: (progress) =>
+    pageChanged = this._isDifferentPage(progress)
     @selectedIndex = progress
-    this._loadGridview()
+    if pageChanged
+      this._loadGridview()
+    else
+      this._updateHighlight()
 
   navigateToNext: =>
     this._markCurrentPageAsViewed()
@@ -84,7 +88,7 @@ class window.Grid extends ModeBase
   _loadGridview: =>
     pictures = this.currentPageOfPictures()
     gridview.loadPictures(pictures)
-    this._updateHighlight() if pictures.length > 0
+    this._updateHighlight()
     this.trigger('progress-changed')
 
   _navigateToNextPageWhenPicturesReady: =>
@@ -111,13 +115,18 @@ class window.Grid extends ModeBase
       alternative?()
 
   _updateHighlight: =>
-    gridview.highlightPicture(this.selectedPicture())
+    if this.currentPageOfPictures().length > 0
+      gridview.highlightPicture(this.selectedPicture())
 
   _currentPageRange: =>
     positionInPage = @selectedIndex % gridview.size
     pageStart = @selectedIndex - positionInPage
     pageEnd = Math.min(pageStart + gridview.size - 1, gallery.size() - 1)
     [pageStart, pageEnd]
+
+  _isDifferentPage: (progress) =>
+    [pageStart, pageEnd] = this._currentPageRange()
+    progress < pageStart or progress > pageEnd
 
   _onPictureSelect: (picture) =>
     @selectedIndex = picture.index
