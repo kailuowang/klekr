@@ -4,7 +4,8 @@ class window.ViewBase extends Events
   @duration = $.fx.interval * 3
 
   @isMobile: ->
-    /iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase())
+    #'safari/533.16' is the pretend userAgent from honeycomb when set as using desktop user agent
+    /iphone|ipad|ipod|safari\/533\.16|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase())
 
   isMobile: -> ViewBase.isMobile()
 
