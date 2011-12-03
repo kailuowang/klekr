@@ -4,16 +4,16 @@
       #ratingDisplayPanel.hidden.fleft
         #ratingDisplay
       .fleft
-        %a#removeFaveLink.btn.has-popover{href: '#', 'data-content' => 'This picture is added to my collection on ', title: 'Remove from My Collection', 'data-popover' => 'above'}
+        %a#removeFaveLink.btn.has-popover{href: '#', 'data-content' => 'This picture is added to my faves on ', title: 'Unfave', 'data-popover' => 'above'}
           remove
-    %a#faveLink.btn.large.hidden.has-popover{href: '#', 'data-content' => 'Add it to "My Collection" on klekr as well as fave on flickr. This also helps klekr figure out your taste.', title: 'Add to My Collection', 'data-popover' => 'right', 'data-popover-top-offset' => -28}
-      Collect it!
+    %a#faveLink.btn.large.hidden.has-popover{href: '#', 'data-content' => 'Add it to "My Faves" on klekr as well as fave on flickr. This also helps klekr figure out your taste.', title: 'Add to My Faves', 'data-popover' => 'right', 'data-popover-top-offset' => -28}
+      Fave it!
   #reloading-picture.hidden
     = image_tag('loading.gif')
   #login-reminder.hidden
     %a.btn.has-popover{href: exhibit_login_slideshow_path(@exhibit_params),
-     'data-content' => 'Login to klekr so that you can collect the pictures here', title: 'Login', 'data-popover' => 'above', 'data-popover-left-offset' => 50}
-      Login to Collect
+     'data-content' => 'Login to klekr so that you can fave the pictures here', title: 'Login', 'data-popover' => 'above', 'data-popover-left-offset' => 50}
+      Login to Fave
   #faveRatingPanel.modal-popup{style: 'margin: 40px'}
     %h2#awesome
       Sweet!
@@ -21,7 +21,7 @@
       What's your personal fave level?
     #faveRating
     #detail
-      Your personal fave level is used to maintain a ranking within your collection. It's not a public rating for the picture.
+      Your personal fave level is used to maintain a ranking within your faves. It's not a public rating for the picture.
 
 
     #related-pictures

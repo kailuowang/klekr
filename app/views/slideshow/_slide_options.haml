@@ -16,7 +16,7 @@
         %label
           %input#type-filter-checkbox{type: 'checkbox', name: 'upload-only'}
             Hide pictures from
-            %span.hasTwipsy{title: "photographers' faves rather than works."} collection sources
+            %span.hasTwipsy{title: "photographers' faves rather than works."} fave sources
 
     #rating-filter-panel
       %h5.inline
@@ -26,12 +26,12 @@
     #faved-at-filter-panel
       #after
         %h5.inline
-          Collected After:
+          Faved After:
         #faved-at-date-filter.inline
           %input#fave-at-date-after.datepicker{type: :text, name: 'faved-at-date-after'}
       #before
         %h5.inline
-          Collected Before:
+          Faved Before:
         #faved-at-date-filter.inline
           %input#fave-at-date.datepicker{type: :text, name: 'faved-at-date'}
 

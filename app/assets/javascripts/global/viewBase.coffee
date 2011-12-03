@@ -36,7 +36,7 @@ class window.ViewBase extends Events
 
   setArtistCollectionLink: (link, picture) =>
     link.attr href: "#{picture.ownerPath}?type=FaveStream"
-    link.text "#{picture.ownerName}'s collection."
+    link.text "#{picture.ownerName}'s faves."
 
   windowDimension:  =>
     [$(window).width(), $(window).height()]

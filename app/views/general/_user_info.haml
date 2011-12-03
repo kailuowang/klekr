@@ -15,7 +15,7 @@
         - if @current_collector.collection_synced
           #faved-count
             = link_to @current_collector.pictures.faved.count, faves_slideshow_path
-            pictures collected.
+            pictures faved.
         #new-pictures-count
           = link_to @current_collector.pictures.unviewed.count, slideshow_path
           new pictures to see.

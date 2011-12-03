@@ -50,7 +50,7 @@ class window.FavePanel  extends ViewBase
       this._updateRating(@picture.data.rating)
       this.setVisible(@ratingDisplayPanel, faved)
       this.setVisible(@faved, faved)
-      @removeFaveLink.attr('data-content', "This picture is added to my collection on #{@picture.favedDate}. Click to remove it." )
+      @removeFaveLink.attr('data-content', "This picture is added to my faves on #{@picture.favedDate}. Click to remove it." )
 
   _registerEvents: =>
     @faveLink.click_ this.fave
@@ -80,8 +80,8 @@ class window.FavePanel  extends ViewBase
   _shortcuts: ->
     @mShortcuts ?=
       (this._createRatingShortcut(i) for i in [1..5]).concat([
-        new KeyShortcut(['f','c'], this.fave, 'collect the picture', => gallery.slide.active() and @picture.favable())
-        new KeyShortcut('u', this.unfave, 'remove the picture from collection', => this.showing(@removeFaveLink))
+        new KeyShortcut(['f','c'], this.fave, 'fave the picture', => gallery.slide.active() and @picture.favable())
+        new KeyShortcut('u', this.unfave, 'unfave the picture', => this.showing(@removeFaveLink))
       ])
 
   _ratingShortcutsEnabled: =>

@@ -14,13 +14,13 @@
   .fleft
     %h3
       = @collector.user_name + "'s"
-      klekr collection
+      klekr faves
   .fleft
-    = render partial: '/general/add_this', locals: {title:  @collector.user_name + "'s klekr collection: "}
+    = render partial: '/general/add_this', locals: {title:  @collector.user_name + "'s klekr faves: "}
 - content_for(:top_right) do
   - if @current_collector.blank?
     %h3
-      = link_to  'Start your own klekr collection now!', slideshow_path
+      = link_to  'Like these photos? Discover more on klekr now!', slideshow_path
 
 
 = render partial: 'slideshow'

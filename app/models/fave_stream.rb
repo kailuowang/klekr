@@ -7,6 +7,6 @@ class FaveStream < FlickrStream
   end
 
   def type_display
-    "Collection"
+    "Faves"
   end
 end

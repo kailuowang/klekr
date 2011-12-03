@@ -21,7 +21,7 @@ class SlideshowController < ApplicationController
 
   def faves
     @more_pictures_path = fave_pictures_slideshow_path
-    @empty_message = "You haven't collect any pictures yet"
+    @empty_message = "You haven't fave any pictures yet"
   end
 
   def exhibit_login
@@ -32,7 +32,7 @@ class SlideshowController < ApplicationController
     @disable_navigation = current_collector.blank?
     @collector = ::Collector.find(params[:collector_id])
     @more_pictures_path = exhibit_pictures_slideshow_path(params.slice(:collector_id))
-    @empty_message = "This collection has no pictures"
+    @empty_message = "#{@collector.user_name} has not faved any pictures yet."
     @defaultFilters = defaultFilters
     @exhibit_params = exhibit_params
   end
