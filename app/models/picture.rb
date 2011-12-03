@@ -7,6 +7,7 @@ class Picture < ActiveRecord::Base
   scope :before, lambda { |pic| where('date_upload <= ? and id <> ? ', pic.date_upload, pic.id) }
   scope :collected_by, lambda { |collector| where(collector_id: collector, collected: true) if collector }
   scope :unfaved, where(rating:  0)
+  scope :valid, where(:no_longer_valid => [false, nil])
   scope :faved, where('rating > 0')
   scope :unviewed, where(viewed: false)
   scope :viewed, where(viewed: true)
@@ -27,7 +28,7 @@ class Picture < ActiveRecord::Base
     end
 
     def faved_by(collector, opts, page, per_page)
-      scope = faved.collected_by(collector).includes(:flickr_streams)
+      scope = faved.valid.collected_by(collector).includes(:flickr_streams)
       scope = if opts[:order]
                 scope.order(opts[:order] + ', date_upload DESC')
               else
