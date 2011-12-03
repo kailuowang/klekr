@@ -1,38 +1,42 @@
-@import '../global/global'
+@import '../global/_mixins'
+#top-banner
+  @include unselectable
+  #top-banner-left
+    .source-icon-placeholder
+      margin-right: 5px
+    #option-button
+      margin-top: 7px
+      margin-left: 3px
+      cursor: pointer
+      opacity: 0.5
 
-#top-banner-left
-  .source-icon-placeholder
-    margin-right: 5px
-  #option-button
-    margin-top: 7px
-    margin-left: 3px
-    cursor: pointer
-    opacity: 0.5
-
-  .addthis_toolbox
-    width: 110px
-    opacity: 0.5
-    margin-top: 9px
-    margin-left: 10px
-  #my-stream-subtitle
-    color: #505050
-    font-weight: lighter
-    font-style: italic
-    margin-left: 20px
-    a
+    .addthis_toolbox
+      width: 110px
+      opacity: 0.5
+      margin-top: 9px
+      margin-left: 10px
+    #my-stream-subtitle
       color: #505050
-    a:hover
-      color: #707070
-    a.my-source-link
-      color: #593327
-    a.my-source-link:hover
-      color: #904E3F
+      font-weight: lighter
+      font-style: italic
+      margin-left: 20px
+      a
+        color: #505050
+      a:hover
+        color: #707070
+      a.my-source-link
+        color: #593327
+      a.my-source-link:hover
+        color: #904E3F
 
 #top-banner-welcome
   .user-name
     font-weight: lighter
     #username
       font-style: italic
+    #user-dropdown
+      @include selectable
+
 #fave-panel
   height: 29px
   #faveArea
