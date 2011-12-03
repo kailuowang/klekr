@@ -8,6 +8,7 @@ class window.AutoPlay extends ViewBase
       @startButton.click_ this._start
       @pauseButton.click_ this.pause
       this._bindToSlide()
+      keyShortcuts.addShortcuts(this._shortcuts())
 
   _start: =>
     unless @started
@@ -29,7 +30,6 @@ class window.AutoPlay extends ViewBase
   show: =>
     @panel.show()
 
-
   pause: =>
     if @started
       @started = false
@@ -38,11 +38,26 @@ class window.AutoPlay extends ViewBase
   _updateStatus: =>
     this.fadeInOut(@startButton, !@started)
     this.fadeInOut(@pauseButton, @started)
+    this._animatePauseButton()
 
   _schedule: =>
-    setTimeout this._goNext, 3000
+    setTimeout this._goNext, 5000
 
   _goNext: =>
     if @started and @slide.active()
      @slide.navigateToNext(this)
      this._schedule()
+
+  _animatePauseButton: =>
+    if @started
+      @pauseButton.toggleClass('faded')
+      setTimeout this._animatePauseButton, 1000
+
+  _togglePlay: =>
+    if @started
+      this.pause()
+    else
+      this._start()
+
+  _shortcuts: ->
+    [ new KeyShortcut('p', this._togglePlay, 'play/pause', => this.showing(@panel)) ]
