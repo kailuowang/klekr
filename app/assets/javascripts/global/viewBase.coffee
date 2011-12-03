@@ -6,8 +6,6 @@ class window.ViewBase extends Events
   @isMobile: ->
     /iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase())
 
-  @adjustBottom: ->
-
   isMobile: -> ViewBase.isMobile()
 
   setVisible: (element, visible) ->
@@ -50,6 +48,5 @@ class window.ViewBase extends Events
 
 $ ->
   $.fx.off = ViewBase.isMobile()
-  ViewBase.adjustBottom()
   if $.browser.msie
     alert("Ooopz, we are still working on supporting Internet Explorer. For now, we highly recommend using Firefox or Chrome to browse klekr.")
