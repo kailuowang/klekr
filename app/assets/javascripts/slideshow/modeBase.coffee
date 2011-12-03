@@ -18,7 +18,7 @@ class window.ModeBase extends Events
     this.trigger('off')
 
   goToIndex: (index) =>
-    window.location = '#' + "#{this.name}-#{index}-#{gallery.pictures[index].id}"
+    window.location = '#' + "#{this.name}-#{index}#{this._extraHashInfo(index)}"
 
   _createShortcuts: =>
     this._createShortcut(setting) for setting in this.shortcutsSettings()
@@ -26,3 +26,6 @@ class window.ModeBase extends Events
   _createShortcut: (setting)=>
     new KeyShortcut setting[0], setting[1], setting[2], =>
       this.active() and !ViewBase.showingPopup
+
+  _extraHashInfo: =>
+    ''

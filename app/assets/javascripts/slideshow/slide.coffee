@@ -74,3 +74,6 @@ class window.Slide extends ModeBase
       if(picture? and picture.sizeReady)
         picture.calculateFitVersion()
         slideview.update(picture)
+
+  _extraHashInfo: (index)=>
+    "-" + gallery.pictures[index].id
