@@ -33,6 +33,11 @@ class window.PictureLabel extends ViewBase
     this.setVisible @interestingessDisplay, (picture.interestingness isnt 0)
 
     this._updateSources(picture.fromStreams)
+    @relatedPanel ?= @panel.find('#related-pictures')
+
+    this.setVisible(@relatedPanel, !picture.noLongerValid)
+    this.setVisible(@interestingess, !picture.noLongerValid)
+
 
   expand: =>
     @expandLink.trigger('click')

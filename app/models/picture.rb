@@ -110,17 +110,25 @@ class Picture < ActiveRecord::Base
   end
 
   def flickr_url size
-    case size
-      when :large
-        FlickRaw.url_b(pic_info)
-      when :medium
-        FlickRaw.url_z(pic_info) + "?zz=1"
-      when :medium_small
-        FlickRaw.url(pic_info)
-      when :small
-        FlickRaw.url_m(pic_info)
+    if(no_longer_valid?)
+      if size == :small
+        '/assets/photo_unavailable_s.gif'
       else
-        raise "unknown size #{size}"
+        '/assets/photo_unavailable_m.gif'
+      end
+    else
+      case size
+        when :large
+          FlickRaw.url_b(pic_info)
+        when :medium
+          FlickRaw.url_z(pic_info) + "?zz=1"
+        when :medium_small
+          FlickRaw.url(pic_info)
+        when :small
+          FlickRaw.url_m(pic_info)
+        else
+          raise "unknown size #{size}"
+      end
     end
   end
 
