@@ -103,7 +103,8 @@ class window.Picture extends Events
       @alreadyUpdated = true
       klekr.Global.server.put resync_picture_path(id: @id), opts, (newData) =>
         @data = newData
-        this.trigger('data-updated', this)
+        this.preloadSmall =>
+          this.trigger('data-updated', this)
 
 
   _smallVersionMightBeInvalid: (image) =>

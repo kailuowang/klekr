@@ -38,7 +38,7 @@ class window.FavePanel  extends ViewBase
 
   _pictureUpdated: (picture)=>
     if(picture is @picture)
-      this._checkAccess()
+      this._updateDom()
 
   _updateDom: =>
     this.setVisible @faveArea, @picture.favable()
