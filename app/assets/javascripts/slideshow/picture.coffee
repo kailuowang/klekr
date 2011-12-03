@@ -22,11 +22,12 @@ class window.Picture extends Events
     @id = @data.id
     _.defaults(this, @data)
     @width = 640
-    @sizeReady = false
+    @sizeReady = false or @data.noLongerValid
     @canUseLargeVersion = false
     @largeVersionAvailable = true
     @canUseMediumVersion = false
     @ready = false
+    @error = false
     @index = null
 
   displayTitle:  =>
@@ -78,8 +79,8 @@ class window.Picture extends Events
   preloadSmall: (callback)=>
     this._preloadImage @data.smallUrl, (image) =>
       [@smallWidth, @smallHeight] = [image.width, image.height]
-      this.calculateFitVersion()
-      this._updateData() if this._smallVersionMightBeInvalid(image)
+      this._updateData() if @error or this._smallVersionMightBeInvalid(image)
+      this.calculateFitVersion() unless @error
       this.trigger('size-ready', this)
       callback?()
 
@@ -115,14 +116,22 @@ class window.Picture extends Events
     @data.getViewedPath?
 
   preloadLarge: (callback)=>
-    this._preloadImage this.url(), (image)=>
-      this._updateSize(image)
+    unless @error
+      this._preloadImage this.url(), (image)=>
+        this._updateSize(image)
+        callback?()
+    else
       callback?()
 
   _preloadImage: (url, onload) =>
     image = new Image()
     image.src = url
-    $(image).load => onload(image) if onload?
+    $(image).load =>
+      @error = false
+      onload(image) if onload?
+    $(image).error =>
+      @error = true
+      onload(image) if onload?
 
   _updateSize: (image) =>
     unless this._largeVersionInvalid(image)

@@ -15,6 +15,7 @@ class window.Slide extends ModeBase
       picture.calculateFitVersion()
       slideview.display(picture)
     else
+      slideview.displayLabel(picture)
       this._monitorPictureReady(picture)
     @favePanel.updateWith(picture)
     this.trigger('progress-changed')
@@ -33,7 +34,6 @@ class window.Slide extends ModeBase
     unless this.atTheBegining()
       this.goToIndex((@currentIndex - 1))
       this.trigger('command-to-navigate', commander)
-
 
   atTheLast: =>
      @currentIndex == gallery.size() - 1
@@ -65,7 +65,7 @@ class window.Slide extends ModeBase
 
   _monitorPictureReady: (picture) =>
     picture.bind 'size-ready', (pic) =>
-      if pic is this.currentPicture()
+      if pic.id is this.currentPicture().id
         slideview.display(pic)
 
   _redisplayPicture: =>

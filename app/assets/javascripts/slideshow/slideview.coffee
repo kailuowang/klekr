@@ -17,12 +17,21 @@ class window.Slideview extends ViewBase
     else
       this._fadeInto(picture)
 
+
   _fadeInto: (picture) =>
     this.update(picture)
     this.fadeInOut(@pictureArea, true)
   
   update: (picture) ->
     @mainImg.attr('src', picture.url())
+    this._updateLabel(picture)
+
+  displayLabel: (picture) =>
+    if this.showing(@pictureArea)
+       this.fadeInOut @pictureArea, false
+    this._updateLabel(picture)
+
+  _updateLabel: (picture) =>
     @label.show(picture)
 
   pictureClick: (callback) =>
