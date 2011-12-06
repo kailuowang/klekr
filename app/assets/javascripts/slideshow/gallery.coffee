@@ -68,7 +68,7 @@ class window.Gallery extends Events
     m.reset() for m in @modes
     @picturePreloader.start()
     @retriever.retrievePic(requestedPicId) if requestedPicId?
-    this.retrieveMorePictures(@cacheSize)
+    this._ensurePictureCache()
 
   _resetRetriever: =>
     if @retriever?
@@ -175,6 +175,7 @@ class window.Gallery extends Events
   _addPictures: (newPictures) =>
     startPosition = @pictures.length
     addedPictures = Picture.uniqConcat(@pictures, newPictures)
+#    console.debug("#{addedPictures.length}/#{newPictures.length} pictures are new")
     if addedPictures.length > 0
       for newPic in addedPictures       #todo remove this hacky workaround
         newPic.index = startPosition++
