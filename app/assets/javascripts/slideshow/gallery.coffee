@@ -38,6 +38,10 @@ class window.Gallery extends Events
     else
       1
 
+  increaseCacheSize: (pages) =>
+    @cacheSize += pages
+    this._ensurePictureCache()
+
   advanceOffset: =>
     this._unseenPictures().length
 
@@ -52,7 +56,7 @@ class window.Gallery extends Events
 
   isLoading: => @retriever and @retriever.busy()
 
-  retrieveMorePictures: (pages = 1)=> @retriever.retrieve(pages)
+  _retrieveMorePictures: (pages = 1)=> @retriever.retrieve(pages)
 
   _reset: (requestedPicId)=>
     @currentMode = @slide if requestedPicId?
@@ -139,9 +143,12 @@ class window.Gallery extends Events
     generalView.updateModeIndicator(this.inGrid())
 
   _ensurePictureCache: =>
-    needMoreForCache = @pictures.length - this._currentProgress() < (@cacheSize * this.pageSize())
-    if needMoreForCache and !@allPicturesRetrieved
-      this.retrieveMorePictures()
+    unless this.isLoading()
+      needMoreForCache = @pictures.length - this._currentProgress() < (@cacheSize * this.pageSize())
+      if needMoreForCache and !@allPicturesRetrieved
+        this._retrieveMorePictures()
+      else
+        this.trigger('idle')
 
   _onRetrieverFinished: (numOfRetrieved)=>
     if this.isEmpty()
@@ -151,7 +158,6 @@ class window.Gallery extends Events
     else if numOfRetrieved == 0
       @allPicturesRetrieved = true
       this.trigger('gallery-pictures-changed')
-    this.trigger('idle')
 
   _emptyGallery: =>
     @currentMode.clear?()

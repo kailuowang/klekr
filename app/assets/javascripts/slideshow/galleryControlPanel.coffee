@@ -15,7 +15,7 @@ class window.GalleryControlPanel extends ViewBase
     klekr.Global.server.bind 'connection-status-changed', this._updateConnectionStatus
 
   _downloadPictures: =>
-    @gallery.retrieveMorePictures(20)
+    @gallery.increaseCacheSize(20)
     @loadingIndicator.show()
     @downloadButton.hide()
 
