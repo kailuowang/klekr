@@ -9,11 +9,12 @@ class window.AutoPlay extends ViewBase
       @pauseButton.click_ this.pause
       this._bindToSlide()
       keyShortcuts.addShortcuts(this._shortcuts())
+      @slide.bind 'progress-changed', this._progressed
 
   _start: =>
     unless @started
       @started = true
-      this._schedule()
+      this._goNext()
       this._updateStatus()
 
   _bindToSlide: =>
@@ -40,16 +41,19 @@ class window.AutoPlay extends ViewBase
     this.fadeInOut(@pauseButton, @started)
     this._animatePauseButton()
 
+
+  _progressed: =>
+    atLast = @slide.atTheLast()
+    @panel.toggleClass 'faded', atLast
+    this.pause() if atLast
+
   _schedule: =>
-    unless @slide.atTheLast()
-      setTimeout this._goNext, 5000
-    else
-      this.pause()
+    setTimeout this._goNext, 5000
 
   _goNext: =>
     if @started and @slide.active()
-     @slide.navigateToNext(this)
-     this._schedule()
+      @slide.navigateToNext(this)
+      this._schedule()
 
   _animatePauseButton: =>
     if @started
