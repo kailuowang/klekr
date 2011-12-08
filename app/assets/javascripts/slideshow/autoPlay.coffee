@@ -41,7 +41,10 @@ class window.AutoPlay extends ViewBase
     this._animatePauseButton()
 
   _schedule: =>
-    setTimeout this._goNext, 5000
+    unless @slide.atTheLast()
+      setTimeout this._goNext, 5000
+    else
+      this.pause()
 
   _goNext: =>
     if @started and @slide.active()
@@ -51,7 +54,7 @@ class window.AutoPlay extends ViewBase
   _animatePauseButton: =>
     if @started
       @pauseButton.toggleClass('faded')
-      setTimeout this._animatePauseButton, 1000
+      setTimeout this._animatePauseButton, 1500
 
   _togglePlay: =>
     if @started

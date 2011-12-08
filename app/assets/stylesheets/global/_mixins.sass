@@ -12,3 +12,8 @@
 
 @mixin special-character
   text-rendering: auto
+
+@mixin flashing($second)
+  -webkit-transition: opacity linear $second
+  transition: opacity linear $second
+  -moz-transition: opacity linear $second
