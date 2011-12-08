@@ -54,10 +54,12 @@ class window.Picture extends Events
   fave: (rating) =>
     @data.rating = rating
     klekr.Global.updater.put @data.favePath, {rating: rating}
+    this._broadCastChange()
 
   unfave:  =>
     @data.rating = 0
     klekr.Global.updater.put @data.unfavePath
+    this._broadCastChange()
 
   getViewed: =>
     if this._viewedMarkable()
@@ -103,9 +105,10 @@ class window.Picture extends Events
       @alreadyUpdated = true
       klekr.Global.server.put resync_picture_path(id: @id), opts, (newData) =>
         @data = newData
-        this.preloadSmall =>
-          this.trigger('data-updated', this)
+        this.preloadSmall this._broadCastChange
 
+  _broadCastChange: =>
+    this.trigger('data-updated', this)
 
   _smallVersionMightBeInvalid: (image) =>
     image.width is 240 and image.height is 180
