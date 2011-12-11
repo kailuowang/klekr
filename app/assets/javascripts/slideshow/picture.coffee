@@ -163,3 +163,6 @@ class window.Picture extends Events
     ratio = versionLongEdge / longEdge
     [@smallWidth * ratio, @smallHeight * ratio]
 
+  trigger: (event, data) =>
+    super(event, data)
+    klekr.Global.broadcaster.trigger('picture:' + event, data)

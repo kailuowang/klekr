@@ -41,16 +41,21 @@
         Go Offline!
     .clearfix
     #under-the-hood-panel.hidden
-      .fleft
+      .fleft.label
         #system-status
-          %span.label Current Status:
+          Currently
           %span#connection-status-label
         #cache-info
-          %span.label New Pictures Ready to View:
           %span#num-of-pics-in-cache 0
+          (
+          %span#num-of-new-pics-in-cache 0
+          new
+          )
+          pictures ready to view.
         #downloading-info
-          %span.label Pictures Scheduled to Download:
           %span#num-of-downloading-pics 0
+          %span pictures scheduled to download.
+
       .clearfix
       #ops-buttons.fright
         %a#download-pictures.btn{href: '#'}
