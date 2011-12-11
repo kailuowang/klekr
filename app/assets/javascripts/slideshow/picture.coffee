@@ -55,11 +55,14 @@ class window.Picture extends Events
     @data.rating = rating
     klekr.Global.updater.put @data.favePath, {rating: rating}
     this._broadCastChange()
+    this.trigger('faved')
 
   unfave:  =>
     @data.rating = 0
     klekr.Global.updater.put @data.unfavePath
     this._broadCastChange()
+    this.trigger('unfaved')
+
 
   getViewed: =>
     if this._viewedMarkable()

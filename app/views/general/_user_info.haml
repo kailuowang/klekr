@@ -14,10 +14,10 @@
           sources.
         - if @current_collector.collection_synced
           #faved-count
-            = link_to @current_collector.pictures.faved.count, faves_slideshow_path
+            = link_to @current_collector.pictures.faved.count, faves_slideshow_path, id: 'faved-count-link'
             pictures faved.
         #new-pictures-count
-          = link_to @current_collector.pictures.unviewed.count, slideshow_path
+          = link_to @current_collector.pictures.unviewed.count, slideshow_path, id: 'new-pictures-count-link'
           new pictures to see.
       .clearfix
     #bottom.inner
