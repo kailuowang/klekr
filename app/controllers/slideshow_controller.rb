@@ -35,6 +35,8 @@ class SlideshowController < ApplicationController
     @empty_message = "#{@collector.user_name} has not faved any pictures yet."
     @defaultFilters = defaultFilters
     @exhibit_params = exhibit_params
+    @exhibit_name = exhibit_name
+    @icon =  @collector.is_editor? ? nil : @collector
   end
 
   def exhibit_pictures
@@ -65,6 +67,14 @@ class SlideshowController < ApplicationController
     render_json_pictures collector.collection( params[:num].to_i,
                                                params[:page].to_i,
                                                opts.merge(filter_params))
+  end
+
+  def exhibit_name
+    if @collector.is_editor?
+      "klekr editor's choice pictures"
+    else
+      @collector.user_name + "'s klekr faves"
+    end
   end
 
   def check_stream_access(stream)

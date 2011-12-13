@@ -10,11 +10,10 @@
 
 - content_for(:top_left) do
   .fleft
-    = icon(@collector)
+    = icon(@icon)
   .fleft
     %h3
-      = @collector.user_name + "'s"
-      klekr faves
+      = @exhibit_name
   .fleft
     = render partial: '/general/add_this', locals: {title:  @collector.user_name + "'s klekr faves: "}
 - content_for(:top_right) do

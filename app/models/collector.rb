@@ -43,6 +43,10 @@ class Collector < ActiveRecord::Base
     end
   end
 
+  def is_editor?
+    Collectr::Editor.new.is_editor self
+  end
+
   private
 
   def parse_date(date_string)

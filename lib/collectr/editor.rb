@@ -1,17 +1,22 @@
 module Collectr
   class Editor
 
+
     def initialize
-      @editor_collector = Collector.where(user_id: Settings.editor_userid).first if Settings.editor_userid
+      @editor_collector = Collector.where(user_id: editor_user_id).first if editor_user_id
     end
 
     def ensure_editor_collector
-      raise 'editor_userid must be set in settings' if Settings.editor_userid.blank?
-      @editor_collector ||= Collector.find_or_create(user_id: Settings.editor_userid, user_name: Settings.editor_name)
+      raise 'editor_userid must be set in settings' if editor_user_id.blank?
+      @editor_collector ||= Collector.find_or_create(user_id: editor_user_id, user_name: Settings.editor_name)
     end
 
     def ready?
       @editor_collector.present?
+    end
+
+    def is_editor(collector)
+      collector.user_id == editor_user_id
     end
 
     def editorial_collection_stream_for(collector)
@@ -26,6 +31,11 @@ module Collectr
     end
 
     private
+
+    def editor_user_id
+      Settings.editor_userid
+    end
+
     def editor_collection_stream_opts
       {
         user_id: @editor_collector.user_id,
