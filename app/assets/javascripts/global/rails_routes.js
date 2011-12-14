@@ -29,6 +29,7 @@ function user_path(params){ return '/users/' + params.id + ''}
 function new_pictures_slideshow_path(params){ return '/slideshow/new_pictures'}
 function fave_pictures_slideshow_path(params){ return '/slideshow/fave_pictures'}
 function exhibit_pictures_slideshow_path(params){ return '/slideshow/exhibit_pictures'}
+function editor_choice_pictures_slideshow_path(params){ return '/slideshow/editor_choice_pictures'}
 function faves_slideshow_path(params){ return '/slideshow/faves'}
 function exhibit_slideshow_path(params){ return '/slideshow/exhibit'}
 function exhibit_login_slideshow_path(params){ return '/slideshow/exhibit_login'}

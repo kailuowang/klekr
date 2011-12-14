@@ -127,6 +127,8 @@ class Picture < ActiveRecord::Base
           FlickRaw.url(pic_info)
         when :small
           FlickRaw.url_m(pic_info)
+        when :thumbnail
+          FlickRaw.url_t(pic_info)
         else
           raise "unknown size #{size}"
       end
@@ -147,6 +149,10 @@ class Picture < ActiveRecord::Base
 
   def small_url
     flickr_url(:small)
+  end
+
+  def thumbnail_url
+    flickr_url(:thumbnail)
   end
 
   def synced_by(stream)

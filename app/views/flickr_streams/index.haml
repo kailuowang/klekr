@@ -36,7 +36,7 @@
         .cell.import-method.well
           %h4.pointer
             %a#add-editor-streams-link{href: '#'}
-              Add recommendations from klekr.
+              Add from editor's choice.
         .cell.import-method.well
           %h4
             %a#import-google-reader-link{href: '#'}
@@ -56,8 +56,8 @@
             %a#add-group-streams-link{href: '#'}
               Add your flickr groups as sources.
 
-= render partial: 'import_streams', locals: {import_type: 'klekr recommended sources', popup_id:  'import-editor-streams-popup' }
-= render partial: 'import_streams', locals: {import_type: 'flickr group sources', popup_id:  'import-group-streams-popup' }
+= render partial: 'import_streams', locals: {import_type: "Editor's Choice", popup_id:  'import-editor-streams-popup' }
+= render partial: 'import_streams', locals: {import_type: 'Flickr Group Sources', popup_id:  'import-group-streams-popup' }
 = render partial: 'import_contacts'
 = render partial: 'import_google_reader'
 = render partial: 'import_user'
