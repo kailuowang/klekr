@@ -7,7 +7,7 @@
   klekr.Global.showDetail = #{@show_detail};
 
 .container.login
-  .site-banner
+  .bigTopPadding
     %h1.site-title
       Welcome to
       %span.site-name klekr!
@@ -17,7 +17,7 @@
     .site-subtitle.animated.fadeInRight
       %a.help-title{herf: '#'}
         Discover photos of your own taste.
-
+  .bigTopPadding{align: 'center'}
   - if @current_collector.blank?
     - unless @redirected_to_login
       %h3
@@ -44,11 +44,6 @@
   - else
     %h3
       = link_to "<< Back to My Stream", slideshow_path
-
-
-= render partial: 'editor_choice'
-
-.container.login
   #welcome-message.well
 
     %h2.uppercase#want-more-link
@@ -61,3 +56,4 @@
     .clearfix
 
   .tweet
+

@@ -63,5 +63,4 @@ class window.Login extends ViewBase
 
 $ ->
   new Login(__authUrl__)
-  new klekr.EditorChoice().load()
 

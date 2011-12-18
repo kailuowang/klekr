@@ -1,6 +1,6 @@
 class SlideshowController < ApplicationController
   include Collectr::PictureControllerHelper
-  before_filter :authenticate, except: [:exhibit, :exhibit_pictures, :editor_choice_pictures]
+  before_filter :authenticate, except: [:exhibit, :exhibit_pictures]
 
   def flickr_stream
     id = params[:id].to_i
@@ -41,10 +41,6 @@ class SlideshowController < ApplicationController
 
   def exhibit_pictures
     render_fave_pictures ::Collector.find(params[:collector_id]), order: 'owner_name'
-  end
-
-  def editor_choice_pictures
-    render_fave_pictures Collectr::Editor.new.ensure_editor_collector, rating: 2
   end
 
   def fave_pictures

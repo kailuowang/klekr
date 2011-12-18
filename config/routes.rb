@@ -62,7 +62,6 @@ Collectr::Application.routes.draw do
     post 'new_pictures'
     post 'fave_pictures'
     post 'exhibit_pictures'
-    get 'editor_choice_pictures'
     get 'faves'
     get 'exhibit'
     get 'exhibit_login'
