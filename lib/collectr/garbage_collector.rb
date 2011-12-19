@@ -6,7 +6,6 @@ module Collectr
       uncollected_streams.old(7).delete_all
     end
 
-
     def report
       <<EOF
       Total Pictures: #{Picture.count}

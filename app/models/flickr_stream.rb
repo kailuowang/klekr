@@ -17,6 +17,7 @@ class FlickrStream < ActiveRecord::Base
   scope :of_user, lambda {|user_id| where(user_id: user_id)}
   scope :type, lambda { |type| where(type: type) }
   scope :old, lambda { |num_of_days| where('updated_at < ?', num_of_days.days.ago)}
+  scope :active_in, lambda{ |num_of_days| includes(:collector).where('collectors.last_login > ?', num_of_days.days.ago)}
 
   has_many :syncages, :dependent => :delete_all
   has_many :pictures, through: :syncages
@@ -65,7 +66,7 @@ class FlickrStream < ActiveRecord::Base
     end
 
     def sync_all(collector = nil, verbose = false)
-      streams_to_sync = collector ? collected_by(collector).collecting : collecting
+      streams_to_sync = collector ? collected_by(collector).collecting : collecting.active_in(30)
 
       streams_to_sync.inject(0) {|total_synced, stream| total_synced + stream.sync(stream.last_sync, 200, verbose) }
     end

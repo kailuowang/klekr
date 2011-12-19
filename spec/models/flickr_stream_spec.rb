@@ -72,7 +72,7 @@ describe FlickrStream do
         stream2 = Factory(:fave_stream)
         stream1.stub!(:sync).and_return 1
         stream2.stub!(:sync).and_return 2
-        FlickrStream.stub!(:collecting).and_return [stream1, stream2]
+        FlickrStream.stub_chain(:collecting, :active_in).and_return [stream1, stream2]
         FlickrStream.sync_all.should == 3
       end
 
