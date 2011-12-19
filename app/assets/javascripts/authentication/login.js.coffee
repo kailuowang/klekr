@@ -7,7 +7,7 @@ class window.Login extends ViewBase
     $('.back-to-about').click_ this._toggleMoreAbout
     if klekr.Global.redirectedToLogin and !klekr.Global.showDetail
       $('#countDownRedirect').show()
-      this.redirectCountdown(9)
+      this.redirectCountdown(5)
     if klekr.Global.showDetail
       $('#want-more-link').hide()
       $('#welcome-message #detail-info').show()
