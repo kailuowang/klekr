@@ -7,6 +7,7 @@ class window.Grid extends ModeBase
 
   reset: =>
     @selectedIndex = 0
+    @picturesLoaded = false
 
   init: (gallery) =>
     gallery.bind 'new-pictures-added', (pictures) =>
@@ -40,9 +41,9 @@ class window.Grid extends ModeBase
     @selectedIndex
 
   updateProgress: (progress) =>
-    pageChanged = this._isDifferentPage(progress)
+    reloadRequired = !@picturesLoaded or this._isDifferentPage(progress)
     @selectedIndex = progress
-    if pageChanged
+    if reloadRequired
       this._loadGridview()
     else
       this._updateHighlight()
@@ -58,7 +59,6 @@ class window.Grid extends ModeBase
       else if gallery.isLoading()
         gridview.showLoading()
         gallery.bind 'gallery-pictures-changed', this._navigateToNextPageWhenPicturesReady
-
 
   navigateToPrevious: =>
     unless this.atTheBegining()
@@ -88,6 +88,7 @@ class window.Grid extends ModeBase
   _loadGridview: =>
     pictures = this.currentPageOfPictures()
     gridview.loadPictures(pictures)
+    @picturesLoaded = true
     this._updateHighlight()
     this.trigger('progress-changed')
 

@@ -11,6 +11,7 @@ class window.Gridview extends ViewBase
 
   highlightPicture: (picture) ->
     $('.grid-picture').removeClass('highlighted')
+    this._showGrid()
     picture.trigger('highlighted')
 
   showLoading: =>
@@ -19,11 +20,15 @@ class window.Gridview extends ViewBase
 
   loadPictures: (pictures) =>
     @grid.empty()
-    @loading.hide()
-    @grid.show()
+    this._showGrid()
     index = 0
     for picture in pictures
       this._load picture, index++
+
+  _showGrid: =>
+    if this.showing(@loading)
+      @loading.hide()
+      @grid.show()
 
   initLayout: =>
     this._calculateSize()
