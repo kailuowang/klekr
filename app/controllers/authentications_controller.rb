@@ -17,6 +17,7 @@ class AuthenticationsController < ApplicationController
     frob = flickr.auth.getFrob
     @auth_url = FlickRaw.auth_url(perms: 'write', frob: frob )
     @show_detail = params[:show_detail].present?
+    @editor_choice_path = exhibit_slideshow_path(collector_id: Collectr::Editor.new.ensure_editor_collector.id, rating: 2 )
     if current_collector && !@show_detail
       redirect_to slideshow_path
     end

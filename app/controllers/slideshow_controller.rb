@@ -71,7 +71,7 @@ class SlideshowController < ApplicationController
 
   def exhibit_name
     if @collector.is_editor?
-      "klekr editor's choice pictures"
+      "Editors' Choice"
     else
       @collector.user_name + "'s klekr faves"
     end

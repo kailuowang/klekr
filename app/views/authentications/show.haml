@@ -8,15 +8,20 @@
 
 .container.login
   .bigTopPadding
-    %h1.site-title
-      Welcome to
-      %span.site-name klekr!
-    %span.beta-tag
-      BETA
+    .fleft
+      %h1.site-title
+        Welcome to
+        %span.site-name klekr!
+      %span.beta-tag
+        BETA
 
-    .site-subtitle.animated.fadeInRight
-      %a.help-title{herf: '#'}
-        Discover photos of your own taste.
+      .site-subtitle.animated.fadeInRight
+        %a.help-title{herf: '#'}
+          Discover photos of your own taste.
+    .fright
+      #editor-choice-link
+        %a{href: @editor_choice_path} Editors' Choice Photos
+    .clearfix
   .bigTopPadding{align: 'center'}
   - if @current_collector.blank?
     - unless @redirected_to_login
