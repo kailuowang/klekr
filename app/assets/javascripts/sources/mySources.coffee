@@ -1,6 +1,6 @@
 class window.MySources
   constructor: ()->
-    @contactImporter = new ContactsImporter(__contactsPath__, __importContactPath__)
+    @contactImporter = new klekr.ContactsImporter
     @editorStreamsImporter = new EditorStreamsImporter
     @groupStreamsImporter = new klekr.GroupStreamsImporter
     @addByUserImporter = new AddByUserImporter

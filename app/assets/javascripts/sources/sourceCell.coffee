@@ -9,24 +9,27 @@ class window.SourceCell extends ViewBase
     @addBtn = @cell.find('#add')
     @server = klekr.Global.server
     this._updateStatus()
+    klekr.Global.broadcaster.bind 'source-changed', this._onSourceChange
 
   registerEvents: =>
     @cell.hover  (() => this._toggleTopBar(true)), (() => this._toggleTopBar(false))
     @removeBtn.click_ this._remove
     @addBtn.click_ this._add
 
+  about: (source) =>
+    @source.id is source.id
 
   _remove: =>
     @removeBtn.fadeOut()
-    @server.put unsubscribe_flickr_stream_path(@source), {}, this._refreshFromData
+    @server.put unsubscribe_flickr_stream_path(@source), {}, this._broadcastNewSource
 
   _add: =>
     @addBtn.fadeOut()
-    @server.put subscribe_flickr_stream_path(@source), {}, this._refreshFromData
+    klekr.Global.broadcaster.trigger('source-added', @source)
+    @server.put subscribe_flickr_stream_path(@source), {}, this._broadcastNewSource
 
-  _refreshFromData: (data)=>
-    @source = new Source(data)
-    this._updateStatus()
+  _broadcastNewSource: (data)=>
+    klekr.Global.broadcaster.trigger 'source-changed', new Source(data)
 
   _updateStatus: =>
     this.setVisible @removeBtn, @source.subscribed
@@ -36,3 +39,8 @@ class window.SourceCell extends ViewBase
   _toggleTopBar: (visible)=>
     @topBar ?= @cell.find('.top-bar')
     @topBar.toggleClass('invisible', !visible)
+
+  _onSourceChange: (source) =>
+    if this.about source
+      @source = source
+      this._updateStatus()

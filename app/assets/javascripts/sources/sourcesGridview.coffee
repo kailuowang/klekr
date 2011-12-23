@@ -4,19 +4,23 @@ class window.SourcesGridview extends ViewBase
     @cells = []
 
   load: (sources) =>
+    @cells = []
     @grid.empty()
     this.addSource(source) for source in sources
     @cellTemplate.hide()
     this.registerEvents()
 
-
   addSource: (source) =>
-    newCell = @cellTemplate.clone()
-    @grid.append(newCell)
-    newCell.show()
-    cell = new SourceCell(newCell, source)
-    @cells.push cell
-    cell
+    unless this._has(source)
+      newCell = @cellTemplate.clone()
+      @grid.append(newCell)
+      newCell.show()
+      cell = new SourceCell(newCell, source)
+      @cells.push cell
+      cell
 
   registerEvents: =>
     cell.registerEvents() for cell in @cells
+
+  _has: (source) =>
+    _(@cells).any( (cell) -> cell.about(source) )

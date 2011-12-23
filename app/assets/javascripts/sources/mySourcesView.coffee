@@ -8,6 +8,7 @@ class window.MySourcesView extends ViewBase
     @newSourcesAddedPanel = $('#new-sources-added')
     $('#close-new-sources-added').click_ => @newSourcesAddedPanel.slideUp()
     @expandLink.click_ this._toggleManagementPanel
+    klekr.Global.broadcaster.bind 'source-added', this.addSource
 
   clear: =>
     @container.empty()

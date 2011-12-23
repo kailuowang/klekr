@@ -8,30 +8,17 @@ module Collectr
       @collector = collector
     end
 
-    def contacts
+    def contact_streams
       response = flickr.contacts.getList
       if response['total'] > 0
         response.map do |fcontact|
-          {user_id: fcontact.nsid, username: fcontact.username}
-        end
+          opts = {user_id: fcontact.nsid, username: fcontact.username, collector: @collector}
+          [ FlickrStream.find_or_create(opts.merge(type: FaveStream.name)),
+            FlickrStream.find_or_create(opts.merge(type: UploadStream.name))]
+        end.flatten
       else
         []
       end
-    end
-
-    def import(params)
-      opts = params.slice(:user_id, :username, :type).merge(collecting: true, collector: @collector)
-      new_streams =
-        if(opts[:type])
-          [FlickrStream.find_or_create(opts)]
-        else
-          [ FlickrStream.find_or_create(opts.merge(type: FaveStream.name)),
-            FlickrStream.find_or_create(opts.merge(type: UploadStream.name))]
-        end
-      new_streams.each do |stream|
-        stream.sync
-      end
-      new_streams
     end
   end
 end

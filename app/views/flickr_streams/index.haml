@@ -44,7 +44,7 @@
       .row
         .cell.import-method.well
           %h4.pointer
-            %a#add-contracts-link{href: '#'}
+            %a#add-contacts-link{href: '#'}
               Add flickr contacts as sources.
         .cell.import-method.well
           %h4
@@ -58,6 +58,6 @@
 
 = render partial: 'import_streams', locals: {import_type: 'klekr recommended sources', popup_id:  'import-editor-streams-popup' }
 = render partial: 'import_streams', locals: {import_type: 'flickr group sources', popup_id:  'import-group-streams-popup' }
-= render partial: 'import_contacts'
+= render partial: 'import_streams', locals: {import_type: 'flickr contacts', popup_id:  'import-contacts-popup' }
 = render partial: 'import_google_reader'
 = render partial: 'import_user'

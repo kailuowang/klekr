@@ -15,7 +15,7 @@ class UsersController < ApplicationController
   end
 
   def contacts
-    render_json Collectr::ContactsImporter.new(@current_collector).contacts
+    render_json data_for_streams(Collectr::ContactsImporter.new(@current_collector).contact_streams)
   end
 
   def index
