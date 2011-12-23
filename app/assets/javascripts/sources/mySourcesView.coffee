@@ -30,7 +30,6 @@ class window.MySourcesView extends ViewBase
     contacts-list
 
   showNewSourcesAddedPanel: (collectorInfo) =>
-    @newSourcesAddedPanel.find('#num-of-pictures').text(collectorInfo.pictures)
     @newSourcesAddedPanel.find('#num-of-sources').text(collectorInfo.sources)
     $(window).scrollTop 0
     @newSourcesAddedPanel.slideDown()

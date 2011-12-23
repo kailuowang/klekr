@@ -12,6 +12,7 @@ function subscribe_flickr_stream_path(params){ return '/flickr_streams/' + param
 function unsubscribe_flickr_stream_path(params){ return '/flickr_streams/' + params.id + '/unsubscribe'}
 function import_flickr_streams_path(params){ return '/flickr_streams/import'}
 function my_sources_flickr_streams_path(params){ return '/flickr_streams/my_sources'}
+function sync_many_flickr_streams_path(params){ return '/flickr_streams/sync_many'}
 function flickr_streams_path(params){ return '/flickr_streams'}
 function flickr_stream_path(params){ return '/flickr_streams/' + params.id + ''}
 function all_viewed_pictures_path(params){ return '/pictures/all_viewed'}

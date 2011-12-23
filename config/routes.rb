@@ -31,6 +31,7 @@ Collectr::Application.routes.draw do
     collection do
       post 'import'
       get 'my_sources'
+      post 'sync_many'
     end
 
   end

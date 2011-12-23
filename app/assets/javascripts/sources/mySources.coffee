@@ -24,8 +24,8 @@ class window.MySources
         onFinish?(page > 1)
 
   _sourcesImportDone: =>
-    klekr.Global.server.get info_collector_path({id: 'current'}), {}, (data)=>
-      this.init =>
+    this.init =>
+      klekr.Global.server.get info_collector_path({id: 'current'}), {}, (data)=>
         @view.showNewSourcesAddedPanel(data)
 
   _sourcesImported: (sources) =>

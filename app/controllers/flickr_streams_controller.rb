@@ -54,6 +54,11 @@ class FlickrStreamsController < ApplicationController
     js_ok
   end
 
+  def sync_many
+    FlickrStream.find(params[:ids]).each(&:sync)
+    js_ok
+  end
+
   #PUT /flickr_stream/1/adjust_rating
   def adjust_rating
     params[:adjustment] == 'up' ? @flickr_stream.bump_rating : @flickr_stream.trash_rating

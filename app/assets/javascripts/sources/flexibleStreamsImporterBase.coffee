@@ -39,23 +39,26 @@ class klekr.FlexibleStreamsImporterBase extends ViewBase
   _startSync: (streams) =>
     new queffee.CollectionWorkQ(
       collection: streams
-      operation: this._sync
+      operation: this._add
       onProgress: (p) => this._reportProgress(p, streams.length )
       onFinish: this._finish
     ).start()
 
-  _sync: (stream, callback) =>
+  _add: (stream, callback) =>
     klekr.Global.server.put subscribe_flickr_stream_path(stream), {}, =>
-      klekr.Global.server.put sync_flickr_stream_path(stream), {}, =>
-        this.trigger('sources-imported', [stream])
-        callback()
+      this.trigger('sources-imported', [stream])
+      callback()
 
   _reportProgress: (progress, total) =>
     @_progressBar.reportprogress(progress * 100 / total)
 
   _finish: =>
+    this._syncAll()
     this.closePopup(@_popup)
     this.trigger('import-finished')
+
+  _syncAll: =>
+    klekr.Global.server.post sync_many_flickr_streams_path(), {ids: _(@streams).map( (s) -> s.id )}
 
 
 

@@ -9,7 +9,6 @@ class window.ContactsImporter extends StreamImporterBase
     @importLink = $('#do-import-contacts')
     @importLink.click_ this._startImport
     @noContacts = $('#no-contact')
-
     $('#add-contracts-link').click_ this._start
 
   _start: =>
