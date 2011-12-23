@@ -12,10 +12,22 @@ namespace :admin do
         puts "Total Pictures Faved: " + c.pictures.faved.count.to_s
         puts "========================================="
       end
-      puts "#{Collector.count} collectors."
+    end
+
+    desc 'report statistics'
+    task :statistics => :environment do
       puts "#{Picture.count} pictures."
+      puts "#{Collector.count} collectors in total."
+      puts "#{Collector.where(['last_login > ?', 10.days.ago]).count} collectors active in last 10 days."
+      active_collectors = Collector.all.select do |collector|
+        collector.flickr_streams.count > 0
+      end
+      puts "#{active_collectors.size} collectors that has more than one source."
+
     end
   end
+
+
 
 end
 

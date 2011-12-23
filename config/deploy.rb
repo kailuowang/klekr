@@ -92,7 +92,7 @@ namespace :deploy do
   end
 
   task :report, :roles => :app do
-    rake 'admin:report:collectors'
+    rake 'admin:report:statistics'
   end
 
   def backup_db_to_local
