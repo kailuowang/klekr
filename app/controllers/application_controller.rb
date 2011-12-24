@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
       return true
     end
 
-    unless request.url =~ /\.json$/
+    unless ajax_url? request.url
       session[:return_to]= request.url
     end
 
@@ -24,12 +24,15 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_to_stored
-    if return_to = session[:return_to]
+    return_to = '/slideshow'
+    if session[:return_to].present?
+      unless ajax_url?(session[:return_to])
+        return_to = session[:return_to]
+      end
       session[:return_to] = nil
-      redirect_to(return_to)
-    else
-      redirect_to('/slideshow')
     end
+
+    redirect_to return_to
   end
 
   def redirected_for_login
@@ -56,6 +59,10 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def ajax_url? url
+    url =~ /\.json$/
+  end
 
   def authenticating
     Settings.authentication
