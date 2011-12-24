@@ -16,7 +16,7 @@ class window.MySourcesView extends ViewBase
     @categories = {}
 
   addSource: (source) =>
-    this._ensureCategory(source.rating).addSource(source)
+    this._ensureCategory(source.rating).addSource(source).registerEvents?()
 
   onAllSourcesLoaded: (empty)=>
     this.setVisible($('#empty-sources'), empty)
