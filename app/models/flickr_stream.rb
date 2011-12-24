@@ -134,6 +134,7 @@ class FlickrStream < ActiveRecord::Base
 
   def unsubscribe
     update_attribute(:collecting, false)
+    mark_all_as_read
   end
 
   def synced_with?(picture)
@@ -212,7 +213,7 @@ class FlickrStream < ActiveRecord::Base
   end
 
   def mark_all_as_read
-    pictures.unviewed.each { |pic| pic.update_attribute(:viewed, true)}
+    pictures.unviewed.update_all(viewed: true)
   end
 
   private
