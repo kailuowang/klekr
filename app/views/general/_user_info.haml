@@ -9,16 +9,17 @@
       .fright
         %h4#username
           = @current_collector.full_name || @current_collector.user_name
-        #sources-count
-          = link_to @current_collector.flickr_streams.count, flickr_streams_path
-          sources.
-        - if @current_collector.collection_synced
-          #faved-count
-            = link_to @current_collector.pictures.faved.count, faves_slideshow_path, id: 'faved-count-link'
-            pictures faved.
-        #new-pictures-count
-          = link_to @current_collector.pictures.unviewed.count, slideshow_path, id: 'new-pictures-count-link'
-          new pictures to see.
+        #detail.hidden
+          #sources-count
+            = link_to '...', flickr_streams_path, id: 'sources-link'
+            sources.
+          - if @current_collector.collection_synced
+            #faved-count
+              = link_to '...', faves_slideshow_path, id: 'faved-count-link'
+              pictures faved.
+          #new-pictures-count
+            = link_to '...', slideshow_path, id: 'new-pictures-count-link'
+            new pictures to see.
       .clearfix
     #bottom.inner
       = link_to 'Sign out', authentications_path, method: :delete

@@ -5,6 +5,14 @@ class klekr.UserInfo extends ViewBase
     klekr.Global.broadcaster.bind('picture:viewed', this._updateNewPictures)
     @favedCountLink = $('#user-dropdown #faved-count-link')
     @newPicturesCountLink = $('#user-dropdown #new-pictures-count-link')
+    @sourcesLink = $('#user-dropdown #sources-link')
+
+  init: =>
+    klekr.Global.server.get info_collector_path({id: 'current'}), {}, (data)=>
+      @favedCountLink.text(data.collection)
+      @newPicturesCountLink.text(data.pictures)
+      @sourcesLink.text(data.sources)
+      $('#user-dropdown #detail').show()
 
   _updateFave: (num) =>
     if @favedCountLink?
@@ -16,4 +24,4 @@ class klekr.UserInfo extends ViewBase
     @newPicturesCountLink.text(count - 1)
 
 $ ->
-  new klekr.UserInfo
+  new klekr.UserInfo().init()
