@@ -24,4 +24,5 @@ class klekr.UserInfo extends ViewBase
     @newPicturesCountLink.text(count - 1)
 
 $ ->
-  new klekr.UserInfo().init()
+  if klekr.Global.currentCollector?
+    new klekr.UserInfo().init()

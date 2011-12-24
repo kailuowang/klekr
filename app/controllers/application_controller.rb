@@ -17,6 +17,7 @@ class ApplicationController < ActionController::Base
 
     unless request.url =~ /\.json$/
       session[:return_to]= request.url
+    end
 
     redirect_to authentications_path
     false
