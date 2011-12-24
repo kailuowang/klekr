@@ -31,7 +31,7 @@ class SlideshowController < ApplicationController
   def exhibit
     @disable_navigation = current_collector.blank?
     @collector = ::Collector.find(params[:collector_id])
-    @more_pictures_path = exhibit_pictures_slideshow_path(params.slice(:collector_id))
+    @more_pictures_path = exhibit_pictures_slideshow_path(params.slice(:collector_id, :order_by))
     @empty_message = "#{@collector.user_name} has not faved any pictures yet."
     @defaultFilters = defaultFilters
     @exhibit_params = exhibit_params
@@ -40,7 +40,8 @@ class SlideshowController < ApplicationController
   end
 
   def exhibit_pictures
-    render_fave_pictures ::Collector.find(params[:collector_id]), order: 'owner_name'
+    order_field = {'photographer' => 'owner_name', 'date' => 'faved_at desc'}[params[:order_by]] || 'owner_name'
+    render_fave_pictures ::Collector.find(params[:collector_id]), order: order_field
   end
 
   def fave_pictures
