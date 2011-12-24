@@ -25,8 +25,9 @@ class window.SourceCell extends ViewBase
 
   _add: =>
     @addBtn.fadeOut()
-    klekr.Global.broadcaster.trigger('source-added', @source)
-    @server.put subscribe_flickr_stream_path(@source), {}, this._broadcastNewSource
+    @server.put subscribe_flickr_stream_path(@source), {}, (data) =>
+      this._broadcastNewSource(data)
+      klekr.Global.broadcaster.trigger('source-added', @source)
 
   _broadcastNewSource: (data)=>
     klekr.Global.broadcaster.trigger 'source-changed', new Source(data)

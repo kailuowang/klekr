@@ -1,3 +1,5 @@
+@import '../global/_mixins'
+
 #loading-sources-indicator
   margin-left: 81px
 
@@ -61,6 +63,8 @@
   #sources-management
     margin-top: 30px
     text-align: center
+    #expand-management
+      @include unselectable
     #sources-import-panel
       padding-top: 20px
       .row
@@ -84,6 +88,15 @@
     width: 661px
     height: 300px
     overflow-y: auto
+
+  #source-added-message
+    .source-added-title
+      color: #909090
+      text-transform: uppercase
+      size: 24px
+    .my-stream-link
+      color: #505050
+
 
 #add-individually-note
   color: #606060

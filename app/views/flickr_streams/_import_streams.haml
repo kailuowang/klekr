@@ -9,12 +9,22 @@
     #streams-list.row.well.mt20
       = render partial: 'streams_grid'
 
+    .fleft
+      #source-added-message.hidden
+        .source-added-title
+          Sweet, Source Added!
+        .my-stream-link
+          Add more or
+          = link_to 'go see pictures in My Stream', slideshow_path
+
+
     .fright.tright
       %h3
         %a#do-import-streams.btn.large.primary{href: '#'}
           Yes! Add Them All!
       %span#add-individually-note
         Or, hover mouse on icons to add individually.
+    .clearfix
   #import-streams-progress.hidden
     %h4 Adding #{import_type} and some of their pictures
     #streams-progress-bar.progress-bar
