@@ -137,7 +137,7 @@ class window.Grid extends ModeBase
     gridview.currentSize() < gridview.size
 
   _markCurrentPageAsViewed: =>
-    Picture.allGetViewed(this.currentPageOfPictures())
+    new klekr.PictureUtil().allGetViewed(this.currentPageOfPictures())
 
   _onLayoutChange: =>
     [original_rows, original_columns] = [gridview.rows, gridview.columns]

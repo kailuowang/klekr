@@ -1,23 +1,5 @@
 class window.Picture extends Events
 
-  @uniqConcat: (original, newOnes) =>
-    h = {}
-    h[p.id] = 1 for p in original
-    added = []
-    for newP in newOnes when not h[newP.id]?
-      original.push newP
-      added.push newP
-    added
-
-  @allGetViewed: (pictures) =>
-    toMarkPictures = _(pictures).select (pic) -> pic._viewedMarkable()
-    pic._setAsViewed() for pic in toMarkPictures
-
-    if toMarkPictures.length > 0
-      updatePath = toMarkPictures[0].data.getAllViewedPath
-      picIds = ( pic.id for pic in toMarkPictures )
-      klekr.Global.updater.post(updatePath, {ids: picIds})
-
   constructor: (@data) ->
     @id = @data.id
     _.defaults(this, @data)
@@ -169,3 +151,25 @@ class window.Picture extends Events
   trigger: (event, data) =>
     super(event, data)
     klekr.Global.broadcaster.trigger('picture:' + event, data)
+
+
+class klekr.PictureUtil
+
+  uniqConcat: (original, newOnes) =>
+    h = {}
+    h[p.id] = 1 for p in original
+    added = []
+    for newP in newOnes when not h[newP.id]?
+      original.push newP
+      added.push newP
+    added
+
+  allGetViewed: (pictures) =>
+    toMarkPictures = _(pictures).select (pic) -> pic._viewedMarkable()
+    pic._setAsViewed() for pic in toMarkPictures
+
+    if toMarkPictures.length > 0
+      updatePath = toMarkPictures[0].data.getAllViewedPath
+      picIds = ( pic.id for pic in toMarkPictures )
+      klekr.Global.updater.post(updatePath, {ids: picIds})
+

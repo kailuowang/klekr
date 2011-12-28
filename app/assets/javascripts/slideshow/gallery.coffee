@@ -180,7 +180,7 @@ class window.Gallery extends Events
 
   _addPictures: (newPictures) =>
     startPosition = @pictures.length
-    addedPictures = Picture.uniqConcat(@pictures, newPictures)
+    addedPictures = new klekr.PictureUtil().uniqConcat(@pictures, newPictures)
 #    console.debug("#{addedPictures.length}/#{newPictures.length} pictures are new")
     if addedPictures.length > 0
       for newPic in addedPictures       #todo remove this hacky workaround

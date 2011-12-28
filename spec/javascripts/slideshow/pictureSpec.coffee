@@ -7,7 +7,7 @@ describe 'Picture', ->
       data = {id: 1}
       original = [new Picture(data)]
       newOnes = [new Picture(data), new Picture({id: 2})]
-      Picture.uniqConcat(original, newOnes)
+      new klekr.PictureUtil().uniqConcat(original, newOnes)
       expect( original.length ).toEqual(2)
 
 
