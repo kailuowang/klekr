@@ -60,6 +60,11 @@ namespace :deploy do
     download "#{app_path}/log/cron.log", "log/cron.log"
     download "#{app_path}/log/production.log", "log/production.log"
   end
+
+  task :tail_log, :roles => :app do
+    run_in_app "tail -f log/production.log"
+  end
+
   task :patch, :roles => :app do
     run_in_app "git checkout ."
     run_in_app "git pull"
