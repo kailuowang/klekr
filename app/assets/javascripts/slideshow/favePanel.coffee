@@ -65,6 +65,8 @@ class window.FavePanel  extends ViewBase
       start: 1
       path: '/assets/'
       size: 24
+      target: '#faveRatingPanel #hint-message'
+      hintList: ['I like it.', 'I would recommend it to others.', "One of the most impresive pictures I've seen for quite a while.", 'I would hang it in my home.', "It's probably a masterpiece."]
       click: (score, evt) =>
         this._changeRating(score)
     })
