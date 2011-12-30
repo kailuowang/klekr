@@ -35,13 +35,13 @@ namespace :deploy do
   set :app_path, '/app/collectr'
   set :current_path, app_path
   set :release_path, app_path
-
+  set :branch, '1.2.1'
 
   task :simple, :roles => :app do
     _, bkp_path = db_backup_dir_and_path()
     deploy.db_backup unless File.exist?(bkp_path)
-    run_in_app "git checkout ."
-    run_in_app "git pull"
+
+    checkout_code
     run_in_app "bundle install --without=test"
 
     whenever.clear_crontab
@@ -50,7 +50,7 @@ namespace :deploy do
     rake "db:migrate"
     deploy.prepare_assets
     whenever.update_crontab
-    run_in_app "#{try_sudo} touch tmp/restart.txt"
+    restart_passenger
     deploy.start_delayed_job
     deploy.post_deploy
     deploy.warm_server
@@ -60,11 +60,11 @@ namespace :deploy do
     download "#{app_path}/log/cron.log", "log/cron.log"
     download "#{app_path}/log/production.log", "log/production.log"
   end
+
   task :patch, :roles => :app do
-    run_in_app "git checkout ."
-    run_in_app "git pull"
+    checkout_code
     deploy.prepare_assets
-    run_in_app "#{try_sudo} touch tmp/restart.txt"
+    restart_passenger
     deploy.warm_server
   end
 
@@ -73,7 +73,6 @@ namespace :deploy do
     rake "assets:precompile"
     run_in_app 'cp -r app/assets/images/* public/assets/'
   end
-
 
   task :warm_server do
     system "curl #{ec2_server}"
@@ -93,6 +92,17 @@ namespace :deploy do
 
   task :report, :roles => :app do
     rake 'admin:report:statistics'
+  end
+
+  def restart_passenger
+    run_in_app "#{try_sudo} touch tmp/restart.txt"
+  end
+
+  def checkout_code
+    run_in_app "git checkout ."
+    run_in_app "git fetch"
+    run_in_app "git checkout #{branch}"
+    run_in_app "git pull"
   end
 
   def backup_db_to_local
