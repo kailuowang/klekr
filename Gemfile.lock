@@ -37,6 +37,8 @@ GEM
       net-sftp (>= 2.0.0)
       net-ssh (>= 2.0.14)
       net-ssh-gateway (>= 1.1.0)
+    childprocess (0.2.4)
+      ffi (~> 1.0.6)
     chronic (0.6.6)
     coffee-script (2.2.0)
       coffee-script-source
@@ -52,6 +54,7 @@ GEM
       multi_json (~> 1.0)
     factory_girl (2.3.2)
       activesupport
+    ffi (1.0.11)
     flickraw (0.8.4)
       json (>= 1.1.1)
     haml (3.1.4)
@@ -122,7 +125,13 @@ GEM
       activesupport (~> 3.0)
       railties (~> 3.0)
       rspec (~> 2.7.0)
+    rubyzip (0.9.5)
     sass (3.1.12)
+    selenium-webdriver (2.15.0)
+      childprocess (>= 0.2.1)
+      ffi (~> 1.0.9)
+      multi_json (~> 1.0.4)
+      rubyzip
     spork (0.9.0.rc9)
     sprockets (2.0.3)
       hike (~> 1.2)
@@ -166,6 +175,7 @@ DEPENDENCIES
   rails_config
   rspec-rails (~> 2.4)
   sass
+  selenium-webdriver (~> 2.15.0)
   spork (~> 0.9.0.rc9)
   sqlite3-ruby
   therubyracer

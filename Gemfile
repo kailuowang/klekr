@@ -27,6 +27,7 @@ group :test, :development do
   gem 'factory_girl'
   gem 'spork', '~> 0.9.0.rc9'
   gem 'jasminerice'
+  gem "selenium-webdriver", "~> 2.15.0"
 end
 
 group :production do
