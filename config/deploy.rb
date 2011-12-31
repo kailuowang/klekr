@@ -42,7 +42,7 @@ namespace :deploy do
     deploy.db_backup unless File.exist?(bkp_path)
 
     checkout_code
-    run_in_app "bundle install --without=test"
+    run_in_app "bundle install --without test development"
 
     whenever.clear_crontab
     run_in_app "#{rails_env} script/delayed_job stop"

@@ -217,4 +217,6 @@ $(document).ready ->
   window.gridview = new Gridview
   window.gallery = new Gallery
   new StreamPanel
+
+$(window).load ->
   gallery.init()
