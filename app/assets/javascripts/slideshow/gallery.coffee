@@ -1,6 +1,6 @@
 class window.Gallery extends Events
   constructor: ->
-    @cacheSize = 5
+    @cacheSize = klekr.Global.defaultGalleryCacheSize || 5
     [@grid, @slide] = @modes = [new Grid, new Slide]
     for mode in @modes
       mode.bind('progressed', this._ensurePictureCache)

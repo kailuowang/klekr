@@ -38,6 +38,7 @@ class window.Gridview extends ViewBase
     item = new PictureCellView(@template.clone(), picture)
     item.setBoarderClasses this._boarderClasses(index)
     @grid.append(item.cellDiv)
+    item.cellDiv.addClass('grid-index-' + index)
     item.cellDiv.show()
 
   _calculateSize: ->

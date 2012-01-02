@@ -24,6 +24,7 @@ class window.Slideview extends ViewBase
   
   update: (picture) ->
     @mainImg.attr('src', picture.url())
+    @mainImg.attr('data-pic-id', picture.id)
     this._updateLabel(picture)
 
   displayLabel: (picture) =>
