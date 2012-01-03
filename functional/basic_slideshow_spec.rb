@@ -1,9 +1,10 @@
 require File.expand_path('../../spec/spec_helper', __FILE__)
 
 describe "slideshow" do
+  include Functional::DataUtil
 
   before :all do
-    Collector.last.pictures.viewed.order('updated_at DESC').limit(50).update_all(viewed: false)
+    reset_viewed_pictures
     @page = Functional::SlideshowPage.new
   end
 
@@ -80,9 +81,9 @@ describe "slideshow" do
     it "highlight the corresponding grid picture when switch to grid" do
       @page.click_right_button
       @page.click_right_button
-      pic_id = @page.slide_picture['data-pic-id']
+      pic_id = @page.slide_picture_id
       @page.slide_picture.click
-      @page.highlighted_grid_picture['id'].should == "pic-#{pic_id}"
+      @page.highlighted_grid_picture_id.should == pic_id
     end
 
     it "switches to the next page of grid when navigate through slide" do

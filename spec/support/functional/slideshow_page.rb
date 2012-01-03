@@ -24,6 +24,10 @@ module Functional
       @d["picture"]
     end
 
+    def slide_picture_id
+      slide_picture['data-pic-id']
+    end
+
     def click_right_button
       @d['right'].click
       pause
@@ -49,6 +53,10 @@ module Functional
       s ".grid-picture.highlighted"
     end
 
+    def highlighted_grid_picture_id
+      grid_pic_id highlighted_grid_picture
+    end
+
     def grid_pictures
       s ".grid-picture"
     end
@@ -58,8 +66,21 @@ module Functional
     end
 
     def grid_pictures_ids
-      grid_pictures.map {|gp| gp['id']}
+      grid_pictures.map {|gp| grid_pic_id(gp)}
     end
+
+    def enter_grid_mode
+      slide_picture.click
+      wait_until_grid_shows
+    end
+
+    def wait_until_grid_shows
+      wait_until do
+        grid_pictures.select(&:displayed?)
+      end
+    end
+
+    private
 
     def s selector
       results = @d.find_elements css: selector
@@ -69,8 +90,13 @@ module Functional
         results.first
       end
     end
+
     def wait_until(&block)
       @w.until &block
+    end
+
+    def grid_pic_id grid_picture_element
+      grid_picture_element['id'].split('-')[1]
     end
 
   end
