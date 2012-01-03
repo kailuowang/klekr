@@ -1,4 +1,4 @@
 desc "run funcational suites"
 task :functional do
-  sh 'rspec functional'
+  sh 'cd functional && RAILS_ENV=development rspec .'
 end

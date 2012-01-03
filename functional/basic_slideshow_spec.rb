@@ -1,4 +1,4 @@
-require File.expand_path('../spec_helper', __FILE__)
+require File.expand_path('../../spec/spec_helper', __FILE__)
 
 describe "slideshow" do
 
@@ -53,6 +53,13 @@ describe "slideshow" do
       last_page_ids.each do |last_page_id|
         @page.grid_pictures_ids.should_not include(last_page_id)
       end
+    end
+
+    it 'goes back to the previous page when left button clicked' do
+      last_page_ids = @page.grid_pictures_ids
+      @page.click_right_button
+      @page.click_left_button
+      @page.grid_pictures_ids.should == last_page_ids
     end
   end
 
