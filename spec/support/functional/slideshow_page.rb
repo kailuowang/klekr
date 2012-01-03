@@ -1,14 +1,19 @@
 module Functional
   class SlideshowPage
+    INTERVAL = 0.1
+
     def initialize
       @d = Selenium::WebDriver.for :firefox
       @d.manage.window.size = Selenium::WebDriver::Dimension.new(1024, 768)
       @d.manage.timeouts.implicit_wait = 4
-      @w = Selenium::WebDriver::Wait.new(:timeout => 4)
+      @w = Selenium::WebDriver::Wait.new(timeout: 4, interval: INTERVAL)
     end
 
     def open
       @d.get "http://localhost:3000/slideshow"
+      wait_until do
+        slide_picture.displayed?
+      end
     end
 
     def close
@@ -21,13 +26,22 @@ module Functional
 
     def click_right_button
       @d['right'].click
-      pause 1
+      pause
     end
 
-    def pause secs
+    def click_left_button
+      @d['left'].click
+      pause
+    end
+
+    def left_arrow
+      s '#leftArrow'
+    end
+
+    def pause secs = 0.4
       count = 0
       wait_until do
-        (count += 1) / 2 > secs
+        (count += 1) * INTERVAL > secs
       end
     end
 
