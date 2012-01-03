@@ -11,10 +11,10 @@ end
 Spork.each_run do
   # This code will be run each time you run your specs.
   begin
-    Factory.definition_file_paths = [
+    FactoryGirl.definition_file_paths = [
       File.join(Rails.root, 'spec', 'factories')
     ]
-    Factory.find_definitions
+    FactoryGirl.find_definitions
   rescue Exception
 
   end
