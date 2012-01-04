@@ -9,15 +9,32 @@ module Functional
       @w = Selenium::WebDriver::Wait.new(timeout: 4, interval: INTERVAL)
     end
 
-    def open
-      @d.get "http://localhost:3000/slideshow"
+    def open page = 'slideshow', grid_default = false
+      @d.get "http://localhost:3000/#{page}"
       wait_until do
-        slide_picture.displayed?
+        if(grid_default)
+          highlighted_grid_picture.displayed?
+        else
+          slide_picture.displayed?
+        end
       end
     end
 
     def close
       @d.quit
+    end
+
+    def fave_button
+      @d['faveLink']
+    end
+
+    def unfave_button
+      @d['removeFaveLink']
+    end
+
+
+    def fave_rating_star rating = 1
+      @d["faveRating-#{rating}"]
     end
 
     def slide_picture
@@ -71,6 +88,11 @@ module Functional
 
     def enter_grid_mode
       slide_picture.click
+      wait_until_grid_shows
+    end
+
+    def grid_next_page
+      click_right_button
       wait_until_grid_shows
     end
 

@@ -50,7 +50,7 @@ describe "slideshow" do
 
     it 'goes to the next page when right button clicked' do
       last_page_ids = @page.grid_pictures_ids
-      @page.click_right_button
+      @page.grid_next_page
       last_page_ids.each do |last_page_id|
         @page.grid_pictures_ids.should_not include(last_page_id)
       end

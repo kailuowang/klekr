@@ -37,8 +37,8 @@ describe "progress tracking in my stream page" do
     it "mark the all pictures in the current page as viewed when navigate to the next page" do
       @page.enter_grid_mode
       pic_ids_in_page = @page.grid_pictures_ids
-      @page.click_right_button
-      @page.wait_until_grid_shows
+      @page.grid_next_page
+      @page.pause 2
       @page.open
       pic_ids_in_page.should_not include(@page.slide_picture_id)
     end
