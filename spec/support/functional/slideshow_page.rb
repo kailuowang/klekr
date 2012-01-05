@@ -13,7 +13,7 @@ module Functional
       @d.get "http://localhost:3000/#{page}"
       wait_until do
         if(grid_default)
-          highlighted_grid_picture.displayed?
+          highlighted_grid_picture.present? && highlighted_grid_picture.displayed?
         else
           slide_picture.displayed?
         end

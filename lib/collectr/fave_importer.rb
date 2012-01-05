@@ -51,7 +51,9 @@ module Collectr
       faves =
         begin
           flickr.photos.getFavorites(photo_id: pic.id, secret: pic.secret, per_page: 50, page: page)
-        rescue FlickRaw::FailedResponse => e; end
+        rescue FlickRaw::FailedResponse => e;
+          Rails.logger.error(e.inspect)
+        end
       if faves && faves.person.size > 0
         faves.person.find{ |p| p.nsid == @collector.user_id } || find_fave_info_by_page(pic, page + 1)
       end

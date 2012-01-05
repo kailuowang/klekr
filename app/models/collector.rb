@@ -17,7 +17,7 @@ class Collector < ActiveRecord::Base
 
   def collection(per_page, page, opts = {})
     pictures_in_db = Picture.faved_by(self, collection_opts(opts), page, per_page)
-    if(pictures_in_db.size == per_page || opts.present?)
+    if(pictures_in_db.to_a.size == per_page || opts.present?)
       pictures_in_db
     else
       pictures_in_db.to_a + import_from_flickr(per_page - pictures_in_db.size)

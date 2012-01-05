@@ -8,12 +8,16 @@ describe "fave pictures" do
     @page = Functional::SlideshowPage.new
   end
 
-
   after :all do
     @page.close
   end
 
+  def open_fave_page
+    @page.open 'slideshow/faves', true
+  end
+
   describe 'fave picture in my stream' do
+
     before :each do
       @page.open
     end
@@ -48,11 +52,21 @@ describe "fave pictures" do
       @page.pause
       @page.unfave_button.click
       @page.pause
-      @page.open 'slideshow/faves', true
+      open_fave_page
       @page.highlighted_grid_picture_id.should_not == pic_id
     end
-
-
   end
 
+  describe "browsing faves" do
+    before :all do
+      clear_faved_pictures
+    end
+
+    it 'automatically load faves from flickr when browsing' do
+      open_fave_page
+
+      @page.click_right_button
+      @page.grid_pictures.size.should == 6
+    end
+  end
 end

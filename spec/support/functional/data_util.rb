@@ -8,5 +8,8 @@ module Functional
       Collectr::PictureRepo.new(Collector.last).new_pictures(offset: 0, limit: 50).update_all(rating: 0)
     end
 
+    def clear_faved_pictures
+      Collector.last.pictures.faved.update_all(rating: 0)
+    end
   end
 end
