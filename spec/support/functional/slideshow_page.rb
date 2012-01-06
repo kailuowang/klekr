@@ -5,17 +5,17 @@ module Functional
     def initialize
       @d = Selenium::WebDriver.for :firefox
       @d.manage.window.size = Selenium::WebDriver::Dimension.new(1024, 768)
-      @d.manage.timeouts.implicit_wait = 4
-      @w = Selenium::WebDriver::Wait.new(timeout: 4, interval: INTERVAL)
+      @d.manage.timeouts.implicit_wait = 10
+      @w = Selenium::WebDriver::Wait.new(timeout: 10, interval: INTERVAL)
     end
 
     def open page = 'slideshow', grid_default = false
       @d.get "http://localhost:3000/#{page}"
       wait_until do
         if(grid_default)
-          highlighted_grid_picture.present? && highlighted_grid_picture.displayed?
+          wait_until_grid_shows
         else
-          slide_picture.displayed?
+          wait_until_slide_shows
         end
       end
     end
@@ -31,7 +31,6 @@ module Functional
     def unfave_button
       @d['removeFaveLink']
     end
-
 
     def fave_rating_star rating = 1
       @d["faveRating-#{rating}"]
@@ -66,6 +65,21 @@ module Functional
       end
     end
 
+    def fave rating = 1
+      fave_button.click
+      fave_rating_star(rating).click
+      wait_until do
+        unfave_button.displayed?
+      end
+    end
+
+    def unfave
+      unfave_button.click
+      wait_until do
+        fave_button.displayed?
+      end
+    end
+
     def highlighted_grid_picture
       s ".grid-picture.highlighted"
     end
@@ -75,7 +89,7 @@ module Functional
     end
 
     def grid_pictures
-      s ".grid-picture"
+      @d.find_elements css: ".grid-picture"
     end
 
     def last_grid_picture
@@ -91,6 +105,11 @@ module Functional
       wait_until_grid_shows
     end
 
+    def enter_slide_mode
+      highlighted_grid_picture.click
+      wait_until_slide_shows
+    end
+
     def grid_next_page
       click_right_button
       wait_until_grid_shows
@@ -98,10 +117,21 @@ module Functional
 
     def wait_until_grid_shows
       wait_until do
-        grid_pictures.select(&:displayed?)
+        grid_pictures.select(&:displayed?).present?
       end
     end
 
+    def wait_until_slide_shows
+      wait_until do
+        slide_picture.displayed?
+      end
+    end
+
+    def wait_until_fave_ready
+       wait_until do
+        fave_button.displayed? || unfave_button.displayed?
+      end
+    end
     private
 
     def s selector

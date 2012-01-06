@@ -11,5 +11,9 @@ module Functional
     def clear_faved_pictures
       Collector.last.pictures.faved.update_all(rating: 0)
     end
+
+    def add_faved_pictures
+      Collector.last.pictures.limit(60).update_all(rating: 1)
+    end
   end
 end
