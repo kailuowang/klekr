@@ -131,7 +131,7 @@ module Functional
 
     def wait_until_grid_shows
       wait_until do
-        grid_pictures.select(&:displayed?).present?
+        @d['gridPictures'].displayed?
       end
     end
 

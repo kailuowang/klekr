@@ -18,11 +18,11 @@ module Functional
 
     def create_some_faved_pictures
       if(Collector.last.pictures.where(rating: 3).count < 20)
-        Collector.last.pictures.where(rating: 1).limit(20).update_all(rating, 3)
+        Collector.last.pictures.where(rating: 1).limit(20).update_all(rating: 3)
       end
 
       if(Collector.last.pictures.where(rating: 2).count < 20)
-        Collector.last.pictures.where(rating: 1).limit(20).update_all(rating, 2)
+        Collector.last.pictures.where(rating: 1).limit(20).update_all(rating: 2)
       end
 
     end
