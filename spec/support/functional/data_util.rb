@@ -5,7 +5,7 @@ module Functional
     end
 
     def reset_faved_pictures
-      Collectr::PictureRepo.new(Collector.last).new_pictures(offset: 0, limit: 50).update_all(rating: 0)
+      Collectr::PictureRepo.new(Collector.last).new_pictures(offset: 0, limit: 50).update_all(rating: 0, faved_at: nil)
     end
 
     def clear_faved_pictures

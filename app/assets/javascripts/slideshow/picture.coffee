@@ -36,6 +36,7 @@ class window.Picture extends Events
   fave: (rating) =>
     @data.rating = rating
     klekr.Global.updater.put @data.favePath, {rating: rating}
+    this.favedDate = $.format.date new Date(), 'MMMM d, yyyyy'
     this._broadCastChange()
     this.trigger('faved')
 
@@ -44,7 +45,6 @@ class window.Picture extends Events
     klekr.Global.updater.put @data.unfavePath
     this._broadCastChange()
     this.trigger('unfaved')
-
 
   getViewed: =>
     if this._viewedMarkable()

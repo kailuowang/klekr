@@ -59,7 +59,12 @@ describe "fave pictures" do
 
     end
 
-    it 'displays the faved date on the tooltip of unfave button' do
+    it 'displays the faved date on the tooltip of unfave button immediately' do
+      @page.click_right_button
+      @page.click_right_button
+
+      @page.fave
+      @page.unfave_button['data-content'].should include(Date.today.to_s(:long).gsub(/\s\s/, ' '))
 
     end
   end
