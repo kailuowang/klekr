@@ -36,6 +36,20 @@ module Functional
       @d["faveRating-#{rating}"]
     end
 
+    def set_fave_rating rating
+      @d["ratingDisplay-#{rating}"].click
+    end
+
+    def set_option options
+      @d["option-button"].click
+      if(options[:rating].present?)
+        select = Selenium::WebDriver::Support::Select.new(@d['rating-filter-select'])
+        select.select_by(:index, options[:rating] - 1)
+      end
+      @d['close-options-button'].click
+      wait_until_grid_shows
+    end
+
     def slide_picture
       @d["picture"]
     end

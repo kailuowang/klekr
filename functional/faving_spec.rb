@@ -65,10 +65,32 @@ describe "faving pictures" do
 
       @page.fave
       @page.unfave_button['data-content'].should include(Date.today.to_s(:long).gsub(/\s\s/, ' '))
+    end
+  end
 
+  describe 'browsing with filter' do
+    before :all do
+      create_some_faved_pictures
+      @page.pause 3
     end
 
-    it "can filter by rating"
+    it "can filter by rating" do
+      open_fave_page
+      @page.enter_slide_mode
+      pic_src = @page.slide_picture['src']
+      @page.set_fave_rating(2)
+
+      @page.set_option rating: 3
+
+      @page.enter_slide_mode
+      @page.slide_picture['src'].should_not == pic_src
+
+      @page.set_option rating: 2
+
+      @page.enter_slide_mode
+      @page.slide_picture['src'].should == pic_src
+
+    end
 
     it "can filter by date"
   end

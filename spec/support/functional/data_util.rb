@@ -15,5 +15,16 @@ module Functional
     def add_faved_pictures
       Collector.last.pictures.limit(60).update_all(rating: 1)
     end
+
+    def create_some_faved_pictures
+      if(Collector.last.pictures.where(rating: 3).count < 20)
+        Collector.last.pictures.where(rating: 1).limit(20).update_all(rating, 3)
+      end
+
+      if(Collector.last.pictures.where(rating: 2).count < 20)
+        Collector.last.pictures.where(rating: 1).limit(20).update_all(rating, 2)
+      end
+
+    end
   end
 end
