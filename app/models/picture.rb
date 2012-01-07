@@ -167,8 +167,10 @@ class Picture < ActiveRecord::Base
   def newly_faved
     update_attribute(:faved_at, DateTime.now )
     flickr_streams.each { |stream| stream.add_score(created_at) }
-    try_flickr('Failed to fave picture') do
-      flickr.favorites.add(photo_id: pic_info.id)
+    if Settings.fave_on_flickr
+      try_flickr('Failed to fave picture') do
+        flickr.favorites.add(photo_id: pic_info.id)
+      end
     end
   end
 
