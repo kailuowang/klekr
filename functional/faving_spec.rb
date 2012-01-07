@@ -1,6 +1,6 @@
 require File.expand_path('../../spec/spec_helper', __FILE__)
 
-describe "fave pictures" do
+describe "faving pictures" do
   include Functional::DataUtil
 
   before :all do
@@ -23,7 +23,7 @@ describe "fave pictures" do
   end
 
 
-  describe 'fave picture in my stream' do
+  describe 'in my stream' do
     before :all do
       reset_faved_pictures
     end
@@ -67,11 +67,16 @@ describe "fave pictures" do
       @page.unfave_button['data-content'].should include(Date.today.to_s(:long).gsub(/\s\s/, ' '))
 
     end
+
+    it "can filter by rating"
+
+    it "can filter by date"
   end
 
   describe "browsing faves from flickr" do
     before :all do
       clear_faved_pictures
+      @page.pause 3
     end
 
     after :all do
