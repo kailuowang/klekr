@@ -46,6 +46,9 @@ module Functional
         select = Selenium::WebDriver::Support::Select.new(@d['rating-filter-select'])
         select.select_by(:index, options[:rating] - 1)
       end
+
+      @d['fave-at-date'].send_keys(options[:faved_at_max]) if options[:faved_at_max].present?
+      @d['fave-at-date-after'].send_keys(options[:faved_at_min]) if options[:faved_at_min].present?
       @d['close-options-button'].click
       wait_until_grid_shows
     end

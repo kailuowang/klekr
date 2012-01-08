@@ -71,7 +71,7 @@ describe "faving pictures" do
   describe 'browsing with filter' do
     before :all do
       create_some_faved_pictures
-      @page.pause 3
+      @page.pause
     end
 
     it "can filter by rating" do
@@ -92,17 +92,27 @@ describe "faving pictures" do
 
     end
 
-    it "can filter by date"
+    it "can filter by date"  do
+      reset_sync_status true
+      clear_faved_pictures(['faved_at > ? and faved_at < ?', Date.new(2004, 1, 1), Date.new(2004, 1, 10)])
+      add_faved_pictures({faved_at: Date.new(2004,1,4)}, 3)
+      open_fave_page
+      @page.set_option(faved_at_max: '1/9/2004', faved_at_min: '1/2/2004')
+      @page.grid_pictures.size.should == 3
+    end
   end
 
   describe "browsing faves from flickr" do
     before :all do
       clear_faved_pictures
-      @page.pause 3
+      reset_sync_status false
+      @page.pause
+
     end
 
     after :all do
       add_faved_pictures
+      reset_sync_status true
     end
 
     it 'automatically load faves from flickr when browsing' do

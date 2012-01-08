@@ -8,12 +8,16 @@ module Functional
       Collectr::PictureRepo.new(Collector.last).new_pictures(offset: 0, limit: 50).update_all(rating: 0, faved_at: nil)
     end
 
-    def clear_faved_pictures
-      Collector.last.pictures.faved.update_all(rating: 0)
+    def clear_faved_pictures(conditions = {})
+      Collector.last.pictures.faved.where(conditions).update_all(rating: 0)
     end
 
-    def add_faved_pictures
-      Collector.last.pictures.limit(60).update_all(rating: 1)
+    def add_faved_pictures(extra = {}, number = 60)
+      Collector.last.pictures.limit(number).update_all(extra.merge(rating: 1))
+    end
+
+    def reset_sync_status status
+      Collector.last.update_attribute(:collection_synced, status)
     end
 
     def create_some_faved_pictures

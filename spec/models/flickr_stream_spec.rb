@@ -445,11 +445,8 @@ describe FlickrStream do
         collector = Factory(:collector)
         @flickr_stream.collector = collector
         @flickr_stream.alternative_stream == @flickr_stream.alternative_stream
-
       end
-
     end
-
   end
 
   describe FaveStream do
