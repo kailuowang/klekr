@@ -12,7 +12,7 @@ set :deploy_to, '/apps/'
 set :ec2_server, 'klekr.com'
 
 set :environment, 'production'
-
+set :branch, 'master'
 set :rails_env, "RAILS_ENV=#{environment}"
 
 role :web, ec2_server                          # Your HTTP server, Apache/etc
@@ -35,7 +35,7 @@ namespace :deploy do
   set :app_path, '/app/collectr'
   set :current_path, app_path
   set :release_path, app_path
-  set :branch, '1.2.1'
+
 
   task :simple, :roles => :app do
     _, bkp_path = db_backup_dir_and_path()
