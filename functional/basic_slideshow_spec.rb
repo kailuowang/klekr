@@ -64,12 +64,6 @@ describe "slideshow" do
     end
   end
 
-
-  describe 'options' do
-    it 'can display all photos in date order'
-    it 'can display only upload streams'
-  end
-
   describe 'switching between two modes' do
     it "hide slide picture when clicked" do
       @page.slide_picture.click

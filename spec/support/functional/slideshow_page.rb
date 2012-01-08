@@ -42,13 +42,7 @@ module Functional
 
     def set_option options
       @d["option-button"].click
-      if(options[:rating].present?)
-        select = Selenium::WebDriver::Support::Select.new(@d['rating-filter-select'])
-        select.select_by(:index, options[:rating] - 1)
-      end
-
-      @d['fave-at-date'].send_keys(options[:faved_at_max]) if options[:faved_at_max].present?
-      @d['fave-at-date-after'].send_keys(options[:faved_at_min]) if options[:faved_at_min].present?
+      set_form_in_gallery_option(options)
       @d['close-options-button'].click
       wait_until_grid_shows
     end
@@ -150,6 +144,18 @@ module Functional
       end
     end
     private
+
+    def set_form_in_gallery_option(options)
+      if (options[:rating].present?)
+        select = Selenium::WebDriver::Support::Select.new(@d['rating-filter-select'])
+        select.select_by(:index, options[:rating] - 1)
+      end
+
+      @d['fave-at-date'].send_keys(options[:faved_at_max]) if options[:faved_at_max].present?
+      @d['fave-at-date-after'].send_keys(options[:faved_at_min]) if options[:faved_at_min].present?
+      @d['viewed-filter-checkbox'].click if options[:viewed_filter]
+      @d['type-filter-checkbox'].click if options[:type_filter]
+    end
 
     def s selector
       results = @d.find_elements css: selector
