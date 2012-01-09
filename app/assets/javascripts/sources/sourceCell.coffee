@@ -4,6 +4,7 @@ class window.SourceCell extends ViewBase
     @cell.find('.source-icon-link').attr('href', @source.slideUrl)
     @cell.find('.source-name').text(@source.username)
     @cell.find('.source-type').text(@source.typeDisplay)
+    @cell.attr('id', 'source-cell-' + @source.id)
     @mainPart = @cell.find('.main-part')
     @removeBtn = @cell.find('#remove')
     @addBtn = @cell.find('#add')

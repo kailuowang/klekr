@@ -39,7 +39,7 @@ module Functional
     end
 
     def collector
-      Collector.last
+      @collector ||= Collector.last
     end
   end
 end

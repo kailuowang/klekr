@@ -1,27 +1,15 @@
 module Functional
-  class SlideshowPage
-    INTERVAL = 0.1
-
-    def initialize
-      @d = Selenium::WebDriver.for :firefox
-      @d.manage.window.size = Selenium::WebDriver::Dimension.new(1024, 768)
-      @d.manage.timeouts.implicit_wait = 10
-      @w = Selenium::WebDriver::Wait.new(timeout: 10, interval: INTERVAL)
-    end
+  class SlideshowPage < PageBase
 
     def open page = 'slideshow', grid_default = false
-      @d.get "http://localhost:3000/#{page}"
+      super(page)
       wait_until do
-        if(grid_default)
+        if (grid_default)
           wait_until_grid_shows
         else
           wait_until_slide_shows
         end
       end
-    end
-
-    def close
-      @d.quit
     end
 
     def fave_button
@@ -67,13 +55,6 @@ module Functional
 
     def left_arrow
       s '#leftArrow'
-    end
-
-    def pause secs = 0.4
-      count = 0
-      wait_until do
-        (count += 1) * INTERVAL > secs
-      end
     end
 
     def fave rating = 1
@@ -143,6 +124,7 @@ module Functional
         fave_button.displayed? || unfave_button.displayed?
       end
     end
+
     private
 
     def set_form_in_gallery_option(options)
@@ -155,19 +137,6 @@ module Functional
       @d['fave-at-date-after'].send_keys(options[:faved_at_min]) if options[:faved_at_min].present?
       @d['viewed-filter-checkbox'].click if options[:viewed_filter]
       @d['type-filter-checkbox'].click if options[:type_filter]
-    end
-
-    def s selector
-      results = @d.find_elements css: selector
-      if(results.count > 1)
-        results
-      else
-        results.first
-      end
-    end
-
-    def wait_until(&block)
-      @w.until &block
     end
 
     def grid_pic_id grid_picture_element
