@@ -98,6 +98,7 @@ describe "faving pictures" do
       add_faved_pictures({faved_at: Date.new(2004,1,4)}, 3)
       open_fave_page
       @page.set_option(faved_at_max: '1/9/2004', faved_at_min: '1/2/2004')
+      @page.pause
       @page.grid_pictures.size.should == 3
     end
   end
