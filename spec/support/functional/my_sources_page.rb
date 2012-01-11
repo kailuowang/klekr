@@ -13,6 +13,10 @@ module Functional
       cells.map { |cell| cell["id"].split('-')[2] }
     end
 
+    def empty_message
+      @d['empty-sources']
+    end
+
     def find_cell_for(stream)
       s cell_locator(stream)
     end

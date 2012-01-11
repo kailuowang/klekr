@@ -73,4 +73,22 @@ describe "my sources page" do
     end
   end
 
+  describe 'in edge cases' do
+    before do
+      @streams = collector.flickr_streams.collecting.map(&:id)
+      collector.flickr_streams.collecting.update_all(collecting: false)
+    end
+
+    after do
+      @streams.each do |stream_id|
+        FlickrStream.find(stream_id).update_attributes(collecting: true)
+      end
+    end
+
+    it 'display import message when there is no sources' do
+      @page.open
+      @page.empty_message.should be_displayed
+    end
+  end
+
 end

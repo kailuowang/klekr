@@ -91,6 +91,7 @@ describe "faving pictures" do
       @page.slide_picture['src'].should == pic_src
 
     end
+
     it "can filter by faved date" do
       reset_sync_status true
       clear_faved_pictures(['faved_at > ? and faved_at < ?', Date.new(2004, 1, 1), Date.new(2004, 1, 10)])
