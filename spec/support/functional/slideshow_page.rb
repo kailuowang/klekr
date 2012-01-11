@@ -132,9 +132,14 @@ module Functional
         select = Selenium::WebDriver::Support::Select.new(@d['rating-filter-select'])
         select.select_by(:index, options[:rating] - 1)
       end
-
-      @d['fave-at-date'].send_keys(options[:faved_at_max]) if options[:faved_at_max].present?
-      @d['fave-at-date-after'].send_keys(options[:faved_at_min]) if options[:faved_at_min].present?
+      if options[:faved_at_max].present?
+        @d['fave-at-date'].clear
+        @d['fave-at-date'].send_keys(options[:faved_at_max])
+      end
+      if options[:faved_at_min].present?
+        @d['fave-at-date-after'].clear
+        @d['fave-at-date-after'].send_keys(options[:faved_at_min])
+      end
       @d['viewed-filter-checkbox'].click if options[:viewed_filter]
       @d['type-filter-checkbox'].click if options[:type_filter]
     end
