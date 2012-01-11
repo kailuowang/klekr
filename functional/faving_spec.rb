@@ -91,15 +91,17 @@ describe "faving pictures" do
       @page.slide_picture['src'].should == pic_src
 
     end
-
-    it "can filter by date"  do
+    it "can filter by faved date" do
       reset_sync_status true
       clear_faved_pictures(['faved_at > ? and faved_at < ?', Date.new(2004, 1, 1), Date.new(2004, 1, 10)])
       add_faved_pictures({faved_at: Date.new(2004,1,4)}, 3)
       open_fave_page
-      @page.set_option(faved_at_max: '1/9/2004', faved_at_min: '1/2/2004')
-      @page.pause 2
-      @page.grid_pictures.size.should == 3
+      @page.set_option(faved_at_max: '1/9/2004')
+      @page.set_option(faved_at_min: '1/2/2004')
+
+      @page.wait_until do
+        @page.grid_pictures.size == 3
+      end
     end
   end
 

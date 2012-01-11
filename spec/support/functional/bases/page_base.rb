@@ -24,6 +24,10 @@ module Functional
       end
     end
 
+    def wait_until(&block)
+      @w.until &block
+    end
+
     protected
 
     def s selector
@@ -37,10 +41,6 @@ module Functional
 
     def ss selector
       @d.find_elements css: selector
-    end
-
-    def wait_until(&block)
-      @w.until &block
     end
 
   end
