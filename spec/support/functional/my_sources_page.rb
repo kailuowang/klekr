@@ -13,8 +13,26 @@ module Functional
       cells.map { |cell| cell["id"].split('-')[2] }
     end
 
+    def sources_import_panel
+      @d['sources-import-panel']
+    end
+
     def empty_message
       @d['empty-sources']
+    end
+
+    def popup_recommendations_import_button
+      @d['add-editor-streams-link']
+    end
+
+    def add_all_recommendations_button
+      s '#import-editor-streams-popup #do-import-streams'
+    end
+
+    def wait_until_new_sources_added_message_appears
+      wait_until do
+        @d['new-sources-added'].displayed?
+      end
     end
 
     def find_cell_for(stream)

@@ -73,10 +73,11 @@ describe "my sources page" do
     end
   end
 
-  describe 'in edge cases' do
+  describe 'importing sources' do
     before do
       @streams = collector.flickr_streams.collecting.map(&:id)
       collector.flickr_streams.collecting.update_all(collecting: false)
+      @page.open
     end
 
     after do
@@ -86,8 +87,15 @@ describe "my sources page" do
     end
 
     it 'display import message when there is no sources' do
-      @page.open
       @page.empty_message.should be_displayed
+      @page.sources_import_panel.should be_displayed
+    end
+
+    it 'imports all editor recommendations when commanded' do
+      @page.popup_recommendations_import_button.click
+      @page.add_all_recommendations_button.click
+      @page.wait_until_new_sources_added_message_appears
+      @page.displaying_sources_ids.should be_present
     end
   end
 
