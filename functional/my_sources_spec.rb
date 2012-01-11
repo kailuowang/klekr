@@ -106,6 +106,14 @@ describe "my sources page" do
       @page.displaying_sources_ids.should be_present
     end
 
+    it 'imports flickr groups sources'
+
+    it 'imports flickr contacts'
+
+    it 'sync some photos when importing all sources in a category'
+
+    it 'sync some photos when importing a single source'
+
   end
 
 end
