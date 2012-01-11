@@ -2,8 +2,8 @@
   .hidden
     .source-cell.cell
       .top-bar.fade-transition.invisible
-        %a#remove.button{href: '#'} ×
-        %a#add.button.hidden{href: '#'} +
+        %a#remove.button{:title => "You already has this source. Click to remove it.", href: '#'} ×
+        %a#add.button.hidden{:title => "Click to add", href: '#'} +
       .main-part
         .source-icon-placeholder
           %a.source-icon-link{target: '_blank'}

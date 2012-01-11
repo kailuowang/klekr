@@ -25,6 +25,10 @@ module Functional
       @d['add-editor-streams-link']
     end
 
+    def sources_in_recommendations
+      ss '#import-editor-streams-popup .source-cell'
+    end
+
     def add_all_recommendations_button
       s '#import-editor-streams-popup #do-import-streams'
     end
@@ -43,10 +47,13 @@ module Functional
       s(cell_locator(stream) + " .main-part.removed").present?
     end
 
-    def hove_on(stream)
-      cell = find_cell_for(stream)
-      @d.action.move_to(cell).perform
-      pause
+    def hove_on_stream(stream)
+      hove_on( find_cell_for(stream) )
+    end
+
+    def add_source_by_cell(cell)
+      hove_on(cell)
+      cell.find_element(id: 'add').click
     end
 
     def add_button_for(stream)

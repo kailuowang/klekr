@@ -50,12 +50,12 @@ describe "my sources page" do
 
     it "only shows remove button when hoved upon" do
       @page.remove_button_for(@stream).should_not be_displayed
-      @page.hove_on(@stream)
+      @page.hove_on_stream(@stream)
       @page.remove_button_for(@stream).should be_displayed
     end
 
     it 'removes the stream and apply the removed class' do
-      @page.hove_on(@stream)
+      @page.hove_on_stream(@stream)
       @page.remove_button_for(@stream).click
       @page.cell_disabled_for(@stream).should be_true
       @page.open
@@ -63,7 +63,7 @@ describe "my sources page" do
     end
 
     it 'adds removed stream back' do
-      @page.hove_on(@stream)
+      @page.hove_on_stream(@stream)
       @page.remove_button_for(@stream).click
       @page.add_button_for(@stream).click
       @page.pause
@@ -97,6 +97,15 @@ describe "my sources page" do
       @page.wait_until_new_sources_added_message_appears
       @page.displaying_sources_ids.should be_present
     end
+
+    it 'imports a single source from recommendation' do
+      @page.popup_recommendations_import_button.click
+      @page.wait_until { @page.add_all_recommendations_button.displayed? }
+      source_cell = @page.sources_in_recommendations.first
+      @page.add_source_by_cell(source_cell)
+      @page.displaying_sources_ids.should be_present
+    end
+
   end
 
 end

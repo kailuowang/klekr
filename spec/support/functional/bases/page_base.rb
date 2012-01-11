@@ -28,6 +28,11 @@ module Functional
       @w.until &block
     end
 
+    def hove_on(element)
+      @d.action.move_to(element).perform
+      pause 0.5
+    end
+
     protected
 
     def s selector
