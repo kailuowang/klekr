@@ -5,8 +5,8 @@ module Functional
     def initialize
       @d = Selenium::WebDriver.for :firefox
       @d.manage.window.size = Selenium::WebDriver::Dimension.new(1024, 768)
-      @d.manage.timeouts.implicit_wait = 10
-      @w = Selenium::WebDriver::Wait.new(timeout: 10, interval: INTERVAL)
+      @d.manage.timeouts.implicit_wait = 30
+      @w = Selenium::WebDriver::Wait.new(timeout: 30, interval: INTERVAL)
     end
 
     def open page
