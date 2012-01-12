@@ -65,8 +65,9 @@ describe "my sources page" do
     it 'adds removed stream back' do
       @page.hove_on_stream(@stream)
       @page.remove_button_for(@stream).click
+      @page.wait_until { @page.add_button_for(@stream).displayed? }
       @page.add_button_for(@stream).click
-      @page.pause
+      @page.pause 0.5
       @page.cell_disabled_for(@stream).should be_false
       @page.open
       @page.find_cell_for(@stream).should be_present
@@ -78,6 +79,7 @@ describe "my sources page" do
       @streams = collector.flickr_streams.collecting.map(&:id)
       collector.flickr_streams.collecting.update_all(collecting: false)
       @page.open
+      @page.wait_until { @page.popup_recommendations_import_button.displayed? }
     end
 
     after do
@@ -92,7 +94,11 @@ describe "my sources page" do
     end
 
     it 'imports all editor recommendations when commanded' do
+
       @page.popup_recommendations_import_button.click
+
+      @page.wait_until { @page.add_all_recommendations_button.displayed? }
+
       @page.add_all_recommendations_button.click
       @page.wait_until_new_sources_added_message_appears
       @page.displaying_sources_ids.should be_present

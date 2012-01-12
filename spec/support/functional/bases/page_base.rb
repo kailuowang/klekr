@@ -3,10 +3,9 @@ module Functional
     INTERVAL = 0.1
 
     def initialize
-      @d = Selenium::WebDriver.for :firefox
-      @d.manage.window.size = Selenium::WebDriver::Dimension.new(1024, 768)
-      @d.manage.timeouts.implicit_wait = 30
-      @w = Selenium::WebDriver::Wait.new(timeout: 30, interval: INTERVAL)
+      @d = Selenium::WebDriver.for :chrome
+      @d.manage.timeouts.implicit_wait = 0.5
+      @w = Selenium::WebDriver::Wait.new(timeout: 5, interval: INTERVAL)
     end
 
     def open page
