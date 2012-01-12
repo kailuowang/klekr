@@ -155,4 +155,8 @@ describe "faving pictures" do
     end
 
   end
+
+  describe "fave from a flickrstream page" do
+    it "faves pictures directly from other flickr stream page"
+  end
 end
