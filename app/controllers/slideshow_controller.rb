@@ -33,7 +33,7 @@ class SlideshowController < ApplicationController
     @collector = ::Collector.find(params[:collector_id])
     @more_pictures_path = exhibit_pictures_slideshow_path(params.slice(:collector_id, :order_by))
     @empty_message = "#{@collector.user_name} has not faved any pictures yet."
-    @defaultFilters = defaultFilters
+    @default_filters = default_filters
     @exhibit_params = exhibit_params
     @exhibit_name = exhibit_name
     @icon =  @collector.is_editor? ? nil : @collector
@@ -84,7 +84,7 @@ class SlideshowController < ApplicationController
     end
   end
 
-  def defaultFilters
+  def default_filters
     filtersParams = params.slice(:rating, :faveDate, :faveDateAfter)
     filtersParams.to_json if (filtersParams.present?)
   end

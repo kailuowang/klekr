@@ -4,7 +4,6 @@ describe "slideshow" do
   include Functional::DataUtil
 
   before :all do
-    reset_viewed_pictures
     @page = Functional::SlideshowPage.new
   end
 
@@ -17,6 +16,10 @@ describe "slideshow" do
   end
 
   describe 'slide mode' do
+    before :all do
+      reset_viewed_pictures
+    end
+
     it "displays the picture by default" do
       @page.slide_picture.should be_displayed
     end
@@ -44,6 +47,10 @@ describe "slideshow" do
       @page.slide_picture.click
     end
 
+    before :all do
+      reset_viewed_pictures
+    end
+
     it "display 6 grid picture according to the screen size" do
       @page.grid_pictures.size.should == 6
     end
@@ -65,6 +72,10 @@ describe "slideshow" do
   end
 
   describe 'switching between two modes' do
+    before :all do
+      reset_viewed_pictures
+    end
+
     it "hide slide picture when clicked" do
       @page.slide_picture.click
       @page.slide_picture.should_not be_displayed

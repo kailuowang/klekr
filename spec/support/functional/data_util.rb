@@ -1,11 +1,11 @@
 module Functional
   module DataUtil
     def reset_viewed_pictures
-      collector.pictures.viewed.order('updated_at DESC').limit(50).update_all(viewed: false)
+      collector.pictures.viewed.order('updated_at DESC').limit(100).update_all(viewed: false)
     end
 
     def reset_faved_pictures
-      Collectr::PictureRepo.new(collector).new_pictures(offset: 0, limit: 50).update_all(rating: 0, faved_at: nil)
+      Collectr::PictureRepo.new(collector).new_pictures(offset: 0, limit: 100).update_all(rating: 0, faved_at: nil)
     end
 
     def clear_faved_pictures(conditions = {})
