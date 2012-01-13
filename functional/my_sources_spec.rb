@@ -112,9 +112,23 @@ describe "my sources page" do
       @page.displaying_sources_ids.should be_present
     end
 
-    it 'imports flickr groups sources'
+    it 'imports flickr groups sources' do
+      @page.popup_groups_import_button.click
+      @page.wait_until { @page.add_all_groups_button.displayed? }
 
-    it 'imports flickr contacts'
+      @page.add_all_groups_button.click
+      @page.wait_until_new_sources_added_message_appears
+      @page.displaying_sources_ids.should be_present
+    end
+
+    it 'imports flickr contacts' do
+      @page.popup_contacts_import_button.click
+      @page.wait_until { @page.add_all_contacts_button.displayed? }
+
+      @page.add_all_contacts_button.click
+      @page.wait_until_new_sources_added_message_appears
+      @page.displaying_sources_ids.should be_present
+    end
 
     it 'sync some photos when importing all sources in a category'
 

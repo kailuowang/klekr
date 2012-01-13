@@ -25,12 +25,28 @@ module Functional
       @d['add-editor-streams-link']
     end
 
+    def popup_groups_import_button
+      @d['add-group-streams-link']
+    end
+
+    def popup_contacts_import_button
+      @d['add-contacts-link']
+    end
+
     def sources_in_recommendations
       ss '#import-editor-streams-popup .source-cell'
     end
 
     def add_all_recommendations_button
       s '#import-editor-streams-popup #do-import-streams'
+    end
+
+    def add_all_groups_button
+      s '#import-group-streams-popup #do-import-streams'
+    end
+
+    def add_all_contacts_button
+      s '#import-contacts-popup #do-import-streams'
     end
 
     def wait_until_new_sources_added_message_appears
