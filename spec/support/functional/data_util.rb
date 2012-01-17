@@ -39,7 +39,13 @@ module Functional
     end
 
     def collector
-      @collector ||= Collector.last
+      @collector ||= Collector.find_by_user_id(Collectr::DevFlickrUserId)
+    end
+
+    def test_collector
+      @test_collector ||= ::Collector.find_or_create( user_id: Collectr::TestFlickrUserId,
+                                                      user_name: Collectr::TestFlickrUserName,
+                                                      auth_token: Collectr::TestFlickrAuthToken )
     end
   end
 end

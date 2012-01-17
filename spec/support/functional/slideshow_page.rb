@@ -1,8 +1,8 @@
 module Functional
   class SlideshowPage < PageBase
 
-    def open page = 'slideshow', grid_default = false
-      super(page)
+    def open page = 'slideshow', grid_default = false, opts = {}
+      super(page, opts)
       wait_until do
         if (grid_default)
           wait_until_grid_shows

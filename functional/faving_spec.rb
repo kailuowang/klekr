@@ -22,7 +22,6 @@ describe "faving pictures" do
     @page.slide_picture['src'] == slide_pic_src
   end
 
-
   describe 'in my stream' do
     before :all do
       reset_faved_pictures

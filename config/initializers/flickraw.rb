@@ -14,4 +14,9 @@ module Collectr
   end
   DevFlickrUserId = flickr_config['user_id']
   DevFlickrUserName = flickr_config['user_name']
+
+  TestFlickrAuthToken      = flickr_config['test_auth_token']
+  TestFlickrUserId = flickr_config['test_user_id']
+  TestFlickrUserName = flickr_config['test_user_name']
+
 end

@@ -8,8 +8,11 @@ module Functional
       @w = Selenium::WebDriver::Wait.new(timeout: 30, interval: INTERVAL)
     end
 
-    def open page
-      @d.get "http://localhost:3000/#{page}"
+    def open page, opts = {}
+      params = if opts.present?
+        '?' + opts.map { |k, v| "#{k}=#{v}" }.join('&')
+      end
+      @d.get "http://localhost:3000/#{page}#{params}"
     end
 
     def close

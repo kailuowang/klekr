@@ -9,9 +9,7 @@ class ApplicationController < ActionController::Base
     end
 
     unless authenticating
-      self.current_collector = ::Collector.find_or_create(user_id: Collectr::DevFlickrUserId,
-                                                          user_name: Collectr::DevFlickrUserName,
-                                                          auth_token: Collectr::DevFlickrAuthToken)
+      self.current_collector = development_collector
       return true
     end
 
@@ -73,4 +71,16 @@ class ApplicationController < ActionController::Base
                            {name: 'My Faves', path: faves_slideshow_path},
                            {name: 'My Stream', path:  slideshow_path} ]
   end
+
+  def development_collector
+    params[:test].present? ?
+      ::Collector.find_or_create(user_id: Collectr::TestFlickrUserId,
+        user_name: Collectr::TestFlickrUserName,
+        auth_token: Collectr::TestFlickrAuthToken) :
+      ::Collector.find_or_create(user_id: Collectr::DevFlickrUserId,
+        user_name: Collectr::DevFlickrUserName,
+        auth_token: Collectr::DevFlickrAuthToken)
+  end
+
+
 end
