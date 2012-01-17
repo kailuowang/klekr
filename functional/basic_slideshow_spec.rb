@@ -100,11 +100,11 @@ describe "slideshow" do
       @page.slide_picture.click
       pic_ids = @page.grid_pictures_ids
       @page.last_grid_picture.click
-      @page.pause 1
+      @page.wait_until_slide_shows
       @page.click_right_button
-
+      @page.wait_until_slide_shows
       @page.slide_picture.click
-      @page.pause 1
+      @page.wait_until_grid_shows
       pic_ids.should_not == @page.grid_pictures_ids
 
     end
