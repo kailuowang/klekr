@@ -73,7 +73,7 @@ class ApplicationController < ActionController::Base
   end
 
   def development_collector
-    params[:test].present? ?
+    params[:as_test_collector].present? ?
       ::Collector.find_or_create(user_id: Collectr::TestFlickrUserId,
         user_name: Collectr::TestFlickrUserName,
         auth_token: Collectr::TestFlickrAuthToken) :
