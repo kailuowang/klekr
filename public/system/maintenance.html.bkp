@@ -1,0 +1,25 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      klekr
+    </title>
+    <link href="http://klekr.com/assets/application.css" media="screen" rel="stylesheet" type="text/css" />
+    <meta content='width=device-width, height=device-height, maximum-scale=1.4, initial-scale=1.0, user-scalable=yes' name='viewport'>
+    <link href="http://klekr.com/assets/authentication.css" media="screen" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div class='container login'>
+      <div class='bigTopPadding'>
+      </div>
+      <div align='center' class='bigTopPadding'></div>
+      <div class='well' id='welcome-message'>
+        <h2 class='' id='want-more-link'>
+            klekr is under maintenance right now.<br/> We will be back momentarily.
+        </h2>
+
+      </div>
+    </div>
+  </body>
+</html>

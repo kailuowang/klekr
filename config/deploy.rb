@@ -38,8 +38,10 @@ namespace :deploy do
 
 
   task :simple, :roles => :app do
+
     _, bkp_path = db_backup_dir_and_path()
     deploy.db_backup unless File.exist?(bkp_path)
+    deploy.bring_site_down
 
     checkout_code
     run_in_app "bundle install --without test development"
@@ -51,6 +53,7 @@ namespace :deploy do
     deploy.prepare_assets
     whenever.update_crontab
     deploy.restart_passenger
+    deploy.bring_site_up
     deploy.start_delayed_job
     deploy.post_deploy
     deploy.warm_server
@@ -66,9 +69,11 @@ namespace :deploy do
   end
 
   task :patch, :roles => :app do
+    deploy.bring_site_down
     checkout_code
     deploy.prepare_assets
     deploy.restart_passenger
+    deploy.bring_site_up
     deploy.warm_server
   end
 
@@ -76,6 +81,14 @@ namespace :deploy do
     rake "assets:clean"
     rake "assets:precompile"
     run_in_app 'cp -r app/assets/images/* public/assets/'
+  end
+
+  task :bring_site_down do
+    run_in_app 'cp public/system/maintenance.html.bkp public/system/maintenance.html'
+  end
+
+  task :bring_site_up do
+    run_in_app 'rm public/system/maintenance.html'
   end
 
   task :warm_server do
