@@ -46,12 +46,12 @@ namespace :deploy do
     checkout_code
     run_in_app "bundle install --without test development"
 
-    whenever.clear_crontab
+    #whenever.clear_crontab
     run_in_app "#{rails_env} script/delayed_job stop"
 
     rake "db:migrate"
     deploy.prepare_assets
-    whenever.update_crontab
+    #whenever.update_crontab
     deploy.restart_passenger
     deploy.bring_site_up
     deploy.start_delayed_job
