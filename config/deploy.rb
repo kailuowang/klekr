@@ -39,7 +39,7 @@ namespace :deploy do
 
   task :simple, :roles => :app do
 
-    _, bkp_path = db_backup_dir_and_path()
+    _, bkp_path, _ = db_backup_dir_and_path()
     deploy.db_backup unless File.exist?(bkp_path)
     deploy.bring_site_down
 
@@ -104,7 +104,12 @@ namespace :deploy do
   end
 
   task :db_backup, :roles => :app do
-   backup_db_to_local
+    bkp_dir, bkp_path, bkp_zip_path = db_backup_dir_and_path
+    run_in_app "mkdir -p #{bkp_dir}"
+    run_in_app "mysqldump collectr -u root > #{bkp_path}"
+    run_in_app "zip #{bkp_zip_path} #{bkp_path}"
+    system "mkdir -p #{bkp_dir}"
+    download "#{app_path}/#{bkp_zip_path}", bkp_zip_path, via: :scp
   end
 
   task :report, :roles => :app do
@@ -122,20 +127,12 @@ namespace :deploy do
     run_in_app "git pull"
   end
 
-  def backup_db_to_local
-    bkp_dir, bkp_path = db_backup_dir_and_path()
-
-    run_in_app "mkdir -p #{bkp_dir}"
-    run_in_app "mysqldump collectr -u root > #{bkp_path}"
-    system "mkdir -p #{bkp_dir}"
-    download "#{app_path}/#{bkp_path}", bkp_path,  via: :scp
-  end
-
   def db_backup_dir_and_path
-    file_name = "collectr-db-backup-#{Date.today.to_s}.sql"
+    file_name = "collectr-db-backup-#{Date.today.to_s}"
     bkp_dir = "db/bkp"
-    bkp_path = "#{bkp_dir}/#{file_name}"
-    return bkp_dir, bkp_path
+    bkp_path = "#{bkp_dir}/#{file_name}.sql"
+    bkp_zip_path = "#{bkp_dir}/#{file_name}.zip"
+    return bkp_dir, bkp_path, bkp_zip_path
   end
 
   def rake task
