@@ -52,6 +52,7 @@ describe "faving pictures" do
       pic_src = @page.slide_picture['src']
 
       @page.fave
+      @page.pause 0.5
       @page.unfave_button.click
       @page.pause 2
       just_faved?(pic_src).should be_false
