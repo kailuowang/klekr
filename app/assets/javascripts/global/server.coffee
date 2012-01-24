@@ -13,18 +13,27 @@ class Server extends Events
 
   ajax: (url, data, type, callback) ->
     $.ajax(
-            url: this._jsUrl(url)
-            dataType: 'json'
-            data: data
-            type: type
-            success: (data) =>
-              this._setOffLine false
-              callback(data) if callback?
-            error: (XMLHttpRequest, textStatus, errorThrown) =>
-              this._setOffLine true
+      url: this._jsUrl(url)
+      dataType: 'json'
+      data: data
+      type: type
+      success: (data) =>
+        this._setOffLine false
+        callback(data) if callback?
+      error: (xhr, textStatus, errorThrown) =>
+        this._handleError(xhr.responseText, callback)
     )
 
   onLine: => !@_offLine
+
+  _handleError: (response, callback) =>
+    if(response is '')
+      this._setOffLine true
+    else if response.search(/Welcome to klekr/i) > -1
+      this._setOffLine false
+      location = authentications_path()
+    else
+      callback?()
 
   _setOffLine: (value) =>
     if @_offLine isnt value
