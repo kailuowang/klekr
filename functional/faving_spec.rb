@@ -70,7 +70,7 @@ describe "faving pictures" do
 
   describe 'browsing with filter' do
     before :all do
-      create_some_faved_pictures
+      create_some_faved_pictures 40
       @page.pause
     end
 
@@ -104,6 +104,15 @@ describe "faving pictures" do
         @page.grid_pictures.size == 3
       end
     end
+
+    it "can switch pages" do
+      open_fave_page
+      @page.click_right_button
+      @page.click_right_button
+      @page.wait_until do
+        @page.grid_pictures.size > 3
+      end
+    end
   end
 
   describe "browsing faves from flickr" do
@@ -124,6 +133,21 @@ describe "faving pictures" do
 
       @page.click_right_button
       @page.grid_pictures.size.should == 6
+    end
+  end
+
+  describe 'exhibit page' do
+    before :all do
+      create_some_faved_pictures 40
+    end
+
+    it 'can display multiple pages of pictures' do
+      @page.open "slideshow/exhibit?collector_id=#{Collector.first.id}", true
+      @page.click_right_button
+      @page.click_right_button
+      @page.wait_until do
+        @page.grid_pictures.size > 3
+      end
     end
   end
 

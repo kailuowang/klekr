@@ -20,13 +20,13 @@ module Functional
       collector.update_attribute(:collection_synced, status)
     end
 
-    def create_some_faved_pictures
-      if(collector.pictures.where(rating: 3).count < 20)
-        collector.pictures.where(rating: 1).limit(20).update_all(rating: 3)
+    def create_some_faved_pictures(num = 20)
+      if(collector.pictures.where(rating: 3).count < num)
+        collector.pictures.where(rating: 1).limit(num).update_all(rating: 3)
       end
 
-      if(collector.pictures.where(rating: 2).count < 20)
-        collector.pictures.where(rating: 1).limit(20).update_all(rating: 2)
+      if(collector.pictures.where(rating: 2).count < num)
+        collector.pictures.where(rating: 1).limit(num).update_all(rating: 2)
       end
     end
     
