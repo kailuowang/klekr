@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111108002647) do
+ActiveRecord::Schema.define(:version => 20120124195930) do
 
   create_table "collectors", :force => true do |t|
     t.string   "user_id"
@@ -77,7 +77,6 @@ ActiveRecord::Schema.define(:version => 20111108002647) do
     t.float    "stream_rating"
     t.integer  "rating",          :default => 0
     t.integer  "collector_id"
-    t.boolean  "collected"
     t.datetime "faved_at"
     t.boolean  "no_longer_valid"
     t.text     "description"

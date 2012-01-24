@@ -18,7 +18,6 @@ module Collectr
         favedDate:        picture.faved_at ? picture.faved_at.to_date.to_s(:long) : nil,
         rating:           picture.rating,
         viewed:           picture.viewed?,
-        collected:        !picture.new_record? && picture.collected?,
         ofCurrentCollector: picture.collector == current_collector,
         inKlekr:          !picture.new_record?,
         dateUpload:       picture.date_upload,

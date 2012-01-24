@@ -23,6 +23,12 @@ describe "Stream slide page" do
       @page.grid_pictures_ids.should be_present
     end
 
+    it 'should not increase the number of unviewd pictures' do
+      original_count = test_collector.pictures.count
+      @page.open("users/#{@stream.user_id}", true, as_test_collector: true)
+      test_collector.pictures.count.should == original_count
+    end
+
     it 'displayes other collectors flickr_stream' do
       @page.open("slideshow/flickr_stream", true, id: @stream.id, as_test_collector: true)
       @page.grid_pictures_ids.should be_present
@@ -34,7 +40,6 @@ describe "Stream slide page" do
       src = @page.slide_picture['src']
       @page.wait_until_fave_ready
       @page.fave(1)
-      @page.close
       fave_page = Functional::FavePage.new
       fave_page.open as_test_collector: true
       fave_page.just_faved?(src).should be_true

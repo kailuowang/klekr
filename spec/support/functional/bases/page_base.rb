@@ -35,6 +35,16 @@ module Functional
       pause 0.5
     end
 
+    def total_new_pictures
+      @d['user-name'].click
+      count_identifier = '#user-dropdown #new-pictures-count'
+      wait_until do
+        count_text = s(count_identifier).text
+        count_text.present? && count_text != '...'
+      end
+      s(count_identifier).text
+    end
+
     protected
 
     def s selector

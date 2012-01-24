@@ -1,7 +1,7 @@
 module Functional
   class MySourcesPage < PageBase
-    def open
-      super('flickr_streams')
+    def open opts = {}
+      super('flickr_streams', opts)
       wait_until do
        !@d['loading-sources-indicator'].displayed?
       end

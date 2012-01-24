@@ -42,11 +42,6 @@ describe Collectr::PictureRepo do
       @repo.new_pictures.should be_empty
     end
 
-    it "does not include pictures that are collected" do
-      pic1 = create_picture(collected: false)
-      @repo.new_pictures.should_not include(pic1)
-    end
-
     it "accept string as offset and limit" do
       create_picture
       @repo.new_pictures(offset: '0', limit: '3').should be_present

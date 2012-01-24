@@ -40,14 +40,9 @@ describe Picture do
         pic = Factory(:picture, collector: collector)
         Picture.collected_by(collector).should == [pic]
       end
-      it "should not return pictures collected by the collector" do
+      it "should not return pictures collected by other collector" do
         Factory(:picture, collector: Factory(:collector))
         Picture.collected_by(Factory(:collector)).should be_empty
-      end
-
-      it "does not return pictures are not collected" do
-        pic = create_picture(collected: false)
-        Picture.collected_by(@collector).should_not include(pic)
       end
     end
   end
@@ -105,22 +100,6 @@ describe Picture do
       picture.synced_by(stream)
       picture.stream_rating.should == 0.2
     end
-
-    it "sets the collected to true if stream is collecting" do
-      picture = Factory(:picture, collected: false)
-      stream = Factory(:fave_stream, collecting: true)
-      picture.synced_by(stream)
-      picture.should be_collected
-    end
-
-    it "does not change the collected status if stream is not collecting" do
-      picture = Factory(:picture, collected: false)
-      stream = Factory(:fave_stream, collecting: false)
-      picture.synced_by(stream)
-      picture.should_not be_collected
-    end
-
-
   end
 
   describe "#get_viewed" do

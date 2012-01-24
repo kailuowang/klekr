@@ -5,7 +5,7 @@ class Picture < ActiveRecord::Base
   scope :old, lambda { |num_of_days| where('updated_at < ?', num_of_days.days.ago)}
   scope :after, lambda { |pic| where('date_upload > ?', pic.date_upload) }
   scope :before, lambda { |pic| where('date_upload <= ? and id <> ? ', pic.date_upload, pic.id) }
-  scope :collected_by, lambda { |collector| where(collector_id: collector, collected: true) if collector }
+  scope :collected_by, lambda { |collector| where(collector_id: collector) if collector }
   scope :unfaved, where(rating:  0)
   scope :valid, where(:no_longer_valid => [false, nil])
   scope :faved, where('rating > 0')
@@ -71,7 +71,7 @@ class Picture < ActiveRecord::Base
 
   def fave(new_rating = 1)
     if (old_rating = rating) != new_rating
-      update_attributes(rating: new_rating, collected: true )
+      update_attributes(rating: new_rating)
       newly_faved if old_rating == 0
     end
   end
@@ -152,7 +152,6 @@ class Picture < ActiveRecord::Base
   def synced_by(stream)
     new_stream_rating = stream.star_rating + (stream_rating || 0)
     self.stream_rating = new_stream_rating
-    self.collected = true if stream.collecting?
     save!
     syncages.create(flickr_stream_id: stream.id)
     self
