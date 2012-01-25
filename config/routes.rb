@@ -23,7 +23,7 @@ Collectr::Application.routes.draw do
       put 'sync'
       put 'adjust_rating'
       put 'mark_all_as_read'
-      post 'pictures'
+      get 'pictures'
       put 'subscribe'
       put 'unsubscribe'
     end
@@ -60,9 +60,9 @@ Collectr::Application.routes.draw do
   end
 
   resource :slideshow, :only => [:show], :controller => :slideshow do
-    post 'new_pictures'
-    post 'fave_pictures'
-    post 'exhibit_pictures'
+    get 'new_pictures'
+    get 'fave_pictures'
+    get 'exhibit_pictures'
     get 'faves'
     get 'exhibit'
     get 'exhibit_login'

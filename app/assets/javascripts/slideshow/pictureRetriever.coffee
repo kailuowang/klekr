@@ -48,7 +48,7 @@ class window.PictureRetriever extends Events
     @_worker.retry() if klekr.Global.server.onLine()
 
   _retrievePage: (pageOpts, callback) =>
-    klekr.Global.server.post @_retrievePath, this._retrieveOpts(pageOpts), (data) =>
+    klekr.Global.server.get @_retrievePath, this._retrieveOpts(pageOpts), (data) =>
       pictures = ( new Picture(picData) for picData in data )
       if pictures.length > 0
         this._onPicturesRetrieved(pictures)

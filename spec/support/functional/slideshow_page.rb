@@ -103,8 +103,13 @@ module Functional
     end
 
     def grid_next_page
+      old_id = highlighted_grid_picture_id
       click_right_button
       wait_until_grid_shows
+      wait_until do
+        highlighted_grid_picture_id != old_id
+      end
+
     end
 
     def wait_until_grid_shows

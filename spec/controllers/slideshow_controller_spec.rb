@@ -14,7 +14,7 @@ describe SlideshowController do
 
       repo.should_receive(:new_pictures).with(limit: '7', offset: '10').and_return([new_pic])
 
-      post "new_pictures", format: :json, limit: 7, offset: 10
+      get "new_pictures", format: :json, limit: 7, offset: 10
 
       response.body.should include new_pic.large_url
 

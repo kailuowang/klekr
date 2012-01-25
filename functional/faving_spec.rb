@@ -107,8 +107,8 @@ describe "faving pictures" do
 
     it "can switch pages" do
       open_fave_page
-      @page.click_right_button
-      @page.click_right_button
+      @page.grid_next_page
+      @page.grid_next_page
       @page.wait_until do
         @page.grid_pictures.size > 3
       end
@@ -131,8 +131,8 @@ describe "faving pictures" do
     it 'automatically load faves from flickr when browsing' do
       open_fave_page
 
-      @page.click_right_button
-      @page.grid_pictures.size.should == 6
+      @page.grid_next_page
+      @page.grid_pictures.size.should > 3
     end
   end
 
@@ -143,8 +143,8 @@ describe "faving pictures" do
 
     it 'can display multiple pages of pictures' do
       @page.open "slideshow/exhibit?collector_id=#{Collector.first.id}", true
-      @page.click_right_button
-      @page.click_right_button
+      @page.grid_next_page
+      @page.grid_next_page
       @page.wait_until do
         @page.grid_pictures.size > 3
       end
