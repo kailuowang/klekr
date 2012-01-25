@@ -29,9 +29,9 @@ class Server extends Events
   _handleError: (response, callback) =>
     if(response is '')
       this._setOffLine true
-    else if response.search(/login through flickr/i) > -1
+    else if response.search(/Welcome to/i) > -1
       this._setOffLine false
-      location = authentications_path()
+      window.location.href = authentications_path()
     else
       callback?()
 
