@@ -45,8 +45,6 @@ module Functional
       s(count_identifier).text
     end
 
-    protected
-
     def s selector
       results = ss selector
       if(results.count > 1)
@@ -55,6 +53,8 @@ module Functional
         results.first
       end
     end
+
+    protected
 
     def ss selector
       @d.find_elements css: selector
