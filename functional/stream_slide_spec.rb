@@ -16,6 +16,11 @@ describe "Stream slide page" do
       @stream = collector.flickr_streams.find { |stream| stream.pictures.many? }
       test_collector.flickr_streams.destroy_all
       test_collector.pictures.destroy_all
+      @fave_page = Functional::FavePage.new
+    end
+
+    after :all do
+      @fave_page.close
     end
 
     it 'displays stranger photographers pictures from flickr' do
@@ -40,10 +45,9 @@ describe "Stream slide page" do
       src = @page.slide_picture['src']
       @page.wait_until_fave_ready
       @page.fave(1)
-      fave_page = Functional::FavePage.new
-      fave_page.open as_test_collector: true
-      fave_page.just_faved?(src).should be_true
-      fave_page.close
+
+      @fave_page.open as_test_collector: true
+      @fave_page.just_faved?(src).should be_true
     end
   end
 end
