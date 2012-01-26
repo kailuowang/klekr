@@ -1,3 +1,4 @@
+Gemfile.lock
 chromedriver.log
 .bundle
 db/*.sqlite3
