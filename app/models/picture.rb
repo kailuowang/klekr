@@ -7,7 +7,7 @@ class Picture < ActiveRecord::Base
   scope :before, lambda { |pic| where('date_upload <= ? and id <> ? ', pic.date_upload, pic.id) }
   scope :collected_by, lambda { |collector| where(collector_id: collector) if collector }
   scope :unfaved, where(rating:  0)
-  scope :valid, where(:no_longer_valid => [false, nil])
+  scope :valid, where(:no_longer_valid => nil)
   scope :faved, where('rating > 0')
   scope :unviewed, where(viewed: false)
   scope :viewed, where(viewed: true)

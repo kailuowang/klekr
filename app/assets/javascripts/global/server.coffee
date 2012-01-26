@@ -27,7 +27,7 @@ class Server extends Events
   onLine: => !@_offLine
 
   _handleError: (response, callback) =>
-    if(response is '')
+    if(response is '' or response.search(/under maintenance/i) > -1 )
       this._setOffLine true
     else if response.search(/Welcome to/i) > -1
       this._setOffLine false
