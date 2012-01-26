@@ -9,17 +9,6 @@ class window.Slide extends ModeBase
   reset: =>
     @currentIndex = 0
 
-  displayCurrentPicture: =>
-    picture = this.currentPicture()
-    if picture.sizeReady
-      picture.calculateFitVersion()
-      slideview.display(picture)
-    else
-      slideview.displayLabel(picture)
-      this._monitorPictureReady(picture)
-    @favePanel.updateWith(picture)
-    this.trigger('progress-changed')
-
   currentPicture: =>
     gallery.pictures[@currentIndex]
 
@@ -46,7 +35,7 @@ class window.Slide extends ModeBase
 
   updateProgress: (progress) =>
     @currentIndex = progress
-    this.displayCurrentPicture()
+    this._displayCurrentPicture()
 
   backToGrid: =>
     this.currentPicture().getViewed()
@@ -77,3 +66,15 @@ class window.Slide extends ModeBase
 
   _extraHashInfo: (index)=>
     "-" + gallery.pictures[index].id
+
+  _displayCurrentPicture: =>
+    picture = this.currentPicture()
+    if picture.sizeReady
+      picture.calculateFitVersion()
+      slideview.display(picture)
+    else
+      slideview.displayLabel(picture)
+      this._monitorPictureReady(picture)
+    @favePanel.updateWith(picture)
+    this.trigger('progress-changed')
+

@@ -21,7 +21,7 @@ class window.Gallery extends Events
     this._listenHashChange()
 
   init: =>
-    [m, i, requestedPicId] = this._infoFromHash()
+    [_, _, requestedPicId] = this._infoFromHash()
     this._reset(requestedPicId)
     @grid.init(this)
 
