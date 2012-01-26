@@ -92,6 +92,7 @@ describe "slideshow" do
       @page.click_right_button
       @page.click_right_button
       pic_id = @page.slide_picture_id
+      @page.wait_until_slide_shows
       @page.slide_picture.click
       @page.highlighted_grid_picture_id.should == pic_id
     end
