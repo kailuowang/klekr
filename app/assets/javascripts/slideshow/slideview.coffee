@@ -17,7 +17,6 @@ class window.Slideview extends ViewBase
     else
       this._fadeInto(picture)
 
-
   _fadeInto: (picture) =>
     this.update(picture)
     this.fadeInOut(@pictureArea, true)
