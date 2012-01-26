@@ -6,7 +6,6 @@ class window.Slideview extends ViewBase
     @slide = $('#slide')
     @bottomLeft = $('#bottomLeft')
     @label = new PictureLabel
-
     this._adjustImageFrame()
     generalView.bind('layout-changed', this._adjustImageFrame)
 
