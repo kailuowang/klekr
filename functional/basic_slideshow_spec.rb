@@ -44,6 +44,7 @@ describe "slideshow" do
 
   describe 'grid mode' do
     before do
+      @page.wait_until_slide_shows
       @page.slide_picture.click
     end
 
