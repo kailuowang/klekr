@@ -120,7 +120,7 @@ module Functional
 
     def wait_until_slide_shows
       wait_until do
-        slide_picture.displayed?
+        slide_picture.displayed? && !slide_picture['src'].include?('loading')
       end
     end
 
