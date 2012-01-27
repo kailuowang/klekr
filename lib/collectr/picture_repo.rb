@@ -28,7 +28,7 @@ module Collectr
     def new_pictures(opts = {})
       default_opts = {limit: 10, offset: 0}
       opts.reverse_merge!(default_opts)
-      scope = Picture.collected_by(@collector).
+      scope = Picture.valid.collected_by(@collector).
               limit(opts[:limit].to_i).
               offset(opts[:offset].to_i).
               includes(:flickr_streams)
