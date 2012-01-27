@@ -4,6 +4,7 @@ module Collectr
     def clean
       outdated_pics.delete_all
       uncollected_streams.old(7).delete_all
+      invalid_pics.delete_all
     end
 
     def report
@@ -20,6 +21,10 @@ EOF
 
     def outdated_pics
       Picture.viewed.unfaved.old(14)
+    end
+
+    def invalid_pics
+      Picture.where(no_longer_valid: true)
     end
 
     def uncollected_streams
