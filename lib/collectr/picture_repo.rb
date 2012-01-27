@@ -31,7 +31,7 @@ module Collectr
       scope = Picture.collected_by(@collector).
               limit(opts[:limit].to_i).
               offset(opts[:offset].to_i).
-              includes(:flickr_streams)
+              includes(:flickr_streams, :collector)
 
       scope = unless opts[:viewed]
         scope.unviewed.desc
