@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120126222218) do
+ActiveRecord::Schema.define(:version => 20120127171002) do
 
   create_table "collectors", :force => true do |t|
     t.string   "user_id"
@@ -82,6 +82,7 @@ ActiveRecord::Schema.define(:version => 20120126222218) do
     t.text     "description"
   end
 
+  add_index "pictures", ["collector_id", "viewed", "stream_rating", "date_upload"], :name => "new_pictures_index"
   add_index "pictures", ["collector_id"], :name => "index_pictures_on_collector_id"
   add_index "pictures", ["date_upload"], :name => "index_pictures_on_date_upload"
   add_index "pictures", ["no_longer_valid"], :name => "index_pictures_on_no_longer_valid"

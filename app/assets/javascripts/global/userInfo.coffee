@@ -23,6 +23,6 @@ class klekr.UserInfo extends ViewBase
     count = parseInt @newPicturesCountLink.text()
     @newPicturesCountLink.text(count - 1)
 
-$ ->
+$(window).load ->
   if klekr.Global.currentCollector?
-    new klekr.UserInfo().init()
+    setTimeout 'new klekr.UserInfo().init()', 2000
