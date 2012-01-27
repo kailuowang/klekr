@@ -28,7 +28,7 @@ class Picture < ActiveRecord::Base
     end
 
     def faved_by(collector, opts, page, per_page)
-      scope = faved.valid.collected_by(collector).includes(:flickr_streams)
+      scope = faved.collected_by(collector).includes(:flickr_streams)
       scope = if opts[:order]
                 scope.order(opts[:order] + ', date_upload DESC')
               else
