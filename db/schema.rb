@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120127171002) do
+ActiveRecord::Schema.define(:version => 20120128171133) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.integer  "resource_id",   :null => false
@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(:version => 20120127171002) do
     t.text     "description"
   end
 
+  add_index "pictures", ["collector_id", "rating", "faved_at"], :name => "index_faved_pictures"
   add_index "pictures", ["collector_id", "viewed", "stream_rating", "date_upload"], :name => "new_pictures_index"
   add_index "pictures", ["collector_id"], :name => "index_pictures_on_collector_id"
   add_index "pictures", ["date_upload"], :name => "index_pictures_on_date_upload"

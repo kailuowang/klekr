@@ -28,7 +28,7 @@ class Picture < ActiveRecord::Base
     end
 
     def faved_by(collector, opts, page, per_page)
-      scope = faved.collected_by(collector).includes(:flickr_streams)
+      scope = faved.collected_by(collector).includes(:flickr_streams, :collector)
       scope = if opts[:order]
                 scope.order(opts[:order] + ', date_upload DESC')
               else
@@ -37,6 +37,7 @@ class Picture < ActiveRecord::Base
       scope = scope.where('rating >= ?', opts[:min_rating]) if opts[:min_rating]
       scope = scope.where('faved_at <= ?', opts[:max_faved_at]) if opts[:max_faved_at]
       scope = scope.where('faved_at >= ?', opts[:min_faved_at]) if opts[:min_faved_at]
+
       scope.paginate(page: page, per_page: per_page )
     end
   end
