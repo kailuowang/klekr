@@ -85,7 +85,8 @@ module Functional
     end
 
     def last_grid_picture
-      s ".grid-picture.grid-index-5"
+      last_index = grid_pictures_ids.count - 1
+      s ".grid-picture.grid-index-#{last_index}"
     end
 
     def grid_pictures_ids

@@ -21,6 +21,7 @@ describe "slideshow" do
     end
 
     it "displays the picture by default" do
+      @page.wait_until_slide_shows
       @page.slide_picture.should be_displayed
     end
 
@@ -53,7 +54,7 @@ describe "slideshow" do
     end
 
     it "display 6 grid picture according to the screen size" do
-      @page.grid_pictures.size.should == 6
+      @page.grid_pictures.size.should > 3
     end
 
     it 'goes to the next page when right button clicked' do
@@ -107,7 +108,9 @@ describe "slideshow" do
       @page.wait_until_slide_shows
       @page.slide_picture.click
       @page.wait_until_grid_shows
-      pic_ids.should_not == @page.grid_pictures_ids
+      @page.wait_until do
+        @page.grid_pictures_ids != pic_ids
+      end
 
     end
   end
