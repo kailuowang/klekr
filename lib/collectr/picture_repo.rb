@@ -29,9 +29,13 @@ module Collectr
       default_opts = {limit: 10, offset: 0}
       opts.reverse_merge!(default_opts)
       scope = Picture.collected_by(@collector).
-              limit(opts[:limit].to_i).
-              offset(opts[:offset].to_i).
-              includes(:flickr_streams, :collector)
+                      limit(opts[:limit].to_i).
+                      offset(opts[:offset].to_i).
+                      includes(:flickr_streams, :collector)
+
+      if Rails.env.production?
+        scope = scope.from("\"pictures\" USE INDEX(new_pictures_index)")
+      end
 
       scope = unless opts[:viewed]
         scope.unviewed.desc
