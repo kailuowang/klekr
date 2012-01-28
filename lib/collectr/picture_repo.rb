@@ -34,7 +34,7 @@ module Collectr
                       includes(:flickr_streams, :collector)
 
       if Rails.env.production?
-        scope = scope.from("\"pictures\" USE INDEX(new_pictures_index)")
+        scope = scope.from("`pictures` USE INDEX (new_pictures_index)")
       end
 
       scope = unless opts[:viewed]
