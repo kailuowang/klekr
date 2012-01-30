@@ -130,10 +130,11 @@ class window.Picture extends Events
 
   _largeVersionInvalid: (image) =>
     if @canUseLargeVersion
-      if(image.width is 500 and image.height is 375)
+      if(image.width < 640 and image.height < 640)
         @canUseLargeVersion = false
         @largeVersionAvailable = false
         this._preloadImage @data.mediumUrl, this._updateSize
+        this.trigger('data-updated', this)
         true
 
 
