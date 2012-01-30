@@ -71,16 +71,15 @@ namespace :deploy do
   task :patch, :roles => :app do
     deploy.bring_site_down
     checkout_code
-    deploy.prepare_assets
     deploy.restart_passenger
     deploy.bring_site_up
+    deploy.prepare_assets
     deploy.warm_server
   end
 
   task :prepare_assets do
-    rake "assets:clean"
-    rake "assets:precompile"
     run_in_app 'cp -r app/assets/images/* public/assets/'
+    rake "assets:precompile"
   end
 
   task :bring_site_down do
