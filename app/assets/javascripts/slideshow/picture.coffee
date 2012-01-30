@@ -170,7 +170,5 @@ class klekr.PictureUtil
     pic._setAsViewed() for pic in toMarkPictures
 
     if toMarkPictures.length > 0
-      updatePath = toMarkPictures[0].data.getAllViewedPath
       picIds = ( pic.id for pic in toMarkPictures )
-      klekr.Global.updater.post(updatePath, {ids: picIds})
-
+      klekr.Global.updater.post(all_viewed_pictures_path(), {ids: picIds})

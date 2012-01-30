@@ -31,7 +31,6 @@ module Collectr
     def action_paths_for(picture)
       {}.tap do |h|
         h[:getViewedPath]    =      viewed_picture_path(picture) unless picture.new_record?
-        h[:getAllViewedPath] =      all_viewed_pictures_path
         h[:favePath]         =      fave_picture_path(picture.string_id)
         h[:unfavePath]       =      unfave_picture_path(picture.string_id)
       end

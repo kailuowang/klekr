@@ -16,10 +16,6 @@ class window.Grid extends ModeBase
     gallery.bind 'pre-reset', => gridview.showLoading()
     gallery.bind 'gallery-pictures-changed', this._tryCompleteCurrentPage
 
-  currentPageOfPictures:  =>
-    [pageStart, pageEnd] = this._currentPageRange()
-    gallery.pictures[pageStart..pageEnd]
-
   clear: =>
     this.reset()
     this._loadGridview()
@@ -86,7 +82,7 @@ class window.Grid extends ModeBase
     ]
 
   _loadGridview: =>
-    pictures = this.currentPageOfPictures()
+    pictures = this._currentPageOfPictures()
     gridview.loadPictures(pictures)
     @picturesLoaded = true
     this._updateHighlight()
@@ -116,7 +112,7 @@ class window.Grid extends ModeBase
       alternative?()
 
   _updateHighlight: =>
-    if this.currentPageOfPictures().length > 0
+    if this._currentPageOfPictures().length > 0
       gridview.highlightPicture(this.selectedPicture())
 
   _currentPageRange: =>
@@ -137,10 +133,14 @@ class window.Grid extends ModeBase
     gridview.currentSize() < gridview.size
 
   _markCurrentPageAsViewed: =>
-    new klekr.PictureUtil().allGetViewed(this.currentPageOfPictures())
+    new klekr.PictureUtil().allGetViewed(this._currentPageOfPictures())
 
   _onLayoutChange: =>
     [original_rows, original_columns] = [gridview.rows, gridview.columns]
     gridview.initLayout()
     if (original_rows isnt gridview.rows) or (original_columns isnt gridview.columns)
       this._loadGridview()
+
+  _currentPageOfPictures:  =>
+    [pageStart, pageEnd] = this._currentPageRange()
+    gallery.pictures[pageStart..pageEnd]
