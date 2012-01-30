@@ -1,7 +1,7 @@
 class PicturesController < ApplicationController
   include Collectr::PictureControllerHelper
 
-  before_filter :authenticate, :load_picture, except: [:rsync]
+  before_filter :authenticate, :load_picture
 
   #PUT /pictures/1/fave
   def fave
