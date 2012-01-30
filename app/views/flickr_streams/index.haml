@@ -19,7 +19,7 @@
 
   #sources-list
   #star-category-template.star-category.well.row.hidden
-    .stars-label.star
+    .stars-label.star.has-popover{'data-content' => 'These star ratings are indication of how much you like photos from the source. The more frequent you fave photos from the source, the higher rating it gets, and the more likely that future photos from it will show up first in the "My Stream" page', title: 'What are these stars about?', 'data-popover' => 'above', 'data-popover-top-offset' => '5'}
       ★
     = render partial: 'streams_grid'
 

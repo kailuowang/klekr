@@ -60,7 +60,7 @@ class window.MySourcesView extends ViewBase
     sorted_categories = (_(categories).sortBy (c) -> c.id).reverse()
     @container.empty()
     @container.append(category) for category in sorted_categories
-
+    $('.star-category .stars-label').popover_ext()
 
   _sourcesGridView: (categoryDiv) =>
     cellGrid = categoryDiv.find('.sources-grid:first')

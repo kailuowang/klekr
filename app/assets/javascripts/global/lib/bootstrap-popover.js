@@ -76,14 +76,6 @@
 
   $.fn.popover.defaults = $.extend({} , $.fn.twipsy.defaults, { content: 'data-content', placement: 'right'})
 
-  $(function () {
-     $('.has-popover[data-popover]').each(function(){
-       var options ={offset: 5};
-       options.placement =  $(this).attr('data-popover');
-       options.topOffset =  $(this).attr('data-popover-top-offset');
-       options.leftOffset =  $(this).attr('data-popover-left-offset');
-       $(this).popover(options);
-     });
-   });
+
 
 }( window.jQuery || window.ender );
