@@ -8,30 +8,36 @@ class window.Slideview extends ViewBase
     @label = new PictureLabel
     this._adjustImageFrame()
     generalView.bind('layout-changed', this._adjustImageFrame)
+    klekr.Global.broadcaster.bind 'picture:data-updated', this._pictureUpdated
 
   display: (picture) =>
+    @picture = picture
     if this.showing(@pictureArea)
       this.fadeInOut @pictureArea, false, =>
-        this._fadeInto(picture)
+        this._fadeInto()
     else
-      this._fadeInto(picture)
+      this._fadeInto()
 
-  _fadeInto: (picture) =>
-    this.update(picture)
+  _pictureUpdated: (picture) =>
+    if @picture and picture.id is @picture.id
+      this.update()
+
+  _fadeInto:  =>
+    this.update()
     this.fadeInOut(@pictureArea, true)
   
-  update: (picture) ->
-    @mainImg.attr('src', picture.url())
-    @mainImg.attr('data-pic-id', picture.id)
-    this._updateLabel(picture)
+  update: () ->
+    @mainImg.attr('src', @picture.url())
+    @mainImg.attr('data-pic-id', @picture.id)
+    this._updateLabel()
 
-  displayLabel: (picture) =>
+  displayLabel:  =>
     if this.showing(@pictureArea)
        this.fadeInOut @pictureArea, false
-    this._updateLabel(picture)
+    this._updateLabel()
 
-  _updateLabel: (picture) =>
-    @label.show(picture)
+  _updateLabel: () =>
+    @label.show(@picture)
 
   pictureClick: (callback) =>
     @mainImg.click(callback)

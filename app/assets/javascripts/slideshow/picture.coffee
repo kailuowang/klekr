@@ -68,7 +68,7 @@ class window.Picture extends Events
       [@smallWidth, @smallHeight] = [image.width, image.height]
       this._updateData() if @error or this._smallVersionMightBeInvalid(image)
       this.calculateFitVersion() unless @error
-      this.trigger('size-ready', this)
+      this.trigger('size-ready')
       callback?()
 
   reloadForCurrentCollector: =>
@@ -93,7 +93,7 @@ class window.Picture extends Events
         this.preloadSmall this._broadCastChange
 
   _broadCastChange: =>
-    this.trigger('data-updated', this)
+    this.trigger('data-updated')
 
   _smallVersionMightBeInvalid: (image) =>
     image.width is 240 and image.height is 180
@@ -126,7 +126,7 @@ class window.Picture extends Events
     unless this._largeVersionInvalid(image)
       @width = image.width
       @ready = true
-      this.trigger('fully-ready', this)
+      this.trigger('fully-ready')
 
   _largeVersionInvalid: (image) =>
     if @canUseLargeVersion
@@ -134,7 +134,7 @@ class window.Picture extends Events
         @canUseLargeVersion = false
         @largeVersionAvailable = false
         this._preloadImage @data.mediumUrl, this._updateSize
-        this.trigger('data-updated', this)
+        this.trigger('data-updated')
         true
 
 
@@ -149,9 +149,9 @@ class window.Picture extends Events
     ratio = versionLongEdge / longEdge
     [@smallWidth * ratio, @smallHeight * ratio]
 
-  trigger: (event, data) =>
-    super(event, data)
-    klekr.Global.broadcaster.trigger('picture:' + event, data)
+  trigger: (event) =>
+    super(event, this)
+    klekr.Global.broadcaster.trigger('picture:' + event, this)
 
 
 class klekr.PictureUtil
