@@ -57,7 +57,9 @@ describe "my sources page" do
     it 'removes the stream and apply the removed class' do
       @page.hove_on_stream(@stream)
       @page.remove_button_for(@stream).click
-      @page.cell_disabled_for(@stream).should be_true
+      @page.wait_until do
+        @page.cell_disabled_for(@stream)
+      end
       @page.open
       @page.find_cell_for(@stream).should be_blank
     end
