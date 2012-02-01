@@ -69,6 +69,8 @@ Collectr::Application.routes.draw do
     get 'flickr_stream'
   end
 
+  resource :editors_choice, only: [:show], controller: :editors_choice
+
   if ["development", "test"].include? Rails.env
     mount Jasminerice::Engine => "/jasmine"
   end
