@@ -5,10 +5,15 @@ class window.StreamPanel extends ViewBase
     @noncollectingOperationDiv = $('#noncollectingStreamOperations')
     @collectingOperationDiv = $('#collectingStreamOperations')
     @rating = @collectingOperationDiv.find('#rating')
+    @sourceAddedPopup = $('#source-added-popup')
+
+    $('#source-added-popup #okay').click =>
+      this.closePopup @sourceAddedPopup
 
     @startCollectingLink.bind 'ajax:success', =>
       @noncollectingOperationDiv.hide()
       @collectingOperationDiv.show()
+      this.popup(@sourceAddedPopup)
 
     @stopCollectingLink.bind 'ajax:success', =>
       @noncollectingOperationDiv.show()
@@ -20,3 +25,4 @@ class window.StreamPanel extends ViewBase
     @alternativeLink ?= $('#alternative-stream')
     windowTooSmall =  @alternativeLink.width() >  ($(window).width() / 3.3)
     this.setVisible(@alternativeLink, !windowTooSmall)
+
