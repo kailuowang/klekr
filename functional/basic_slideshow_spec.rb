@@ -78,13 +78,9 @@ describe "slideshow" do
       reset_viewed_pictures
     end
 
-    it "hide slide picture when clicked" do
+    it "hide slide picture and display grid when clicked" do
       @page.slide_picture.click
       @page.slide_picture.should_not be_displayed
-    end
-
-    it "displays the grid when clicked the slide picture" do
-      @page.slide_picture.click
       @page.grid_pictures.each do |grid_picture|
         grid_picture.should be_displayed
       end
