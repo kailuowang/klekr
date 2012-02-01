@@ -37,6 +37,9 @@ class Picture < ActiveRecord::Base
       scope = scope.where('rating >= ?', opts[:min_rating]) if opts[:min_rating]
       scope = scope.where('faved_at <= ?', opts[:max_faved_at]) if opts[:max_faved_at]
       scope = scope.where('faved_at >= ?', opts[:min_faved_at]) if opts[:min_faved_at]
+      if Rails.env.production?
+        scope = scope.from("`pictures` USE INDEX (index_faved_pictures)")
+      end
 
       scope.paginate(page: page, per_page: per_page, total_entries: per_page * (page + 1) )
     end
