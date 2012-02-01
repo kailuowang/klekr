@@ -1,7 +1,7 @@
 {
   "name": "klekr",
   "description": "Discover photos articistally interesting to your own taste.",
-  "version": "0.0.0.3",
+  "version": "1.0.0",
   "icons": {
     "128": "logo128.png",
     "48": "logo48.png",
@@ -10,7 +10,7 @@
   "app": {
     "urls": [
       "http://klekr.com/",
-      "http://www.klekr.com/"
+      "http://klekr.com/editors_choice"
     ],
     "launch": {
       "web_url": "http://klekr.com/"

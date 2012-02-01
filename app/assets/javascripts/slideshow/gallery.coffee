@@ -19,6 +19,7 @@ class window.Gallery extends Events
     @autoPlay = new AutoPlay(@slide)
     new GalleryControlPanel(this)
     this._listenHashChange()
+    generalView.bind 'layout-changed', this._preloadOnLayoutChange
 
   init: =>
     [_, _, requestedPicId] = this._infoFromHash()
@@ -188,6 +189,11 @@ class window.Gallery extends Events
       @picturePreloader.preload(addedPictures)
       this.trigger('new-pictures-added', addedPictures)
       this._morePicturesReady()
+
+  _preloadOnLayoutChange: =>
+    picturesToReload = _(@pictures).filter (picture) ->
+      picture.sizeReady and !picture.data.viewed
+    @picturePreloader.preload(picturesToReload)
 
   _unseenPictures: =>
     p for p in gallery.pictures when !p.data.viewed
