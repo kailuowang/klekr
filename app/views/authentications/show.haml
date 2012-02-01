@@ -7,7 +7,8 @@
   klekr.Global.showDetail = #{@show_detail};
 
 .container.login
-  .bigTopPadding
+
+  #top-banner
     .fleft
       %h1.site-title
         Welcome to
@@ -22,13 +23,18 @@
       #editor-choice-link
         %a{href: editors_choice_path} Editors' Choice Photos
     .clearfix
-  .bigTopPadding{align: 'center'}
   - if @current_collector.blank?
     - unless @redirected_to_login
-      %h3
+      %h3#login-link.inline
         %a.has-popover{'data-content' => 'klekr needs your "write" permission from flickr so that you can fave pictures directly here. klekr does not change any of your photos/settings in any other ways.', title: 'Please note', 'data-popover' => 'above', href: @auth_url}
           Login through flickr.com
-
+      %span#not-sure-guide
+        %span.not-sure
+          Not sure?
+        Check out
+        %a{href: editors_choice_path}
+          editors' choice photos
+        first.
     #countDownRedirect.hidden
       %h3
         Redirecting to flickr.com
