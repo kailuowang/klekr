@@ -38,7 +38,7 @@ class Picture < ActiveRecord::Base
       scope = scope.where('faved_at <= ?', opts[:max_faved_at]) if opts[:max_faved_at]
       scope = scope.where('faved_at >= ?', opts[:min_faved_at]) if opts[:min_faved_at]
 
-      scope.paginate(page: page, per_page: per_page )
+      scope.paginate(page: page, per_page: per_page, total_entries: per_page * (page + 1) )
     end
   end
 
