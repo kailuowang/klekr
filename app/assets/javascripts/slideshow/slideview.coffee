@@ -27,7 +27,7 @@ class window.Slideview extends ViewBase
     this.fadeInOut(@pictureArea, true)
   
   update: () ->
-    @mainImg.attr('src', @picture.url())
+    @mainImg.attr('src', @picture.url()) if @mainImg.attr('src') isnt @picture.url()
     @mainImg.attr('data-pic-id', @picture.id)
     this._updateLabel()
 
