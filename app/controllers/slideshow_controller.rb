@@ -44,6 +44,19 @@ class SlideshowController < ApplicationController
     render_fave_pictures ::Collector.find(params[:collector_id]), order: order_field
   end
 
+  def exhibit_feed
+    @collector = ::Collector.find(params[:collector_id])
+    @exhibit_params = exhibit_params
+    @exhibit_url = @collector.is_editor? ? editors_choice_url : exhibit_slideshow_url(@exhibit_params)
+    @pictures = @collector.collection( 20,
+                                      1,
+                                      filter_params.merge(order: 'faved_at desc'))
+
+    respond_to do |format|
+      format.rss { render :layout => false }
+    end
+  end
+
   def fave_pictures
     render_fave_pictures current_collector
   end

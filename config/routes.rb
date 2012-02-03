@@ -66,6 +66,7 @@ Collectr::Application.routes.draw do
     get 'faves'
     get 'exhibit'
     get 'exhibit_login'
+    get 'exhibit_feed'
     get 'flickr_stream'
   end
 

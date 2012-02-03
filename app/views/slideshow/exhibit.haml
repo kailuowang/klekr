@@ -15,6 +15,8 @@
     %h3
       = @exhibit_name
   .fleft
+    = auto_discovery_link_tag(:rss, @exhibit_params.merge(action: "exhibit_feed"))
+  .fleft
     = render partial: '/general/add_this', locals: {title:  @collector.user_name + "'s klekr faves: "}
 - content_for(:top_right) do
   - if @current_collector.blank?
