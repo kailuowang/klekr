@@ -24,7 +24,7 @@ class window.PicturePreloader
 
   _createJobs: (picture) =>
     priority = new PicturePreloadPriority(picture, @gallery)
-    [ this._createJob(picture, 'Small', priority), this._createJob(picture, 'Large', priority)]
+    [ this._createJob(picture, 'Small', priority), this._createJob(picture, 'Full', priority)]
 
   _createJob: (picture, size, priority) =>
     priorityFn =  priority[size.toLowerCase()]

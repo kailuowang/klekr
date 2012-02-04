@@ -4,8 +4,8 @@ class window.PicturePreloadPriority
   small: =>
     100 + this._pageAdjustmentSmall() + this._positionAdjustment()
 
-  large:  =>
-    0 + this._pageAdjustmentLarge() + this._positionAdjustment() + this._positionAdjustmentLarge()
+  full:  =>
+    0 + this._pageAdjustmentFull() + this._positionAdjustment() + this._positionAdjustmentFull()
 
   _pageAdjustmentSmall: =>
     pagesAhead = this._pagesAhead()
@@ -16,7 +16,7 @@ class window.PicturePreloadPriority
     else
       0
 
-  _pageAdjustmentLarge: =>
+  _pageAdjustmentFull: =>
     pagesAhead = this._pagesAhead()
     if pagesAhead < 0
       -500
@@ -34,7 +34,7 @@ class window.PicturePreloadPriority
     else
       0
 
-  _positionAdjustmentLarge: =>
+  _positionAdjustmentFull: =>
     if 0 <= this._ahead()
       @gallery.pageSize() - this._ahead()
     else

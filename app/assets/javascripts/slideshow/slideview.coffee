@@ -27,9 +27,14 @@ class window.Slideview extends ViewBase
     this.fadeInOut(@pictureArea, true)
   
   update: () ->
+    @mainImg.load this._checkImage
+    @mainImg.error this._checkImage
     @mainImg.attr('src', @picture.url()) if @mainImg.attr('src') isnt @picture.url()
     @mainImg.attr('data-pic-id', @picture.id)
     this._updateLabel()
+
+  _checkImage: =>
+    @picture.checkLargeVersionInvalid(@mainImg[0])
 
   displayLabel:  =>
     if this.showing(@pictureArea)

@@ -61,7 +61,7 @@ class window.Picture extends Events
   faved: => @data.rating > 0
 
   preload: =>
-    this.preloadSmall this.preloadLarge
+    this.preloadSmall this.preloadFull
 
   preloadSmall: (callback)=>
     this._preloadImage @data.smallUrl, (image) =>
@@ -104,10 +104,10 @@ class window.Picture extends Events
   _inKlekr: =>
     @data.getViewedPath?
 
-  preloadLarge: (callback)=>
+  preloadFull: (callback)=>
     unless @error
       this._preloadImage this.url(), (image)=>
-        this._updateSize(image)
+        this._updateSize(image) unless this.checkLargeVersionInvalid(image)
         callback?()
     else
       callback?()
@@ -123,20 +123,18 @@ class window.Picture extends Events
       onload(image) if onload?
 
   _updateSize: (image) =>
-    unless this._largeVersionInvalid(image)
-      @width = image.width
-      @ready = true
-      this.trigger('fully-ready')
+    @width = image.width
+    @ready = true
+    this.trigger('fully-ready')
 
-  _largeVersionInvalid: (image) =>
-    if @canUseLargeVersion
+  checkLargeVersionInvalid: (image) =>
+    if image.src is this.data.largeUrl
       if(image.width < 640 and image.height < 640)
         @canUseLargeVersion = false
         @largeVersionAvailable = false
         this._preloadImage @data.mediumUrl, this._updateSize
         this.trigger('data-updated')
         true
-
 
   guessLargeSize: =>
     this._guessVersionSize(1024)
