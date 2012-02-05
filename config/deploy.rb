@@ -77,6 +77,12 @@ namespace :deploy do
     deploy.warm_server
   end
 
+  task :minor_patch, :roles => :app do
+    checkout_code
+    deploy.restart_passenger
+    deploy.warm_server
+  end
+
   task :prepare_assets do
     run_in_app 'cp -r app/assets/images/* public/assets/'
     rake "assets:precompile"
