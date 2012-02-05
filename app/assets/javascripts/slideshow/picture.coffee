@@ -99,7 +99,7 @@ class window.Picture extends Events
     image.width is 240 and image.height is 180
 
   _updatable: =>
-    !@alreadyUpdated and this._inKlekr()
+    klekr.Global.currentCollector? and !@alreadyUpdated and this._inKlekr()
 
   _inKlekr: =>
     @data.getViewedPath?
