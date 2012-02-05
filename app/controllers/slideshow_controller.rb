@@ -1,6 +1,6 @@
 class SlideshowController < ApplicationController
   include Collectr::PictureControllerHelper
-  before_filter :authenticate, except: [:exhibit, :exhibit_pictures]
+  before_filter :authenticate, except: [:exhibit, :exhibit_pictures, :exhibit_feed]
 
   def flickr_stream
     id = params[:id].to_i
