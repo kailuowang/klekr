@@ -7,7 +7,7 @@ module Collectr
     end
 
     def find(string_id)
-      if is_flickr_id?(string_id)
+      if Picture.is_flickr_id?(string_id)
         find_by_flickr_id(string_id)
       else
         find_by_db_id(string_id)
@@ -72,11 +72,6 @@ module Collectr
           picture.collector = @collector
         end
     end
-
-    def is_flickr_id?(string_id)
-      string_id.to_s.include?('_')
-    end
-
 
     def find_by_flickr_id(string_id)
       fid, secret = string_id.split('_')

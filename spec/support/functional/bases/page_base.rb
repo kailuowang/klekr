@@ -26,6 +26,19 @@ module Functional
       end
     end
 
+    def log_out
+      user_link = s('#top-banner #user-name.dropdown-tggle')
+      if user_link
+        user_link.click
+        s('sign-out-link').click
+        s('#bye-bye')
+      end
+    end
+
+    def refresh
+      @d.navigate.refresh
+    end
+
     def wait_until(&block)
       @w.until &block
     end

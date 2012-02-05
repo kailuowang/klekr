@@ -19,6 +19,10 @@ class Picture < ActiveRecord::Base
 
   class << self
 
+    def is_flickr_id?(string_id)
+      string_id.to_s.include?('_')
+    end
+
     def flickr_id(pic_info)
       pic_info.id + "_" + pic_info.secret
     end

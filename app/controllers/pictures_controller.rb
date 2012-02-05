@@ -1,7 +1,8 @@
 class PicturesController < ApplicationController
   include Collectr::PictureControllerHelper
 
-  before_filter :authenticate, :load_picture
+  before_filter :authenticate, :load_picture, except: [:rsync, :show]
+  before_filter :load_picture_anonymously, only: [:rsync, :show]
 
   #PUT /pictures/1/fave
   def fave
@@ -47,9 +48,20 @@ class PicturesController < ApplicationController
   end
 
   private
+
   def load_picture
     @picture = Collectr::PictureRepo.new(current_collector).find(params[:id]) if params[:id].present?
     check_picture_access(@picture)
+  end
+
+  def load_picture_anonymously #if possible
+    id = params[:id]
+    unless Picture.is_flickr_id?(id)
+      @picture = Picture.find(params[:id])
+    else
+      authenticate
+      load_picture
+    end
   end
 
   def check_picture_access picture
