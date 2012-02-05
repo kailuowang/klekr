@@ -56,11 +56,11 @@ class PicturesController < ApplicationController
 
   def load_picture_anonymously #if possible
     id = params[:id]
-    unless Picture.is_flickr_id?(id)
-      @picture = Picture.find(params[:id])
-    else
+    if Picture.is_flickr_id?(id) || current_collector.present?
       authenticate
       load_picture
+    else
+      @picture = Picture.find(params[:id])
     end
   end
 
