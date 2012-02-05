@@ -14,7 +14,9 @@ xml.feed 'xmlns'=>"http://www.w3.org/2005/Atom" do
         xml.updated picture.faved_at.to_datetime.to_s(:rfc3339)
         xml.link href: picture_url(picture, @exhibit_url), rel: "alternate", type: "text/html"
         xml.link rel: 'enclosure', href: picture.large_url, type: "image/jpeg"
-        xml.content picture.description.present? ? picture.description : "There is no description."
+        xml.content type: "html" do
+          xml.text!(picture.description.present? ? picture.description : "There is no description.")
+        end
         xml.author do
           xml.name picture.owner_name
           xml.uri "http://flickr.com/photos/#{picture.owner_id}"
