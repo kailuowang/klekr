@@ -21,6 +21,8 @@ gem 'sass'
 gem 'coffee-script'
 gem 'uglifier'
 
+gem 'newrelic_rpm'
+
 group :test, :development do
   gem 'sqlite3-ruby', :require => 'sqlite3'
   gem "rspec-rails"

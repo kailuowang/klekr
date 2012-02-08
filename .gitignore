@@ -2,7 +2,7 @@ Gemfile.lock
 chromedriver.log
 .bundle
 db/*.sqlite3
-log/*.log
+log/*
 tmp/**/*
 tmp/*.jpg
 .idea/workspace.xml
