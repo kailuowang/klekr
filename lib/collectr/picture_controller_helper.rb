@@ -8,7 +8,7 @@ module Collectr
         mediumSmallUrl:   picture.medium_small_url,
         smallUrl:         picture.small_url,
         interestingness:  picture.stream_rating.to_i,
-        title:            picture.no_longer_valid? ? 'REMOVED' : picture.title,
+        title:            picture.no_longer_valid? ? 'THIS PICTURE WAS REMOVED.' : picture.title,
         description:      picture.no_longer_valid? ? 'SORRY. This picture is no longer available.' : picture.description,
         flickrPageUrl:    picture.url,
         ownerName:        picture.owner_name,
