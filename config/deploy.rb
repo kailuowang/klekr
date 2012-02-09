@@ -44,7 +44,7 @@ namespace :deploy do
     deploy.bring_site_down
 
     checkout_code
-    run_in_app "bundle install --without test development"
+    deploy.bundle
 
     #whenever.clear_crontab
     run_in_app "#{rails_env} script/delayed_job stop"
@@ -57,6 +57,10 @@ namespace :deploy do
     deploy.start_delayed_job
     deploy.post_deploy
     deploy.warm_server
+  end
+
+  task :bundle, :roles => :app do
+    run_in_app "bundle install --without test development"
   end
 
   task :get_logs, :roles => :app do
@@ -74,6 +78,15 @@ namespace :deploy do
     deploy.restart_passenger
     deploy.bring_site_up
     deploy.prepare_assets
+    deploy.warm_server
+  end
+
+  task :patch_one_time, :roles => :app do
+    deploy.bring_site_down
+    checkout_code
+    deploy.bundle
+    deploy.restart_passenger
+    deploy.bring_site_up
     deploy.warm_server
   end
 
