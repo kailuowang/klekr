@@ -42,12 +42,12 @@ class window.GeneralView extends ViewBase
 
   updateShareLink: (filterSettings = {}) =>
     @_shareLink ?= $('#top-banner-left .addthis_toolbox[data-dynamic-url="true" ]')
-    if @_shareLink.length > 0
+    if @_shareLink.length > 0 and addthis?
       params = _.extend({collector_id: klekr.Global.currentCollector.id}, filterSettings)
       url = exhibit_slideshow_path() + '?' + $.param(params)
       url = window.location.hostname + url
       @_shareLink.attr 'addthis:url': url
-      addthis.update('share', 'url', url) if addthis?
+      addthis.update('share', 'url', url)
 
   _calculateDimensions: ->
     [@windowWidth, @windowHeight] = this.windowDimension()
