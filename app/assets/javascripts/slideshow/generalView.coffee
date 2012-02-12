@@ -6,6 +6,7 @@ class window.GeneralView extends ViewBase
     @_indicatorPanel = $('#mode-indicator')
     @bottomLeft = $('#bottomLeft')
     @bottomRight = $('#bottomRight')
+    @socialSharing = new klekr.SocialSharing exhibit_slideshow_path()
     $(window).resize(this.initLayout)
     this.initLayout()
 
@@ -41,13 +42,10 @@ class window.GeneralView extends ViewBase
     $('#left').click(listener)
 
   updateShareLink: (filterSettings = {}) =>
-    @_shareLink ?= $('#top-banner-left .addthis_toolbox[data-dynamic-url="true" ]')
-    if @_shareLink.length > 0 and addthis?
-      params = _.extend({collector_id: klekr.Global.currentCollector.id}, filterSettings)
-      url = exhibit_slideshow_path() + '?' + $.param(params)
-      url = window.location.hostname + url
-      @_shareLink.attr 'addthis:url': url
-      addthis.update('share', 'url', url)
+    if @socialSharing.updatable()
+      @socialSharing.path = exhibit_slideshow_path()
+      @socialSharing.params = _.extend({collector_id: klekr.Global.currentCollector.id}, filterSettings)
+      @socialSharing.update()
 
   _calculateDimensions: ->
     [@windowWidth, @windowHeight] = this.windowDimension()

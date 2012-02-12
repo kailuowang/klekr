@@ -16,7 +16,6 @@ describe "Editor's Choice page" do
   end
 
   describe 'display photos' do
-
     it 'as grid' do
       open
       @page.wait_until_grid_shows
