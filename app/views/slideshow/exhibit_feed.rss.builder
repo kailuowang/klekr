@@ -15,7 +15,11 @@ xml.feed 'xmlns'=>"http://www.w3.org/2005/Atom" do
         xml.link href: picture_url(picture, @exhibit_url), rel: "alternate", type: "text/html"
         xml.link rel: 'enclosure', href: picture.large_url, type: "image/jpeg"
         xml.content type: "html" do
-          xml.text!(picture.description.present? ? picture.description : "There is no description.")
+          xml.text! <<CONTENT
+            #{picture.description.present? ? picture.description : "There is no description."}
+            <br /> <br />All photos copyrighted © by their respective owners
+            <br /><br /> <a href='#{picture_url(picture, @exhibit_url)}'>View on klekr</a>
+CONTENT
         end
         xml.author do
           xml.name picture.owner_name
