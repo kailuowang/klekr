@@ -16,9 +16,13 @@ xml.feed 'xmlns'=>"http://www.w3.org/2005/Atom" do
         xml.link rel: 'enclosure', href: picture.large_url, type: "image/jpeg"
         xml.content type: "html" do
           xml.text! <<CONTENT
+            <a href='#{picture_url(picture, @exhibit_url)}'>
+              <img src='#{picture.medium_url}' />
+            </a>
+            <br /> <br />
             #{picture.description.present? ? picture.description : "There is no description."}
             <br /> <br />All photos copyrighted © by their respective owners
-            <br /><br /> <a href='#{picture_url(picture, @exhibit_url)}'>View on klekr</a>
+            <br /><a href='#{picture_url(picture, @exhibit_url)}'>View on klekr</a>
 CONTENT
         end
         xml.author do
