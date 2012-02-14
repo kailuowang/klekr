@@ -1,10 +1,10 @@
 class klekr.SocialSharing extends ViewBase
-  constructor: (@path, @params = {}, @hash = '')->
+  constructor: (@path, @params = {})->
     @_shareLink ?= $('#top-banner-left .addthis_toolbox[data-dynamic-url="true" ]')
     if this.updatable()
-      $(window).bind 'hashchange', =>
-        @hash = $.param.fragment()
-        this.update()
+      this.update()
+      $(window).bind 'hashchange', this.update
+
 
   updatable: =>
     @_shareLink.length > 0
@@ -17,5 +17,5 @@ class klekr.SocialSharing extends ViewBase
 
   _url: =>
     search = if _.isEmpty(@params) then '' else '?' + $.param(@params)
-    window.location.hostname + "#{@path}#{search}##{@hash}"
+    window.location.hostname + "#{@path}#{search}##{$.param.fragment()}"
 
