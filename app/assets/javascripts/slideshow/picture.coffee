@@ -12,13 +12,6 @@ class window.Picture extends Events
     @error = false
     @index = null
 
-  displayTitle:  =>
-    t = @data.title
-    if t? and t isnt '-' and t isnt '.' and t isnt ''
-      @data.title
-    else
-      'Untitled'
-
   url: =>
     if @canUseLargeVersion
       @data.largeUrl

@@ -110,6 +110,16 @@ class Picture < ActiveRecord::Base
     @pic_info = pi
   end
 
+  def display_title
+    if no_longer_valid?
+      'THIS PICTURE WAS REMOVED.'
+    elsif title.blank? || ['-', '~', '_', '.'].include?(title)
+      "Untitled"
+    else
+      title
+    end
+  end
+
   def get_upload_date(pic_info)
     rawdate = pic_info['dateupload'] || pic_info['dateuploaded']
     Time.at(rawdate.to_i).to_datetime
