@@ -11,11 +11,7 @@ xml.rss version: "2.0", 'xmlns:media' => "http://search.yahoo.com/mrss/" do
       xml.item do
         xml.title picture.display_title
         xml.link picture_url(picture, @exhibit_url)
-        xml.description (<<CONTENT)
-          <p> #{picture.description} </p>
-          <p><a href='#{picture_url(picture, @exhibit_url)}'>View on klekr</a></p>
-          <p>All photos copyrighted © by their respective owners</p>
-CONTENT
+        xml.description picture.description
         xml.pubDate picture.faved_at.to_datetime.to_s(:rfc822)
         xml.guid picture_url(picture, @exhibit_url)
         xml.media :content, url: picture.large_url, type: "image/jpeg"
