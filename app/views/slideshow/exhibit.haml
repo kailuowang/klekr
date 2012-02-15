@@ -21,7 +21,8 @@
 - content_for(:top_right) do
   - if @current_collector.blank?
     %h3#invite-link
-      = link_to  'Like these photos? Start your own discovery on klekr now!', slideshow_path
+      %span.question Like these photos?
+      = link_to  'Start your own discovery on klekr now!', slideshow_path
 
 
 = render partial: 'slideshow'

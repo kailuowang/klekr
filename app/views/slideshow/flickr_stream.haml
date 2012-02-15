@@ -10,7 +10,8 @@
         = @stream.to_s
     - if @stream.alternative_stream
       #alternative-stream.inline
-        Like these pictures? Checkout
+        %span.question Like these pictures?
+        Checkout
         = link_to @stream.alternative_stream.to_s, flickr_stream_path(@stream.alternative_stream)
 
     #stream-dropdown.dropdown-menu.hidden
