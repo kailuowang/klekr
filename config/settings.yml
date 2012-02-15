@@ -4,3 +4,4 @@ editor_name: Editor
 gallery_cache_size: 5
 fave_on_flickr: false
 add_this_button: true
+enable_analytics: true
