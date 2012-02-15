@@ -1,8 +1,10 @@
 #bottomBanner
   = link_to "About",  root_path(:show_detail => true)
   |
-  = link_to "Editors Choice Photos", editors_choice_path
-  |
+  - if @bottom_links.present?
+    - for link_text, link_path in @bottom_links
+      = link_to link_text, link_path
+      |
   %a#keyShortcutsLink{href: '#'}
     Key Shortcuts
   .copyrights

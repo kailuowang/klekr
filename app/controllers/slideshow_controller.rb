@@ -1,6 +1,7 @@
 class SlideshowController < ApplicationController
   include Collectr::PictureControllerHelper
   before_filter :authenticate, except: [:exhibit, :exhibit_pictures, :exhibit_feed]
+  before_filter :set_default_bottom_links, only: [:exhibit, :show, :flickr_stream, :faves]
 
   def flickr_stream
     id = params[:id].to_i
@@ -100,6 +101,10 @@ class SlideshowController < ApplicationController
   def default_filters
     filtersParams = params.slice(:rating, :faveDate, :faveDateAfter)
     filtersParams.to_json if (filtersParams.present?)
+  end
+
+  def set_default_bottom_links
+    @bottom_links = { "Editor's Choice" => editors_choice_path }
   end
 
 end

@@ -1,8 +1,8 @@
 xml.instruct! :xml, :version => "1.0", standalone: "yes"
 xml.rss version: "2.0", 'xmlns:media' => "http://search.yahoo.com/mrss/" do
   xml.channel do
-    xml.title "klekr.com - editors choice photos"
-    xml.description "Discover photos of your own taste"
+    xml.title "klekr.com - Editors' Choice"
+    xml.description "Discover art photography"
     xml.link "http://klekr.com/slideshow/exhibit?collector_id=#{@collector.id}&order_by=date"
     xml.pubDate DateTime.now.to_s(:rfc822)
     xml.lastBuildDate @pictures.first.faved_at.to_datetime.to_s(:rfc822)
