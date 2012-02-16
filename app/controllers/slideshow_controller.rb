@@ -1,6 +1,6 @@
 class SlideshowController < ApplicationController
   include Collectr::PictureControllerHelper
-  before_filter :authenticate, except: [:exhibit, :exhibit_pictures, :exhibit_feed]
+  before_filter :authenticate, except: [:exhibit, :exhibit_pictures, :editors_choice]
   before_filter :set_default_bottom_links, only: [:exhibit, :show, :flickr_stream, :faves]
 
   def flickr_stream
@@ -30,32 +30,25 @@ class SlideshowController < ApplicationController
   end
 
   def exhibit
-    @disable_navigation = current_collector.blank?
+    @html_url = exhibit_slideshow_url(exhibit_params)
     @collector = ::Collector.find(params[:collector_id])
-    @more_pictures_path = exhibit_pictures_slideshow_path(params.slice(:collector_id, :order_by))
-    @empty_message = "#{@collector.user_name} has not faved any pictures yet."
-    @default_filters = default_filters
-    @exhibit_params = exhibit_params
-    @exhibit_name = exhibit_name
-    @icon =  @collector.is_editor? ? nil : @collector
+    @icon =  @collector
+    @exhibit_name = @collector.user_name + "'s klekr faves"
+    render_exhibit
+  end
+
+  def editors_choice
+    @html_url = editors_choice_url
+    @bottom_links = [:editors_choice_rss, :editor_choice_google_currents]
+    @collector = Collectr::Editor.new.ensure_editor_collector
+    @exhibit_name = "Editors' Choice"
+    params.merge!(rating: 2, order_by: 'date', collector_id: @collector.id)
+    render_exhibit
   end
 
   def exhibit_pictures
     order_field = {'photographer' => 'owner_name', 'date' => 'faved_at desc'}[params[:order_by]] || 'owner_name'
     render_fave_pictures ::Collector.find(params[:collector_id]), order: order_field
-  end
-
-  def exhibit_feed
-    @collector = ::Collector.find(params[:collector_id])
-    @exhibit_params = exhibit_params
-    @exhibit_url = @collector.is_editor? ? editors_choice_url : exhibit_slideshow_url(@exhibit_params)
-    @pictures = @collector.collection( 20,
-                                      1,
-                                      filter_params.merge(order: 'faved_at desc'))
-
-    respond_to do |format|
-      format.rss { render :layout => false }
-    end
   end
 
   def fave_pictures
@@ -70,8 +63,33 @@ class SlideshowController < ApplicationController
 
   private
 
+  def render_exhibit
+    @exhibit_params = exhibit_params
+
+    respond_to do |format|
+      format.rss { exhibit_feed }
+      format.html { exhibit_html }
+    end
+  end
+
+  def exhibit_feed
+
+    @pictures = @collector.collection( 20, 1, exhibit_params.merge(order: 'faved_at desc'))
+
+    render 'slideshow/exhibit_feed', :layout => false
+  end
+
+  def exhibit_html
+    @disable_navigation = current_collector.blank?
+    @more_pictures_path = exhibit_pictures_slideshow_path(params.slice(:collector_id, :order_by))
+    @empty_message = "#{@collector.user_name} has not faved any pictures yet."
+    @default_filters = default_filters
+    render 'slideshow/exhibit'
+  end
+
+
   def exhibit_params
-    params.slice(:collector_id, :rating, :faveDate, :faveDateAfter)
+    params.slice(:collector_id, :rating, :faveDate, :faveDateAfter, :order_by)
   end
 
   def filter_params
@@ -82,14 +100,6 @@ class SlideshowController < ApplicationController
     render_json_pictures collector.collection( params[:num].to_i,
                                                params[:page].to_i,
                                                opts.merge(filter_params))
-  end
-
-  def exhibit_name
-    if @collector.is_editor?
-      "Editors' Choice"
-    else
-      @collector.user_name + "'s klekr faves"
-    end
   end
 
   def check_stream_access(stream)
@@ -104,7 +114,7 @@ class SlideshowController < ApplicationController
   end
 
   def set_default_bottom_links
-    @bottom_links = { "Editor's Choice" => editors_choice_path }
+    @bottom_links = [:editors_choice]
   end
 
 end

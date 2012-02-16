@@ -66,11 +66,10 @@ Collectr::Application.routes.draw do
     get 'faves'
     get 'exhibit'
     get 'exhibit_login'
-    get 'exhibit_feed'
     get 'flickr_stream'
   end
 
-  resource :editors_choice, only: [:show], controller: :editors_choice
+  match 'editors_choice' => 'slideshow#editors_choice'
 
   if ["development", "test"].include? Rails.env
     mount Jasminerice::Engine => "/jasmine"

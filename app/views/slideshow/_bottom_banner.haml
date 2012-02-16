@@ -2,8 +2,8 @@
   = link_to "About",  root_path(:show_detail => true)
   |
   - if @bottom_links.present?
-    - for link_text, link_path in @bottom_links
-      = link_to link_text, link_path
+    - for link_name in @bottom_links
+      = render_bottom_link link_name
       |
   %a#keyShortcutsLink{href: '#'}
     Key Shortcuts
