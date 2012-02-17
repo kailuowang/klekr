@@ -25,6 +25,7 @@ describe "Editor's Choice page" do
   describe 'display single picture url' do
     def check_reload_picture
       @page.grid_pictures[2].click
+      @page.wait_until_slide_shows
       src = @page.slide_picture['src']
       @page.refresh
       @page.wait_until_slide_shows
