@@ -5,6 +5,7 @@ class window.KeyShortcuts extends ViewBase
     this._registerHelpPopup()
     @helpList = $('#shortcuts')
     this.addShortcuts new KeyShortcut('k', this._popupHelp, 'Show all keyboard shortcuts', this._canShowHelp )
+    this.addShortcuts new KeyShortcut('w', this.goFullScreen, 'Go to full screen mode', -> fullScreenApi.supportsFullScreen )
 
   disable: =>
     $(document).unbind('keydown', this._clearLock)

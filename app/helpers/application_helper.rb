@@ -27,6 +27,7 @@ module ApplicationHelper
   end
 
   def icon(with_icon)
-    render partial: '/general/icon', locals: {with_icon: with_icon} if with_icon
+    icon_url = with_icon.respond_to?(:icon_url) ? with_icon.icon_url : with_icon
+    render partial: '/general/icon', locals: {icon_url: icon_url} if icon_url.present?
   end
 end

@@ -38,6 +38,7 @@ class SlideshowController < ApplicationController
   end
 
   def editors_choice
+    @icon = 'logo48.jpeg'
     @html_url = editors_choice_url
     @bottom_links = [:editors_choice_rss, :editor_choice_google_currents]
     @collector = Collectr::Editor.new.ensure_editor_collector
