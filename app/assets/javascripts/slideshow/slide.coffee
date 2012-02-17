@@ -45,12 +45,12 @@ class window.Slide extends ModeBase
 
   shortcutsSettings: ->
     [
-      [ ['right', 'space'], this.navigateToNext, 'next picture' ]
-      [ 'left', this.navigateToPrevious, 'previous picture' ]
-      [ 'o', slideview.gotoOwner, "go to photographer's page" ]
-      [ 'shift+o', (=> slideview.gotoOwner(true)), "open photographer's page in new tab" ]
-      [ ['g', 'return', 'up'], this.backToGrid, "go to grid mode" ]
-    ].concat(unless klekr.Global.readonly then [[ 'l', slideview.label.expand, "expand picture label" ]] else [])
+      [ ['right', 'space'], this.navigateToNext, 'Next picture' ]
+      [ 'left', this.navigateToPrevious, 'Previous picture' ]
+      [ 'o', slideview.gotoOwner, "Go to photographer's page" ]
+      [ 'shift+o', (=> slideview.gotoOwner(true)), "Open photographer's page in new tab" ]
+      [ ['g', 'return', 'up'], this.backToGrid, "Go to grid mode" ]
+    ].concat(unless klekr.Global.readonly then [[ 'l', slideview.label.expand, "Expand picture label" ]] else [])
 
   _monitorPictureReady: (picture) =>
     picture.bind 'size-ready', (pic) =>

@@ -67,4 +67,4 @@ class window.AutoPlay extends ViewBase
       this._start()
 
   _shortcuts: ->
-    [ new KeyShortcut('p', this._togglePlay, 'play/pause', => this.showing(@panel)) ]
+    [ new KeyShortcut('p', this._togglePlay, 'Toggle auto play', => this.showing(@panel)) ]

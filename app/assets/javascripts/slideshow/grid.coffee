@@ -72,13 +72,13 @@ class window.Grid extends ModeBase
 
   shortcutsSettings: ->
     [
-      [ 'up', this.moveUp, 'move up' ]
-      [ 'right', this.moveRight, 'move right' ]
-      [ 'down', this.moveDown, 'move down' ]
-      [ 'left', this.moveLeft, 'move left' ]
-      [ [ 'pagedown', 'shift+right' ], this.navigateToNext, 'next page' ]
-      [ [ 'pageup', 'shift+left' ], this.navigateToPrevious, 'previous page' ]
-      [ [ 'return', 'space' ], this.switchToSlide, "go to the selected picture" ]
+      [ 'up', this.moveUp, 'Move up' ]
+      [ 'right', this.moveRight, 'Move right' ]
+      [ 'down', this.moveDown, 'Move down' ]
+      [ 'left', this.moveLeft, 'Move left' ]
+      [ [ 'pagedown', 'shift+right' ], this.navigateToNext, 'Next page' ]
+      [ [ 'pageup', 'shift+left' ], this.navigateToPrevious, 'Previous page' ]
+      [ [ 'return', 'space' ], this.switchToSlide, "Go to the selected picture" ]
     ]
 
   _loadGridview: =>

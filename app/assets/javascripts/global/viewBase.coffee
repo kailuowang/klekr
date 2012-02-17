@@ -15,9 +15,12 @@ class window.ViewBase extends Events
     else
        element.hide()
 
-  goFullScreen: =>
+  toggleFullScreen: =>
     if fullScreenApi.supportsFullScreen
-       $('body').requestFullScreen()
+      if fullScreenApi.isFullScreen()
+        fullScreenApi.cancelFullScreen()
+      else
+        $('body').requestFullScreen()
 
   fadeInOut: (element, visible, callback) ->
     this._animateVisible(element, visible, callback)

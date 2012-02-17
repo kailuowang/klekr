@@ -17,6 +17,7 @@ class window.Slideview extends ViewBase
         this._fadeInto()
     else
       this._fadeInto()
+    generalView.updateModeIndicator(false)
 
   _pictureUpdated: (picture) =>
     if @picture and picture.id is @picture.id

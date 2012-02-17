@@ -7,6 +7,8 @@ class window.GeneralView extends ViewBase
     @bottomLeft = $('#bottomLeft')
     @bottomRight = $('#bottomRight')
     @socialSharing = new klekr.SocialSharing exhibit_slideshow_path()
+
+    this._initFullScreenButton()
     $(window).resize(this.initLayout)
     this.initLayout()
 
@@ -14,6 +16,7 @@ class window.GeneralView extends ViewBase
     this._calculateDimensions()
     this._adjustArrowsPosition()
     this._adjustFrames()
+    this._updateFullScreenButton()
     this.trigger('layout-changed' )
 
   displayProgress: (atLast, atBegining) =>
@@ -21,13 +24,11 @@ class window.GeneralView extends ViewBase
     this.fadeInOut(@_leftArrow, !atBegining)
     this.fadeInOut(@_rightArrow, !atLast)
 
-  updateModeIndicator: (isGrid) =>
+  updateModeIndicator: (toGrid) =>
     @_indicatorPanel.show()
-    offset = 26
-    left = if isGrid then offset else 0
-    unless alreadyInPosition = "#{left}px" is @_indicator.css('left')
-      animation = if (left is offset) then '+=' else '-='
-      @_indicator.animate {left: animation + offset}, ViewBase.duration
+    @_indicatorPanel.attr('title', if toGrid then 'Show Picture' else 'Show Grid')
+    position = if toGrid then 26 else 0
+    @_indicator.css('left', "#{position}px" )
 
   toggleModeClick: (listener) ->
     @_indicatorPanel.click listener
@@ -63,3 +64,13 @@ class window.GeneralView extends ViewBase
     topLeftWidth = @windowWidth / 2 + 40
     $('#top-banner-left').css('max-width', topLeftWidth + 'px')
 
+  _initFullScreenButton: =>
+    @_fullScreenButton ?= $('#full-screen-button')
+
+    if fullScreenApi.supportsFullScreen
+      @_fullScreenButton.show()
+      @_fullScreenButton.click this.toggleFullScreen
+
+  _updateFullScreenButton: =>
+    newTitle = if fullScreenApi.isFullScreen() then 'Exit full screen' else 'Go full screen!'
+    @_fullScreenButton.attr('title', newTitle)
