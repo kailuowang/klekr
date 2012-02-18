@@ -33,7 +33,7 @@ class SlideshowController < ApplicationController
     @html_url = exhibit_slideshow_url(exhibit_params)
     @collector = ::Collector.find(params[:collector_id])
     @icon =  @collector
-    @exhibit_name = @collector.user_name + "'s klekr faves"
+    @exhibit_name = @collector.user_name + "'s faves"
     render_exhibit
   end
 

@@ -12,12 +12,12 @@
   .fleft
     = icon(@icon)
   .fleft
-    %h3
+    %h3#exhibit-name
       = @exhibit_name
   .fleft
     = auto_discovery_link_tag(:rss, @exhibit_params.merge(format: :rss))
   .fleft
-    = render partial: '/general/add_this', locals: {title:  @collector.user_name + "'s klekr faves: "}
+    = render partial: '/general/add_this', locals: {title:  'klekr - ' + @exhibit_name}
 - content_for(:top_right) do
   - if @current_collector.blank?
     %h3#invite-link
