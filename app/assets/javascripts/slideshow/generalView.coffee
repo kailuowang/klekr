@@ -85,5 +85,5 @@ class window.GeneralView extends ViewBase
       @_fullScreenButton.click this.toggleFullScreen
 
   _updateFullScreenButton: =>
-    newTitle = if fullScreenApi.isFullScreen() then 'Exit full screen' else 'Go full screen!'
+    newTitle = if fullScreenApi.isFullScreen() then 'Exit full screen' else 'Full screen (recommended)'
     @_fullScreenButton.attr('title', newTitle)
