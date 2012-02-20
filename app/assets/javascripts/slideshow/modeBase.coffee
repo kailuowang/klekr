@@ -5,7 +5,6 @@ class window.ModeBase extends Events
   active: =>
     gallery.currentMode is this and !gallery.isEmpty()
 
-
   shortcuts: =>
     @_shortcuts ?= this._createShortcuts()
 
@@ -19,6 +18,18 @@ class window.ModeBase extends Events
 
   goToIndex: (index) =>
     window.location = '#' + "#{this.name}-#{index}#{this._extraHashInfo(index)}"
+
+  canScroll: (towardsLeft) =>
+    if towardsLeft
+      !this.atTheBegining()
+    else
+      !this.atTheLast() and !gallery.isLoading()
+
+  scroll: (towardsLeft) =>
+    if towardsLeft
+      this.navigateToPrevious()
+    else
+      this.navigateToNext()
 
   _createShortcuts: =>
     this._createShortcut(setting) for setting in this.shortcutsSettings()

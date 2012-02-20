@@ -17,6 +17,7 @@ class window.Gallery extends Events
     @filters.bind('changed', this._reinitToGrid)
     @filters.bind('changed', generalView.updateShareLink)
     @autoPlay = new AutoPlay(@slide)
+    this._registerScrollControl()
     new GalleryControlPanel(this)
     this._listenHashChange()
     generalView.bind 'layout-changed', this._preloadOnLayoutChange
@@ -115,8 +116,9 @@ class window.Gallery extends Events
     @picturePreloader.rePrioritize()
 
   _updateProgressInView: =>
-    generalView.displayProgress(this.currentMode.atTheLast() and !gallery.isLoading(),
-                                this.currentMode.atTheBegining())
+    generalView.displayProgress(@currentMode.atTheLast() and !gallery.isLoading(),
+                                @currentMode.atTheBegining())
+    @scrollControl.reset?()
 
   _alternativeMode: =>
     if @currentMode is @grid then @slide else @grid
@@ -206,6 +208,14 @@ class window.Gallery extends Events
 
   readyNewPictures: =>
     _(@pictures).select (p) -> p.ready and !p.data.viewed
+
+  _registerScrollControl: =>
+    @scrollControl = new klekr.ScrollControl( (towardsLeft) => @currentMode.canScroll(towardsLeft) )
+    @scrollControl.bind 'jump', (towardsLeft) =>
+      @currentMode.scroll(towardsLeft)
+    @scrollControl.bind 'move', generalView.inidicateScroll
+
+
 
   report: ->
     console.debug "cache size: " + @cacheSize

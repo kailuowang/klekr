@@ -23,6 +23,7 @@ class window.GeneralView extends ViewBase
     $('.side-nav').show()
     this.fadeInOut(@_leftArrow, !atBegining)
     this.fadeInOut(@_rightArrow, !atLast)
+    this._resetScorllIndication()
 
   updateModeIndicator: (toGrid) =>
     @_indicatorPanel.show()
@@ -47,6 +48,18 @@ class window.GeneralView extends ViewBase
       @socialSharing.path = exhibit_slideshow_path()
       @socialSharing.params = _.extend({collector_id: klekr.Global.currentCollector.id}, filterSettings)
       @socialSharing.update()
+
+  inidicateScroll: (position) =>
+    leftPadding = rightPadding = 10
+    if position < 0
+      leftPadding = 10 + position
+    else
+      rightPadding = 10 - position
+
+    @_leftArrow.css('padding-left', leftPadding + 'px')
+    @_rightArrow.css('padding-right', rightPadding + 'px')
+
+  _resetScorllIndication: => this.inidicateScroll(0)
 
   _calculateDimensions: ->
     [@windowWidth, @windowHeight] = this.windowDimension()
