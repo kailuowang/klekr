@@ -1,5 +1,7 @@
 // http://johndyer.name/native-fullscreen-javascript-api-plus-jquery-plugin/
 // Curly Braces and Angled Brackets
+// Change by Kai : added Element.ALLOW_KEYBOARD_INPUT to support keyboard in chrome
+
 (function() {
     var
         fullScreenApi = {
@@ -43,7 +45,7 @@
             }
         }
         fullScreenApi.requestFullScreen = function(el) {
-            return (this.prefix === '') ? el.requestFullScreen() : el[this.prefix + 'RequestFullScreen']();
+            return (this.prefix === '') ? el.requestFullScreen() : el[this.prefix + 'RequestFullScreen'](Element.ALLOW_KEYBOARD_INPUT);
         }
         fullScreenApi.cancelFullScreen = function(el) {
             return (this.prefix === '') ? document.cancelFullScreen() : document[this.prefix + 'CancelFullScreen']();
