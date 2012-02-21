@@ -100,6 +100,7 @@ class window.Gallery extends Events
       @currentMode = newMode
       @currentMode.on()
       this._updateModeIndicatorInView()
+      this._updateProgressInView()
     if(newIndex != this._currentProgress() or @blank or modeChanged )
       @blank = false
       @currentMode.updateProgress(newIndex)
@@ -116,8 +117,8 @@ class window.Gallery extends Events
     @picturePreloader.rePrioritize()
 
   _updateProgressInView: =>
-    generalView.displayProgress(@currentMode.atTheLast() and !gallery.isLoading(),
-                                @currentMode.atTheBegining())
+    generalView.updateNavigation(@currentMode.forwardable(),
+                                 @currentMode.backwardable())
     @scrollControl.reset?()
 
   _alternativeMode: =>
@@ -165,7 +166,8 @@ class window.Gallery extends Events
   _emptyGallery: =>
     @currentMode.clear?()
     unless @filters.hasActiveFilter()
-        generalView.showEmptyGalleryMessage()
+      @currentMode.off()
+      generalView.showEmptyGalleryMessage()
 
   _reinitToGrid: =>
     @currentMode = @grid

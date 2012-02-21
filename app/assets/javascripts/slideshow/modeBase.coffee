@@ -21,9 +21,14 @@ class window.ModeBase extends Events
 
   canScroll: (towardsLeft) =>
     if towardsLeft
-      !this.atTheBegining()
+      this.backwardable()
     else
-      !this.atTheLast() and !gallery.isLoading()
+      this.forwardable()
+
+  forwardable: =>
+    !this.atTheLast() and !gallery.isLoading() and !gallery.isEmpty()
+
+  backwardable: => !this.atTheBegining()
 
   scroll: (towardsLeft) =>
     if towardsLeft

@@ -19,10 +19,10 @@ class window.GeneralView extends ViewBase
     this._updateFullScreenButton()
     this.trigger('layout-changed' )
 
-  displayProgress: (atLast, atBegining) =>
+  updateNavigation: (forwardable, backwardable) =>
     $('.side-nav').show()
-    this.fadeInOut(@_leftArrow, !atBegining)
-    this.fadeInOut(@_rightArrow, !atLast)
+    this.fadeInOut(@_leftArrow, backwardable)
+    this.fadeInOut(@_rightArrow, forwardable)
     this._resetScorllIndication()
 
   updateModeIndicator: (toGrid) =>
