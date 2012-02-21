@@ -2,8 +2,11 @@ module Collectr
   class FlickrPictureRetriever
     include Collectr::Flickr
 
-    FLICKR_PHOTOS_PER_PAGE = 40
     attr_reader :collector
+
+    def self.flickr_photos_per_page
+      Settings.default_flickr_photo_retrieve_size
+    end
 
     def initialize(params)
       @module = params[:module]
@@ -12,7 +15,7 @@ module Collectr
       @user_id = params[:user_id]
       @id_field = params[:id_field] || :user_id
       @collector = params[:collector]
-      @default_per_page = params[:per_page] || FLICKR_PHOTOS_PER_PAGE
+      @default_per_page = params[:per_page] || FlickrPictureRetriever.flickr_photos_per_page
     end
 
     def get_module

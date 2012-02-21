@@ -39,7 +39,7 @@ describe Collectr::FlickrPictureRetriever do
     end
 
     it "goes through whatever pages it takes to get max_num_of pictures when since is not given" do
-      page_size = Collectr::FlickrPictureRetriever::FLICKR_PHOTOS_PER_PAGE
+      page_size = Collectr::FlickrPictureRetriever.flickr_photos_per_page
       @flickr.should_receive(:getList).and_return(page_size.pics)
       @flickr.should_receive(:getList).with(hash_including(page: 2)).and_return(page_size.pics)
       @flickr.should_not_receive(:getList).with(hash_including(page: 3))

@@ -6,7 +6,6 @@ class FlickrStream < ActiveRecord::Base
 
   TYPES = ['FaveStream', 'UploadStream'].freeze
   DEFAULT_TYPE = 'UploadStream'
-  FLICKR_PHOTOS_PER_PAGE = 20
 
   validates_uniqueness_of :user_id, :scope => [:collector_id, :type]
   validates_presence_of :user_id
@@ -144,7 +143,7 @@ class FlickrStream < ActiveRecord::Base
     Syncage.where(flickr_stream_id: id, picture_id: picture.id).present?
   end
 
-  def sync(since = last_sync || 1.month.ago, max_num = Collectr::FlickrPictureRetriever::FLICKR_PHOTOS_PER_PAGE / 4, verbose = false)
+  def sync(since = last_sync || 1.month.ago, max_num = Collectr::FlickrPictureRetriever.flickr_photos_per_page / 4, verbose = false)
     photos_synced = 0
     retriever.get_all(since, max_num).each do |pic_info|
       _, newly_synced = picture_repo.create_from_sync(pic_info, self)
