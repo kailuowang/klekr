@@ -1,7 +1,8 @@
 .user-name
   %a#user-name.dropdown-toggle{href: '#', 'data-dropdown' => "dropdown"}
     Hi!
-    = @current_collector.user_name
+    %span
+      = @current_collector.user_name
   #user-dropdown.dropdown-menu.hidden
     #upper.inner
       #user-icon.fleft
