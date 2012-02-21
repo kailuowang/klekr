@@ -51,10 +51,10 @@ class window.GeneralView extends ViewBase
 
   inidicateScroll: (position) =>
     leftPadding = rightPadding = 10
-    if position < 0
-      leftPadding = 10 + position
+    if ( offset = position * 2 ) < 0
+      leftPadding = 10 + offset
     else
-      rightPadding = 10 - position
+      rightPadding = 10 - offset
 
     @_leftArrow.css('padding-left', leftPadding + 'px')
     @_rightArrow.css('padding-right', rightPadding + 'px')

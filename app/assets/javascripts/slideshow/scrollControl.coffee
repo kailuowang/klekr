@@ -13,7 +13,7 @@ class klekr.ScrollControl extends Events
 
   _move: (delta) =>
     @position += delta
-    if Math.abs(@position) > 10
+    if Math.abs(@position) > 5
       this.trigger 'jump', @position < 0
       this.reset()
     else
