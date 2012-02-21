@@ -43,5 +43,4 @@ class window.ModeBase extends Events
     new KeyShortcut setting[0], setting[1], setting[2], =>
       this.active() and !ViewBase.showingPopup
 
-  _extraHashInfo: =>
-    ''
+  _extraHashInfo: => ''
