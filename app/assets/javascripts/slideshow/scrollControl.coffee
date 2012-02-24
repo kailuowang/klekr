@@ -12,12 +12,18 @@ class klekr.ScrollControl extends Events
     this._move(delta) if @canScroll(towardsLeft = delta < 0)
 
   _move: (delta) =>
+    oldPosition = @position
     @position += delta
-    if Math.abs(@position) > 5
-      this.trigger 'jump', @position < 0
-      this.reset()
-    else
+    needToJump = Math.abs(@position) > 5
+
+    if needToJump
+      @position = @position * 5 / Math.abs(@position)
+
+    if @position isnt oldPosition
       this.trigger 'move', @position
+
+    this._jump() if needToJump
+
 
   _getDelta: (event) =>
     if event.wheelDelta
@@ -25,5 +31,11 @@ class klekr.ScrollControl extends Events
     else if event.detail
       event.detail / 2
     else
-      0
 
+  _jump: =>
+    @jumpFunc ?= _.throttle(this._triggerJumpEvent, 500)
+    @jumpFunc()
+
+  _triggerJumpEvent: =>
+    this.reset()
+    this.trigger 'jump', @position < 0
