@@ -13,6 +13,7 @@ module Collectr
       Total Faved Pictures: #{Picture.faved.count}
       Total Viewed Pictures: #{Picture.viewed.count}
       Outdated Pictures : #{outdated_pics.count}
+      Invalide Pictures: #{invalid_pics.count}
       Temporary Streams : #{uncollected_streams.count}
 EOF
     end
