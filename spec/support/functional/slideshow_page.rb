@@ -44,6 +44,9 @@ module Functional
     end
 
     def click_right_button
+      wait_until do
+        @d['right'].displayed?
+      end
       @d['right'].click
       pause
     end
