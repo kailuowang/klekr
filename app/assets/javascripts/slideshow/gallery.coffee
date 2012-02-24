@@ -162,6 +162,7 @@ class window.Gallery extends Events
     else if numOfRetrieved == 0
       @allPicturesRetrieved = true
       this.trigger('gallery-pictures-changed')
+    this._updateProgressInView()
 
   _emptyGallery: =>
     @currentMode.clear?()

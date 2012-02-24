@@ -77,4 +77,3 @@ class window.Slide extends ModeBase
       this._monitorPictureReady(picture)
     @favePanel.updateWith(picture)
     this.trigger('progress-changed')
-

@@ -26,7 +26,7 @@ class window.ModeBase extends Events
       this.forwardable()
 
   forwardable: =>
-    !this.atTheLast() and !gallery.isLoading() and !gallery.isEmpty()
+    (!this.atTheLast() or gallery.isLoading()) and !gallery.isEmpty()
 
   backwardable: => !this.atTheBegining()
 
