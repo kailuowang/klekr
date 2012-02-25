@@ -1,8 +1,9 @@
 class klekr.ScrollControl extends Events
   constructor: (@canScroll) ->
     this.reset()
-    document.addEventListener "DOMMouseScroll", this._onScroll, false  if window.addEventListener
-    document.onmousewheel = this._onScroll
+    onScroll = _.throttle(this._onScroll, 50)
+    document.addEventListener "DOMMouseScroll", onScroll, false  if window.addEventListener
+    document.onmousewheel = onScroll
 
   reset: =>
     @position = 0
@@ -12,17 +13,22 @@ class klekr.ScrollControl extends Events
     this._move(delta) if @canScroll(towardsLeft = delta < 0)
 
   _move: (delta) =>
+    if @position is NaN #todo figure out why in some rare case this becomes true
+      @position = 0
     oldPosition = @position
     @position += delta
-    needToJump = Math.abs(@position) > 5
+    overThreshod = this._overThreshod()
 
-    if needToJump
-      @position = @position * 5 / Math.abs(@position)
+    if overThreshod
+      @position = if @position > 0 then 5 else -5
 
     if @position isnt oldPosition
       this.trigger 'move', @position
 
-    this._jump() if needToJump
+    this._jump() if overThreshod
+
+  _overThreshod: =>
+    Math.abs(@position) >= 5
 
 
   _getDelta: (event) =>
@@ -37,5 +43,6 @@ class klekr.ScrollControl extends Events
     @jumpFunc()
 
   _triggerJumpEvent: =>
-    this.reset()
-    this.trigger 'jump', @position < 0
+    if this._overThreshod()
+      this.trigger 'jump', @position < 0
+      this.reset()
