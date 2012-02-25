@@ -84,7 +84,7 @@ class FlickrStreamsController < ApplicationController
   def load_stream
     unless @flickr_stream
       @flickr_stream = FlickrStream.find(params[:id].to_i) if params[:id]
-      if(current_collector && @flickr_stream && @flickr_stream.collector != current_collector)
+      if(@flickr_stream && @flickr_stream.collector != current_collector)
         raise ActionController::RoutingError.new('Access not permitted')
       end
     end
