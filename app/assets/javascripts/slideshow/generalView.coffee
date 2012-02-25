@@ -9,15 +9,15 @@ class window.GeneralView extends ViewBase
     @socialSharing = new klekr.SocialSharing exhibit_slideshow_path()
 
     this._initFullScreenButton()
-    $(window).resize(this.initLayout)
+    $(window).resize(_.throttle(this.initLayout, 100))
     this.initLayout()
 
   initLayout: =>
-    this._calculateDimensions()
-    this._adjustArrowsPosition()
-    this._adjustFrames()
-    this._updateFullScreenButton()
-    this.trigger('layout-changed' )
+    if this._updateDimensions()
+      this._adjustArrowsPosition()
+      this._adjustFrames()
+      this._updateFullScreenButton()
+      this.trigger('layout-changed' )
 
   updateNavigation: (forwardable, backwardable) =>
     $('.side-nav').show()
@@ -61,10 +61,14 @@ class window.GeneralView extends ViewBase
 
   _resetScorllIndication: => this.inidicateScroll(0)
 
-  _calculateDimensions: ->
-    [@windowWidth, @windowHeight] = this.windowDimension()
-    [@displayWidth, @displayHeight] = [@windowWidth - 80, @windowHeight - 93]
-
+  _updateDimensions: ->
+    [newWidth, newHeight] = this.windowDimension()
+    if([@windowWidth, @windowHeight] isnt [newWidth, newHeight])
+      [@windowWidth, @windowHeight] = [newWidth, newHeight]
+      [@displayWidth, @displayHeight] = [@windowWidth - 80, @windowHeight - 93]
+      true
+    else
+      false
 
   _adjustArrowsPosition: ->
     sideArrowHeight = ( @displayHeight - 150 )+ "px"

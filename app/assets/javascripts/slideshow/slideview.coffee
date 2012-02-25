@@ -9,6 +9,8 @@ class window.Slideview extends ViewBase
     this._adjustImageFrame()
     generalView.bind('layout-changed', this._adjustImageFrame)
     klekr.Global.broadcaster.bind 'picture:data-updated', this._pictureUpdated
+    @mainImg.load this._checkImage
+    @mainImg.error this._checkImage
 
   display: (picture) =>
     @picture = picture
@@ -28,14 +30,15 @@ class window.Slideview extends ViewBase
     this.fadeInOut(@pictureArea, true)
   
   update: () ->
-    @mainImg.load this._checkImage
-    @mainImg.error this._checkImage
     @mainImg.attr('src', @picture.url()) if @mainImg.attr('src') isnt @picture.url()
     @mainImg.attr('data-pic-id', @picture.id)
     this._updateLabel()
 
+  isShowing: =>
+    this.showing(@mainImg)
+
   _checkImage: =>
-    @picture.checkLargeVersionInvalid(@mainImg[0])
+    @picture.checkLargeVersionInvalid(@mainImg[0]) if @picture?
 
   displayLabel:  =>
     if this.showing(@pictureArea)
