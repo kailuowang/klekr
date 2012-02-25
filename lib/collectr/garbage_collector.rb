@@ -5,6 +5,7 @@ module Collectr
       outdated_pics.delete_all
       uncollected_streams.old(7).delete_all
       invalid_pics.delete_all
+      really_old_pics.delete_all
     end
 
     def report
@@ -14,6 +15,7 @@ module Collectr
       Total Viewed Pictures: #{Picture.viewed.count}
       Outdated Pictures : #{outdated_pics.count}
       Invalide Pictures: #{invalid_pics.count}
+      Really Old Pictures: #{really_old_pics.count}
       Temporary Streams : #{uncollected_streams.count}
 EOF
     end
@@ -30,6 +32,10 @@ EOF
 
     def uncollected_streams
       FlickrStream.where(collecting: false)
+    end
+
+    def really_old_pics
+      Picture.where('date_upload < ?', 12.months.ago).unfaved
     end
 
   end
