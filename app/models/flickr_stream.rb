@@ -143,7 +143,8 @@ class FlickrStream < ActiveRecord::Base
     Syncage.where(flickr_stream_id: id, picture_id: picture.id).present?
   end
 
-  def sync(since = last_sync || 1.month.ago, max_num = Collectr::FlickrPictureRetriever.flickr_photos_per_page / 4, verbose = false)
+  def sync(since = nil, max_num = Collectr::FlickrPictureRetriever.flickr_photos_per_page / 4, verbose = false)
+    since ||= last_sync || 1.month.ago
     photos_synced = 0
     retriever.get_all(since, max_num).each do |pic_info|
       _, newly_synced = picture_repo.create_from_sync(pic_info, self)
