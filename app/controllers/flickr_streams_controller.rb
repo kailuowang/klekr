@@ -33,6 +33,7 @@ class FlickrStreamsController < ApplicationController
 
   def subscribe
     @flickr_stream.subscribe
+    @flickr_stream.set_as_synced
     render_json data_for_stream(@flickr_stream)
   end
 

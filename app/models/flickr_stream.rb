@@ -139,6 +139,10 @@ class FlickrStream < ActiveRecord::Base
     mark_all_as_read
   end
 
+  def set_as_synced
+    update_attribute(:last_sync, DateTime.now)
+  end
+
   def synced_with?(picture)
     Syncage.where(flickr_stream_id: id, picture_id: picture.id).present?
   end
