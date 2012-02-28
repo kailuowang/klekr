@@ -40,6 +40,7 @@ describe "Stream slide page" do
     end
 
     it 'can fave pictures' do
+      @page.open #make sure it auto login when going to slideshow
       @page.open("slideshow/flickr_stream", true, id: @stream.id, as_test_collector: true)
       @page.enter_slide_mode
       src = @page.slide_picture['src']
