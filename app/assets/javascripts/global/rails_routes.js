@@ -7,7 +7,6 @@ function collector_group_streams_path(params){ return '/collectors/' + params.co
 function sync_flickr_stream_path(params){ return '/flickr_streams/' + params.id + '/sync'}
 function adjust_rating_flickr_stream_path(params){ return '/flickr_streams/' + params.id + '/adjust_rating'}
 function mark_all_as_read_flickr_stream_path(params){ return '/flickr_streams/' + params.id + '/mark_all_as_read'}
-function pictures_flickr_stream_path(params){ return '/flickr_streams/' + params.id + '/pictures'}
 function subscribe_flickr_stream_path(params){ return '/flickr_streams/' + params.id + '/subscribe'}
 function unsubscribe_flickr_stream_path(params){ return '/flickr_streams/' + params.id + '/unsubscribe'}
 function import_flickr_streams_path(params){ return '/flickr_streams/import'}

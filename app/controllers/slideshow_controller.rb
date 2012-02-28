@@ -1,14 +1,22 @@
 class SlideshowController < ApplicationController
   include Collectr::PictureControllerHelper
-  before_filter :authenticate, except: [:exhibit, :exhibit_pictures, :editors_choice]
-  before_filter :set_default_bottom_links, only: [:exhibit, :show, :flickr_stream, :faves]
+  before_filter :authenticate, except: [:exhibit, :exhibit_pictures, :editors_choice, :flickr_stream, :flickr_stream_pictures]
+  before_filter :set_navigation_links, only: [:exhibit, :show, :flickr_stream, :faves, :editors_choice]
 
   def flickr_stream
     id = params[:id].to_i
     @stream = FlickrStream.find(id)
     check_stream_access(@stream)
-    @more_pictures_path = pictures_flickr_stream_path(id)
+    @more_pictures_path = flickr_stream_pictures_slideshow_path(id: id)
     @empty_message = "#{@stream} has no pictures."
+  end
+
+
+  def flickr_stream_pictures
+    page = params[:page] ? params[:page].to_i : 1
+    per_page = params[:num] ? params[:num].to_i : 1
+    @stream = FlickrStream.find(params[:id])
+    render_json_pictures @stream.get_pictures(per_page, page)
   end
 
   def show
@@ -81,7 +89,7 @@ class SlideshowController < ApplicationController
   end
 
   def exhibit_html
-    @disable_navigation = current_collector.blank?
+
     @more_pictures_path = exhibit_pictures_slideshow_path(params.slice(:collector_id, :order_by))
     @empty_message = "#{@collector.user_name} has not faved any pictures yet."
     @default_filters = default_filters
@@ -104,7 +112,7 @@ class SlideshowController < ApplicationController
   end
 
   def check_stream_access(stream)
-    if(stream.collector != current_collector)
+    if(current_collector && stream.collector != current_collector)
       redirect_to user_path(stream.user_id, type: stream.class.name)
     end
   end
@@ -114,8 +122,9 @@ class SlideshowController < ApplicationController
     filtersParams.to_json if (filtersParams.present?)
   end
 
-  def set_default_bottom_links
+  def set_navigation_links
     @bottom_links = [:editors_choice]
+    @disable_navigation = current_collector.blank?
   end
 
 end

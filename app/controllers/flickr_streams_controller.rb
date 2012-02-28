@@ -2,7 +2,7 @@ class FlickrStreamsController < ApplicationController
   include Collectr::PictureControllerHelper
   include Collectr::FlickrStreamsControllerHelper
 
-  before_filter :authenticate, :load_stream
+  before_filter :authenticate, :load_stream, except: [:show]
 
   def index
   end
@@ -41,13 +41,6 @@ class FlickrStreamsController < ApplicationController
     @flickr_stream.unsubscribe
     render_json data_for_stream(@flickr_stream)
   end
-
-  def pictures
-    page = params[:page] ? params[:page].to_i : 1
-    per_page = params[:num] ? params[:num].to_i : 1
-    render_json_pictures @flickr_stream.get_pictures(per_page, page)
-  end
-
 
   #PUT /flickr_stream/1/sync
   def sync

@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   include Collectr::FlickrStreamsControllerHelper
   NUM_OF_PIX_TO_SHOW = 12
 
-  before_filter :authenticate
+  before_filter :authenticate , except: [:show, :flickr_stream]
 
   def show
     type = params[:type] || FlickrStream::DEFAULT_TYPE
@@ -10,9 +10,10 @@ class UsersController < ApplicationController
   end
 
   def flickr_stream
-    stream = FlickrStream.find_or_create(user_id: params[:id], collector: current_collector, type: params[:type])
-    redirect_to(action: :show, controller: :flickr_streams, id: stream.id)
+    stream = FlickrStream.find_or_create(user_id: params[:id], collector: collector_for_stream, type: params[:type])
+    redirect_to(action: :flickr_stream, controller: :slideshow, id: stream.id)
   end
+
 
   def contacts
     render_json data_for_streams(Collectr::ContactsImporter.new(@current_collector).contact_streams)
@@ -57,4 +58,7 @@ class UsersController < ApplicationController
       FlickrStream.find_or_create(user_id: user_id, collector: current_collector, type: UploadStream.to_s)]
   end
 
+  def collector_for_stream
+    current_collector || Collectr::Editor.new.ensure_editor_collector
+  end
 end

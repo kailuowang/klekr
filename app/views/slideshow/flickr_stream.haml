@@ -23,6 +23,7 @@
           = @stream.username + "'s"
           = link_to @stream.alternative_stream.type_display.downcase, flickr_stream_path(@stream.alternative_stream)
 
-    %h5
-      = render partial: 'stream_panel'
+    - if @current_collector.present?
+      %h5
+        = render partial: 'stream_panel'
 =render partial: 'slideshow'

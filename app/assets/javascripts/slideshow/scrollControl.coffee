@@ -30,7 +30,6 @@ class klekr.ScrollControl extends Events
   _overThreshod: =>
     Math.abs(@position) >= 5
 
-
   _getDelta: (event) =>
     if event.wheelDelta
       - event.wheelDelta / 60

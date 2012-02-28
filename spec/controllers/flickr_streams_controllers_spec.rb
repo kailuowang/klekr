@@ -49,7 +49,7 @@ describe FlickrStreamsController do
     it 'should forbid accessing other collector stream' do
       controller.stub!(:current_collector).and_return Factory(:collector)
       fave_stream = Factory(:fave_stream)
-      lambda{ get 'show', id: fave_stream.id }.should raise_exception
+      lambda{ put 'subscribe', id: fave_stream.id }.should raise_exception
     end
   end
 end
