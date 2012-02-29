@@ -24,6 +24,7 @@
           = link_to @stream.alternative_stream.type_display.downcase, flickr_stream_path(@stream.alternative_stream)
 
     - if @current_collector.present?
-      %h5
-        = render partial: 'stream_panel'
+      = render partial: 'stream_panel'
+    - else
+      = link_to 'Login to subscribe to '
 =render partial: 'slideshow'

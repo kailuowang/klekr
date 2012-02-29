@@ -1,18 +1,19 @@
-#noncollectingStreamOperations{class: hidden_class(@stream.collecting?)}
-  = link_to 'Add', subscribe_flickr_stream_path(@stream), remote: true, :method => :put, id: 'startCollecting', class: 'btn primary glow has-popover', 'data-glowing' => 1000, title: "Add to my sources", 'data-content' => "If you like these pictures from #{@stream}, add it as a source for your \"My Stream\" page.", 'data-popover' => 'right'
-#collectingStreamOperations{class: hidden_class(!@stream.collecting?)}
-  #rating-display.fleft
-    Rating:
-    %nbsp
-    %span#rating> #{@stream.star_rating}
-    = '/5'
-  #rating-adjustment.fleft
-    = link_to '▲', adjust_rating_flickr_stream_path(@stream, adjustment: 'up'), remote: true, method: :put,  class: 'rating-adjustment-link'
-    = link_to '▼', adjust_rating_flickr_stream_path(@stream), remote: true, method: :put,  class: 'rating-adjustment-link'
+#stream-panel
+  #noncollectingStreamOperations{class: hidden_class(@stream.collecting?)}
+    = link_to 'Add', subscribe_flickr_stream_path(@stream), remote: true, :method => :put, id: 'startCollecting', class: 'btn primary glow has-popover', 'data-glowing' => 1000, title: "Add to my sources", 'data-content' => "If you like these pictures from #{@stream}, add it as a source for your \"My Stream\" page.", 'data-popover' => 'right'
+  #collectingStreamOperations{class: hidden_class(!@stream.collecting?)}
+    #rating-display.fleft
+      Rating:
+      %nbsp
+      %span#rating> #{@stream.star_rating}
+      = '/5'
+    #rating-adjustment.fleft
+      = link_to '▲', adjust_rating_flickr_stream_path(@stream, adjustment: 'up'), remote: true, method: :put,  class: 'rating-adjustment-link'
+      = link_to '▼', adjust_rating_flickr_stream_path(@stream), remote: true, method: :put,  class: 'rating-adjustment-link'
 
-  .fleft
-    = link_to 'Remove from my sources', unsubscribe_flickr_stream_path(@stream), remote: true, method: :put, id: 'stopCollecting',  class: 'btn', confirm: 'Are you sure? This will also mark all photos from this sources as viewed.'
-    = link_to 'Mark all as viewed', mark_all_as_read_flickr_stream_path(@stream), remote: true, confirm: 'Are you sure? This will mark all unviewed pictures from this source as viewed.', method: :put, class: 'btn'
+    .fleft
+      = link_to 'Remove from my sources', unsubscribe_flickr_stream_path(@stream), remote: true, method: :put, id: 'stopCollecting',  class: 'btn', confirm: 'Are you sure? This will also mark all photos from this sources as viewed.'
+      = link_to 'Mark all as viewed', mark_all_as_read_flickr_stream_path(@stream), remote: true, confirm: 'Are you sure? This will mark all unviewed pictures from this source as viewed.', method: :put, class: 'btn'
 
 #source-added-popup.hidden.modal-popup
   %h2.sweet

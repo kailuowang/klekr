@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
       return true
     end
 
-    unless ajax_url? request.url
+    unless ajax_url?(request.url)
       session[:return_to]= request.url
     end
 
