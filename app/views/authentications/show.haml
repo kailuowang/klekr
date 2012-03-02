@@ -26,7 +26,7 @@
   - if @current_collector.blank?
     - unless @redirected_to_login
       %h3#login-link.inline
-        %a.has-popover{'data-content' => 'klekr needs your "write" permission from flickr so that you can fave pictures directly here. klekr does not change any of your photos/settings in any other ways.', title: 'Please note', 'data-popover' => 'above', href: @auth_url}
+        %a#login-auth-link.has-popover{'data-content' => 'klekr needs your "write" permission from flickr so that you can fave pictures directly here. klekr does not change any of your photos/settings in any other ways.', title: 'Please note', 'data-popover' => 'above', href: @auth_url}
           Login through flickr.com
       %span#not-sure-guide
         %span.not-sure
