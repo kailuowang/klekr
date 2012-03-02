@@ -26,7 +26,7 @@
   - if @current_collector.blank?
     - unless @redirected_to_login
       %h3#login-link.inline
-        %a#login-auth-link.has-popover{'data-content' => 'klekr needs your "write" permission from flickr so that you can fave pictures directly here. klekr does not change any of your photos/settings in any other ways.', title: 'Please note', 'data-popover' => 'above', href: @auth_url}
+        %a.login-auth-link.has-popover{'data-content' => 'klekr needs your "write" permission from flickr so that you can fave pictures directly here. klekr does not change any of your photos/settings in any other ways.', title: 'Please note', 'data-popover' => 'above', href: @auth_url}
           Login through flickr.com
       %span#not-sure-guide
         %span.not-sure
@@ -39,7 +39,7 @@
       %h3
         Redirecting to flickr.com
         to
-        = link_to 'login', @auth_url, class: 'hasTwipsy', title: "click here to login."
+        = link_to 'login', @auth_url, class: 'login-auth-link hasTwipsy', title: "click here to login."
         in
         %span#countdown
           5
@@ -47,7 +47,7 @@
     #redirect-link.hidden
       %h3
         Auto redirection stopped.
-        = link_to 'Click here to login', @auth_url
+        = link_to 'Click here to login', @auth_url, class: 'login-auth-link'
 
     .flickr-login-notes
       %span *

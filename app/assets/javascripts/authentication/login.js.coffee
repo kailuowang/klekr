@@ -11,7 +11,7 @@ class window.Login extends ViewBase
     if klekr.Global.showDetail
       $('#want-more-link').hide()
       $('#welcome-message #detail-info').show()
-    $('#login-auth-link').attr('href', $('#login-auth-link').attr('href') + "#" + $.param.fragment() )
+    $('.login-auth-link').attr('href', $('.login-auth-link').attr('href') + "#" + $.param.fragment() )
     this._loadAnnouncement()
 
   _toggleMoreAbout: =>
