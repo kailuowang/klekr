@@ -44,16 +44,23 @@ module Functional
     end
 
     def click_right_button
-      wait_until do
-        @d['right'].displayed?
-      end
-      @d['right'].click
-      pause
+      click_direction_button('right')
     end
 
     def click_left_button
-      @d['left'].click
-      pause
+      click_direction_button('left')
+    end
+
+    def click_direction_button(direction)
+      url = @d.current_url
+      arrow = "##{direction}Arrow"
+      wait_until do
+        s(arrow).displayed?
+      end
+      s(arrow).click
+      wait_until do
+        @d.current_url != url
+      end
     end
 
     def left_arrow
@@ -102,6 +109,7 @@ module Functional
     end
 
     def enter_slide_mode
+      wait_until { highlighted_grid_picture.present? }
       highlighted_grid_picture.click
       wait_until_slide_shows
     end
@@ -118,20 +126,33 @@ module Functional
 
     def wait_until_grid_shows
       wait_until do
-        @d['gridPictures'].displayed?
+        @d['gridPictures'].displayed? || empty_message_shows
       end
     end
 
     def wait_until_slide_shows
       wait_until do
-        slide_picture.displayed? && !slide_picture['src'].include?('loading')
+        ( slide_picture.displayed? && !slide_picture['src'].include?('loading')) || empty_message_shows
       end
     end
 
+    def empty_message_shows
+      s('#empty-gallery-message').displayed?
+    end
+
     def wait_until_fave_ready
-       wait_until do
+      wait_until do
         fave_button.displayed? || unfave_button.displayed?
       end
+    end
+
+    def fave_login_link
+      s '#fave-login'
+    end
+
+    def click_fave_login
+      wait_until { fave_login_link.displayed? }
+      fave_login_link.click
     end
 
     private

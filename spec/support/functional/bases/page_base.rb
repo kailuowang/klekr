@@ -1,11 +1,11 @@
 module Functional
   class PageBase
-    INTERVAL = 0.1
+    INTERVAL = 0.05
 
     def initialize
       @d = Selenium::WebDriver.for :chrome
       @d.manage.timeouts.implicit_wait = 0.5
-      @w = Selenium::WebDriver::Wait.new(timeout: 30, interval: INTERVAL)
+      @w = Selenium::WebDriver::Wait.new(timeout: 10, interval: INTERVAL)
     end
 
     def open page, opts = {}
@@ -27,10 +27,10 @@ module Functional
     end
 
     def log_out
-      user_link = s('#top-banner #user-name.dropdown-tggle')
+      user_link = s('#top-banner #user-name.dropdown-toggle')
       if user_link
         user_link.click
-        s('sign-out-link').click
+        s('#sign-out-link').click
         s('#bye-bye')
       end
     end

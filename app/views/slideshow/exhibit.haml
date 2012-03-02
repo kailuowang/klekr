@@ -19,11 +19,6 @@
   .fleft
     = render partial: '/general/add_this', locals: {title:  'klekr - ' + @exhibit_name}
 - content_for(:top_right) do
-  - if @current_collector.blank?
-    %h3#invite-link
-      %span.question Like these photos?
-      = link_to  'Start your own discovery now!', slideshow_path
-
-
+  =render partial: 'start_klekr_link'
 = render partial: 'slideshow'
 = render partial: 'slide_options'

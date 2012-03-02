@@ -11,7 +11,7 @@
   #reloading-picture.hidden
     = image_tag('loading.gif')
   #login-reminder.hidden
-    %a.btn.has-popover{href: exhibit_login_slideshow_path(@exhibit_params),
+    %a#fave-login.btn.has-popover{href: @fave_login_path,
      'data-content' => 'Login to klekr so that you can fave the pictures here', title: 'Login', 'data-popover' => 'above', 'data-popover-left-offset' => 50}
       Login to Fave
   #faveRatingPanel.modal-popup{style: 'margin: 40px'}

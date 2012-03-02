@@ -26,5 +26,9 @@
     - if @current_collector.present?
       = render partial: 'stream_panel'
     - else
-      = link_to 'Login to subscribe to '
+      .login-link
+        = link_to 'Login to Subscribe', subscribe_flickr_stream_path(@stream), id: 'login-to-subscribe', class: 'btn has-popover', method: :put, 'data-content' => "Login to klekr to subscribe to #{@stream}", title: 'Peronal photography discovery on klekr', 'data-popover' => 'right'
+
+- content_for(:top_right) do
+  =render partial: 'start_klekr_link'
 =render partial: 'slideshow'

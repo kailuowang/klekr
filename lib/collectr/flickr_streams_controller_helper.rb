@@ -20,5 +20,6 @@ module Collectr
         subscribed: stream.collecting
       }
     end
+
   end
 end

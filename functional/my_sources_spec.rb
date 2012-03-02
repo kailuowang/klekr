@@ -69,8 +69,9 @@ describe "my sources page" do
       @page.remove_button_for(@stream).click
       @page.wait_until { @page.add_button_for(@stream).displayed? }
       @page.add_button_for(@stream).click
-      @page.pause 0.5
-      @page.cell_disabled_for(@stream).should be_false
+      @page.wait_until do
+        !@page.cell_disabled_for(@stream)
+      end
       @page.open
       @page.find_cell_for(@stream).should be_present
     end

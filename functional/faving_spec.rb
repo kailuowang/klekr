@@ -54,7 +54,7 @@ describe "faving pictures" do
       @page.fave
       @page.pause 0.5
       @page.unfave_button.click
-      @page.pause 2
+      @page.pause 2.5
       just_faved?(pic_src).should be_false
 
     end

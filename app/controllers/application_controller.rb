@@ -14,11 +14,15 @@ class ApplicationController < ActionController::Base
     end
 
     unless ajax_url?(request.url)
-      session[:return_to]= request.url
+      set_return_url(request.url)
     end
 
     redirect_to authentications_path
     false
+  end
+
+  def set_return_url url
+    session[:return_to]= url
   end
 
   def redirect_to_stored

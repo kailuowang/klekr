@@ -10,7 +10,7 @@ class window.FavePanel  extends ViewBase
     @ratingDisplay = $('#ratingDisplay')
     @reloading = $('#reloading-picture')
     @loginReminder = $('#login-reminder')
-
+    @faveLoginLink = $('#fave-login')
     this._registerEvents()
     this._initRaty(@faveRating)
     this._initRaty(@ratingDisplay)
@@ -41,7 +41,7 @@ class window.FavePanel  extends ViewBase
       this._updateDom()
 
   _updateDom: =>
-    this.setVisible @faveArea, @picture.favable()
+    this.setVisible @faveArea, klekr.Global.currentCollector? and @picture.favable()
     this.setVisible @reloading, (!@picture.favable() and klekr.Global.currentCollector?)
     this.setVisible @loginReminder, !klekr.Global.currentCollector?
     if @picture.favable()
@@ -51,6 +51,7 @@ class window.FavePanel  extends ViewBase
       this.setVisible(@ratingDisplayPanel, faved)
       this.setVisible(@faved, faved)
       @removeFaveLink.attr('data-content', "This picture is added to my faves on #{@picture.favedDate}. Click to remove it." )
+    this._updateFaveLoginLink()
 
   _registerEvents: =>
     @faveLink.click_ this.fave
@@ -59,6 +60,11 @@ class window.FavePanel  extends ViewBase
   _updateRating: (rating) =>
     $.fn.raty.start(rating, '#faveRating');
     $.fn.raty.start(rating, '#ratingDisplay');
+
+  _updateFaveLoginLink: =>
+    fave_url =  @faveLoginLink.attr('href').split('#')[0]
+    currentHash = $.param.fragment()
+    @faveLoginLink.attr('href', fave_url+ '#' + currentHash)
 
   _initRaty: (div)=>
     div.raty({

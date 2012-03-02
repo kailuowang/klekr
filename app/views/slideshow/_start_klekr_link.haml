@@ -1,0 +1,5 @@
+- if @current_collector.blank?
+  %h3#invite-link
+    %span.question Like these photos?
+    = link_to  'Start your own discovery now!', slideshow_path, class: 'has-popover', 'data-content' => 'Login to klekr to have your own personalized stream which congregates your favorite groups, favorite photographers and their recent discoveries.', title: 'Peronal photography discovery on klekr', 'data-popover' => 'below'
+

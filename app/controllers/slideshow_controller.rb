@@ -9,6 +9,7 @@ class SlideshowController < ApplicationController
     check_stream_access(@stream)
     @more_pictures_path = flickr_stream_pictures_slideshow_path(id: id)
     @empty_message = "#{@stream} has no pictures."
+    @fave_login_path = flickr_stream_path(id: id)
   end
 
 
@@ -74,6 +75,7 @@ class SlideshowController < ApplicationController
 
   def render_exhibit
     @exhibit_params = exhibit_params
+    @fave_login_path = exhibit_login_slideshow_path(@exhibit_params)
 
     respond_to do |format|
       format.rss { exhibit_feed }

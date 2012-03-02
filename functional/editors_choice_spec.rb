@@ -36,9 +36,11 @@ describe "Editor's Choice page" do
     end
 
     it 'can load picture when login' do
-      Functional::SlideshowPage.new.open #opens my stream page which logs in automatically
+      mystream = Functional::SlideshowPage.new
+      mystream.open #opens my stream page which logs in automatically
       @page.open
       check_reload_picture
+      mystream.close
     end
   end
 

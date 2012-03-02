@@ -20,22 +20,29 @@ describe "slideshow" do
       reset_viewed_pictures
     end
 
-    it "displays the picture by default" do
+    before :each do
       @page.wait_until_slide_shows
+    end
+
+    it "displays the picture by default" do
       @page.slide_picture.should be_displayed
     end
 
     it "display the next picture when the right arrow button was clicked" do
       current_src = @page.slide_picture['src']
       @page.click_right_button
-      @page.slide_picture['src'].should_not == current_src
+      @page.wait_until do
+        @page.slide_picture['src'] != current_src
+      end
     end
 
     it "display the previous picture when click the left arrow button" do
       current_src = @page.slide_picture['src']
       @page.click_right_button
       @page.click_left_button
-      @page.slide_picture['src'].should == current_src
+      @page.wait_until do
+        @page.slide_picture['src'] == current_src
+      end
     end
 
     it "shouldn't display the left arrow at the begining" do
@@ -89,10 +96,13 @@ describe "slideshow" do
     it "highlight the corresponding grid picture when switch to grid" do
       @page.click_right_button
       @page.click_right_button
-      pic_id = @page.slide_picture_id
+      @page.pause
       @page.wait_until_slide_shows
+      pic_id = @page.slide_picture_id
       @page.slide_picture.click
-      @page.highlighted_grid_picture_id.should == pic_id
+      @page.wait_until do
+        @page.highlighted_grid_picture_id == pic_id
+      end
     end
 
     it "switches to the next page of grid when navigate through slide" do

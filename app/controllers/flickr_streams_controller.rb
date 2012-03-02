@@ -2,7 +2,8 @@ class FlickrStreamsController < ApplicationController
   include Collectr::PictureControllerHelper
   include Collectr::FlickrStreamsControllerHelper
 
-  before_filter :authenticate, :load_stream, except: [:show]
+  before_filter :authenticate
+  before_filter :load_stream, only: [:show, :subscribe, :unsubscribe, :sync, :adjust_rating, :mark_all_as_read]
 
   def index
   end
@@ -22,7 +23,8 @@ class FlickrStreamsController < ApplicationController
 
   def show
     respond_to do |format|
-      format.html { redirect_to action: :flickr_stream, controller: :slideshow, id: params[:id] }
+      format.json{ render_json data_for_stream(@flickr_stream) }
+      format.html { redirect_to_slideshow  }
     end
   end
 
@@ -32,9 +34,11 @@ class FlickrStreamsController < ApplicationController
   end
 
   def subscribe
-    @flickr_stream.subscribe
-    @flickr_stream.set_as_synced
-    render_json data_for_stream(@flickr_stream)
+    unless @flickr_stream.collecting?
+      @flickr_stream.subscribe
+      @flickr_stream.set_as_synced
+    end
+    show
   end
 
   def unsubscribe
@@ -74,13 +78,16 @@ class FlickrStreamsController < ApplicationController
   end
 
   private
+
   def load_stream
-    unless @flickr_stream
-      @flickr_stream = FlickrStream.find(params[:id].to_i) if params[:id]
-      if(@flickr_stream && @flickr_stream.collector != current_collector)
-        raise ActionController::RoutingError.new('Access not permitted')
-      end
+    @flickr_stream ||= FlickrStream.find(params[:id].to_i)
+    if(@flickr_stream.collector != current_collector)
+      @flickr_stream = FlickrStream.find_or_create(user_id: @flickr_stream.user_id, collector: current_collector, type: @flickr_stream.type)
     end
+  end
+
+  def redirect_to_slideshow
+    redirect_to action: :flickr_stream, controller: :slideshow, id: params[:id]
   end
 
 end
