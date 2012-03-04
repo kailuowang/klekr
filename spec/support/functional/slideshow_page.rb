@@ -53,14 +53,16 @@ module Functional
 
     def click_direction_button(direction)
       url = @d.current_url
-      arrow = "##{direction}Arrow"
+      button = direction_button(direction)
       wait_until do
-        s(arrow).displayed?
+        button.displayed?
       end
-      s(arrow).click
-      wait_until do
-        @d.current_url != url
-      end
+      button.click
+      pause 0.25
+    end
+
+    def direction_button(direction)
+      s "##{direction}Arrow"
     end
 
     def left_arrow

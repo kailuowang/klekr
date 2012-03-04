@@ -48,6 +48,7 @@ describe "slideshow" do
     it "shouldn't display the left arrow at the begining" do
       @page.left_arrow.should_not be_displayed
     end
+
   end
 
   describe 'grid mode' do
@@ -119,6 +120,47 @@ describe "slideshow" do
       end
 
     end
+  end
+
+  describe "navigation buttons" do
+    before :all do
+      reset_viewed_pictures
+    end
+
+    before :each do
+      @page.open
+    end
+
+    def right_button
+      @page.direction_button(:right)
+    end
+
+    def left_button
+      @page.direction_button(:left)
+    end
+
+    context "slide mode" do
+      it 'display only the right button at the beginning' do
+        right_button.should be_displayed
+        left_button.should_not be_displayed
+      end
+
+      it 'display both right and left button at the second picture' do
+        @page.click_right_button
+        right_button.should be_displayed
+        left_button.should be_displayed
+      end
+
+      it 'display only right button when navigate back to the first picture' do
+        @page.click_right_button
+        @page.click_left_button
+        right_button.should be_displayed
+        left_button.should_not be_displayed
+      end
+
+
+    end
+
   end
 
 end

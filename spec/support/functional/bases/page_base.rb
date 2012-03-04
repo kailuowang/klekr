@@ -1,11 +1,11 @@
 module Functional
   class PageBase
-    INTERVAL = 0.05
+    INTERVAL = 0.01
 
     def initialize
       @d = Selenium::WebDriver.for :chrome
       @d.manage.timeouts.implicit_wait = 0.5
-      @w = Selenium::WebDriver::Wait.new(timeout: 10, interval: INTERVAL)
+      @w = Selenium::WebDriver::Wait.new(timeout: 4, interval: INTERVAL)
     end
 
     def open page, opts = {}

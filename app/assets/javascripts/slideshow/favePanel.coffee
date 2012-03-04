@@ -51,7 +51,7 @@ class window.FavePanel  extends ViewBase
       this.setVisible(@ratingDisplayPanel, faved)
       this.setVisible(@faved, faved)
       @removeFaveLink.attr('data-content', "This picture is added to my faves on #{@picture.favedDate}. Click to remove it." )
-    this._updateFaveLoginLink()
+    this._updateFaveLoginLink() if @faveLoginLink.length > 0
 
   _registerEvents: =>
     @faveLink.click_ this.fave
@@ -62,9 +62,10 @@ class window.FavePanel  extends ViewBase
     $.fn.raty.start(rating, '#ratingDisplay');
 
   _updateFaveLoginLink: =>
-    fave_url =  @faveLoginLink.attr('href').split('#')[0]
-    currentHash = $.param.fragment()
-    @faveLoginLink.attr('href', fave_url+ '#' + currentHash)
+    if @faveLoginLink.attr('href')?
+      fave_url =  @faveLoginLink.attr('href').split('#')[0]
+      currentHash = $.param.fragment()
+      @faveLoginLink.attr('href', fave_url+ '#' + currentHash)
 
   _initRaty: (div)=>
     div.raty({
