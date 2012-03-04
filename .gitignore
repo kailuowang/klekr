@@ -5,15 +5,10 @@ db/*.sqlite3
 log/*
 tmp/**/*
 tmp/*.jpg
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/.rakeTasks
+.idea/*
 config/flickr.yml
 .DS_Store
-.idea/dataSources.ids
-.idea/dataSources.xml
 db/development.sqlite3-journal
 db/bkp
-.idea/collectr.iml
 .sass-cache
 compiled
