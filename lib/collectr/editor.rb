@@ -8,7 +8,7 @@ module Collectr
 
     def ensure_editor_collector
       raise 'editor_userid must be set in settings' if editor_user_id.blank?
-      @editor_collector ||= Collector.find_or_create(user_id: editor_user_id, user_name: Settings.editor_name)
+      @editor_collector ||= Collector.find_or_create(user_id: editor_user_id, user_name: Settings.editor_name, auth_token: Collectr::EditorFlickrAuthToken)
     end
 
     def ready?

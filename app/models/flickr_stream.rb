@@ -61,7 +61,14 @@ class FlickrStream < ActiveRecord::Base
     end
 
     def get_user_from_flickr user_id, collector
-      flickr(collector).people.getInfo(user_id: user_id)
+      begin
+        flickr(collector).people.getInfo(user_id: user_id)
+      rescue FlickRaw::FailedResponse => e
+        Rails.logger.error("failed to load user info from flickr (userid #{user_id}")
+        throw e
+      end
+
+
     end
 
     def sync_all(collector = nil, verbose = false)

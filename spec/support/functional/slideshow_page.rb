@@ -58,7 +58,7 @@ module Functional
         button.displayed?
       end
       button.click
-      pause 0.25
+      pause 0.1
     end
 
     def direction_button(direction)

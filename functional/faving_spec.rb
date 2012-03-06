@@ -24,6 +24,7 @@ describe "faving pictures" do
 
   describe 'in my stream' do
     before :all do
+      reset_viewed_pictures
       reset_faved_pictures
     end
 
@@ -154,26 +155,22 @@ describe "faving pictures" do
   describe "fave from other user's exhibit page" do
 
     def open_exhibit
-      @page.open "slideshow/exhibit?collector_id=#{Collector.first.id}", true
+
+      @page.open "slideshow/exhibit?collector_id=#{test_collector.id}", true
       @page.enter_slide_mode
       @page.wait_until_fave_ready
     end
 
-    def unfave_exhibit_picture
-      open_exhibit
-      if(@page.unfave_button.displayed?)
-        @page.unfave
-      end
-    end
-
     before :all do
       @page.open "slideshow" #for login
-      unfave_exhibit_picture
+      add_faved_pictures_to_test_collector
+      clear_faved_pictures
     end
 
     it "faves other pictures from exhibit page" do
       open_exhibit
       pic_src = @page.slide_picture['src']
+      @page.slide_picture_id
       @page.fave
       just_faved?(pic_src).should be_true
     end

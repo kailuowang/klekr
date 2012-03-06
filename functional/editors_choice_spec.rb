@@ -4,6 +4,7 @@ describe "Editor's Choice page" do
   include Functional::DataUtil
 
   before :all do
+    reset_editors_choice_pictures
     @page = Functional::EditorsChoicePage.new
   end
 

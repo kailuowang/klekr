@@ -51,6 +51,11 @@ describe "My stream page" do
   end
 
   describe 'with filter options' do
+
+    before :all do
+      reset_viewed_pictures(1000)
+    end
+
     it 'can display all photos in date order' do
       last_picture = latest_viewed_picture
       @page.set_option(viewed_filter: true)

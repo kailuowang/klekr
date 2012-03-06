@@ -1,8 +1,8 @@
 module Functional
   module DataUtil
 
-    def reset_viewed_pictures
-      collector.pictures.viewed.order('updated_at DESC').limit(100).update_all(viewed: false)
+    def reset_viewed_pictures(num = 100)
+      collector.pictures.viewed.order('updated_at DESC').limit(num).update_all(viewed: false)
     end
 
     def reset_faved_pictures
@@ -15,6 +15,21 @@ module Functional
 
     def add_faved_pictures(extra = {}, number = 60)
       collector.pictures.limit(number).update_all(extra.merge(rating: 1))
+    end
+
+    def add_faved_pictures_to_test_collector
+      if(test_collector.pictures.empty?)
+        test_collector.import_from_flickr 50
+      end
+      test_collector.pictures.limit(40).update_all(rating: 1)
+    end
+
+    def reset_editors_choice_pictures
+      editor = Collectr::Editor.new.ensure_editor_collector
+      if(editor.pictures.where(rating: 2).empty?)
+        editor.import_from_flickr 50
+      end
+      editor.pictures.limit(100).update_all(rating: 2)
     end
 
     def reset_sync_status status

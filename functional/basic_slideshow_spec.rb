@@ -154,13 +154,10 @@ describe "slideshow" do
       it 'display only right button when navigate back to the first picture' do
         @page.click_right_button
         @page.click_left_button
-        right_button.should be_displayed
-        left_button.should_not be_displayed
+        @page.wait_until do
+          right_button.displayed? && !left_button.displayed?
+        end
       end
-
-
     end
-
   end
-
 end

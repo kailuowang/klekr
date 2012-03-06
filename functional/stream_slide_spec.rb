@@ -5,7 +5,8 @@ describe "Stream slide page" do
 
   before :all do
     @page = Functional::FlickrStreamSlidePage.new
-    @stream = collector.flickr_streams.find { |stream| stream.pictures.many? }
+    @stream = collector.flickr_streams.type('UploadStream').where(user_id: '45425373@N00').first
+    @stream.sync if @stream.pictures.empty?
   end
 
   after :all do
