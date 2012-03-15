@@ -34,7 +34,7 @@ class FlickrStream < ActiveRecord::Base
 
     def build_type(params)
       params = params.with_indifferent_access
-      unless params[:username]
+      unless params[:username].present? || params[:type] == 'GroupStream'
         user = get_user_from_flickr(params[:user_id], params[:collector])
         params[:username] = user.username
       end
