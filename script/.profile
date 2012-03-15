@@ -1,0 +1,8 @@
+alias sshc='ssh ec2-user@klekr.com'
+alias func='clear && time RAILS_ENV=development bundle exec rspec -c -fdocumentation'
+alias fndrb='func --drb'
+alias fnspk='RAILS_ENV=development spork'
+alias add='git add -p'
+alias shove='script/shove.sh'
+alias commit='git commit -m'
+alias amend='git commit --amend -C HEAD'

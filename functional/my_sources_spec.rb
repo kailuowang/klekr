@@ -112,7 +112,9 @@ describe "my sources page" do
       @page.wait_until { @page.add_all_recommendations_button.displayed? }
       source_cell = @page.sources_in_recommendations.first
       @page.add_source_by_cell(source_cell)
-      @page.displaying_sources_ids.should be_present
+      @page.wait_until do
+        @page.displaying_sources_ids.present?
+      end
     end
 
     it 'imports flickr groups sources' do
