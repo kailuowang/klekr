@@ -86,8 +86,8 @@ describe "my sources page" do
     end
 
     after :all do
-      @streams.each do |stream_id|
-        FlickrStream.find(stream_id).update_attributes(collecting: true)
+      @streams.each do |sid|
+        FlickrStream.find_by_id(sid).try(:update_attributes, {collecting: true})
       end
     end
 
