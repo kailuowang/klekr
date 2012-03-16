@@ -5,6 +5,20 @@ module Functional
       collector.pictures.viewed.order('updated_at DESC').limit(num).update_all(viewed: false)
     end
 
+    def reset_viewed_upload_pictures(num = 100)
+      stream = ensure_upload_stream
+      stream.sync(1.year.ago, num) if stream.pictures.count == 0
+      stream.pictures.update_all(viewed: false)
+    end
+
+    def ensure_upload_stream
+      editor = Collectr::Editor.new.ensure_editor_collector
+      FlickrStream.find_or_create(user_id: editor.user_id,
+                                 username: editor.user_name,
+                                 type: UploadStream.to_s,
+                                 collector: collector )
+    end
+
     def reset_faved_pictures
       Collectr::PictureRepo.new(collector).new_pictures(offset: 0, limit: 100).update_all(rating: 0, faved_at: nil)
     end

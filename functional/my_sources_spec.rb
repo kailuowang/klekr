@@ -85,12 +85,11 @@ describe "my sources page" do
       @page.wait_until { @page.popup_recommendations_import_button.displayed? }
     end
 
-    after do
+    after :all do
       @streams.each do |stream_id|
         FlickrStream.find(stream_id).update_attributes(collecting: true)
       end
     end
-
 
     def has_imported_something
       @page.wait_until do
@@ -159,6 +158,25 @@ describe "my sources page" do
       @page.wait_until_new_sources_added_message_appears
       has_imported_something
     end
+
+    it 'add just one existing stream by user search' do
+      @page.popup_add_by_user.click
+      @page.search_for_user_to_add('xjack')
+      source_cell = @page.sources_in_user_search.first
+      @page.add_source_by_cell(source_cell)
+      has_imported_something
+    end
+
+
+    it 'add just one new stream by user search' do
+      FlickrStream.where(username: 'xjack').destroy_all
+      @page.popup_add_by_user.click
+      @page.search_for_user_to_add('xjack')
+      source_cell = @page.sources_in_user_search.first
+      @page.add_source_by_cell(source_cell)
+      has_imported_something
+    end
+
 
     it 'sync some photos when importing all sources in a category'
 

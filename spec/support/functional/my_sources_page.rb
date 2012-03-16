@@ -37,6 +37,10 @@ module Functional
       ss '#import-editor-streams-popup .source-cell'
     end
 
+     def sources_in_user_search
+      ss '#import-by-user .source-cell'
+    end
+
     def add_all_recommendations_button
       s '#import-editor-streams-popup #do-import-streams'
     end

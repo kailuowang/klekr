@@ -53,7 +53,8 @@ describe "My stream page" do
   describe 'with filter options' do
 
     before :all do
-      reset_viewed_pictures(1000)
+      reset_viewed_pictures
+      reset_viewed_upload_pictures
     end
 
     it 'can display all photos in date order' do

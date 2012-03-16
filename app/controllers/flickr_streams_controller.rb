@@ -29,7 +29,7 @@ class FlickrStreamsController < ApplicationController
   end
 
   def create
-    opts = params.slice(:user_id, :username, :type).merge(collector: current_collector.id)
+    opts = params.slice(:user_id, :username, :type).merge(collector: current_collector)
     new_stream = FlickrStream.find_or_create(opts)
     new_stream.subscribe
     render_json data_for_stream(new_stream)
