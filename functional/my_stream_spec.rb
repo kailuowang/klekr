@@ -30,6 +30,7 @@ describe "My stream page" do
 
       it "marks the picture as viewed after enter the grid mode from that picture" do
         pic_src = @page.slide_picture['src']
+        @page.wait_until { @page.slide_picture.displayed? }
         @page.slide_picture.click
         @page.pause
         @page.open

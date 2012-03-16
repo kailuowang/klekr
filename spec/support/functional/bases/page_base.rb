@@ -16,6 +16,9 @@ module Functional
     end
 
     def close
+      if(js_error.present?)
+        throw "Javascript Error Occurred: " + js_error
+      end
       @d.quit
     end
 
@@ -65,6 +68,10 @@ module Functional
       else
         results.first
       end
+    end
+
+    def js_error
+      s("body")["data-JSError"];
     end
 
     protected

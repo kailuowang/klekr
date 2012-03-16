@@ -49,8 +49,8 @@ class window.PictureRetriever extends Events
 
   _retrievePage: (pageOpts, callback) =>
     klekr.Global.server.get @_retrievePath, this._retrieveOpts(pageOpts), (data) =>
-      pictures = ( new Picture(picData) for picData in data )
-      if pictures.length > 0
+      pictures = ( new Picture(picData) for picData in data ) if data?
+      if pictures? and pictures.length > 0
         this._onPicturesRetrieved(pictures)
       else
         @_q.clear()
