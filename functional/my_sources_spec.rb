@@ -91,6 +91,14 @@ describe "my sources page" do
       end
     end
 
+
+    def has_imported_something
+      @page.wait_until do
+        @page.displaying_sources_ids.present?
+      end
+    end
+
+
     it 'display import message when there is no sources' do
       @page.empty_message.should be_displayed
       @page.sources_import_panel.should be_displayed
@@ -104,7 +112,7 @@ describe "my sources page" do
 
       @page.add_all_recommendations_button.click
       @page.wait_until_new_sources_added_message_appears
-      @page.displaying_sources_ids.should be_present
+      has_imported_something
     end
 
     it 'imports a single source from recommendation' do
@@ -112,9 +120,7 @@ describe "my sources page" do
       @page.wait_until { @page.add_all_recommendations_button.displayed? }
       source_cell = @page.sources_in_recommendations.first
       @page.add_source_by_cell(source_cell)
-      @page.wait_until do
-        @page.displaying_sources_ids.present?
-      end
+      has_imported_something
     end
 
     it 'imports flickr groups sources' do
@@ -123,7 +129,7 @@ describe "my sources page" do
 
       @page.add_all_groups_button.click
       @page.wait_until_new_sources_added_message_appears
-      @page.displaying_sources_ids.should be_present
+      has_imported_something
     end
 
     it 'imports flickr contacts' do
@@ -132,7 +138,26 @@ describe "my sources page" do
 
       @page.add_all_contacts_button.click
       @page.wait_until_new_sources_added_message_appears
-      @page.displaying_sources_ids.should be_present
+      has_imported_something
+    end
+
+    it 'imports google reader subscriptions' do
+      @page.popup_google_reader_button.click
+      @page.wait_until { @page.import_google_reader_button.displayed? }
+
+      reader_file = File.expand_path('../../data/fave.xml', __FILE__)
+      @page.import_google_reader_file.send_keys(reader_file)
+      @page.import_google_reader_button.click
+      @page.wait_until_new_sources_added_message_appears
+      has_imported_something
+    end
+
+    it 'add by a single user search' do
+      @page.popup_add_by_user.click
+      @page.search_for_user_to_add('xjack')
+      @page.add_by_user_button.click
+      @page.wait_until_new_sources_added_message_appears
+      has_imported_something
     end
 
     it 'sync some photos when importing all sources in a category'

@@ -83,5 +83,38 @@ module Functional
     def cell_locator(stream)
       "#sources-list #source-cell-#{stream.id}"
     end
+
+    def popup_google_reader_button
+      s '#import-google-reader-link'
+    end
+
+    def import_google_reader_button
+      s '#import-google-reader-popup #do-import'
+    end
+
+    def import_google_reader_file
+      s '#import-google-reader-popup #google-reader-file'
+    end
+
+    def popup_add_by_user
+      s '#add-by-user-link'
+    end
+
+    def add_by_user_button
+      s '#import-by-user #do-add'
+    end
+
+    def search_for_user_to_add(username)
+      add_by_user_search_box.send_keys username
+      s('#search-user-form #submit').click
+      wait_until do
+        add_by_user_button.displayed?
+      end
+    end
+
+    def add_by_user_search_box
+      s '#search-user-form #keyword'
+    end
+
   end
 end

@@ -38,13 +38,13 @@ class FlickrStream < ActiveRecord::Base
         user = get_user_from_flickr(params[:user_id], params[:collector])
         params[:username] = user.username
       end
-      params[:type].constantize.new(params)
+      params[:type].constantize.new(params.except(:type, :collector).merge(collector_id: params[:collector]))
     end
 
     def find_or_create(params)
       stream = of_user(params[:user_id]).where(collector_id: params[:collector]).type(params[:type]).first
       if(stream)
-        stream.update_attributes(params)
+        stream.update_attributes(params.except(:type, :collector))
         stream
       else
         create_type(params)
