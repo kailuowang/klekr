@@ -1,12 +1,12 @@
 require File.expand_path('../spec_helper', __FILE__)
 
 describe 'jasmine tests' do
-  before do
+  before :all do
     @page = Functional::PageBase.new
     @page.open('jasmine')
   end
 
-  after do
+  after :all do
     @page.close
   end
 

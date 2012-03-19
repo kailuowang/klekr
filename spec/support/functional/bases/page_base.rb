@@ -17,7 +17,7 @@ module Functional
 
     def close
       if(js_error.present?)
-        throw "Javascript Error Occurred: " + js_error
+        throw "Won't Close Browser Because Javascript Error Occurred: " + js_error
       end
       @d.quit
     end
