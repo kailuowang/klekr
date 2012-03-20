@@ -6,6 +6,9 @@ module Functional
       @d = Selenium::WebDriver.for :chrome
       @d.manage.timeouts.implicit_wait = 0.5
       @w = Selenium::WebDriver::Wait.new(timeout: 10, interval: INTERVAL)
+      #resize doesn't work for chrome
+      #@d.manage.window.size = Selenium::WebDriver::Dimension.new(1024, 768)
+      #@d.execute_script("window.resizeTo(1024, 768);")
     end
 
     def open page, opts = {}
