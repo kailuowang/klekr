@@ -68,7 +68,7 @@ class Picture < ActiveRecord::Base
       begin
         flickr.photos.getInfo(photo_id: pic_info.id).secret
       rescue FlickRaw::FailedResponse
-        update_attributes(no_longer_valid: true)
+        mark_as_invalid
         nil
       end
     update_secret(new_secret) if new_secret.present?
@@ -101,11 +101,11 @@ class Picture < ActiveRecord::Base
   def pic_info
     begin
       @pic_info ||= FlickRaw::Response.new *pic_info_dump
-    rescue Exception => e
-
+    rescue
       Rails.logger.error("Picture #{self.id} failed to dehydrate pic_info")
-      Rails.logger.error(pic_info_dump.inspect)
-      raise e
+      Rails.logger.error(pic_info_dump)
+      mark_as_invalid
+      nil
     end
   end
 
@@ -133,7 +133,7 @@ class Picture < ActiveRecord::Base
   end
 
   def flickr_url size
-    if(no_longer_valid?)
+    if(no_longer_valid? || pic_info.blank?)
       if size == :small
         '/assets/photo_unavailable_s.gif'
       else
@@ -154,6 +154,11 @@ class Picture < ActiveRecord::Base
       end
     end
   end
+
+  def mark_as_invalid
+    update_attributes(no_longer_valid: true)
+  end
+
 
   def large_url
     flickr_url(:large)
