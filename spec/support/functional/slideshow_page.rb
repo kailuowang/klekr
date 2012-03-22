@@ -106,6 +106,9 @@ module Functional
     end
 
     def enter_grid_mode
+      wait_until do
+        slide_picture.displayed?
+      end
       slide_picture.click
       wait_until_grid_shows
     end

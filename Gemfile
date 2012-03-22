@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~> 3.1.0'
+gem 'rails', '~> 3.2.0'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -8,24 +8,24 @@ gem 'rails', '~> 3.1.0'
 gem 'haml'
 gem 'flickraw', '= 0.8.4'
 
-gem "jquery-rails"
+gem "jquery-rails", "~> 2.0.1"
 gem 'capistrano'
 gem 'will_paginate', '~> 3.0.0'
 gem "rails_config"
 gem 'delayed_job'
 gem 'whenever', :require => false
-
-# Rails 3.1 - Asset Pipeline
-gem 'json'
-gem 'sass'
-gem 'coffee-script'
-gem 'uglifier'
-
 gem 'newrelic_rpm'
+gem 'json'
+
+group :assets do
+  gem 'sass-rails', '~> 3.2.3'
+  gem 'coffee-rails', '~> 3.2.1'
+  gem 'uglifier', '>= 1.0.3'
+end
 
 group :test, :development do
   gem 'sqlite3-ruby', :require => 'sqlite3'
-  gem "rspec-rails"
+  gem "rspec-rails", "~> 2.9.0"
   gem 'factory_girl'
   gem 'spork', '~> 0.9.0.rc9'
   gem 'jasminerice'
