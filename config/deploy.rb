@@ -122,6 +122,10 @@ namespace :deploy do
     run_in_app "#{rails_env} script/delayed_job start"
   end
 
+  task :restart_apache, :roles => :app do
+    run_in_app "#{try_sudo} apachectl -k graceful"
+  end
+
   task :post_deploy, :roles => :app do
     rake ENV['POST_DEPLOY'] if ENV['POST_DEPLOY'] && !ENV['POST_DEPLOY'].empty?
   end
