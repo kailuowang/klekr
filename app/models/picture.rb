@@ -99,7 +99,12 @@ class Picture < ActiveRecord::Base
   end
 
   def pic_info
-    @pic_info ||= FlickRaw::Response.new *pic_info_dump
+    begin
+      @pic_info ||= FlickRaw::Response.new *pic_info_dump
+    rescue Exception => e
+      Rails.logger.error(pic_info_dump.inspect)
+      raise e
+    end
   end
 
   def pic_info= pi
