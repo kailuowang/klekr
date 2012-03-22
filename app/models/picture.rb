@@ -102,6 +102,8 @@ class Picture < ActiveRecord::Base
     begin
       @pic_info ||= FlickRaw::Response.new *pic_info_dump
     rescue Exception => e
+
+      Rails.logger.error("Picture #{self.id} failed to dehydrate pic_info")
       Rails.logger.error(pic_info_dump.inspect)
       raise e
     end
