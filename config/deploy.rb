@@ -43,7 +43,7 @@ namespace :deploy do
     deploy.db_backup unless File.exist?(bkp_path)
     deploy.bring_site_down
 
-    checkout_code
+    deploy.checkout_code
     deploy.bundle
 
     #whenever.clear_crontab
@@ -63,6 +63,10 @@ namespace :deploy do
     run_in_app "bundle install --without test development"
   end
 
+  task :bundle_update, :roles => :app do
+    run_in_app "bundle update"
+  end
+
   task :get_logs, :roles => :app do
     download "#{app_path}/log/cron.log", "log/cron.log"
     download "#{app_path}/log/production.log", "log/production.log"
@@ -74,16 +78,17 @@ namespace :deploy do
 
   task :patch, :roles => :app do
     deploy.bring_site_down
-    checkout_code
+    deploy.checkout_code
     deploy.restart_passenger
     deploy.bring_site_up
     deploy.prepare_assets
     deploy.warm_server
   end
 
-  task :patch_one_time, :roles => :app do
+  task :upgrade_gems, :roles => :app do
     deploy.bring_site_down
-    checkout_code
+    deploy.checkout_code
+    deploy.bundle_update
     deploy.bundle
     deploy.restart_passenger
     deploy.bring_site_up
@@ -91,7 +96,7 @@ namespace :deploy do
   end
 
   task :minor_patch, :roles => :app do
-    checkout_code
+    deploy.checkout_code
     deploy.restart_passenger
     deploy.warm_server
   end
@@ -138,7 +143,7 @@ namespace :deploy do
     run_in_app "#{try_sudo} touch tmp/restart.txt"
   end
 
-  def checkout_code
+  task :checkout_code, :roles => :app do
     run_in_app "git checkout ."
     run_in_app "git fetch"
     run_in_app "git checkout #{branch}"

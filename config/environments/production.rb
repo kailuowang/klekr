@@ -46,6 +46,7 @@ Collectr::Application.configure do
 
   config.assets.compress = true
   config.assets.js_compressor = :uglifier
+  config.assets.digest = true
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 end
