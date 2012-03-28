@@ -3,12 +3,18 @@ module Functional
     INTERVAL = 0.01
 
     def initialize
-      @d = Selenium::WebDriver.for :chrome
+      @d = Selenium::WebDriver.for :chrome, profile: chrome_size_profile
       @d.manage.timeouts.implicit_wait = 0.5
       @w = Selenium::WebDriver::Wait.new(timeout: 10, interval: INTERVAL)
-      #resize doesn't work for chrome
-      #@d.manage.window.size = Selenium::WebDriver::Dimension.new(1024, 768)
-      #@d.execute_script("window.resizeTo(1024, 768);")
+    end
+
+    def chrome_size_profile
+      profile = Selenium::WebDriver::Chrome::Profile.new
+      profile['browser.window_placement.top'] = 0
+      profile['browser.window_placement.left'] = 0
+      profile['browser.window_placement.right'] = 1024
+      profile['browser.window_placement.bottom'] = 800
+      profile
     end
 
     def open page, opts = {}
