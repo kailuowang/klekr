@@ -14,7 +14,6 @@ gem 'will_paginate', '~> 3.0.0'
 gem "rails_config"
 gem 'delayed_job'
 gem 'whenever', :require => false
-gem 'newrelic_rpm'
 gem 'json'
 
 group :assets do
@@ -36,6 +35,7 @@ group :production do
   gem 'mysql2'
   gem 'execjs'
   gem 'therubyracer'
+  gem 'newrelic_rpm'
 end
 
 # Use unicorn as the web server
