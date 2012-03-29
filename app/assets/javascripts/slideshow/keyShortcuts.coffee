@@ -35,6 +35,8 @@ class window.KeyShortcuts extends ViewBase
 
   _registerHelpPopup: ->
     $('#keyShortcutsLink').click_ this._popupHelp
+    @_popup.find('#close').click_  =>
+      this.closePopup(@_popup)
 
   _popupHelp: =>
     this._updateHelp()
