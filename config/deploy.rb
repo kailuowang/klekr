@@ -46,17 +46,26 @@ namespace :deploy do
     deploy.checkout_code
     deploy.bundle
 
-    #whenever.clear_crontab
+    deploy.clear_cron
     run_in_app "#{rails_env} script/delayed_job stop"
 
     rake "db:migrate"
     deploy.prepare_assets
-    #whenever.update_crontab
+    deploy.update_cron
     deploy.restart_passenger
     deploy.bring_site_up
     deploy.start_delayed_job
     deploy.post_deploy
     deploy.warm_server
+  end
+
+
+  task :update_cron, :roles => :app do
+    run_in_app "bundle exec whenever --update-crontab collectr"
+  end
+
+  task :clear_cron, :roles => :app do
+    run_in_app "bundle exec whenever --clear-crontab collectr"
   end
 
   task :bundle, :roles => :app do
