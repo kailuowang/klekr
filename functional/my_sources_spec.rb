@@ -78,17 +78,21 @@ describe "my sources page" do
   end
 
   describe 'importing sources' do
-    before do
+
+    before :all do
       @streams = collector.flickr_streams.collecting.map(&:id)
-      collector.flickr_streams.collecting.update_all(collecting: false)
-      @page.open
-      @page.wait_until { @page.popup_recommendations_import_button.displayed? }
     end
 
     after :all do
       @streams.each do |sid|
         FlickrStream.find_by_id(sid).try(:update_attributes, {collecting: true})
       end
+    end
+
+    before do
+      collector.flickr_streams.collecting.update_all(collecting: false)
+      @page.open
+      @page.wait_until { @page.popup_recommendations_import_button.displayed? }
     end
 
     def has_imported_something
