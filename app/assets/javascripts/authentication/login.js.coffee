@@ -1,10 +1,15 @@
 class window.Login extends ViewBase
   constructor: (@authUrl) ->
     @helpTitle = $('.help-title')
-    @helpTitle.click_ this._displayHelp
+    @moreAbout = $('#welcome-message #detail-info')
+    @faqPanel = $('#welcome-message #faq')
 
+    @helpTitle.click_ this._displayHelp
     $('.learn-more').click_ this._toggleMoreAbout
     $('.back-to-about').click_ this._toggleMoreAbout
+    $('#faq-link').click_ this._toggleFaq
+    $('#back-to-more-about-link').click_ this._toggleFaq
+
     if klekr.Global.redirectedToLogin and !klekr.Global.showDetail
       $('#countDownRedirect').show()
       this.redirectCountdown(5)
@@ -18,6 +23,13 @@ class window.Login extends ViewBase
     $('#about').slideToggle()
     $('#more').slideToggle()
 
+  _toggleFaq: =>
+    if this.showing(@moreAbout)
+      @moreAbout.fadeOut 500, =>
+        @faqPanel.fadeIn()
+    else
+      @faqPanel.fadeOut 500, =>
+        @moreAbout.fadeIn()
 
   redirectCountdown: (seconds)=>
     @countdownText ?= $("#countdown")
@@ -37,7 +49,7 @@ class window.Login extends ViewBase
   _displayHelp: =>
     this._stopCountdown()
     $('#want-more-link').slideUp()
-    $('#welcome-message #detail-info').slideDown()
+    @moreAbout.slideDown()
 
   _nextCountdown: (seconds) =>
     => this.redirectCountdown(seconds - 1)
