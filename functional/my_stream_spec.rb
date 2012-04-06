@@ -43,7 +43,7 @@ describe "My stream page" do
         @page.enter_grid_mode
         pic_ids_in_page = @page.grid_pictures_ids
         @page.grid_next_page
-        @page.pause 2
+        @page.pause 1
         @page.open
         pic_ids_in_page.should_not include(@page.slide_picture_id)
       end

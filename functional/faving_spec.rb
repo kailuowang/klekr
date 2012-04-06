@@ -46,7 +46,7 @@ describe "faving pictures" do
       @page.unfave_button.should be_displayed
     end
 
-    it "unfave picture should disapear from my fave page" do
+    it "unfaved picture should disappear from my fave page" do
       @page.click_right_button
       @page.click_right_button
 
@@ -55,7 +55,7 @@ describe "faving pictures" do
       @page.fave
       @page.pause 0.5
       @page.unfave_button.click
-      @page.pause 2.5
+      @page.pause 1.5
       just_faved?(pic_src).should be_false
 
     end
