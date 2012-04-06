@@ -11,9 +11,7 @@ describe 'jasmine tests' do
   end
 
   it "pass" do
-    @page.wait_until do
-      @page.s('.jasmine_reporter .runner').present?
-    end
-    @page.s('.jasmine_reporter .runner.passed').should be_present
+    @page.f('.jasmine_reporter .runner')
+    @page.f('.jasmine_reporter .runner.passed')
   end
 end

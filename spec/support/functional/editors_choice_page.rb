@@ -4,7 +4,7 @@ module Functional
   class EditorsChoicePage < SlideshowPage
     def open opts = {}
       super('editors_choice', true, opts)
-      s('#exhibit-name')
+      f('#exhibit-name')
       wait_until_grid_shows
     end
   end

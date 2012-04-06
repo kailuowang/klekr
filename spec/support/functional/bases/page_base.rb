@@ -4,8 +4,7 @@ module Functional
 
     def initialize
       @d = Selenium::WebDriver.for :chrome, profile: chrome_size_profile
-      @d.manage.timeouts.implicit_wait = 0.5
-      @w = Selenium::WebDriver::Wait.new(timeout: 10, interval: INTERVAL)
+      @w = Selenium::WebDriver::Wait.new(timeout: 5, interval: INTERVAL)
     end
 
     def chrome_size_profile
@@ -68,6 +67,12 @@ module Functional
         count_text.present? && count_text != '...'
       end
       s(count_identifier).text
+    end
+
+    def f selector
+      wait_until do
+        @d.find_element css: selector
+      end
     end
 
     def s selector
