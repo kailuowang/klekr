@@ -72,12 +72,15 @@ class FlickrStream < ActiveRecord::Base
     end
 
     def sync_all(collector = nil, verbose = false)
-      streams_to_sync = collector ? collected_by(collector).collecting : collecting.active_in(30)
 
+      streams_to_sync = collector ? collected_by(collector).collecting : collecting.active_in(30)
+      puts "Start to sync all streams @#{DateTime.now} " if verbose
       streams_to_sync.inject(0) do |total_synced, stream|
         synced = stream.sync(stream.last_sync, 200, verbose) if stream.collecting?
         total_synced + (synced || 0)
       end
+      puts "Finished syncing all streams @#{DateTime.now} with #{total_synced}" if verbose
+
     end
 
     def import(data, collector)

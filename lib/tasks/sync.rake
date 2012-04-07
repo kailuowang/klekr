@@ -15,9 +15,12 @@ namespace :sync do
 
   desc "sync collection for all collector that hasn't yet"
   task :collections => :environment do
+    puts "start to sync collection for all collectors @#{DateTime.now}"
     Collector.where(collection_synced: false).each do |collector|
-      collector.import_all_from_flickr(true)
+      collector.import_all_from_flickr(false)
+      print "."
     end
+    puts "Finished syncing collection for all collectors @#{DateTime.now}"
   end
 end
 

@@ -85,6 +85,10 @@ namespace :deploy do
     run_in_app "tail -f log/production.log"
   end
 
+  task :tail_cron_log, :roles => :app do
+    run_in_app "tail -n 2000 log/cron.log"
+  end
+
   task :patch, :roles => :app do
     deploy.bring_site_down
     deploy.checkout_code
