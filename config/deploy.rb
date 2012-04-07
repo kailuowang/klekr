@@ -160,6 +160,10 @@ namespace :deploy do
     run_in_app "#{try_sudo} touch tmp/restart.txt"
   end
 
+  task :one_time_sync, :roles => :app do
+    run_in_app "nohup bundle exec rake --trace sync:all_streams RAILS_ENV=production > log/onetime_sync.out 2> ontime_sync.err < /dev/null  &"
+  end
+
   task :checkout_code, :roles => :app do
     run_in_app "git checkout ."
     run_in_app "git fetch"

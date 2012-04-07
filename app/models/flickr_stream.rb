@@ -79,7 +79,7 @@ class FlickrStream < ActiveRecord::Base
         synced = stream.sync(stream.last_sync, 200, verbose) if stream.collecting?
         total_synced + (synced || 0)
       end
-      puts "Finished syncing all streams @#{DateTime.now} with #{total_synced}" if verbose
+      puts "Finished syncing all streams @#{DateTime.now}" if verbose
 
     end
 

@@ -23,7 +23,7 @@ namespace :admin do
         collector.flickr_streams.count > 0
       end
       puts "#{active_collectors.size} collectors that has more than one source."
-
+      puts "#{FlickrStream.collecting.count} syncing flickr streams."
     end
   end
 
