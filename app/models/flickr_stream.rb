@@ -162,7 +162,7 @@ class FlickrStream < ActiveRecord::Base
       photos_synced += 1 if newly_synced
     end
     update_attribute(:last_sync, DateTime.now)
-    puts "#{self} was synced with #{photos_synced} new pictures since #{since}." if verbose && photos_synced > 0
+    print "." if verbose && photos_synced > 0
     photos_synced
   end
 
