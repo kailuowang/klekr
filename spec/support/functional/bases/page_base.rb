@@ -4,7 +4,7 @@ module Functional
 
     def initialize
       @d = Selenium::WebDriver.for :chrome, profile: chrome_size_profile
-      @w = Selenium::WebDriver::Wait.new(timeout: 5, interval: INTERVAL)
+      @w = Selenium::WebDriver::Wait.new(timeout: 10, interval: INTERVAL)
     end
 
     def chrome_size_profile
