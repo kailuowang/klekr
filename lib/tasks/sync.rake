@@ -4,7 +4,7 @@ namespace :sync do
   desc 'sync all streams'
   task :all_streams => :environment do
     num_of_pic_synced = FlickrStream.sync_all(nil, true)
-    output("All stream synced. #{num_of_pic_synced} pictures were collected" )
+    output("All stream synced #{Time.now.to_s(:short)}")
   end
 
   desc "refresh personal insterestingness for unviewed picture"
