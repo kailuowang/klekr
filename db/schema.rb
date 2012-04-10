@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120128171133) do
+ActiveRecord::Schema.define(:version => 20120410173944) do
 
   create_table "collectors", :force => true do |t|
     t.string   "user_id"
@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(:version => 20120128171133) do
     t.boolean  "collecting",   :default => false
   end
 
+  add_index "flickr_streams", ["collector_id", "user_id", "type"], :name => "index_find_existing_stream"
   add_index "flickr_streams", ["collector_id"], :name => "index_flickr_streams_on_collector_id"
 
   create_table "monthly_scores", :force => true do |t|

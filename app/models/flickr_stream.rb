@@ -42,7 +42,7 @@ class FlickrStream < ActiveRecord::Base
     end
 
     def find_or_create(params)
-      stream = params[:collector].flickr_streams.type(params[:type]).of_user(params[:user_id]).first
+      stream = params[:collector].flickr_streams.type(params[:type]).of_user(params[:user_id]).includes(:monthly_scores).first
       if(stream)
         stream.update_attributes(params.except(:type, :collector))
         stream
