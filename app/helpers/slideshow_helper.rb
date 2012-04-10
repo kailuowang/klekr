@@ -10,9 +10,13 @@ module SlideshowHelper
       when :editors_choice
         link_to "Editor's Choice" , editors_choice_path
       when :editor_choice_google_currents
-        link_to( image_tag('google-currents-logo-small.png', class: 'currents-logo'), "http://www.google.com/producer/editions/CAow2Y0b/klekr")
+        google_currents_link()
       else
         ''
     end
+  end
+
+  def google_currents_link
+    link_to(image_tag('google-currents-logo-small.png', class: 'currents-logo'), "http://www.google.com/producer/editions/CAow2Y0b/klekr")
   end
 end

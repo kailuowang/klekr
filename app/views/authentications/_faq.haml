@@ -6,7 +6,7 @@
       %p Questions
     #other-links
       %a#back-to-more-about-link{href: '#'}
-        << back
+        << back to about klekr
 
   #right-column
     .item
@@ -26,6 +26,40 @@
         Faving pictures helps klekr understand what sources you like the most and display the new pictures from them with higher priority in the My Stream page
     .item
       .question
-        I've have already seen all old pictures from this photographer, how do I stop them from showing up on My Stream.
+        I've have seen all old pictures from this photographer from somewhere else, how do I stop them from showing up on My Stream.
       .answer
         Go to the photographer's page (by clicking on his/her name label at the bottom right,) you should be able to see a button that says "Mark All As Viewed", click on it and all existing photos will no longer show up on the My Stream page (new ones still will)
+    .item
+      .question
+        What are the star ratings of sources about?
+      .answer
+        These star ratings are indication of how much you like photos from the source. The rating of a source is determined by the ratio of the pictures you faved versus the pictures you saw from that source. The more frequent you fave photos from the source, the higher rating it gets and the more likely that future photos from it will show up first in the "My Stream" page.
+    .item
+      .question
+        What is the personal interestingess of the pictures?
+      .answer
+        %p
+          In klekr, the interestingess of a picture is determined by your own taste through the star ratings of the sources where the picture comes from. It is the sum of star ratings of the sources it comes from.
+        %p
+          For example, suppose that you subscribe to both Micheal's fave and Julie's uploads. Micheal's fave has a star rating of 2, while Julie's uploads' star rating is 1. Julie's upload pictures will generally have an interestingness of 1, if some of them are faved by Michael, their interestingess will be 3.
+        %p By default the 'My Stream' page displays photos in the order of interestingness.
+    .item
+      .question
+        Is there a tablet/mobile app for klekr?
+      .answer
+        We are building one. Meanwhile, you can view the editors' choice photos using
+        #google_currents.inline
+          = google_currents_link
+    .item
+      .question
+        I really like klekr, is there a way I can help?
+      .answer
+        Thank you very much! It will be really appreciated if you help to promote klekr. And it is good for all of us - the more users discover photos using klekr, the easier for you to find more interesting photos. You can mention it on flickr or facebook, tweet about it, blog about it, review it on
+        %a{target: '_blank', href: 'https://chrome.google.com/webstore/detail/opljjfbgbkjjjgdhbocfakafilegppbl/reviews?utm_source=chrome-ntp-icon'}
+          Chrome store,
+        anything helps!
+
+    #other-links
+      %a#back-to-more-about-link{href: '#'}
+        << back to about klekr
+

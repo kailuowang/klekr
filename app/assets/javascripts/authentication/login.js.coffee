@@ -10,12 +10,17 @@ class window.Login extends ViewBase
     $('#faq-link').click_ this._toggleFaq
     $('#back-to-more-about-link').click_ this._toggleFaq
 
-    if klekr.Global.redirectedToLogin and !klekr.Global.showDetail
+    if klekr.Global.redirectedToLogin and $.param.fragment() is ''
       $('#countDownRedirect').show()
       this.redirectCountdown(5)
-    if klekr.Global.showDetail
+
+    if $.param.fragment() is 'about'
       $('#want-more-link').hide()
       $('#welcome-message #detail-info').show()
+    if $.param.fragment() is 'faq'
+      $('#want-more-link').hide()
+      $('#welcome-message #faq').show()
+
     $('.login-auth-link').attr('href', $('.login-auth-link').attr('href') + "#" + $.param.fragment() )
     this._loadAnnouncement()
 

@@ -1,5 +1,7 @@
 #bottomBanner
-  = link_to "About",  root_path(:show_detail => true)
+  = link_to "About",  root_path(anchor: 'about', show_detail: true)
+  |
+  = link_to "FAQ",  root_path(anchor: "faq", show_detail: true)
   |
   - if @bottom_links.present?
     - for link_name in @bottom_links
