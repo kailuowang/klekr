@@ -24,12 +24,8 @@ class window.Login extends ViewBase
     $('#more').slideToggle()
 
   _toggleFaq: =>
-    if this.showing(@moreAbout)
-      @moreAbout.fadeOut 500, =>
-        @faqPanel.fadeIn()
-    else
-      @faqPanel.fadeOut 500, =>
-        @moreAbout.fadeIn()
+    @moreAbout.slideToggle()
+    @faqPanel.slideToggle()
 
   redirectCountdown: (seconds)=>
     @countdownText ?= $("#countdown")
