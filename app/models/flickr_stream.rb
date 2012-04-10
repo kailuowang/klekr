@@ -80,7 +80,7 @@ class FlickrStream < ActiveRecord::Base
         total_synced + (synced || 0)
       end
       puts "Finished syncing all streams @#{DateTime.now}" if verbose
-
+      total_synced
     end
 
     def import(data, collector)
