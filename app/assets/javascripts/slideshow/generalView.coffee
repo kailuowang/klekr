@@ -77,7 +77,7 @@ class window.GeneralView extends ViewBase
 
   _adjustFrames: =>
     bottomOffset = @displayHeight + 51
-    $('#bottomBanner').css('top',(bottomOffset + 10) + 'px' )
+    $('#bottom-banner').css('top',(bottomOffset + 10) + 'px' )
     topLeftWidth = @windowWidth / 2 + 40
     $('#top-banner-left').css('max-width', topLeftWidth + 'px')
 
