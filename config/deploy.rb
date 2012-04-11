@@ -49,7 +49,7 @@ namespace :deploy do
     deploy.clear_cron
     run_in_app "#{rails_env} script/delayed_job stop"
 
-    rake "db:migrate"
+    deploy.migrate
     deploy.prepare_assets
     deploy.update_cron
     deploy.restart_passenger
@@ -59,6 +59,9 @@ namespace :deploy do
     deploy.warm_server
   end
 
+  task :migrate, :roles => :app do
+    rake "db:migrate"
+  end
 
   task :update_cron, :roles => :app do
     run_in_app "bundle exec whenever --update-crontab collectr"
