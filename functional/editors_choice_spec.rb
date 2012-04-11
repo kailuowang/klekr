@@ -12,16 +12,12 @@ describe "Editor's Choice page" do
     @page.close
   end
 
-
-  describe 'display photos' do
-    it 'as grid' do
-      @page.open
+  shared_examples "slideshow" do
+    it 'display as grid' do
       @page.wait_until_grid_shows
     end
-  end
 
-  describe 'display single picture url' do
-    def check_reload_picture
+    it 'can reload picture' do
       @page.grid_pictures[2].click
       @page.wait_until_slide_shows
       src = @page.slide_picture['src']
@@ -30,19 +26,54 @@ describe "Editor's Choice page" do
       @page.slide_picture['src'].should == src
     end
 
-    it 'can load picture without login' do
-      @page.log_out
-      @page.open
-      check_reload_picture
+    it "can display slide picture and the next" do
+      @page.enter_slide_mode
+      @page.click_right_button
+      @page.wait_until_slide_shows
     end
 
-    it 'can load picture when login' do
-      mystream = Functional::SlideshowPage.new
-      mystream.open #opens my stream page which logs in automatically
-      @page.open
-      check_reload_picture
-      mystream.close
+    it "can display grid pictures and enter the next page" do
+      @page.click_right_button
+      @page.wait_until_grid_shows
     end
   end
 
+
+  context "when anonymously" do
+    before :all do
+      @page.log_out
+    end
+
+    before do
+      @page.open
+    end
+
+    it 'should not be logged in' do
+      @page.should_not be_logged_in
+    end
+
+    it_behaves_like "slideshow"
+  end
+
+  context 'when logged in' do
+    before :all do
+      @page.log_in
+    end
+
+    before do
+      @page.open
+    end
+
+    it 'should be logged in' do
+      @page.should be_logged_in
+    end
+
+    it 'should be able to load fave/unfave button' do
+      @page.enter_slide_mode
+      @page.wait_until_fave_ready
+    end
+
+    it_behaves_like "slideshow"
+
+  end
 end

@@ -63,7 +63,7 @@ module Collectr
 
 
     def find_or_initialize_from_pic_info(pic_info)
-      url = FlickRaw.url_photopage(pic_info)
+      url = get_photopage_url(pic_info)
       Picture.where(collector_id: @collector, url: url).includes(:flickr_streams).first ||
         Picture.new.tap do |picture|
           picture.url = url
@@ -71,6 +71,14 @@ module Collectr
           picture.description = pic_info.to_hash.delete('description')
           picture.collector = @collector
         end
+    end
+
+    def get_photopage_url(pic_info)
+      begin
+        FlickRaw.url_photopage(pic_info)
+      rescue
+        pic_info.urls[0]["_content"]
+      end
     end
 
     def find_by_flickr_id(string_id)

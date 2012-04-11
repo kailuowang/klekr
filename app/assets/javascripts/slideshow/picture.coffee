@@ -82,8 +82,9 @@ class window.Picture extends Events
     if this._updatable()
       @alreadyUpdated = true
       klekr.Global.server.put resync_picture_path(id: @id), opts, (newData) =>
-        @data = newData
-        this.preloadSmall this._broadCastChange
+        if newData?
+          @data = newData
+          this.preloadSmall this._broadCastChange
 
   _broadCastChange: =>
     this.trigger('data-updated')

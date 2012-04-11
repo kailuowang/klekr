@@ -20,7 +20,11 @@ module Functional
       params = if opts.present?
         '?' + opts.map { |k, v| "#{k}=#{v}" }.join('&')
       end
-      @d.get "http://localhost:3000/#{page}#{params}"
+      get("#{page}#{params}")
+    end
+
+    def get(path)
+      @d.get "http://localhost:3000/#{path}"
     end
 
     def close
@@ -37,13 +41,25 @@ module Functional
       end
     end
 
+    def log_in
+      get('flickr_streams') #temporary solution, go to the my sources page and take advantage of the auto login
+    end
+
     def log_out
-      user_link = s('#top-banner #user-name.dropdown-toggle')
-      if user_link
-        user_link.click
+      ul = user_link
+      if ul
+        ul.click
         s('#sign-out-link').click
         s('#bye-bye')
       end
+    end
+
+    def user_link
+      s('#top-banner #user-name.dropdown-toggle')
+    end
+
+    def logged_in?
+      user_link && user_link.displayed?
     end
 
     def refresh
