@@ -13,3 +13,4 @@ db/bkp
 .sass-cache
 compiled
 .rspec
+db/schema.rb
