@@ -9,6 +9,7 @@ class window.Login extends ViewBase
     $('.back-to-about').click_ this._toggleMoreAbout
     $('#faq-link').click_ this._toggleFaq
     $('#back-to-more-about-link').click_ this._toggleFaq
+    $('#back-to-more-about-link-bottom').click this._toggleFaq
 
     if klekr.Global.redirectedToLogin and $.param.fragment() is ''
       $('#countDownRedirect').show()
