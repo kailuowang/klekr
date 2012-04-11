@@ -16,6 +16,9 @@
 #sources.container
 
   = render partial: 'new_sources_added'
+  #top-menu
+    %a#add-more-sources{href: '#expand-management'}
+      Add More Sources
 
   #sources-list
   #star-category-template.star-category.well.row.hidden
@@ -29,7 +32,7 @@
 
   #sources-management.well.hidden
     %h2.pointer
-      %a#expand-management{src: '#'}
+      %a#expand-management{href: '#'}
         I want more sources!
     #sources-import-panel.hidden
       .row
