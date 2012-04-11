@@ -21,6 +21,7 @@ class window.MySourcesView extends ViewBase
 
   onAllSourcesLoaded: (empty)=>
     this.setVisible($('#empty-sources'), empty)
+    this.setVisible($('#add-more-sources'), !empty)
     this.setVisible(@importPanel, empty)
     this._setExpandLinkText(empty)
     $('#sources-management').show()
