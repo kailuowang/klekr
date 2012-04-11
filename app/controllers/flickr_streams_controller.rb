@@ -1,8 +1,8 @@
 class FlickrStreamsController < ApplicationController
   include Collectr::PictureControllerHelper
   include Collectr::FlickrStreamsControllerHelper
-
-  before_filter :authenticate
+  include Collectr::SlideshowControllerHelper
+  before_filter :authenticate, except: [:find]
   before_filter :load_stream, only: [:show, :subscribe, :unsubscribe, :sync, :adjust_rating, :mark_all_as_read]
 
   def index
@@ -24,8 +24,14 @@ class FlickrStreamsController < ApplicationController
   def show
     respond_to do |format|
       format.json{ render_json data_for_stream(@flickr_stream) }
-      format.html { redirect_to_slideshow  }
+      format.html do
+        redirect_to find_flickr_streams_path(user_id: @flickr_stream.user_id, type: @flickr_stream.type)
+      end
     end
+  end
+
+  def find
+    slideshow_for_stream(find_stream)
   end
 
   def create
@@ -86,10 +92,6 @@ class FlickrStreamsController < ApplicationController
     if(@flickr_stream.collector != current_collector)
       @flickr_stream = FlickrStream.find_or_create(user_id: @flickr_stream.user_id, collector: current_collector, type: @flickr_stream.type)
     end
-  end
-
-  def redirect_to_slideshow
-    redirect_to action: :flickr_stream, controller: :slideshow, id: params[:id]
   end
 
 end

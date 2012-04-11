@@ -7,12 +7,12 @@
     __advance_by_progress__ = '#{@advance_by_progress}';
     klekr.Global.defaultGalleryCacheSize = #{Settings.gallery_cache_size}
 
-= render partial: 'gridview'
+= render partial: 'slideshow/gridview'
 
 #empty-gallery-message.container.hidden
   .well
     - if @empty_message_partial.present?
-      = render partial: @empty_message_partial
+      = render partial: 'slideshow/' + @empty_message_partial
     - else
       %h2
         = @empty_message
@@ -33,18 +33,18 @@
   = link_to 'Next', '#', id: 'next', style: 'display: none'
 #preload{style: 'display: none'}
 
-= render partial: 'bottom_banner'
+= render partial: 'slideshow/bottom_banner'
 
 #bottomLeft.bottom
   .fleft
-    = render partial: 'mode_switch'
+    = render partial: 'slideshow/mode_switch'
   .fleft
-    = render partial: 'full_screen_button'
+    = render partial: 'slideshow/full_screen_button'
   .fleft
-    = render partial: 'auto_play'
+    = render partial: 'slideshow/auto_play'
   .fleft
-    = render partial: 'fave_panel'
+    = render partial: 'slideshow/fave_panel'
 
 #bottomRight
 
-= render partial: 'picture_label'
+= render partial: 'slideshow/picture_label'

@@ -30,4 +30,8 @@ module ApplicationHelper
     icon_url = with_icon.respond_to?(:icon_url) ? with_icon.icon_url : with_icon
     render partial: '/general/icon', locals: {icon_url: icon_url} if icon_url.present?
   end
+
+  def restful_flickr_stream_path stream
+    find_flickr_streams_path(user_id: stream.user_id, type: stream.type)
+  end
 end

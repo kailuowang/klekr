@@ -2,9 +2,9 @@
 
   = link_to "About",  root_path(anchor: 'about', show_detail: true)
   |
-  = link_to "FAQ",  root_path(anchor: "faq", show_detail: true)
-  |
   %a{href: "mailto:info@klekr.com"} Contact
+  |
+  = link_to "FAQ",  root_path(anchor: "faq", show_detail: true)
   |
   - if @bottom_links.present?
     - for link_name in @bottom_links
@@ -18,4 +18,4 @@
 
   #debugInfo.inline
 
-= render partial: 'key_shortcuts'
+= render partial: 'slideshow/key_shortcuts'

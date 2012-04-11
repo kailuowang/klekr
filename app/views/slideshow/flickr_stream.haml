@@ -12,7 +12,7 @@
       #alternative-stream.inline
         %span.question Like these pictures?
         Checkout
-        = link_to @stream.alternative_stream.to_s, flickr_stream_path(@stream.alternative_stream)
+        = link_to @stream.alternative_stream.to_s, restful_flickr_stream_path(@stream.alternative_stream)
 
     #stream-dropdown.dropdown-menu.hidden
       %div
@@ -21,14 +21,14 @@
       - if @stream.alternative_stream
         %div
           = @stream.username + "'s"
-          = link_to @stream.alternative_stream.type_display.downcase, flickr_stream_path(@stream.alternative_stream)
+          = link_to @stream.alternative_stream.type_display.downcase, restful_flickr_stream_path(@stream.alternative_stream)
 
     - if @current_collector.present?
-      = render partial: 'stream_panel'
+      = render partial: 'slideshow/stream_panel'
     - else
       .login-link
         = link_to 'Login to Subscribe', subscribe_flickr_stream_path(@stream), id: 'login-to-subscribe', class: 'btn has-popover', method: :put, 'data-content' => "Login to klekr to subscribe to #{@stream}", title: 'Peronal photography discovery on klekr', 'data-popover' => 'right'
 
 - content_for(:top_right) do
-  =render partial: 'start_klekr_link'
-=render partial: 'slideshow'
+  =render partial: 'slideshow/start_klekr_link'
+=render partial: 'slideshow/slideshow'

@@ -5,15 +5,12 @@ class UsersController < ApplicationController
   before_filter :authenticate , except: [:show, :flickr_stream]
 
   def show
-    type = params[:type] || FlickrStream::DEFAULT_TYPE
-    redirect_to(action: :flickr_stream, type: type)
+    flickr_stream
   end
 
   def flickr_stream
-    stream = FlickrStream.find_or_create(user_id: params[:id], collector: collector_for_stream, type: params[:type])
-    redirect_to(action: :flickr_stream, controller: :slideshow, id: stream.id)
+    redirect_to find_flickr_streams_path(user_id: params[:id], type: params[:type]  || FlickrStream::DEFAULT_TYPE)
   end
-
 
   def contacts
     render_json data_for_streams(Collectr::ContactsImporter.new(@current_collector).contact_streams)
@@ -58,7 +55,4 @@ class UsersController < ApplicationController
       FlickrStream.find_or_create(user_id: user_id, collector: current_collector, type: UploadStream.to_s)]
   end
 
-  def collector_for_stream
-    current_collector || Collectr::Editor.new.ensure_editor_collector
-  end
 end

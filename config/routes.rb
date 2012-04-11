@@ -32,6 +32,7 @@ Collectr::Application.routes.draw do
       post 'import'
       get 'my_sources'
       post 'sync_many'
+      get 'find'
     end
 
   end

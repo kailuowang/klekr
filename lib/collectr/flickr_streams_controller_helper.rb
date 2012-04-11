@@ -21,5 +21,14 @@ module Collectr
       }
     end
 
+    def find_stream(stream_user_id = params[:user_id])
+      FlickrStream.find_or_create(user_id: stream_user_id, collector: collector_for_stream, type: params[:type])
+    end
+
+    def collector_for_stream
+      current_collector || Collectr::Editor.new.ensure_editor_collector
+    end
+
   end
+
 end
