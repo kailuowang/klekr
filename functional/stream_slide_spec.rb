@@ -37,7 +37,9 @@ describe "Stream slide page" do
 
     it 'can direct to the same picture when clicked on fave reminder' do
       @page.log_out
-      @page.open_anonymously(@stream.id)
+      @page.open_anonymously(@stream)
+      @page.should_not be_logged_in
+
       @page.enter_slide_mode
       src = @page.slide_picture['src']
 
@@ -45,8 +47,11 @@ describe "Stream slide page" do
 
       @page.wait_until do
         @page.slide_picture['src'] == src
+        @page.should be_logged_in
       end
+
     end
+
   end
 
   context 'flickr stream operations' do
@@ -68,7 +73,7 @@ describe "Stream slide page" do
       end
 
       it 'displayes other collectors flickr_stream' do
-        @page.open_anonymously( @stream.id, as_test_collector: true)
+        @page.open_anonymously( @stream, as_test_collector: true)
         @page.grid_pictures_ids.should be_present
       end
     end

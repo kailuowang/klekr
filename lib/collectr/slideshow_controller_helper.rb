@@ -8,14 +8,12 @@ module Collectr
       check_stream_access(@stream)
       @more_pictures_path = flickr_stream_pictures_slideshow_path(id: @stream.id)
       @empty_message = "#{@stream} has no pictures."
-      @fave_login_path = flickr_stream_path(id: @stream.id)
       render "/slideshow/flickr_stream"
     end
 
+
     def render_exhibit
       @exhibit_params = exhibit_params
-      @fave_login_path = exhibit_login_slideshow_path(@exhibit_params)
-
       respond_to do |format|
         format.rss { exhibit_feed }
         format.html { exhibit_html }

@@ -22,7 +22,7 @@
       .section
         #top-banner-right.fright
           %h4.inline
-            - unless @disable_navigation
+            - if @current_collector && !@disable_navigation
               = render_navigation_links
         #top-banner-welcome.fright
           - if @current_collector && !@disable_navigation

@@ -54,6 +54,9 @@ class window.ViewBase extends Events
     else
       element.fadeOut(ViewBase.duration, callback)
 
+  login: =>
+    location.href = $.param.querystring(window.location.href, 'do_login=true');
+
 $ ->
   $.fx.off = ViewBase.isMobile()
   if $.browser.msie

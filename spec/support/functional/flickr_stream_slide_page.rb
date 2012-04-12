@@ -7,8 +7,8 @@ module Functional
       super(url, true, opts)
     end
 
-    def open_anonymously(stream_id, opts = {})
-      open("slideshow/flickr_stream", opts.merge(id: stream_id) )
+    def open_anonymously(stream, opts = {})
+      open("flickr_streams/find", opts.merge(user_id: stream.user_id, type: stream.type) )
     end
 
     def open_authenticated(stream_id, opts ={})
@@ -30,10 +30,11 @@ module Functional
         wait_until { popup_okay.displayed? }
         popup_okay.click
       end
-  end
+    end
 
     def unsubscribe
       unsubscribe_btn.click
+      pause(0.2)
       @d.switch_to.alert.accept
     end
 
