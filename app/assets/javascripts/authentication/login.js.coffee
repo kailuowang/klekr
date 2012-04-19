@@ -36,7 +36,7 @@ class window.Login extends ViewBase
 
 
   _toggleMoreAbout: =>
-    $('#about').slideToggle()
+    $('#about-main').slideToggle()
     $('#more').slideToggle()
 
   _toggleFaq: =>
