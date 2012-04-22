@@ -40,6 +40,6 @@ class window.StreamPanel extends ViewBase
 
 
   _displayAlternativeLink: =>
-    alternativeLink ?= $('#alternative-stream')
+    alternativeLink = $('#alternative-stream')
     windowTooSmall =  alternativeLink.width() > ($(window).width() / 3.3)
     this.setVisible(alternativeLink, !windowTooSmall)
