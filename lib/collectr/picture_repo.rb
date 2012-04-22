@@ -75,8 +75,8 @@ module Collectr
     def get_photopage_url(pic_info)
       begin
         FlickRaw.url_photopage(pic_info)
-      rescue
-        pic_info.urls[0]["_content"]
+      rescue #todo fix this after upgrading flickraw
+        pic_info.urls[0]["_content"].to_s
       end
     end
 
