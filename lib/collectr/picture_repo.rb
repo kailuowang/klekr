@@ -61,7 +61,6 @@ module Collectr
       end
     end
 
-
     def find_or_initialize_from_pic_info(pic_info)
       url = get_photopage_url(pic_info)
       Picture.where(collector_id: @collector, url: url).includes(:flickr_streams).first ||
