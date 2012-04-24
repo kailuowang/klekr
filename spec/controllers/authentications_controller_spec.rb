@@ -3,17 +3,20 @@ require 'spec_helper'
 
 describe AuthenticationsController do
 
+
   describe "GET" do
-
-
     describe "validate" do
 
       def create_mock_auth(user_id)
         mock(token: "a_fake_token", user: mock(nsid: user_id, username: "NNBB Alf", fullname: "Kailuo Wang"))
       end
 
+      before do
+        controller.stub!(:flickr).and_return(mock(:flickr))
+      end
+
       it "should create a new collector with user_name, full_name and token if the user_id is not found" do
-        user_id = Factory.next(:user_id)
+        user_id =  FactoryGirl.generate(:user_id)
         auth = create_mock_auth(user_id)
 
         stub_flickr(controller, :auth).should_receive(:getToken).with(frob: 'a_fake_frob').and_return(auth)
@@ -26,7 +29,7 @@ describe AuthenticationsController do
       end
 
       it "should create a new collector and save the collector id into session" do
-        user_id = Factory.next(:user_id)
+        user_id =  FactoryGirl.generate(:user_id)
         auth = create_mock_auth(user_id)
 
         stub_flickr(controller, :auth).should_receive(:getToken).with(frob: 'a_fake_frob').and_return(auth)
@@ -37,7 +40,7 @@ describe AuthenticationsController do
       end
 
       it "should re-use an exisiting collector with the same user_id" do
-        collector = Factory(:collector)
+        collector = FactoryGirl.create(:collector)
         auth = create_mock_auth(collector.user_id)
 
         stub_flickr(controller, :auth).should_receive(:getToken).with(frob: 'a_fake_frob').and_return(auth)

@@ -5,7 +5,7 @@ describe Collectr::FaveImporter do
   def mock_fave_info(*opts)
     opts = [{}] if opts.blank?
     mock(person: opts.map do |opt|
-        opt[:collector] = Factory(:collector) unless opt[:collector]
+        opt[:collector] = FactoryGirl.create(:collector) unless opt[:collector]
         opt[:fave_date] = 1423.days.ago unless opt[:fave_date]
         mock(nsid: opt[:collector].user_id, favedate: opt[:fave_date].to_i)
       end
@@ -16,7 +16,7 @@ describe Collectr::FaveImporter do
     @retriever = mock(:retriever)
     @retriever.stub!(:get).and_return(2.pics)
     Collectr::FlickrPictureRetriever.stub!(:new).and_return(@retriever)
-    @importer = Collectr::FaveImporter.new(Factory(:collector), 1.week.ago)
+    @importer = Collectr::FaveImporter.new(FactoryGirl.create(:collector), 1.week.ago)
 
     @flickr = stub_flickr(@importer, :photos)
     @flickr.stub(:getFavorites).and_return(mock_fave_info(collector: @importer.collector))

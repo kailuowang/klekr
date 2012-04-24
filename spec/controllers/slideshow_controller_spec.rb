@@ -4,10 +4,10 @@ describe SlideshowController do
 
   describe "#new_pictures" do
     it "return interesting pictures after the target picture" do
-      collector = Factory(:collector)
+      collector = FactoryGirl.create(:collector)
       controller.stub(:current_collector).and_return(collector)
 
-      new_pic = Factory(:picture)
+      new_pic = FactoryGirl.create(:picture)
       repo = mock(:repo)
 
       Collectr::PictureRepo.should_receive(:new).with(collector).and_return(repo)

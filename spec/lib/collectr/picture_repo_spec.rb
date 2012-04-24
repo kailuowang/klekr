@@ -2,12 +2,12 @@ require 'spec_helper'
 
 describe Collectr::PictureRepo do
   before do
-    @collector = Factory(:collector)
+    @collector = FactoryGirl.create(:collector)
     @repo = Collectr::PictureRepo.new(@collector)
   end
 
   def create_picture(opts = {})
-    Factory(:picture, {collector: @collector}.merge(opts))
+    FactoryGirl.create(:picture, {collector: @collector}.merge(opts))
   end
 
   describe ".new_pictures" do
@@ -38,7 +38,7 @@ describe Collectr::PictureRepo do
     end
 
     it "does not return pictures by a different collector" do
-      create_picture(:collector => Factory(:collector))
+      create_picture(:collector => FactoryGirl.create(:collector))
       @repo.new_pictures.should be_empty
     end
 
@@ -49,14 +49,14 @@ describe Collectr::PictureRepo do
 
     it "return picture from a flickrstream whose type matches the type filter" do
       pic = create_picture
-      pic.synced_by(Factory(:fave_stream))
-      pic.synced_by(Factory(:upload_stream))
-      pic.synced_by(Factory(:fave_stream))
+      pic.synced_by(FactoryGirl.create(:fave_stream))
+      pic.synced_by(FactoryGirl.create(:upload_stream))
+      pic.synced_by(FactoryGirl.create(:fave_stream))
       @repo.new_pictures(type: 'UploadStream').should include(pic)
     end
 
     it "does not return picture from a flickrstream whose type does not matche the type filter" do
-      upload_stream = Factory(:fave_stream)
+      upload_stream = FactoryGirl.create(:fave_stream)
       pic = create_picture
       pic.synced_by(upload_stream)
       @repo.new_pictures(type: 'UploadStream').should_not include(pic)
@@ -66,7 +66,7 @@ describe Collectr::PictureRepo do
 
   describe "#find_or_initialize_from_pic_info" do
     it "should be able to create from flickr pic info" do
-      pic_info = Factory.next(:pic_info)
+      pic_info =  FactoryGirl.generate(:pic_info)
       FlickRaw.should_receive(:url_photopage).with(pic_info).and_return('http://flickr/photo/pic1')
       picture = @repo.find_or_initialize_from_pic_info(pic_info)
       picture.url.should == 'http://flickr/photo/pic1'
@@ -76,23 +76,23 @@ describe Collectr::PictureRepo do
     end
 
     it "should not create duplicate picture for the same collector" do
-      pic_info = Factory.next(:pic_info)
+      pic_info =  FactoryGirl.generate(:pic_info)
       pic = @repo.find_or_initialize_from_pic_info(pic_info)
       pic.save!
       @repo.find_or_initialize_from_pic_info(pic_info).should == pic
     end
 
     it "should create duplicate picture for different collectors" do
-      pic_info = Factory.next(:pic_info)
-      pic = Collectr::PictureRepo.new(Factory(:collector)).find_or_initialize_from_pic_info(pic_info)
+      pic_info =  FactoryGirl.generate(:pic_info)
+      pic = Collectr::PictureRepo.new(FactoryGirl.create(:collector)).find_or_initialize_from_pic_info(pic_info)
       pic.save!
       @repo.find_or_initialize_from_pic_info(pic_info).should_not == pic
     end
 
     it "create picture with description" do
-      pic_info = Factory.next(:pic_info)
+      pic_info =  FactoryGirl.generate(:pic_info)
       pic_info.to_hash['description'] = "a description"
-      pic = Collectr::PictureRepo.new(Factory(:collector)).find_or_initialize_from_pic_info(pic_info)
+      pic = Collectr::PictureRepo.new(FactoryGirl.create(:collector)).find_or_initialize_from_pic_info(pic_info)
       pic.description.should == 'a description'
       pic.pic_info.description.should be_blank
     end
@@ -100,13 +100,13 @@ describe Collectr::PictureRepo do
 
   describe "#find" do
     it "finds picture by db id" do
-      pic = Factory(:picture, collector: @collector)
+      pic = FactoryGirl.create(:picture, collector: @collector)
       @repo.find(pic.id).should == pic
     end
 
     context 'finding by flickr_id' do
       before do
-        @pic_info = Factory.next(:pic_info)
+        @pic_info =  FactoryGirl.generate(:pic_info)
         stub_flickr(@repo, :photos).
           should_receive(:getInfo).
           with(photo_id: @pic_info.id, secret: @pic_info.secret).
@@ -120,7 +120,7 @@ describe Collectr::PictureRepo do
       end
 
       it "does not find existing picture with different collector" do
-        pic = Collectr::PictureRepo.new(Factory(:collector)).build(@pic_info)
+        pic = Collectr::PictureRepo.new(FactoryGirl.create(:collector)).build(@pic_info)
         pic.save
         @repo.find(pic.flickr_id).should_not == pic
       end
@@ -135,9 +135,9 @@ describe Collectr::PictureRepo do
     context "find by other user's pictures' db id" do
 
       it 'should find the corresponding picture for the current collector' do
-        pic_info = Factory.next(:pic_info)
+        pic_info =  FactoryGirl.generate(:pic_info)
 
-        pic_from_other_user = Collectr::PictureRepo.new(Factory(:collector)).build(pic_info)
+        pic_from_other_user = Collectr::PictureRepo.new(FactoryGirl.create(:collector)).build(pic_info)
         pic_from_other_user.save
         pic = @repo.build(pic_info)
         pic.save

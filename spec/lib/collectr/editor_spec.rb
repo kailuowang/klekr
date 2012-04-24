@@ -18,7 +18,7 @@ describe Collectr::Editor do
       Settings.stub(:editor_name).and_return('editor')
       @editor = Collectr::Editor.new
       @editor.ensure_editor_collector
-      @collector = Factory(:collector)
+      @collector = FactoryGirl.create(:collector)
     end
 
     it 'includes the collection stream of the user id' do
@@ -36,7 +36,7 @@ describe Collectr::Editor do
     end
 
     it 'create the same streams with 4+ star rating streams of the editor collector' do
-      editor_stream = Factory(:fave_stream, collector: @editor.editor_collector)
+      editor_stream = FactoryGirl.create(:fave_stream, collector: @editor.editor_collector)
       editor_stream.bump_rating(4)
       @editor.recommendation_streams_for(@collector).find_similiar_stream(editor_stream).should be_present
     end

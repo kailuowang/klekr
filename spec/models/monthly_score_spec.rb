@@ -27,14 +27,14 @@ describe MonthlyScore do
 
   describe "#bump" do
     it "should increase rating when there is num of pics" do
-      ms = Factory(:monthly_score)
+      ms = FactoryGirl.create(:monthly_score)
       ms.add_num_of_pics_viewed(10)
       ms.bump
       ms.rating.should > 0
     end
 
     it "should increase rating when there no num of pics" do
-      ms = Factory(:monthly_score)
+      ms = FactoryGirl.create(:monthly_score)
       ms.bump
       ms.rating.should > 0
     end
@@ -43,7 +43,7 @@ describe MonthlyScore do
 
   describe "#trash" do
     it "should decrease rating when there is num of pics" do
-      ms = Factory(:monthly_score)
+      ms = FactoryGirl.create(:monthly_score)
       ms.add_num_of_pics_viewed(10)
       ms.add(6)
       ms.trash
@@ -51,7 +51,7 @@ describe MonthlyScore do
     end
 
     it "should not decrease rating to less than 0" do
-      ms = Factory(:monthly_score)
+      ms = FactoryGirl.create(:monthly_score)
       ms.add_num_of_pics_viewed(10)
       ms.trash
       ms.rating.should == 0
@@ -60,7 +60,7 @@ describe MonthlyScore do
 
   describe "#rating" do
     it 'should never exeed 1 even if score added more than num of pics' do
-      ms = Factory(:monthly_score)
+      ms = FactoryGirl.create(:monthly_score)
       ms.add_num_of_pics_viewed(10)
       ms.add(11)
       ms.rating.should == 1

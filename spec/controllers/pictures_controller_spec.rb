@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe PicturesController do
   before do
-    @collector = Factory(:collector)
+    @collector = FactoryGirl.create(:collector)
   end
 
   def stub_current(collector = @collector)
@@ -16,7 +16,7 @@ describe PicturesController do
 
   def create_picture
     stub_current
-    Factory(:picture, collector: @collector)
+    FactoryGirl.create(:picture, collector: @collector)
   end
 
   describe "PUT fave" do
@@ -46,7 +46,7 @@ describe PicturesController do
 
     it "should not change pic from other collector" do
       stub_current
-      others_pic = Factory(:picture, collector: Factory(:collector))
+      others_pic = FactoryGirl.create(:picture, collector: FactoryGirl.create(:collector))
       FlickRaw::Flickr.stub_chain(:new, :favorites, :add)
       put 'fave', format: :json, id: others_pic.id
       others_pic.reload

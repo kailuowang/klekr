@@ -4,7 +4,7 @@ require 'flickraw'
 describe FlickrStream do
 
   before do
-    @flickr_stream_init_args = {user_id: 'a_user_id', collector: Factory(:collector), collecting: true}
+    @flickr_stream_init_args = {user_id: 'a_user_id', collector: FactoryGirl.create(:collector), collecting: true}
   end
 
   describe "class" do
@@ -36,14 +36,14 @@ describe FlickrStream do
 
     describe "#find_or_create" do
       it "creates one stream " do
-        collector = Factory(:collector)
+        collector = FactoryGirl.create(:collector)
         FlickrStream.find_or_create(user_id: 'a_user_id', collector: collector, type: 'UploadStream')
         UploadStream.count.should == 1
       end
 
       it "creates a stream that is not collecting if the stream does not exist yet" do
-        collector = Factory(:collector)
-        Factory(:fave_stream, user_id: 'a_user_id', collector: collector)
+        collector = FactoryGirl.create(:collector)
+        FactoryGirl.create(:fave_stream, user_id: 'a_user_id', collector: collector)
         result = FlickrStream.find_or_create(user_id: 'a_user_id', collector: collector, type: 'UploadStream')
         stream = UploadStream.all.first
         result.should == stream
@@ -51,8 +51,8 @@ describe FlickrStream do
       end
 
       it "return an existing one with the same user id and collector" do
-        collector = Factory(:collector)
-        stream = Factory(:fave_stream, user_id: 'a_user_id', collector: collector)
+        collector = FactoryGirl.create(:collector)
+        stream = FactoryGirl.create(:fave_stream, user_id: 'a_user_id', collector: collector)
         FlickrStream.find_or_create(user_id: 'a_user_id', collector: collector, type: 'FaveStream').should == stream
         stream.reload.should be_collecting
       end
@@ -62,14 +62,14 @@ describe FlickrStream do
 
     describe "#sync_all" do
       def create_stream(opts)
-        stream = Factory(:fave_stream, opts)
+        stream = FactoryGirl.create(:fave_stream, opts)
         stub_flickr(stream, :favorites).stub!(:getList).and_return([])
         stream
       end
 
       it "should sync all streams and return the total number of pictures synced" do
-        stream1 = Factory(:fave_stream)
-        stream2 = Factory(:fave_stream)
+        stream1 = FactoryGirl.create(:fave_stream)
+        stream2 = FactoryGirl.create(:fave_stream)
         stream1.stub!(:sync).and_return 1
         stream2.stub!(:sync).and_return 2
         FlickrStream.stub_chain(:collecting, :active_in).and_return [stream1, stream2]
@@ -77,7 +77,7 @@ describe FlickrStream do
       end
 
       it "sync streams from the collector if the collector is given" do
-        collector = Factory(:collector)
+        collector = FactoryGirl.create(:collector)
         stream = create_stream(collector: collector)
 
         FlickrStream.sync_all(collector)
@@ -85,8 +85,8 @@ describe FlickrStream do
       end
 
       it "not sync streams from other collector if the collector is given" do
-        stream = Factory(:fave_stream, collector: Factory(:collector))
-        FlickrStream.sync_all(Factory(:collector))
+        stream = FactoryGirl.create(:fave_stream, collector: FactoryGirl.create(:collector))
+        FlickrStream.sync_all(FactoryGirl.create(:collector))
 
         stream.reload.last_sync.should be_blank
       end
@@ -99,7 +99,7 @@ describe FlickrStream do
       end
 
       it "does not sync the streams whose collecting? is false" do
-        notcollecting_stream = Factory(:fave_stream, collecting: false)
+        notcollecting_stream = FactoryGirl.create(:fave_stream, collecting: false)
         FlickrStream.sync_all()
         notcollecting_stream.reload.last_sync.should be_blank
       end
@@ -108,14 +108,14 @@ describe FlickrStream do
     describe "#import" do
       it "should import from the array of attributes hashes" do
         import_data = [{'user_id' => 'a_user_id', 'type' => 'FaveStream'}]
-        FlickrStream.import(import_data, Factory(:collector))
+        FlickrStream.import(import_data, FactoryGirl.create(:collector))
         stream = FlickrStream.all.first
         stream.class.should == FaveStream
         stream.user_id.should == 'a_user_id'
       end
 
       it "should not reimport if the stream is already subscribed by the same collector" do
-        collector = Factory(:collector)
+        collector = FactoryGirl.create(:collector)
         stream_args = {'user_id' => 'a_user_id', 'type' => 'FaveStream', collector: collector}
         FlickrStream.create_type(stream_args)
         FlickrStream.import( [stream_args], collector)
@@ -123,14 +123,14 @@ describe FlickrStream do
       end
 
       it "should still import if the stream is subscribed by another collector" do
-        stream_args = {'user_id' => 'a_user_id', 'type' => 'FaveStream', collector: Factory(:collector)}
+        stream_args = {'user_id' => 'a_user_id', 'type' => 'FaveStream', collector: FactoryGirl.create(:collector)}
         FlickrStream.create_type(stream_args)
-        FlickrStream.import([stream_args], Factory(:collector))
+        FlickrStream.import([stream_args], FactoryGirl.create(:collector))
         FlickrStream.count.should == 2
       end
 
       it "should import the streams for the collector passed in" do
-        collector = Factory(:collector)
+        collector = FactoryGirl.create(:collector)
         a_different_collector_id = collector.id + 1000
         import_data = [{'collector_id' => a_different_collector_id, 'user_id' => 'a_user_id', 'type' => 'FaveStream'}]
         FlickrStream.import(import_data, collector)
@@ -141,59 +141,59 @@ describe FlickrStream do
 
     describe "#unviewed" do
       it "should return the stream which is not viewed at all" do
-        stream = Factory(:fave_stream)
-        Factory(:picture).synced_by(stream)
+        stream = FactoryGirl.create(:fave_stream)
+        FactoryGirl.create(:picture).synced_by(stream)
         FlickrStream.unviewed.should == stream
       end
 
       it "should not return the stream which is viewed once" do
-        stream = Factory(:fave_stream)
-        Factory(:picture).synced_by(stream)
-        Factory(:picture).synced_by(stream).get_viewed
+        stream = FactoryGirl.create(:fave_stream)
+        FactoryGirl.create(:picture).synced_by(stream)
+        FactoryGirl.create(:picture).synced_by(stream).get_viewed
         FlickrStream.unviewed.should be_nil
       end
 
       it "should not return stream with no pictures at all" do
-        Factory(:fave_stream)
+        FactoryGirl.create(:fave_stream)
         FlickrStream.unviewed.should be_nil
       end
 
       it "should not return stream with no pictures at all" do
-        Factory(:fave_stream)
+        FactoryGirl.create(:fave_stream)
         FlickrStream.unviewed.should be_nil
       end
     end
 
     describe "#least_viewed" do
       it "should return the stream which is not viewed at all" do
-        stream = Factory(:fave_stream)
-        stream2 = Factory(:fave_stream)
-        Factory(:picture).synced_by(stream)
-        Factory(:picture).synced_by(stream2).get_viewed
+        stream = FactoryGirl.create(:fave_stream)
+        stream2 = FactoryGirl.create(:fave_stream)
+        FactoryGirl.create(:picture).synced_by(stream)
+        FactoryGirl.create(:picture).synced_by(stream2).get_viewed
         FlickrStream.least_viewed.should == stream
       end
 
       it "should return the stream which is viewed less than other stream" do
-        stream = Factory(:fave_stream)
-        stream2 = Factory(:fave_stream)
-        Factory(:picture).synced_by(stream)
-        Factory(:picture).synced_by(stream).get_viewed
-        Factory(:picture).synced_by(stream2).get_viewed
-        Factory(:picture).synced_by(stream2).get_viewed
+        stream = FactoryGirl.create(:fave_stream)
+        stream2 = FactoryGirl.create(:fave_stream)
+        FactoryGirl.create(:picture).synced_by(stream)
+        FactoryGirl.create(:picture).synced_by(stream).get_viewed
+        FactoryGirl.create(:picture).synced_by(stream2).get_viewed
+        FactoryGirl.create(:picture).synced_by(stream2).get_viewed
         FlickrStream.least_viewed.should == stream
       end
 
       it "should be able to change according to the flickstream viewed count" do
-        stream = Factory(:fave_stream)
-        stream2 = Factory(:fave_stream)
+        stream = FactoryGirl.create(:fave_stream)
+        stream2 = FactoryGirl.create(:fave_stream)
 
-        Factory(:picture).synced_by(stream).get_viewed
-        pic1b = Factory(:picture).synced_by(stream)
-        pic1c = Factory(:picture).synced_by(stream)
-        Factory(:picture).synced_by(stream)
-        Factory(:picture).synced_by(stream2).get_viewed
-        Factory(:picture).synced_by(stream2).get_viewed
-        Factory(:picture).synced_by(stream2)
+        FactoryGirl.create(:picture).synced_by(stream).get_viewed
+        pic1b = FactoryGirl.create(:picture).synced_by(stream)
+        pic1c = FactoryGirl.create(:picture).synced_by(stream)
+        FactoryGirl.create(:picture).synced_by(stream)
+        FactoryGirl.create(:picture).synced_by(stream2).get_viewed
+        FactoryGirl.create(:picture).synced_by(stream2).get_viewed
+        FactoryGirl.create(:picture).synced_by(stream2)
 
         FlickrStream.least_viewed.should == stream
 
@@ -205,24 +205,24 @@ describe FlickrStream do
       end
 
       it "should not return the stream without any unviewed picture" do
-        stream = Factory(:fave_stream)
-        Factory(:picture).synced_by(stream).get_viewed
+        stream = FactoryGirl.create(:fave_stream)
+        FactoryGirl.create(:picture).synced_by(stream).get_viewed
         FlickrStream.least_viewed.should be_nil
       end
 
       it "should not return viewed stream of a collector different from the one passed in" do
-        stream = Factory(:fave_stream, collector: Factory(:collector))
-        Factory(:picture).synced_by(stream)
-        Factory(:picture).synced_by(stream).get_viewed
+        stream = FactoryGirl.create(:fave_stream, collector: FactoryGirl.create(:collector))
+        FactoryGirl.create(:picture).synced_by(stream)
+        FactoryGirl.create(:picture).synced_by(stream).get_viewed
 
-        FlickrStream.least_viewed(Factory(:collector)).should be_nil
+        FlickrStream.least_viewed(FactoryGirl.create(:collector)).should be_nil
       end
 
       it "should not return unviewed stream of a collector different from the one passed in" do
-        stream = Factory(:fave_stream, collector: Factory(:collector))
-        Factory(:picture).synced_by(stream)
+        stream = FactoryGirl.create(:fave_stream, collector: FactoryGirl.create(:collector))
+        FactoryGirl.create(:picture).synced_by(stream)
 
-        FlickrStream.least_viewed(Factory(:collector)).should be_nil
+        FlickrStream.least_viewed(FactoryGirl.create(:collector)).should be_nil
       end
 
     end
@@ -235,7 +235,7 @@ describe FlickrStream do
 
     describe "#retriever" do
       it "return the retriever of the same collector" do
-        collector = Factory(:collector)
+        collector = FactoryGirl.create(:collector)
         @flickr_stream.collector = collector
         @flickr_stream.retriever.collector.should == collector
       end
@@ -267,14 +267,14 @@ describe FlickrStream do
       end
 
       it "should synced picture should be linked with the stream" do
-        a_pic_info = Factory.next(:pic_info)
+        a_pic_info =  FactoryGirl.generate(:pic_info)
         @module.should_receive(@flickr_method).and_return([a_pic_info])
         @flickr_stream.sync
         Picture.first.flickr_streams.should include(@flickr_stream)
       end
 
       it "should not duplicate syncage when syncing the same picture" do
-        a_pic_info = Factory.next(:pic_info)
+        a_pic_info =  FactoryGirl.generate(:pic_info)
         @module.stub(@flickr_method).and_return([a_pic_info])
         @flickr_stream.sync(nil,1)
         @flickr_stream.sync(nil,1)
@@ -282,7 +282,7 @@ describe FlickrStream do
       end
 
       it "should create one picture with multiple linked flickr_streams if the picture get synced by muitiple flickr_streams(from the same collector)" do
-        a_pic_info = Factory.next(:pic_info)
+        a_pic_info =  FactoryGirl.generate(:pic_info)
         stub_retriever([a_pic_info])
         flickr_stream1 = @flickr_stream.class.create!(user_id: 'one_user', collector: @flickr_stream.collector, collecting: true)
         flickr_stream2 = @flickr_stream.class.create!(user_id: 'another_user', collector: @flickr_stream.collector, collecting: true)
@@ -295,7 +295,7 @@ describe FlickrStream do
       end
 
       it "should add the picture synced to the collector this stream belongs to" do
-        a_pic_info =  Factory.next(:pic_info)
+        a_pic_info =   FactoryGirl.generate(:pic_info)
         @module.should_receive(@flickr_method).and_return([a_pic_info])
 
         @flickr_stream.sync
@@ -394,18 +394,18 @@ describe FlickrStream do
 
     describe "#destroy" do
       it "should remove pictures from the stream" do
-        pic = Factory(:picture)
-        stream = Factory(:fave_stream)
+        pic = FactoryGirl.create(:picture)
+        stream = FactoryGirl.create(:fave_stream)
         pic.synced_by(stream)
         stream.destroy
         Picture.find_by_id(pic.id).should be_nil
       end
 
       it "should not remove pictures that is also from other stream" do
-        pic = Factory(:picture)
-        stream = Factory(:fave_stream)
+        pic = FactoryGirl.create(:picture)
+        stream = FactoryGirl.create(:fave_stream)
         pic.synced_by(stream)
-        pic.synced_by(Factory(:fave_stream))
+        pic.synced_by(FactoryGirl.create(:fave_stream))
         stream.destroy
         Picture.find(pic.id).should be_present
       end
@@ -414,7 +414,7 @@ describe FlickrStream do
 
     describe "#flickr" do
       it "should be using the auth_token as the collector" do
-        collector = Factory(:collector, auth_token: 'a_token')
+        collector = FactoryGirl.create(:collector, auth_token: 'a_token')
         @flickr_stream.collector = collector
         Collectr::Flickr::FlickRawFactory.should_receive(:create).with('a_token').and_return(:a_fake_flickr)
         @flickr_stream.flickr.should == :a_fake_flickr
@@ -423,7 +423,7 @@ describe FlickrStream do
 
     describe "mark_all_as_read" do
       it "should mark all unviewed pictures as viewed" do
-        pic = Factory(:picture)
+        pic = FactoryGirl.create(:picture)
         pic.synced_by(@flickr_stream)
         @flickr_stream.mark_all_as_read
         pic.reload.should be_viewed
@@ -432,7 +432,7 @@ describe FlickrStream do
 
     describe "alternative_stream" do
       it "return the stream of the same collector and same user but different type" do
-        collector = Factory(:collector)
+        collector = FactoryGirl.create(:collector)
         @flickr_stream.collector = collector
         alternative_stream = @flickr_stream.alternative_stream
         alternative_stream.reload
@@ -442,7 +442,7 @@ describe FlickrStream do
       end
 
       it "does not create a new one when there is already existing in db" do
-        collector = Factory(:collector)
+        collector = FactoryGirl.create(:collector)
         @flickr_stream.collector = collector
         @flickr_stream.alternative_stream == @flickr_stream.alternative_stream
       end
@@ -463,15 +463,15 @@ describe FlickrStream do
 
   describe "FaveStream#Sync" do
      it "should create a new picture if the pic from flickr is already synced by a stream of another collector" do
-        a_pic_info =  Factory.next(:pic_info)
+        a_pic_info =   FactoryGirl.generate(:pic_info)
 
-        stream1 = Factory(:fave_stream, collector: Factory(:collector))
+        stream1 = FactoryGirl.create(:fave_stream, collector: FactoryGirl.create(:collector))
         stream1.stub(:retriever).and_return(stub(:get_all => [a_pic_info]))
         stream1.sync
         Picture.count.should == 1
 
-        collector = Factory(:collector)
-        stream2 = Factory(:fave_stream, collector: collector)
+        collector = FactoryGirl.create(:collector)
+        stream2 = FactoryGirl.create(:fave_stream, collector: collector)
         stream2.stub(:retriever).and_return(stub(:get_all => [a_pic_info]))
         stream2.sync
 
