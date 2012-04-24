@@ -7,6 +7,7 @@ tmp/**/*
 tmp/*.jpg
 .idea/*
 config/flickr.yml
+config/smtp.yml
 .DS_Store
 db/development.sqlite3-journal
 db/bkp

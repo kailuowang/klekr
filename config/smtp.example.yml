@@ -1,0 +1,17 @@
+defaults: &defaults
+  address: smtp.gmail.com
+  port: 587
+  domain: klekr.com
+  user_name:  XXXXXXXX
+  password: *******
+  authentication: plain
+  enable_starttls_auto: Yes
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults
