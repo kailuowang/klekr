@@ -17,7 +17,7 @@ class FlickrStream < ActiveRecord::Base
   scope :type, lambda { |type| where(type: type) }
   scope :old, lambda { |num_of_days| where('updated_at < ?', num_of_days.days.ago)}
   scope :active_in, lambda{ |num_of_days| includes(:collector).where('collectors.last_login > ?', num_of_days.days.ago)}
-
+  scope :unsynced_after, lambda{|before| where('last_sync < ? or last_sync is null' , before)}
   has_many :syncages, :dependent => :delete_all
   has_many :pictures, through: :syncages
   has_many :monthly_scores, order: 'year desc, month desc'
@@ -67,13 +67,13 @@ class FlickrStream < ActiveRecord::Base
         Rails.logger.error("failed to load user info from flickr (userid #{user_id}")
         throw e
       end
-
-
     end
 
-    def sync_all(collector = nil, verbose = false)
+    def sync_all(opts = {})
+      opts.reverse_merge!({collector: nil, verbose: false, synced_before: Time.now})
+      collector, verbose, time_range = opts[:collector], opts[:verbose], opts[:synced_before]
 
-      streams_to_sync = collector ? collected_by(collector).collecting : collecting.active_in(30)
+      streams_to_sync = get_streams_to_sync(time_range, collector)
       puts "Start to sync all streams #{Time.now.to_s(:short)} " if verbose
       total_synced =
         streams_to_sync.inject(0) do |total_synced, stream|
@@ -83,6 +83,11 @@ class FlickrStream < ActiveRecord::Base
       num_collectors = streams_to_sync.map(&:collector).uniq.size
       puts "Finished syncing all #{streams_to_sync.size} streams with #{total_synced} pictures for #{num_collectors} collectors #{Time.now.to_s(:short)}" if verbose
       total_synced
+    end
+
+    def get_streams_to_sync(time_range, collector)
+      collector_scope = collector ? collected_by(collector) : active_in(30)
+      collector_scope.collecting.unsynced_after(time_range)
     end
 
     def import(data, collector)

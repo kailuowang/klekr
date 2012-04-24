@@ -72,7 +72,7 @@ describe FlickrStream do
         stream2 = FactoryGirl.create(:fave_stream)
         stream1.stub!(:sync).and_return 1
         stream2.stub!(:sync).and_return 2
-        FlickrStream.stub_chain(:collecting, :active_in).and_return [stream1, stream2]
+        FlickrStream.stub(:get_streams_to_sync).and_return [stream1, stream2]
         FlickrStream.sync_all.should == 3
       end
 
@@ -80,13 +80,13 @@ describe FlickrStream do
         collector = FactoryGirl.create(:collector)
         stream = create_stream(collector: collector)
 
-        FlickrStream.sync_all(collector)
+        FlickrStream.sync_all(collector: collector)
         stream.reload.last_sync.should be_present
       end
 
       it "not sync streams from other collector if the collector is given" do
         stream = FactoryGirl.create(:fave_stream, collector: FactoryGirl.create(:collector))
-        FlickrStream.sync_all(FactoryGirl.create(:collector))
+        FlickrStream.sync_all(collector: FactoryGirl.create(:collector))
 
         stream.reload.last_sync.should be_blank
       end
@@ -94,15 +94,26 @@ describe FlickrStream do
       it "sync the streams whose collecting? is true" do
         collecting_stream = create_stream(collecting: true )
 
-        FlickrStream.sync_all()
+        FlickrStream.sync_all
         collecting_stream.reload.last_sync.should be_present
       end
 
       it "does not sync the streams whose collecting? is false" do
         notcollecting_stream = FactoryGirl.create(:fave_stream, collecting: false)
-        FlickrStream.sync_all()
+        FlickrStream.sync_all
         notcollecting_stream.reload.last_sync.should be_blank
       end
+
+      it "does not sync the streams already synced within range" do
+        recent_sync = 20.seconds.ago
+        recently_synced_stream = create_stream( last_sync: recent_sync)
+        unsynced_stream = create_stream(last_sync: 10.minutes.ago)
+        FlickrStream.sync_all(synced_before: 1.minute.ago)
+
+        recently_synced_stream.reload.last_sync.should == recent_sync
+        unsynced_stream.reload.last_sync.to_f.should be_within(1.5).of(DateTime.now.to_f)
+      end
+
     end
 
     describe "#import" do
