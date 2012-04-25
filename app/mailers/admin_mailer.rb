@@ -4,7 +4,7 @@ class AdminMailer < ActionMailer::Base
 
   def regular_report(subject, msg)
     @msg = msg
-    email = mail(:to => AdminMailer::AdminEmail, :subject => subject).deliver
+    mail(:to => AdminMailer::AdminEmail, :subject => "#{Rails.env}: #{subject}").deliver
   end
 
 end
