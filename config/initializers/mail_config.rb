@@ -1,5 +1,5 @@
 module MailConfig
-  setting_file = "#{Rails.root}/config/smtp.yml"
+  setting_file = Rails.root.join('config', 'smtp.yml')
   if File.exist?(setting_file)
     smtp_settings = YAML.load_file(setting_file)[Rails.env]
     Collectr::Application.configure do

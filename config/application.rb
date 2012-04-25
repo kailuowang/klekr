@@ -1,6 +1,14 @@
 require File.expand_path('../boot', __FILE__)
-
 require 'rails/all'
+
+#todo remove this when pic_info is no longer serialized into db
+unless File.exists?(File.expand_path('../no_syck', __FILE__))
+  require 'yaml'
+  YAML::ENGINE.yamler = 'syck'
+  puts "WARNING: using syck because psych seg faults - KAI"
+end
+
+
 require 'flickraw'
 
 if defined?(Bundler)
