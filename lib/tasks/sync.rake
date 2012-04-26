@@ -4,7 +4,7 @@ namespace :sync do
   desc 'sync all streams'
   task :all_streams => :environment do
     with_error_report do
-      num_of_pic_synced = FlickrStream.sync_all(verbose: true, synced_before: 3.hours.ago)
+      num_of_pic_synced = FlickrStream.sync_all(verbose: true, synced_before: 10.hours.ago)
       output("All stream synced #{Time.now.to_s(:short)}")
       AdminMailer.regular_report("klekr streams were successfully synced", "#{num_of_pic_synced} pictures were synced" )
     end

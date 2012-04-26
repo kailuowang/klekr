@@ -8,6 +8,8 @@
     %h4
       = @exception.message
     %p
+      = @exception.class
+    %p
       .trace
         - @exception.backtrace.each do |trace|
           #{trace}

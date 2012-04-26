@@ -179,8 +179,12 @@ class Picture < ActiveRecord::Base
   def synced_by(stream)
     new_stream_rating = stream.star_rating + (stream_rating || 0)
     self.stream_rating = new_stream_rating
-    save!
-    syncages.create(flickr_stream_id: stream.id)
+    begin
+      save!
+      syncages.create(flickr_stream_id: stream.id)
+    rescue => e
+      AdminMailer.error_report(e)
+    end
     self
   end
 
