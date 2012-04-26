@@ -182,8 +182,8 @@ class Picture < ActiveRecord::Base
     begin
       save!
       syncages.create(flickr_stream_id: stream.id)
-    rescue => e
-      AdminMailer.error_report(e)
+    rescue ArgumentError => e
+      Rails.logger.error(e.to_s + e.backtrace.join("\n"))
     end
     self
   end
