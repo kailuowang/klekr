@@ -3,7 +3,14 @@
   %head
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}
   %body
-    %h3
-      Detailed Message at #{Time.now.to_s(:short)}
     %p
-      = @error_msg
+      Detailed Error Message at #{Time.now.to_s(:short)}
+    %h4
+      = @exception.message
+    %p
+      .trace
+        - @exception.backtrace.each do |trace|
+          #{trace}
+          %br
+
+

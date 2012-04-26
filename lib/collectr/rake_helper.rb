@@ -7,4 +7,13 @@ module Collectr::RakeHelper
       Rails.logger.info(msg)
     end
   end
+
+  def with_error_report
+    begin
+      yield
+    rescue  => e
+      Rails.logger.error(e)
+      AdminMailer.error_report(e)
+    end
+  end
 end
