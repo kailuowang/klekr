@@ -35,9 +35,9 @@ module Collectr
       rescue FlickRaw::FailedResponse => e
         handle_flickr_error(e)
       rescue Timeout::Error => e
-        handle_flickr_error(e)
+        handle_timeout_error(e)
       rescue Errno::ETIMEDOUT => e
-        handle_flickr_error(e)
+        handle_timeout_error(e)
       end
     end
 
@@ -86,10 +86,18 @@ module Collectr
     end
 
     def handle_flickr_error(e)
+      handle_error(e, "failed sync #{@module} photo for #{@user_id} from flickr. Response code:" + e.code.to_s + "\n" + e.msg)
+    end
+
+    def handle_timeout_error(e)
+      handle_error(e, "Timed out when syncing #{@module} photo for #{@user_id} from flickr.")
+    end
+
+    def handle_error(e, msg)
       if (Rails.env == 'test')
         raise e
       else
-        Rails.logger.error("failed sync #{@module} photo for #{@user_id} from flickr. Response code:" + e.code.to_s + "\n" + e.msg)
+        Rails.logger.error(msg)
         []
       end
     end

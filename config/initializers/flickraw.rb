@@ -5,6 +5,7 @@ module Collectr
   FlickRaw.api_key        = flickr_config['api_key']
   FlickRaw.shared_secret  = flickr_config['shared_secret']
   DevFlickrAuthToken      = flickr_config['auth_token']
+  FlickRawOptions['timeout'] = 15
   if DevFlickrAuthToken.present?
     begin
       flickr.auth.checkToken :auth_token => DevFlickrAuthToken
