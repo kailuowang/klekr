@@ -34,6 +34,10 @@ module Collectr
         get_module.send(@method, opts)
       rescue FlickRaw::FailedResponse => e
         handle_flickr_error(e)
+      rescue Timeout::Error => e
+        handle_flickr_error(e)
+      rescue Errno::ETIMEDOUT => e
+        handle_flickr_error(e)
       end
     end
 
