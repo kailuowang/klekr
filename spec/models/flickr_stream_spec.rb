@@ -73,7 +73,7 @@ describe FlickrStream do
         stream1.stub!(:sync).and_return 1
         stream2.stub!(:sync).and_return 2
         FlickrStream.stub(:get_streams_to_sync).and_return [stream1, stream2]
-        FlickrStream.sync_all.should == 3
+        FlickrStream.sync_all[:total_pictures_synced].should == 3
       end
 
       it "sync streams from the collector if the collector is given" do

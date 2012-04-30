@@ -74,15 +74,18 @@ class FlickrStream < ActiveRecord::Base
       collector, verbose, time_range = opts[:collector], opts[:verbose], opts[:synced_before]
 
       streams_to_sync = get_streams_to_sync(time_range, collector)
+
+      results = {total_streams_synced: 0, total_pictures_synced: 0, total_streams_to_sync: streams_to_sync.size}
+
       puts "Start to sync all streams #{Time.now.to_s(:short)} " if verbose
-      total_synced =
-        streams_to_sync.inject(0) do |total_synced, stream|
-          synced = stream.sync(stream.last_sync, 200, verbose) if stream.collecting?
-          total_synced + (synced || 0)
-        end
+      streams_to_sync.each do |stream|
+        synced = stream.sync(stream.last_sync, 200, verbose) if stream.collecting?
+        results[:total_streams_synced] += 1 if synced
+        results[:total_pictures_synced] += synced.to_i
+      end
       num_collectors = streams_to_sync.map(&:collector).uniq.size
-      puts "Finished syncing all #{streams_to_sync.size} streams with #{total_synced} pictures for #{num_collectors} collectors #{Time.now.to_s(:short)}" if verbose
-      total_synced
+      puts "Finished syncing all #{streams_to_sync.size} streams with #{results[:total_pictures_synced]} pictures for #{num_collectors} collectors #{Time.now.to_s(:short)}" if verbose
+      results
     end
 
     def get_streams_to_sync(time_range, collector)
