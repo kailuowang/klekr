@@ -38,6 +38,10 @@ module Collectr
         handle_timeout_error(e)
       rescue Errno::ETIMEDOUT => e
         handle_timeout_error(e)
+      rescue Errno::ECONNRESET => e
+        handle_timeout_error(e)
+      rescue Errno::ECONNREFUSED => e
+        handle_timeout_error(e)
       end
     end
 
@@ -91,6 +95,7 @@ module Collectr
 
     def handle_timeout_error(e)
       handle_error(e, "Timed out when syncing #{@module} photo for #{@user_id} from flickr.")
+      sleep(30)
     end
 
     def handle_error(e, msg)
