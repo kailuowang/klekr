@@ -94,8 +94,9 @@ module Collectr
     end
 
     def handle_timeout_error(e)
-      handle_error(e, "Timed out when syncing #{@module} photo for #{@user_id} from flickr.")
-      sleep(30)
+      handle_error(e, "Timed out when syncing #{@module} photo for #{@user_id} from flickr.") do
+        sleep(30)
+      end
     end
 
     def handle_error(e, msg)
@@ -103,6 +104,7 @@ module Collectr
         raise e
       else
         Rails.logger.error(msg)
+        yield
         []
       end
     end
