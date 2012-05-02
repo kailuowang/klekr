@@ -104,10 +104,9 @@ module Collectr
         raise e
       else
         Rails.logger.error(msg)
-        yield
+        yield if block_given?
         []
       end
     end
-
   end
 end
