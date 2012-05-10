@@ -50,7 +50,8 @@ class window.Slide extends ModeBase
       [ 'o', slideview.gotoOwner, "Go to photographer's page" ]
       [ 'shift+o', (=> slideview.gotoOwner(true)), "Open photographer's page in new tab" ]
       [ ['g', 'return', 'up'], this.backToGrid, "Go to grid mode" ]
-    ].concat(unless klekr.Global.readonly then [[ 'l', slideview.label.expand, "Expand picture label" ]] else [])
+      [ 'l', slideview.label.expand, "Expand picture label" ]
+    ]
 
   _monitorPictureReady: (picture) =>
     picture.bind 'size-ready', (pic) =>

@@ -2,7 +2,6 @@ class window.PictureLabel extends ViewBase
   constructor: ->
     @panel = $('#picture-label')
     @expandLink =  @panel.find('#expand-link')
-    this.setVisible(@expandLink, !klekr.Global.readonly)
     new CollapsiblePanel(@panel.find('#collapsible'), @expandLink, ['[+]', '[-]'])
 
   show: (picture)=>
@@ -31,6 +30,7 @@ class window.PictureLabel extends ViewBase
     @interestingess.text picture.interestingness
     @interestingessDisplay ?= @panel.find('#interestingness')
     this.setVisible @interestingessDisplay, (picture.interestingness isnt 0)
+    this.setVisible $('#personalized-info'), !klekr.Global.anonymous?
 
     this._updateSources(picture.fromStreams)
     @relatedPanel ?= @panel.find('#related-pictures')
