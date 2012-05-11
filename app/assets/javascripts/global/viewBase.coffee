@@ -1,7 +1,7 @@
 class window.ViewBase extends Events
   @showingPopup: false
-  $.fx.interval = 40
-  @duration = $.fx.interval * 3
+  $.fx.interval = 20
+  @duration = $.fx.interval * 6
 
   @isMobile: ->
     #'safari/533.16' is the pretend userAgent from honeycomb when set as using desktop user agent
