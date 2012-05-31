@@ -218,8 +218,6 @@ class window.Gallery extends Events
       @currentMode.scroll(towardsLeft)
     @scrollControl.bind 'move', generalView.inidicateScroll
 
-
-
   report: ->
     console.debug "cache size: " + @cacheSize
     console.debug "pictures in cache: " + @pictures.length
