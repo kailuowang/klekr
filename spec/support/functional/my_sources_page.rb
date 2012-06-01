@@ -112,8 +112,12 @@ module Functional
       add_by_user_search_box.send_keys username
       s('#search-user-form #submit').click
       wait_until do
-        add_by_user_button.displayed?
+        user_search_results_ready? and add_by_user_button.displayed?
       end
+    end
+
+    def user_search_results_ready?
+      s('#import-by-user #search-result').size.height.to_i > 210
     end
 
     def add_by_user_search_box
