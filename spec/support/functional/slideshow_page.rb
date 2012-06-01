@@ -112,9 +112,13 @@ module Functional
 
     def click_slide_picture
       wait_until do
-        slide_picture.displayed? and slide_picture.size.height.to_i > 10
+        slide_picture_ready?
       end
       slide_picture.click
+    end
+
+    def slide_picture_ready?
+      slide_picture.displayed? and slide_picture.size.height.to_i > 10
     end
 
     def enter_slide_mode
@@ -141,8 +145,12 @@ module Functional
 
     def wait_until_slide_shows
       wait_until do
-        ( slide_picture.displayed? && !slide_picture['src'].include?('loading')) || empty_message_shows
+        ( slide_picture_ready? && !loading_slide_picture? ) || empty_message_shows
       end
+    end
+
+    def loading_slide_picture?
+      slide_picture['src'].include?('loading')
     end
 
     def empty_message_shows
