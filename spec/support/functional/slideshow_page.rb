@@ -106,11 +106,15 @@ module Functional
     end
 
     def enter_grid_mode
+      click_slide_picture
+      wait_until_grid_shows
+    end
+
+    def click_slide_picture
       wait_until do
-        slide_picture.displayed?
+        slide_picture.displayed? and slide_picture.size.height.to_i > 10
       end
       slide_picture.click
-      wait_until_grid_shows
     end
 
     def enter_slide_mode

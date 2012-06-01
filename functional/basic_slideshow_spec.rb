@@ -87,7 +87,7 @@ describe "slideshow" do
     end
 
     it "hide slide picture and display grid when clicked" do
-      @page.slide_picture.click
+      @page.click_slide_picture
       @page.slide_picture.should_not be_displayed
       @page.grid_pictures.each do |grid_picture|
         grid_picture.should be_displayed
@@ -100,22 +100,20 @@ describe "slideshow" do
       @page.pause
       @page.wait_until_slide_shows
       pic_id = @page.slide_picture_id
-      @page.slide_picture.click
+      @page.click_slide_picture
       @page.wait_until do
         @page.highlighted_grid_picture_id == pic_id
       end
     end
 
     it "switches to the next page of grid when navigate through slide" do
-      @page.pause(0.1)
-      @page.slide_picture.click
+      @page.click_slide_picture
       pic_ids = @page.grid_pictures_ids
       @page.last_grid_picture.click
       @page.wait_until_slide_shows
       @page.click_right_button
       @page.wait_until_slide_shows
-      @page.pause(0.1)
-      @page.slide_picture.click
+      @page.click_slide_picture
       @page.wait_until_grid_shows
       @page.wait_until do
         @page.grid_pictures_ids != pic_ids
