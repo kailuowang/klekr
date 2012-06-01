@@ -16,6 +16,11 @@ module Functional
       profile
     end
 
+    def capture_screen filename
+      path = File.expand_path("../../../../../tmp/screenshots/#{filename}.png", __FILE__)
+      @d.save_screenshot(path)
+    end
+
     def open page, opts = {}
       params = if opts.present?
         '?' + opts.map { |k, v| "#{k}=#{v}" }.join('&')
