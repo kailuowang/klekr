@@ -27,7 +27,7 @@ class window.Gallery extends Events
     this._reset(requestedPicId)
     @grid.init(this)
 
-  size: => @pictures.length
+  size: => if @pictures? then @pictures.length else 0
 
   isEmpty: => this.size() is 0
 
