@@ -5,6 +5,9 @@ class AuthenticationsController < ApplicationController
     auth = flickr.auth.getToken(frob: params[:frob])
     collector = ::Collector.find_or_create_by_auth(auth)
     collector.update_attribute(:last_login, DateTime.now)
+    if(collector.auth_token != auth.token)
+      collector.update_attribute(:auth_token, auth.token)
+    end
     session[:collector_id] = collector.id
     self.current_collector = collector
     redirect_to_stored

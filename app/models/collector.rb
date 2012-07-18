@@ -1,6 +1,39 @@
+#monkey patch the flickraw so that I can run the exchange token
+require 'net/http'
+require 'digest/md5'
+require 'json'
+
+module FlickRaw
+
+
+  # Root class of the flickr api hierarchy.
+  class Flickr < Request
+
+
+    def process_response(req, http_response)
+      json = JSON.load(http_response.body.empty? ? "{}" : http_response.body)
+      raise FailedResponse.new(json['message'], json['code'], req) if json.delete('stat') == 'fail'
+      type, json = json.to_a.first if json.size == 1 and json.all? {|k,v| v.is_a? Hash}
+
+      res = Response.build json, type
+      begin
+        @token = res.token if res.respond_to? :flickr_type and res.flickr_type == "auth"
+      rescue
+      end
+      res
+    end
+
+
+  end
+
+end
+
+
+
 class Collector < ActiveRecord::Base
   extend Collectr::FindOrCreate
   include Collectr::FlickrIcon
+  include Collectr::Flickr
 
   has_many :flickr_streams
   has_many :pictures
@@ -21,6 +54,16 @@ class Collector < ActiveRecord::Base
       pictures_in_db
     else
       pictures_in_db.to_a + import_from_flickr(per_page - pictures_in_db.size)
+    end
+  end
+
+  def exchange_token
+    if self.access_secret.blank? && self.access_token.blank?
+      resp = flickr(self).auth.oauth.getAccessToken
+      p resp.inspect
+      update_attributes(access_secret: resp["access_token"]["oauth_token_secret"],
+                        access_token: resp["access_token"]["oauth_token"]
+      )
     end
   end
 

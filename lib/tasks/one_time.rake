@@ -18,4 +18,18 @@ namespace :one_time do
       end
     end
   end
+
+  desc 'exchange_token'
+  task :exchange_tokens => :environment do
+    count = 0
+    Collector.report.each do |c|
+      begin
+        c.exchange_token
+        count += 1
+      rescue => e
+        Rails.logger.error e.inspect
+      end
+    end
+    output "successfully exchanged tokens for #{count} / #{Collector.count} collectors"
+  end
 end
