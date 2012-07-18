@@ -1,4 +1,5 @@
-authentication: false
+authentication: true
+fave_on_flickr: true
 gallery_cache_size: 3
 add_this_button: false
 enable_analytics: false
