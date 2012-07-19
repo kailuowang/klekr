@@ -6,7 +6,7 @@ gem 'rails', '~> 3.2.0'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'haml'
-gem 'flickraw', '= 0.8.4'
+gem 'flickraw', '~> 0.9.6'
 
 gem "jquery-rails", "~> 2.0.1"
 gem 'capistrano'

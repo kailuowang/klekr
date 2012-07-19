@@ -47,12 +47,15 @@
       %h3
         Auto redirection stopped.
         = link_to 'Click here to login', @auth_url, class: 'login-auth-link'
-
+    .remember-me-checkbox
+      %input#remember-me{type: 'checkbox'}
+      %label remember me on this computer
     .flickr-login-notes
       %span *
       As your personalized picture browser,
       %span.site-name klekr
       links with your flickr account so that you don't have to create yet another account.
+
   - else
     %h3
       = link_to "<< Back to My Stream", slideshow_path

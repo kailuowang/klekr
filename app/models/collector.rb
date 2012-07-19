@@ -6,13 +6,17 @@ class Collector < ActiveRecord::Base
   has_many :pictures
   scope :report, order: 'last_login asc'
   def self.from_new_user(auth)
-    user = auth.user
-    user_id = user.nsid
-    create(user_id: user_id, auth_token: auth.token, user_name: user.username, full_name: user.fullname)
+    puts auth[:user].inspect
+    user = auth[:user]
+    create(user_id: user['id'],
+           access_token: auth[:access_token],
+           access_secret: auth[:access_secret],
+           user_name: user.username,
+           full_name: "")
   end
 
   def self.find_or_create_by_auth(auth)
-    find_by_user_id(auth.user.nsid) || from_new_user(auth)
+    find_by_user_id(auth[:user]['id']) || from_new_user(auth)
   end
 
   def collection(per_page, page, opts = {})

@@ -425,9 +425,9 @@ describe FlickrStream do
 
     describe "#flickr" do
       it "should be using the auth_token as the collector" do
-        collector = FactoryGirl.create(:collector, auth_token: 'a_token')
+        collector = FactoryGirl.create(:collector, access_token: 'a_token', access_secret: 'a_secret')
         @flickr_stream.collector = collector
-        Collectr::Flickr::FlickRawFactory.should_receive(:create).with('a_token').and_return(:a_fake_flickr)
+        Collectr::Flickr::FlickRawFactory.should_receive(:create).with('a_token', 'a_secret').and_return(:a_fake_flickr)
         @flickr_stream.flickr.should == :a_fake_flickr
       end
     end

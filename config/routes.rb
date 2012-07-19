@@ -3,6 +3,7 @@ Collectr::Application.routes.draw do
   resource :authentications, :only => [:show, :destroy] do
     member do
       get 'validate'
+      get 'login'
     end
   end
 

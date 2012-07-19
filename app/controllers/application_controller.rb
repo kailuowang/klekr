@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include Collectr::TestDataUtil
+
   protect_from_forgery
   before_filter :navigation_setup
   before_filter :check_authentication_requested
@@ -49,7 +51,16 @@ class ApplicationController < ActionController::Base
   end
 
   def current_collector
+    load_remembered_user_to_session
     @current_collector ||= ::Collector.find_by_id(session[:collector_id]) if session[:collector_id]
+  end
+
+  def load_remembered_user_to_session
+    if session[:collector_id].blank?
+      session[:collector_id] = cookies.signed["collector_id"]
+    elsif cookies.signed["collector_id"] != session[:collector_id]
+      cookies.permanent.signed["collector_id"] = nil
+    end
   end
 
   def current_collector= collector
@@ -84,13 +95,7 @@ class ApplicationController < ActionController::Base
   end
 
   def development_collector
-    params[:as_test_collector].present? ?
-      ::Collector.find_or_create(user_id: Collectr::TestFlickrUserId,
-        user_name: Collectr::TestFlickrUserName,
-        auth_token: Collectr::TestFlickrAuthToken) :
-      ::Collector.find_or_create(user_id: Collectr::DevFlickrUserId,
-        user_name: Collectr::DevFlickrUserName,
-        auth_token: Collectr::DevFlickrAuthToken)
+    params[:as_test_collector].present? ? test_collector : dev_collector
   end
 
 

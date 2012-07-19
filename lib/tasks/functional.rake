@@ -9,14 +9,11 @@ namespace :functional do
 
   desc "prepare for functional suites"
   task :prepare => :environment do
-    testUser = ::Collector.find_or_create(user_id: Collectr::TestFlickrUserId,
-                               user_name: Collectr::TestFlickrUserName,
-                               auth_token: Collectr::TestFlickrAuthToken)
-    import_contacts testUser
-    devUser = ::Collector.find_or_create(user_id: Collectr::DevFlickrUserId,
-                               user_name: Collectr::DevFlickrUserName,
-                               auth_token: Collectr::DevFlickrAuthToken)
-    import_contacts devUser
+    include Collectr::TestDataUtil
+
+    import_contacts test_collector
+    import_contacts dev_collector
+
     editor = Collectr::Editor.new.ensure_editor_collector
     editor.import_from_flickr(300)
   end

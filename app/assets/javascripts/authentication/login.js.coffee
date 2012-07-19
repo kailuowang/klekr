@@ -8,7 +8,7 @@ class window.Login extends ViewBase
     this._registerEvents()
     this._displayLoginLinks()
 
-    $('.login-auth-link').attr('href', $('.login-auth-link').attr('href') + "#" + $.param.fragment())
+    $('.login-auth-link').click_ @_login
     this._loadAnnouncement()
 
   _showingDetail: =>
@@ -38,6 +38,12 @@ class window.Login extends ViewBase
   _toggleMoreAbout: =>
     $('#about-main').slideToggle()
     $('#more').slideToggle()
+
+  _login: =>
+    console.log 'here'
+    rememberMe = $('#remember-me')[0].checked
+    url = $('.login-auth-link').attr('href')  + "?remember_me=#{rememberMe}#" + $.param.fragment()
+    window.location = url
 
   _toggleFaq: =>
     @moreAbout.slideToggle()

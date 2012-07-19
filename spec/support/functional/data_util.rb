@@ -1,6 +1,8 @@
 module Functional
   module DataUtil
 
+    include Collectr::TestDataUtil
+
     def reset_viewed_pictures(num = 100)
       collector.pictures.viewed.order('updated_at DESC').limit(num).update_all(viewed: false)
     end
@@ -69,13 +71,8 @@ module Functional
     end
 
     def collector
-      @collector ||= Collector.find_by_user_id(Collectr::DevFlickrUserId)
+      @collector ||= dev_collector
     end
 
-    def test_collector
-      @test_collector ||= ::Collector.find_or_create( user_id: Collectr::TestFlickrUserId,
-                                                      user_name: Collectr::TestFlickrUserName,
-                                                      auth_token: Collectr::TestFlickrAuthToken )
-    end
   end
 end
