@@ -40,7 +40,6 @@ class window.Login extends ViewBase
     $('#more').slideToggle()
 
   _login: =>
-    console.log 'here'
     rememberMe = $('#remember-me')[0].checked
     url = $('.login-auth-link').attr('href')  + "?remember_me=#{rememberMe}#" + $.param.fragment()
     window.location = url
@@ -57,7 +56,7 @@ class window.Login extends ViewBase
         this._flashStopLink() if seconds < 5
         setTimeout this._nextCountdown(seconds), 1000
       else
-        window.location = $('.login-auth-link').attr('href')
+        @_login()
 
   _flashStopLink: =>
     @stopCountdownLink ?= $('.stop-countdown')
