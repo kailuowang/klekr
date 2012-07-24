@@ -1,11 +1,6 @@
 - if Settings.add_this_button
   - content_for(:head) do
-    :javascript
-      (function() {
-        var at = document.createElement('script'); at.type = 'text/javascript'; at.async = true;
-        at.src = 'http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4ea76a4c1cc9567c&domready=1';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(at, s);
-      })();
+    = javascript_include_tag 'http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4ea76a4c1cc9567c&domready=1'
 - dynamic_url = false unless defined?(:dynamic_url)
 .addthis_toolbox.addthis_default_style{ 'addthis:title' => title, 'data-dynamic-url' => dynamic_url.to_s }
   %a.addthis_button_preferred_1
