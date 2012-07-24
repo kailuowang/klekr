@@ -60,7 +60,6 @@ class Collector < ActiveRecord::Base
   def exchange_token
     if self.access_secret.blank? && self.access_token.blank?
       resp = flickr(self).auth.oauth.getAccessToken
-      p resp.inspect
       update_attributes(access_secret: resp["access_token"]["oauth_token_secret"],
                         access_token: resp["access_token"]["oauth_token"]
       )
