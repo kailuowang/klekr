@@ -39,24 +39,27 @@ namespace :deploy do
 
   task :simple, :roles => :app do
 
-    _, bkp_path, _ = db_backup_dir_and_path()
-    deploy.db_backup unless File.exist?(bkp_path)
+    #_, bkp_path, _ = db_backup_dir_and_path()
+    #deploy.db_backup unless File.exist?(bkp_path)
     deploy.bring_site_down
 
     deploy.checkout_code
     deploy.bundle
 
-    deploy.clear_cron
-    run_in_app "#{rails_env} script/delayed_job stop"
-
+    #deploy.clear_cron
+    #depploy.stop_delayed_job
     deploy.migrate
     deploy.prepare_assets
-    deploy.update_cron
+    #deploy.update_cron
     deploy.restart_passenger
     deploy.bring_site_up
-    deploy.start_delayed_job
+    #deploy.start_delayed_job
     deploy.post_deploy
     deploy.warm_server
+  end
+
+  task :stop_delayed_job, :roles => :app do
+    run_in_app "#{rails_env} script/delayed_job stop"
   end
 
   task :migrate, :roles => :app do
