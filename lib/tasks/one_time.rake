@@ -26,6 +26,7 @@ namespace :one_time do
       begin
         c.exchange_token
         count += 1
+        puts count
       rescue => e
         Rails.logger.error e.inspect
       end
