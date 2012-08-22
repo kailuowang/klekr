@@ -68,9 +68,9 @@ class window.KeyShortcut
     keyWithDirection =  stringKey.replace('up', '↑').replace('down', '↓').replace('left', '←').replace('right', '→')
     "<span class='key-name'>#{keyWithDirection}</span>"
 
-  onKeydown: =>
+  onKeydown: (e) =>
     unless keyShortcuts.locked #this ensures that for one key stroke only one action is fired (needed to prevent chain reaction)
       if this.enable()
-        this._func()
+        this._func(e)
         keyShortcuts.locked = true
 

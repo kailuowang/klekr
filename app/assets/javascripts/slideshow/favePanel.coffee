@@ -81,19 +81,26 @@ class window.FavePanel  extends ViewBase
 
   _shortcuts: ->
     @mShortcuts ?=
-      (this._createRatingShortcut(i) for i in [1..5]).concat([
-        new KeyShortcut(['f','c'], this.fave, 'fave the picture', => gallery.slide.active() and @picture.favable())
+      [
+        this._createRatingShortcut()
+        new KeyShortcut(['f','c'], this.fave, 'fave the picture', @_canFave)
         new KeyShortcut('u', this.unfave, 'unfave the picture', => this.showing(@removeFaveLink))
-      ])
+      ]
+
+  _canFave: =>
+    gallery?.slide?.active() and @picture.favable()
 
   _ratingShortcutsEnabled: =>
     this._showingPopup() or this.showing(@ratingDisplayPanel)
 
-  _createRatingShortcut: (rating)=>
-    new KeyShortcut( rating.toString(),
-      ( => this._changeRating(rating)),
-      'set rating to '+ rating,
-      this._ratingShortcutsEnabled
+  _createRatingShortcut: =>
+    new KeyShortcut( ['1','2','3','4','5'],
+      ( (e) =>
+        rating = e.keyCode - 48
+        console.log(rating)
+        @_changeRating(rating)),
+      'set fave rating accordingly',
+      @_canFave
     )
 
 
