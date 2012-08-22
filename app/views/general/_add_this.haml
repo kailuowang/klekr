@@ -1,10 +1,9 @@
 - if Settings.add_this_button
-  - content_for(:head) do
-    = javascript_include_tag 'http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4ea76a4c1cc9567c&domready=1'
-- dynamic_url = false unless defined?(:dynamic_url)
-.addthis_toolbox.addthis_default_style{ 'addthis:title' => title, 'data-dynamic-url' => dynamic_url.to_s }
-  %a.addthis_button_preferred_1
-  %a.addthis_button_preferred_2
-  %a.addthis_button_preferred_3
-  %a.addthis_button_preferred_4
-  %a.addthis_button_compact
+  - dynamic_url = false unless defined?(:dynamic_url)
+  .addthis_toolbox.addthis_default_style{ 'addthis:title' => title, 'data-dynamic-url' => dynamic_url.to_s }
+    %a.addthis_button_preferred_1
+    %a.addthis_button_preferred_2
+    %a.addthis_button_preferred_3
+    %a.addthis_button_preferred_4
+    %a.addthis_button_compact
+  = javascript_include_tag 'http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4ea76a4c1cc9567c&domready=1'
