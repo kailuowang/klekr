@@ -1,6 +1,6 @@
 authentication: false
 fave_on_flickr: false
 gallery_cache_size: 3
-add_this_button: false
+add_this_button: true
 enable_analytics: false
 default_flickr_photo_retrieve_size: 4
