@@ -79,9 +79,16 @@ class FlickrStream < ActiveRecord::Base
 
       puts "Start to sync all streams #{Time.now.to_s(:short)} " if verbose
       streams_to_sync.each do |stream|
-        synced = stream.sync(stream.last_sync, 200, verbose) if stream.collecting?
-        results[:total_streams_synced] += 1 if synced
-        results[:total_pictures_synced] += synced.to_i
+        begin
+          synced = stream.sync(stream.last_sync, 200, verbose) if stream.collecting?
+          results[:total_streams_synced] += 1 if synced
+          results[:total_pictures_synced] += synced.to_i
+        rescue FlickRaw::OAuthClient::FailedResponse => e
+          string title = "failed to sync flickr stream(id: #{stream.id}) due to flickr server error (#{e.to_s})"
+          Rails.logger.error(string)
+          AdminMailer.error_report(e, title)
+        end
+
       end
       num_collectors = streams_to_sync.map(&:collector).uniq.size
       puts "Finished syncing all #{streams_to_sync.size} streams with #{results[:total_pictures_synced]} pictures for #{num_collectors} collectors #{Time.now.to_s(:short)}" if verbose

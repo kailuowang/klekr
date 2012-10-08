@@ -11,8 +11,9 @@ class AdminMailer < ActionMailer::Base
     mail(:to => AdminMailer::AdminEmail, :subject => "#{Rails.env}: #{subject}").deliver
   end
 
-  def error_report(exception)
+  def error_report(exception, title = "An exception occurred.")
     @exception = exception
+    @title = title
     report("DON'T PANIC!")
   end
 

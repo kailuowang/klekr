@@ -4,7 +4,9 @@
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}
   %body
     %p
-      Detailed Error Message at #{Time.now.to_s(:short)}
+      = @title
+    %p
+      Exception at #{Time.now.to_s(:short)}
     %h4
       = @exception.message
     %p
