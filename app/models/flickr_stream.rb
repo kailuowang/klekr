@@ -84,8 +84,8 @@ class FlickrStream < ActiveRecord::Base
           results[:total_streams_synced] += 1 if synced
           results[:total_pictures_synced] += synced.to_i
         rescue FlickRaw::OAuthClient::FailedResponse => e
-          string title = "failed to sync flickr stream(id: #{stream.id}) due to flickr server error (#{e.to_s})"
-          Rails.logger.error(string)
+          title = "failed to sync flickr stream(id: #{stream.id}) due to flickr server error (#{e.to_s})"
+          Rails.logger.error(title)
           AdminMailer.error_report(e, title)
         end
 
