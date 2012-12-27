@@ -9,7 +9,7 @@ class window.GeneralView extends ViewBase
     @socialSharing = new klekr.SocialSharing exhibit_slideshow_path()
 
     this._initFullScreenButton()
-    $(window).resize(_.throttle(this.initLayout, 100))
+    $(window).resize(_.debounce(this.initLayout, 500))
     this.initLayout()
 
   initLayout: =>
