@@ -5,6 +5,9 @@ class klekr.Reporter
       @pictureString(picture, index) for picture, index in pictures[start...limit]
     console.log toPrint.join(' ') + "For more pictures go to \nhttp://klekr.com/editors_choice\n"
 
+  help: =>
+    "limit = 20, start = 0, faveOnly = false"
+    
   pictureString: (picture, index) =>
      """
      #{(index + 1)}
