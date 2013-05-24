@@ -18,6 +18,7 @@ class SlideshowController < ApplicationController
   end
 
   def show
+    @current_collector.update_attribute(:last_login, DateTime.now)
     if(@current_collector.flickr_streams.count == 0)
       redirect_to(flickr_streams_path)
     end
