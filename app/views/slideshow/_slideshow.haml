@@ -33,18 +33,17 @@
   = link_to 'Next', '#', id: 'next', style: 'display: none'
 #preload{style: 'display: none'}
 
-= render partial: 'slideshow/bottom_banner'
+#bottom-part
+  = render partial: 'slideshow/bottom_banner'
 
-#bottomLeft.bottom
-  .fleft
-    = render partial: 'slideshow/mode_switch'
-  .fleft
-    = render partial: 'slideshow/full_screen_button'
-  .fleft
-    = render partial: 'slideshow/auto_play'
-  .fleft
-    = render partial: 'slideshow/fave_panel'
+  #bottomLeft.bottom
+    .fleft.fullscreen-hidden
+      = render partial: 'slideshow/mode_switch'
+    .fleft
+      = render partial: 'slideshow/full_screen_button'
+    .fleft
+      = render partial: 'slideshow/auto_play'
+    .fleft
+      = render partial: 'slideshow/fave_panel'
 
-#bottomRight
-
-= render partial: 'slideshow/picture_label'
+  = render partial: 'slideshow/picture_label'

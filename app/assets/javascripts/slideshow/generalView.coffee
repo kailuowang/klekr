@@ -5,7 +5,6 @@ class window.GeneralView extends ViewBase
     @_indicator = $('#indicator')
     @_indicatorPanel = $('#mode-indicator')
     @bottomLeft = $('#bottomLeft')
-    @bottomRight = $('#bottomRight')
     @socialSharing = new klekr.SocialSharing exhibit_slideshow_path()
 
     this._initFullScreenButton()
@@ -17,6 +16,7 @@ class window.GeneralView extends ViewBase
       this._adjustArrowsPosition()
       this._adjustFrames()
       this._updateFullScreenButton()
+      this._updateFullScreenLayout()
       this.trigger('layout-changed' )
 
   updateNavigation: (forwardable, backwardable) =>
@@ -63,9 +63,11 @@ class window.GeneralView extends ViewBase
 
   _updateDimensions: ->
     [newWidth, newHeight] = this.windowDimension()
+    heightReserve = if @_isFullScreenMobile() then 0 else 93
+
     if([@windowWidth, @windowHeight] isnt [newWidth, newHeight])
       [@windowWidth, @windowHeight] = [newWidth, newHeight]
-      [@displayWidth, @displayHeight] = [@windowWidth - 80, @windowHeight - 93]
+      [@displayWidth, @displayHeight] = [@windowWidth - 80, @windowHeight - heightReserve]
       true
     else
       false
@@ -91,3 +93,15 @@ class window.GeneralView extends ViewBase
   _updateFullScreenButton: =>
     newTitle = if fullScreenApi.isFullScreen() then 'Exit full screen' else 'Full screen (recommended)'
     @_fullScreenButton.attr('title', newTitle)
+
+  _updateFullScreenLayout: =>
+    isFullScreenMobile = @_isFullScreenMobile()
+    pictureAreaTop = if isFullScreenMobile then "0px" else "60px"
+    bottomLeftBottom = if isFullScreenMobile then "5px" else "10px"
+    $("#slide #pictureArea").css("top", pictureAreaTop)
+    $(".fullscreen-hidden").toggleClass("fullscreen",  isFullScreenMobile)
+    $("#bottomLeft").css("bottom", bottomLeftBottom)
+
+
+  _isFullScreenMobile: =>
+    fullScreenApi.isFullScreen()# and @isMobile()

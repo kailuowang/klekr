@@ -2,6 +2,7 @@ class window.PictureLabel extends ViewBase
   constructor: ->
     @panel = $('#picture-label')
     @expandLink =  @panel.find('#expand-link')
+    @expandLink.click @_toggleSecondRow
     new CollapsiblePanel(@panel.find('#collapsible'), @expandLink, ['[+]', '[-]'])
 
   show: (picture)=>
@@ -38,6 +39,9 @@ class window.PictureLabel extends ViewBase
     this.setVisible(@relatedPanel, !picture.noLongerValid)
     this.setVisible(@interestingess, !picture.noLongerValid)
 
+
+  _toggleSecondRow: =>
+    $("#second-row").toggleClass("override-hidden")
 
   expand: =>
     @expandLink.trigger('click')
