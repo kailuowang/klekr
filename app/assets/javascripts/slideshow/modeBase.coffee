@@ -1,9 +1,6 @@
 class window.ModeBase extends Events
   constructor: (@name)->
     keyShortcuts.addShortcuts(this.shortcuts())
-    $.event.special.swipe.verticalDistanceThreshold = 200
-    $(window).on("swipeleft", => @navigateToNext())
-    $(window).on("swiperight", => @navigateToPrevious())
 
   active: =>
     gallery.currentMode is this and !gallery.isEmpty()

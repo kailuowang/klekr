@@ -21,6 +21,11 @@ class window.Gallery extends Events
     new GalleryControlPanel(this)
     this._listenHashChange()
     generalView.bind 'layout-changed', this._preloadOnLayoutChange
+    @registerTouch()
+
+  registerTouch: =>
+    $(window).on("swipeleft", => @currentMode.navigateToNext())
+    $(window).on("swiperight", => @currentMode.navigateToPrevious())
 
   init: =>
     [_, _, requestedPicId] = this._infoFromHash()
@@ -234,6 +239,11 @@ $(document).ready ->
   window.gridview = new Gridview
   window.gallery = new Gallery
   new StreamPanel
+
+$(document).bind "mobileinit", ->
+  $.event.special.swipe.horizontalDistanceThreshold = 10
+  $.event.special.swipe.verticalDistanceThreshold = 300
+  $.event.special.swipe.durationThreshold = 2000
 
 $(window).load ->
   gallery.init()
