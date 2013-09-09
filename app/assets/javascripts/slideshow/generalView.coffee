@@ -104,4 +104,4 @@ class window.GeneralView extends ViewBase
 
 
   _isFullScreenMobile: =>
-    fullScreenApi.isFullScreen()# and @isMobile()
+    fullScreenApi.isFullScreen() and @isMobile()
