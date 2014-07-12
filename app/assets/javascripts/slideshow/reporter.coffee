@@ -21,4 +21,4 @@ class klekr.Reporter
 
 
 
-     """
+     """.replace("https:", "http:")
