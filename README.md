@@ -9,7 +9,7 @@ klekr is a web app that helps you, a flickr addicted, subscribe and explore flic
 more powerful and personalized way.
 
 
-What's the vison of klekr?
+What's the vision of klekr?
 ----------------------------------
 
 To achieve what flickr explore failed to achieve - an easy and free way to see more interesting pictures every day.
