@@ -1,6 +1,7 @@
 class window.Gallery extends Events
   constructor: ->
-    @cacheSize = klekr.Global.defaultGalleryCacheSize || 5
+    # Increase the default cache size to load many pages by default
+    @cacheSize = klekr.Global.defaultGalleryCacheSize || 20
     [@grid, @slide] = @modes = [new Grid, new Slide]
     for mode in @modes
       mode.bind('progressed', this._ensurePictureCache)
@@ -31,6 +32,10 @@ class window.Gallery extends Events
     [_, _, requestedPicId] = this._infoFromHash()
     this._reset(requestedPicId)
     @grid.init(this)
+    
+    # Start with a more reasonable initial load to avoid rate limiting
+    console.log("Gallery: Initializing with moderate cache size to enable navigation")
+    this.increaseCacheSize(2)  # Load just 2 pages worth of pictures initially
 
   size: => if @pictures? then @pictures.length else 0
 
@@ -63,7 +68,9 @@ class window.Gallery extends Events
 
   isLoading: => @retriever and @retriever.busy()
 
-  _retrieveMorePictures: (pages = 1)=> @retriever.retrieve(pages)
+  _retrieveMorePictures: (pages = 1)=>
+    console.log("Gallery: Retrieving #{pages} more pages of pictures")
+    @retriever.retrieve(pages)
 
   _reset: (requestedPicId)=>
     @currentMode = @slide if requestedPicId?
@@ -141,22 +148,56 @@ class window.Gallery extends Events
 
 
   _createPictureRetriever: =>
+    console.log("Creating picture retriever with filter options:", this._filterOpts())
+    
+    # Add cache busting parameter to avoid browser caching API responses
+    opts = this._filterOpts()
+    opts._cacheKey = (new Date()).getTime() 
+    
     if @advanceByProgress
       offsetFn = unless @filters.filterSettings().viewed
         this.advanceOffset
-      new PictureRetrieverByOffset( this._filterOpts, this.pageSize(), __morePicturesPath__, offsetFn)
+      new PictureRetrieverByOffset(opts, this.pageSize(), __morePicturesPath__, offsetFn)
     else
-      new PictureRetrieverByPage( this._filterOpts, this.pageSize(), __morePicturesPath__)
+      # Initialize with a larger page size to reduce API calls
+      new PictureRetrieverByPage(opts, this.pageSize(), __morePicturesPath__)
 
   _updateModeIndicatorInView: =>
     generalView.updateModeIndicator(this.inGrid())
 
   _ensurePictureCache: =>
     unless this.isLoading()
-      needMoreForCache = @pictures.length - this._currentProgress() < (@cacheSize * this.pageSize())
+      # Calculate how many pictures we have ahead of current position
+      picturesAhead = @pictures.length - this._currentProgress()
+      
+      # Calculate ideal cache size based on grid size
+      gridSize = gridview.size
+      
+      # Use a cache size that's approximately 3 grids worth
+      maxCacheSize = gridSize * 3
+      
+      # Only fetch more if we have fewer than the max cache size
+      needMoreForCache = picturesAhead < maxCacheSize
+      
+      # Log cache info for debugging
+      console.log("Picture cache status: ahead=#{picturesAhead}, gridSize=#{gridSize}, maxCache=#{maxCacheSize}, needMore=#{needMoreForCache}, allRetrieved=#{@allPicturesRetrieved}")
+      
       if needMoreForCache and !@allPicturesRetrieved
-        this._retrieveMorePictures()
+        console.log("Retrieving more pictures...")
+        
+        # Calculate the number of pages to load based on how many pictures we need
+        # and how many pictures per page we're requesting
+        picsNeeded = maxCacheSize - picturesAhead
+        picsPerPage = this.pageSize()
+        numPagesToLoad = Math.ceil(picsNeeded / picsPerPage)
+        
+        # Limit to loading at most 2 pages at once
+        numPagesToLoad = Math.min(numPagesToLoad, 2)
+        
+        console.log("Need #{picsNeeded} more pictures, loading #{numPagesToLoad} pages")
+        this._retrieveMorePictures(numPagesToLoad)
       else
+        console.log("Cache is sufficiently full, no need to load more pictures")
         this.trigger('idle')
 
   _onRetrieverFinished: (numOfRetrieved)=>
@@ -187,6 +228,8 @@ class window.Gallery extends Events
       opts.faved_date_after = filterSettings.faveDateAfter if filterSettings.faveDateAfter
       opts.type = filterSettings.type if filterSettings.type
       opts.viewed = filterSettings.viewed
+      # Always request real-time mode to get fresh pictures from Flickr API
+      opts.real_time = true
 
 
   _addPictures: (newPictures) =>

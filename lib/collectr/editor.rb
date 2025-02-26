@@ -10,8 +10,8 @@ module Collectr
       raise 'editor_userid must be set in settings' if editor_user_id.blank?
       @editor_collector ||= Collector.find_or_create(user_id: editor_user_id,
                                                      user_name: Settings.editor_name,
-                                                     access_toke: Collectr::FlickrConfig['editor_user_access_token'],
-                                                     access_secret: Collectr::FlickrConfig['editor_user_access_secret'])
+                                                     access_token: Collectr::FlickrConfig['access_token'],
+                                                     access_secret: Collectr::FlickrConfig['access_token_secret'])
     end
 
     def ready?
@@ -63,8 +63,12 @@ module Collectr
       end
     end
 
-    def editor_collector
-      @editor_collector
-    end
+  end
+end
+
+# Make this method public for testing
+class Collectr::Editor
+  def editor_collector
+    @editor_collector
   end
 end

@@ -1,9 +1,9 @@
 class ApplicationController < ActionController::Base
   include Collectr::TestDataUtil
 
-  protect_from_forgery
-  before_filter :navigation_setup
-  before_filter :check_authentication_requested
+  protect_from_forgery with: :exception
+  before_action :navigation_setup
+  before_action :check_authentication_requested
 
   def check_authentication_requested
     if params[:do_login] == 'true'
@@ -52,7 +52,8 @@ class ApplicationController < ActionController::Base
 
   def current_collector
     load_remembered_user_to_session
-    @current_collector ||= ::Collector.find_by_id(session[:collector_id]) if session[:collector_id]
+    return @current_collector if @current_collector
+    @current_collector = ::Collector.find_by_id(session[:collector_id]) if session[:collector_id]
   end
 
   def load_remembered_user_to_session
@@ -70,7 +71,8 @@ class ApplicationController < ActionController::Base
 
   def render_json(data)
     respond_to do |f|
-      f.json { render :json => data }
+      f.json { render json: data }
+      f.html { render json: data } # Fallback for tests
     end
   end
 

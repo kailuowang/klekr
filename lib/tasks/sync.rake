@@ -6,7 +6,10 @@ namespace :sync do
     with_error_report do
       results = FlickrStream.sync_all(verbose: true, synced_before: 20.hours.ago)
       output("All stream synced #{Time.now.to_s(:short)}")
-      AdminMailer.regular_report("klekr streams were successfully synced", "#{results[:total_pictures_synced]} pictures from #{results[:total_streams_synced]} were synced out of #{results[:total_streams_to_sync]} streams scheduled to sync" )
+      # Only send mail in production
+      if Rails.env.production?
+        AdminMailer.regular_report("klekr streams were successfully synced", "#{results[:total_pictures_synced]} pictures from #{results[:total_streams_synced]} were synced out of #{results[:total_streams_to_sync]} streams scheduled to sync" )
+      end
     end
   end
 
@@ -25,7 +28,10 @@ namespace :sync do
         print "."
       end.count
       puts "Finished syncing collection for all collectors @#{DateTime.now}"
-      AdminMailer.regular_report("Fave synced successfully", "#{count} collectors' fave were synced",  )
+      # Only send mail in production
+      if Rails.env.production?
+        AdminMailer.regular_report("Fave synced successfully", "#{count} collectors' fave were synced")
+      end
     end
   end
 end

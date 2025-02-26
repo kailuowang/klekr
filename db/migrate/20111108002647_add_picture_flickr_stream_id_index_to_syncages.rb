@@ -1,6 +1,6 @@
-class AddPictureFlickrStreamIdIndexToSyncages < ActiveRecord::Migration
+class AddPictureFlickrStreamIdIndexToSyncages < ActiveRecord::Migration[7.1]
   def change
-    add_index :syncages, :picture_id
-    add_index :syncages, :flickr_stream_id
+    # Index for picture_id already exists from AddSyncages migration
+    add_index :syncages, :flickr_stream_id unless index_exists?(:syncages, :flickr_stream_id)
   end
 end

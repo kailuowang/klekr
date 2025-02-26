@@ -26,7 +26,11 @@ class window.ModeBase extends Events
       this.forwardable()
 
   forwardable: =>
-    (!this.atTheLast() or gallery.isLoading()) and !gallery.isEmpty()
+    # Always show forward buttons unless we know for sure we have all pictures and at the last one
+    # This ensures navigation buttons show up even when we only have one page loaded
+    forward = (!this.atTheLast() or gallery.isLoading() or !gallery.allPicturesRetrieved) and !gallery.isEmpty()
+    console.log("ModeBase: forwardable check: #{forward} - atTheLast: #{this.atTheLast()}, isLoading: #{gallery.isLoading()}, allPicturesRetrieved: #{gallery.allPicturesRetrieved}")
+    forward
 
   backwardable: => !this.atTheBegining()
 

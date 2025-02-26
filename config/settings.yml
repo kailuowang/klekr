@@ -1,8 +1,10 @@
 authentication: false
 editor_userid: 45425373@N00
 editor_name: Editor
-gallery_cache_size: 5
+gallery_cache_size: 20
 fave_on_flickr: false
 add_this_button: true
 enable_analytics: true
-default_flickr_photo_retrieve_size: 40
+default_flickr_photo_retrieve_size: 50
+max_pages_per_request: 10
+max_items_per_page: 100

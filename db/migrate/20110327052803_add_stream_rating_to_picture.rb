@@ -1,9 +1,9 @@
-class AddStreamRatingToPicture < ActiveRecord::Migration
-  def self.up
+class AddStreamRatingToPicture < ActiveRecord::Migration[7.1]
+  def up
     add_column :pictures, :stream_rating, :float
   end
 
-  def self.down
+  def down
     remove_column :pictures, :stream_rating
   end
 end

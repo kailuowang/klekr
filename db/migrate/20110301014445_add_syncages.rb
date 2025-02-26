@@ -1,5 +1,5 @@
-class AddSyncages < ActiveRecord::Migration
-  def self.up
+class AddSyncages < ActiveRecord::Migration[7.1]
+  def up
     create_table :syncages do |t|
       t.references :picture
       t.references :flickr_stream, :polymorphic => true
@@ -8,7 +8,7 @@ class AddSyncages < ActiveRecord::Migration
     end
   end
 
-  def self.down
+  def down
     drop_table :syncages
   end
 

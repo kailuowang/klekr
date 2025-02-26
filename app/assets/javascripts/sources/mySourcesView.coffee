@@ -28,6 +28,7 @@ class window.MySourcesView extends ViewBase
     @indicator.hide()
     unless empty
       this._registerCellEvents()
+      this._setupInfiniteScroll()
 
   showContacts: =>
     contacts-list
@@ -77,5 +78,66 @@ class window.MySourcesView extends ViewBase
   _setExpandLinkText: (expanded) =>
     text = if expanded then "It's easy! 5 ways of adding sources:" else 'I want more sources!'
     @expandLink.text(text)
+    
+  _setupInfiniteScroll: =>
+    console.log("Setting up infinite scroll")
+    @currentPage = 1
+    @isLoading = false
+    @hasMoreSources = true
+    
+    # Remove any existing scroll handlers to prevent duplicates
+    $(window).off('scroll.mySources')
+    
+    # Add new scroll handler with namespace
+    $(window).on 'scroll.mySources', =>
+      this._checkIfMoreContentNeeded()
+      
+    # Check immediately after setup in case the initial content doesn't fill the page
+    setTimeout =>
+      this._checkIfMoreContentNeeded()
+    , 500  # Short delay to ensure the DOM is fully rendered
+    
+  _checkIfMoreContentNeeded: =>
+    scrollPosition = $(window).scrollTop() + $(window).height()
+    documentHeight = $(document).height()
+    
+    # Check if we need to load more content
+    if scrollPosition >= documentHeight - 200
+      console.log("Near bottom, loading more if possible")
+      this._loadMoreSources() unless @isLoading or !@hasMoreSources
+      
+    # If there's no scrollbar yet, check if we need to load more
+    if documentHeight <= $(window).height() and @hasMoreSources and !@isLoading
+      console.log("No scrollbar yet, loading more content")
+      this._loadMoreSources()
+  
+  _loadMoreSources: =>
+    @isLoading = true
+    @currentPage += 1
+    @indicator.show()
+    
+    console.log("Loading page", @currentPage)
+    klekr.Global.server.get my_sources_flickr_streams_path(), {page: @currentPage, per_page: 50}, (data) =>
+      console.log("Page", @currentPage, "loaded with", data.length, "items")
+      sources = (new Source(d) for d in data)
+      if sources.length > 0
+        this._display(sources)
+        this._registerCellEvents()
+        
+        # After displaying new content, check if we need more (for cases with tall browser windows)
+        setTimeout =>
+          this._checkIfMoreContentNeeded()
+        , 100
+      else
+        @hasMoreSources = false
+        console.log("No more sources to load")
+      
+      @isLoading = false
+      @indicator.hide()
+  
+  _display: (sources) =>
+    console.log("Displaying", sources.length, "sources")
+    for source in sources
+      this.addSource(source)
 
 

@@ -22,7 +22,15 @@ class window.Grid extends ModeBase
 
   atTheLast: =>
     [pageStart, pageEnd] = this._currentPageRange()
-    pageEnd is gallery.size() - 1
+    result = pageEnd is gallery.size() - 1
+    console.log("Grid: atTheLast check - pageEnd: #{pageEnd}, gallery.size: #{gallery.size()}, result: #{result}")
+    # Always pretend we're not at the last page when gallery is empty or has only one page
+    # This ensures navigation buttons appear even when we only have one page loaded so far
+    if gallery.size() <= gridview.size
+      console.log("Grid: Only one page or less loaded, pretending we're not at the last page")
+      false
+    else 
+      result
 
   atTheBegining: =>
     [pageStart, pageEnd] = this._currentPageRange()
@@ -43,17 +51,28 @@ class window.Grid extends ModeBase
       this._loadGridview()
     else
       this._updateHighlight()
+    
+    # After updating progress, always trigger progress-changed to update navigation
+    this.trigger('progress-changed')
 
   navigateToNext: =>
+    console.log("Grid: navigateToNext called")
     this._markCurrentPageAsViewed()
     unless this._pageIncomplete()
       [pageStart, pageEnd] = this._currentPageRange()
+      console.log("Grid: current page range is #{pageStart} to #{pageEnd}")
       newIndex = pageEnd + 1
-      if picturesReady = newIndex < gallery.size()
+      console.log("Grid: trying to navigate to index #{newIndex}, gallery size: #{gallery.size()}")
+      
+      if newIndex < gallery.size()
+        console.log("Grid: navigating to new page starting at index #{newIndex}")
         this._changePage(newIndex)
         this.trigger('progressed')
-      else if gallery.isLoading()
+      else
+        console.log("Grid: reached end of available pictures, requesting more")
         gridview.showLoading()
+        # Always try to load more pictures when reaching the end
+        gallery.increaseCacheSize(1)
         gallery.bind 'gallery-pictures-changed', this._navigateToNextPageWhenPicturesReady
 
   navigateToPrevious: =>
@@ -89,11 +108,21 @@ class window.Grid extends ModeBase
     this.trigger('progress-changed')
 
   _navigateToNextPageWhenPicturesReady: =>
+      console.log("Grid: pictures are ready, checking if we can navigate to next page")
       gallery.unbind 'gallery-pictures-changed', this._navigateToNextPageWhenPicturesReady
-      unless this.atTheLast()
-        this.navigateToNext()
-      else
+      
+      # Check if we're still at the last page after pictures were loaded
+      if this.atTheLast()
+        console.log("Grid: Still at the last page, gallery size: #{gallery.size()}")
         this._loadGridview()
+        
+        # If we still don't have enough pictures, try loading more
+        if gallery.pictures.length <= gridview.size
+          console.log("Grid: Not enough pictures loaded yet, requesting more")
+          gallery.increaseCacheSize(1)
+      else
+        console.log("Grid: More pictures available, navigating to next page")
+        this.navigateToNext()
 
   _tryCompleteCurrentPage: =>
     if this._pageIncomplete()

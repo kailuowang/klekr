@@ -1,7 +1,13 @@
+public/assets
 Gemfile.lock
 chromedriver.log
 .bundle
 db/*.sqlite3
+db/*.sqlite3-*
+db/*.sqlite3-journal
+db/*.sqlite3-shm
+db/*.sqlite3-wal
+db/bkp
 log/*
 tmp/**/*
 tmp/*.jpg
@@ -9,8 +15,6 @@ tmp/*.jpg
 config/flickr.yml
 config/smtp.yml
 .DS_Store
-db/development.sqlite3-journal
-db/bkp
 .sass-cache
 compiled
 .rspec

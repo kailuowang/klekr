@@ -22,7 +22,7 @@ module Collectr
           ofCurrentCollector: picture.collector == current_collector,
           inKlekr:          !picture.new_record?,
           dateUpload:       picture.date_upload,
-          ownerPath:        user_path(picture.owner_id),
+          ownerPath:        picture.owner_id ? user_path(id: picture.owner_id) : nil,
           fromStreams:      picture.flickr_streams.map do |stream|
                               data_for_stream_info(stream)
                             end
@@ -41,6 +41,8 @@ module Collectr
     end
 
     def data_list_for(pictures)
+      # Reverting to the original implementation to fix issues
+      # We'll add back optimizations incrementally after debugging
       pictures.map do |picture|
         data_for(picture)
       end.compact

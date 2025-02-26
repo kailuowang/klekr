@@ -15,7 +15,7 @@ class window.PictureRetriever extends Events
 
   busy: => !@_worker.idle()
 
-  retrieve: (numOfPages = 3) =>
+  retrieve: (numOfPages = 1) =>
     for work in this._createWorks(numOfPages)
       @_q.enQ(work)
 
@@ -26,9 +26,12 @@ class window.PictureRetriever extends Events
         callback()
 
   _createWorks: (numOfPages) =>
-    for i in [0...numOfPages]
+    console.log("Creating retrieval work for #{numOfPages} pages, current page: #{@_currentPage}")
+    works = for i in [0...numOfPages]
       this._proceed()
       this._createWork()
+    console.log("Created #{works.length} work items for pages #{@_currentPage-numOfPages+1} to #{@_currentPage}")
+    works
 
   _createWork: =>
     pageOpts = this._pageOpts()
@@ -39,7 +42,9 @@ class window.PictureRetriever extends Events
     @_retrievedCount = 0
 
   _retrieveOpts: (pageOpts) =>
-    $.extend(pageOpts, @_filterOptsFn())
+    # Handle either a function or direct object for filter options
+    filterOpts = if typeof @_filterOptsFn is 'function' then @_filterOptsFn() else @_filterOptsFn
+    $.extend(pageOpts, filterOpts)
 
   _proceed: =>
     @_currentPage++
@@ -48,11 +53,16 @@ class window.PictureRetriever extends Events
     @_worker.retry() if klekr.Global.server.onLine()
 
   _retrievePage: (pageOpts, callback) =>
-    klekr.Global.server.get @_retrievePath, this._retrieveOpts(pageOpts), (data) =>
+    retrieveOpts = this._retrieveOpts(pageOpts)
+    console.log("Retrieving page #{pageOpts.page} with options:", retrieveOpts)
+    
+    klekr.Global.server.get @_retrievePath, retrieveOpts, (data) =>
       pictures = ( new Picture(picData) for picData in data ) if data?
       if pictures? and pictures.length > 0
+        console.log("Retrieved #{pictures.length} pictures from page #{pageOpts.page}")
         this._onPicturesRetrieved(pictures)
       else
+        console.log("No pictures found on page #{pageOpts.page}, stopping retrieval")
         @_q.clear()
         this._onWorkerDone()
       callback()

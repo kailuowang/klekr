@@ -46,3 +46,23 @@ Unlike many of the third party flickr websites, when the klekr slide show displa
 
 You can share/backup your collections by exporting them into a backup file so that later
 you or other klekr users can import it.
+
+## Development
+
+### Ruby version
+This application requires Ruby 3.0.0 or later and Rails 7.1.0.
+
+### Flickr API Setup
+To run the application locally, you'll need to set up Flickr API authentication:
+
+1. Register for a Flickr API key at https://www.flickr.com/services/apps/create/
+   - Choose "Apply for a non-commercial key"
+   - Request "write" permissions
+2. Run `bin/flickr_oauth` and follow the OAuth 1.0a authentication flow
+3. The script will guide you through:
+   - Entering your API credentials
+   - Getting authorization from Flickr
+   - Obtaining OAuth tokens
+   - Saving tokens to `config/flickr.yml`
+
+See the [SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md) for detailed steps and [MIGRATION_PLAN.md](MIGRATION_PLAN.md) for information about the migration from FlickRaw to flickr-objects.

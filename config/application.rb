@@ -1,22 +1,11 @@
-require File.expand_path('../boot', __FILE__)
-require 'rails/all'
+require_relative "boot"
+require "rails/all"
 
-#todo remove this when pic_info is no longer serialized into db
-unless File.exists?(File.expand_path('../no_syck', __FILE__))
-  require 'yaml'
-  YAML::ENGINE.yamler = 'syck'
-  puts "WARNING: using syck because psych seg faults - KAI"
-end
+# Require the gems listed in Gemfile, including any gems
+# you've limited to :test, :development, or :production.
+Bundler.require(*Rails.groups)
 
-
-require 'flickraw'
-
-if defined?(Bundler)
-  # If you precompile assets before deploying to production, use this line
-  #Bundler.require(*Rails.groups(:assets => %w(development test)))
-  # If you want your assets lazily compiled in production, use this line
-  Bundler.require(:default, :assets, Rails.env)
-end
+require 'flickr-objects'
 
 module Collectr
   class Application < Rails::Application
@@ -45,13 +34,22 @@ module Collectr
     # JavaScript files you want as :defaults (application.js is always included).
     # config.action_view.javascript_expansions[:defaults] = %w(jquery rails)
 
-    # Configure the default encoding used in templates for Ruby 1.9.
+    # Configure the default encoding used in templates
     config.encoding = "utf-8"
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
-
+    
+    # Initialize configuration defaults for Rails 7.1
+    config.load_defaults 7.1
+    
+    # Propshaft asset pipeline
     config.assets.enabled = true
-    config.assets.version = '1.0'
+    config.assets.version = '2.0'
+    
+    # Please, add to the `ignore` list any other `lib` subdirectories that do
+    # not contain `.rb` files, or that should not be reloaded or eager loaded.
+    # Common ones are `templates`, `generators`, or `middleware`, for example.
+    config.autoload_lib(ignore: %w(assets tasks))
   end
 end

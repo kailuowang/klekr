@@ -1,5 +1,5 @@
-class CreateFaveStreams < ActiveRecord::Migration
-  def self.up
+class CreateFaveStreams < ActiveRecord::Migration[7.1]
+  def up
     create_table :fave_streams do |t|
       t.string :user_id
       t.datetime :last_sync
@@ -8,7 +8,7 @@ class CreateFaveStreams < ActiveRecord::Migration
     end
   end
 
-  def self.down
+  def down
     drop_table :fave_streams
   end
 end
