@@ -5,7 +5,8 @@
   :javascript
     __morePicturesPath__ = '#{@more_pictures_path}';
     __advance_by_progress__ = '#{@advance_by_progress}';
-    klekr.Global.defaultGalleryCacheSize = #{Settings.gallery_cache_size}
+    klekr.Global.defaultGalleryCacheSize = #{Settings.gallery_cache_size || 10};
+    console.log("Initializing slideshow with cache size:", klekr.Global.defaultGalleryCacheSize);
 
 = render partial: 'slideshow/gridview'
 

@@ -1,3 +1,4 @@
 class window.PictureRetrieverByPage extends PictureRetriever
   _pageOpts: =>
-    { num: @pageSize , page: @_currentPage }
+    # Add real_time: true to force retrieving from Flickr API rather than database
+    { num: @pageSize, page: @_currentPage, real_time: true }

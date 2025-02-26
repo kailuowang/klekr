@@ -87,7 +87,10 @@
     };
 
     ModeBase.prototype.forwardable = function() {
-      return (!this.atTheLast() || gallery.isLoading()) && !gallery.isEmpty();
+      var forward;
+      forward = (!this.atTheLast() || gallery.isLoading() || !gallery.allPicturesRetrieved) && !gallery.isEmpty();
+      console.log("ModeBase: forwardable check: " + forward + " - atTheLast: " + (this.atTheLast()) + ", isLoading: " + (gallery.isLoading()) + ", allPicturesRetrieved: " + gallery.allPicturesRetrieved);
+      return forward;
     };
 
     ModeBase.prototype.backwardable = function() {
@@ -175,7 +178,7 @@
     PictureRetriever.prototype.retrieve = function(numOfPages) {
       var j, len, ref, results, work;
       if (numOfPages == null) {
-        numOfPages = 3;
+        numOfPages = 1;
       }
       ref = this._createWorks(numOfPages);
       results = [];
@@ -200,13 +203,19 @@
     };
 
     PictureRetriever.prototype._createWorks = function(numOfPages) {
-      var i, j, ref, results;
-      results = [];
-      for (i = j = 0, ref = numOfPages; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
-        this._proceed();
-        results.push(this._createWork());
-      }
-      return results;
+      var i, works;
+      console.log("Creating retrieval work for " + numOfPages + " pages, current page: " + this._currentPage);
+      works = (function() {
+        var j, ref, results;
+        results = [];
+        for (i = j = 0, ref = numOfPages; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+          this._proceed();
+          results.push(this._createWork());
+        }
+        return results;
+      }).call(this);
+      console.log("Created " + works.length + " work items for pages " + (this._currentPage - numOfPages + 1) + " to " + this._currentPage);
+      return works;
     };
 
     PictureRetriever.prototype._createWork = function() {
@@ -239,7 +248,10 @@
     };
 
     PictureRetriever.prototype._retrievePage = function(pageOpts, callback) {
-      return klekr.Global.server.get(this._retrievePath, this._retrieveOpts(pageOpts), (function(_this) {
+      var retrieveOpts;
+      retrieveOpts = this._retrieveOpts(pageOpts);
+      console.log("Retrieving page " + pageOpts.page + " with options:", retrieveOpts);
+      return klekr.Global.server.get(this._retrievePath, retrieveOpts, (function(_this) {
         return function(data) {
           var picData, pictures;
           if (data != null) {
@@ -254,8 +266,10 @@
             })();
           }
           if ((pictures != null) && pictures.length > 0) {
+            console.log("Retrieved " + pictures.length + " pictures from page " + pageOpts.page);
             _this._onPicturesRetrieved(pictures);
           } else {
+            console.log("No pictures found on page " + pageOpts.page + ", stopping retrieval");
             _this._q.clear();
             _this._onWorkerDone();
           }
@@ -633,12 +647,13 @@
     };
 
     PicturePreloader.prototype.preload = function(pictures) {
-      var jobs, pic, ref;
+      var jobs, limited_pictures, pic, ref;
+      limited_pictures = pictures.length > 50 ? pictures.slice(0, 50) : pictures;
       jobs = _((function() {
         var j, len, results;
         results = [];
-        for (j = 0, len = pictures.length; j < len; j++) {
-          pic = pictures[j];
+        for (j = 0, len = limited_pictures.length; j < len; j++) {
+          pic = limited_pictures[j];
           if (!pic.noLongerValid) {
             results.push(this._createJobs(pic));
           }
@@ -1159,9 +1174,16 @@
     };
 
     Grid.prototype.atTheLast = function() {
-      var pageEnd, pageStart, ref;
+      var pageEnd, pageStart, ref, result;
       ref = this._currentPageRange(), pageStart = ref[0], pageEnd = ref[1];
-      return pageEnd === gallery.size() - 1;
+      result = pageEnd === gallery.size() - 1;
+      console.log("Grid: atTheLast check - pageEnd: " + pageEnd + ", gallery.size: " + (gallery.size()) + ", result: " + result);
+      if (gallery.size() <= gridview.size) {
+        console.log("Grid: Only one page or less loaded, pretending we're not at the last page");
+        return false;
+      } else {
+        return result;
+      }
     };
 
     Grid.prototype.atTheBegining = function() {
@@ -1187,23 +1209,30 @@
       reloadRequired = !this.picturesLoaded || this._isDifferentPage(progress);
       this.selectedIndex = progress;
       if (reloadRequired) {
-        return this._loadGridview();
+        this._loadGridview();
       } else {
-        return this._updateHighlight();
+        this._updateHighlight();
       }
+      return this.trigger('progress-changed');
     };
 
     Grid.prototype.navigateToNext = function() {
-      var newIndex, pageEnd, pageStart, picturesReady, ref;
+      var newIndex, pageEnd, pageStart, ref;
+      console.log("Grid: navigateToNext called");
       this._markCurrentPageAsViewed();
       if (!this._pageIncomplete()) {
         ref = this._currentPageRange(), pageStart = ref[0], pageEnd = ref[1];
+        console.log("Grid: current page range is " + pageStart + " to " + pageEnd);
         newIndex = pageEnd + 1;
-        if (picturesReady = newIndex < gallery.size()) {
+        console.log("Grid: trying to navigate to index " + newIndex + ", gallery size: " + (gallery.size()));
+        if (newIndex < gallery.size()) {
+          console.log("Grid: navigating to new page starting at index " + newIndex);
           this._changePage(newIndex);
           return this.trigger('progressed');
-        } else if (gallery.isLoading()) {
+        } else {
+          console.log("Grid: reached end of available pictures, requesting more");
           gridview.showLoading();
+          gallery.increaseCacheSize(1);
           return gallery.bind('gallery-pictures-changed', this._navigateToNextPageWhenPicturesReady);
         }
       }
@@ -1252,11 +1281,18 @@
     };
 
     Grid.prototype._navigateToNextPageWhenPicturesReady = function() {
+      console.log("Grid: pictures are ready, checking if we can navigate to next page");
       gallery.unbind('gallery-pictures-changed', this._navigateToNextPageWhenPicturesReady);
-      if (!this.atTheLast()) {
-        return this.navigateToNext();
+      if (this.atTheLast()) {
+        console.log("Grid: Still at the last page, gallery size: " + (gallery.size()));
+        this._loadGridview();
+        if (gallery.pictures.length <= gridview.size) {
+          console.log("Grid: Not enough pictures loaded yet, requesting more");
+          return gallery.increaseCacheSize(1);
+        }
       } else {
-        return this._loadGridview();
+        console.log("Grid: More pictures available, navigating to next page");
+        return this.navigateToNext();
       }
     };
 
@@ -1413,6 +1449,8 @@
     Gridview.prototype._calculateSize = function() {
       this.columns = Math.floor(generalView.displayWidth / 260);
       this.rows = Math.floor(generalView.displayHeight / 270);
+      this.rows += 1;
+      console.log("Gridview: calculated grid size as " + this.columns + " columns × " + this.rows + " rows");
       return this.size = this.columns * this.rows;
     };
 
@@ -1509,7 +1547,7 @@
       this.init = bind(this.init, this);
       this.registerTouch = bind(this.registerTouch, this);
       var i, len, mode, ref, ref1;
-      this.cacheSize = klekr.Global.defaultGalleryCacheSize || 5;
+      this.cacheSize = klekr.Global.defaultGalleryCacheSize || 20;
       ref = this.modes = [new Grid, new Slide], this.grid = ref[0], this.slide = ref[1];
       ref1 = this.modes;
       for (i = 0, len = ref1.length; i < len; i++) {
@@ -1563,7 +1601,9 @@
       var _, ref, requestedPicId;
       ref = this._infoFromHash(), _ = ref[0], _ = ref[1], requestedPicId = ref[2];
       this._reset(requestedPicId);
-      return this.grid.init(this);
+      this.grid.init(this);
+      console.log("Gallery: Initializing with increased cache size to enable navigation and fill the grid");
+      return this.increaseCacheSize(5);
     };
 
     Gallery.prototype.size = function() {
@@ -1625,6 +1665,7 @@
       if (pages == null) {
         pages = 1;
       }
+      console.log("Gallery: Retrieving " + pages + " more pages of pictures");
       return this.retriever.retrieve(pages);
     };
 
@@ -1752,11 +1793,18 @@
     };
 
     Gallery.prototype._ensurePictureCache = function() {
-      var needMoreForCache;
+      var maxCacheSize, needMoreForCache, numPagesToLoad, picturesAhead;
       if (!this.isLoading()) {
-        needMoreForCache = this.pictures.length - this._currentProgress() < (this.cacheSize * this.pageSize());
+        picturesAhead = this.pictures.length - this._currentProgress();
+        maxCacheSize = Math.min(this.cacheSize * this.pageSize(), 500);
+        needMoreForCache = picturesAhead < maxCacheSize;
+        console.log("Picture cache status: ahead=" + picturesAhead + ", maxCache=" + maxCacheSize + ", needMore=" + needMoreForCache + ", allRetrieved=" + this.allPicturesRetrieved);
         if (needMoreForCache && !this.allPicturesRetrieved) {
-          return this._retrieveMorePictures();
+          console.log("Retrieving more pictures...");
+          numPagesToLoad = Math.ceil((maxCacheSize - picturesAhead) / this.pageSize());
+          numPagesToLoad = Math.min(numPagesToLoad, 5);
+          console.log("Loading " + numPagesToLoad + " pages at once");
+          return this._retrieveMorePictures(numPagesToLoad);
         } else {
           return this.trigger('idle');
         }
@@ -1808,7 +1856,8 @@
           if (filterSettings.type) {
             opts.type = filterSettings.type;
           }
-          return opts.viewed = filterSettings.viewed;
+          opts.viewed = filterSettings.viewed;
+          return opts.real_time = true;
         };
       })(this));
     };
@@ -2778,7 +2827,8 @@
     PictureRetrieverByPage.prototype._pageOpts = function() {
       return {
         num: this.pageSize,
-        page: this._currentPage
+        page: this._currentPage,
+        real_time: true
       };
     };
 

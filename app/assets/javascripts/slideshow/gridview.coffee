@@ -42,8 +42,26 @@ class window.Gridview extends ViewBase
     item.cellDiv.show()
 
   _calculateSize: ->
-    @columns = Math.floor( generalView.displayWidth / 260 )
-    @rows = Math.floor( generalView.displayHeight /  270 )
+    # Calculate grid dimensions based on available space
+    # Each cell is 260px wide and 270px tall
+    cellWidth = 260
+    cellHeight = 270
+    
+    @columns = Math.floor(generalView.displayWidth / cellWidth)
+    @rows = Math.floor(generalView.displayHeight / cellHeight)
+    
+    # Ensure we have at least one row and column
+    @columns = Math.max(@columns, 1)
+    @rows = Math.max(@rows, 1)
+    
+    # Calculate the visible height without scrolling
+    visibleHeight = $(window).height() - $('.side-nav').offset().top
+    visibleRows = Math.floor(visibleHeight / cellHeight)
+    
+    console.log("Gridview: window dimensions - width: #{generalView.displayWidth}, height: #{generalView.displayHeight}")
+    console.log("Gridview: calculated grid size as #{@columns} columns × #{@rows} rows")
+    console.log("Gridview: visible height: #{visibleHeight}px, visible rows: #{visibleRows}")
+    
     @size = @columns * @rows
 
   _createPictureItem: (picture, index)=>
@@ -61,8 +79,19 @@ class window.Gridview extends ViewBase
 
 
   _adjustFrame: =>
-    @grid.css('width', (@columns * 260 + 2) + 'px')
-    @grid.css('height',(@rows * 270 + 2) + 'px')
+    cellWidth = 260
+    cellHeight = 270
+    
+    # Calculate the exact width and height needed for the grid
+    gridWidth = @columns * cellWidth + 2
+    gridHeight = @rows * cellHeight + 2
+    
+    console.log("Gridview: adjusting frame to width: #{gridWidth}px, height: #{gridHeight}px")
+    
+    @grid.css('width', gridWidth + 'px')
+    @grid.css('height', gridHeight + 'px')
+    
+    # Set the gridInner height to match the window height
     $('#gridInner').css('height', generalView.displayHeight + 'px')
 
   switchVisible: (showing)=>

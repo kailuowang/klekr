@@ -1,6 +1,7 @@
 class window.Gallery extends Events
   constructor: ->
-    @cacheSize = klekr.Global.defaultGalleryCacheSize || 5
+    # Increase the default cache size to load many pages by default
+    @cacheSize = klekr.Global.defaultGalleryCacheSize || 20
     [@grid, @slide] = @modes = [new Grid, new Slide]
     for mode in @modes
       mode.bind('progressed', this._ensurePictureCache)
@@ -31,6 +32,10 @@ class window.Gallery extends Events
     [_, _, requestedPicId] = this._infoFromHash()
     this._reset(requestedPicId)
     @grid.init(this)
+    
+    # Force a large initial cache size increase to load many pictures immediately
+    console.log("Gallery: Initializing with increased cache size to enable navigation and fill the grid")
+    this.increaseCacheSize(5)  # Load 5 pages worth of pictures immediately
 
   size: => if @pictures? then @pictures.length else 0
 
@@ -63,7 +68,9 @@ class window.Gallery extends Events
 
   isLoading: => @retriever and @retriever.busy()
 
-  _retrieveMorePictures: (pages = 1)=> @retriever.retrieve(pages)
+  _retrieveMorePictures: (pages = 1)=>
+    console.log("Gallery: Retrieving #{pages} more pages of pictures")
+    @retriever.retrieve(pages)
 
   _reset: (requestedPicId)=>
     @currentMode = @slide if requestedPicId?
@@ -156,14 +163,22 @@ class window.Gallery extends Events
       # Calculate how many pictures we have ahead of current position
       picturesAhead = @pictures.length - this._currentProgress()
       
-      # Limit cache to max 50 pictures regardless of page size
-      maxCacheSize = Math.min(@cacheSize * this.pageSize(), 50)
+      # Allow a much larger cache size to ensure we load enough pictures
+      maxCacheSize = Math.min(@cacheSize * this.pageSize(), 500)
       
       # Only fetch more if we have fewer than the max cache size
       needMoreForCache = picturesAhead < maxCacheSize
       
+      # Log cache info for debugging
+      console.log("Picture cache status: ahead=#{picturesAhead}, maxCache=#{maxCacheSize}, needMore=#{needMoreForCache}, allRetrieved=#{@allPicturesRetrieved}")
+      
       if needMoreForCache and !@allPicturesRetrieved
-        this._retrieveMorePictures()
+        console.log("Retrieving more pictures...")
+        # Retrieve multiple pages at once to fill the screen faster
+        numPagesToLoad = Math.ceil((maxCacheSize - picturesAhead) / this.pageSize())
+        numPagesToLoad = Math.min(numPagesToLoad, 5)  # Limit to 5 pages at once to avoid overwhelming the API
+        console.log("Loading #{numPagesToLoad} pages at once")
+        this._retrieveMorePictures(numPagesToLoad)
       else
         this.trigger('idle')
 

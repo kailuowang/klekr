@@ -12,14 +12,14 @@ class SlideshowController < ApplicationController
 
   def flickr_stream_pictures
     page = params[:page] ? params[:page].to_i : 1
-    per_page = params[:num] ? params[:num].to_i : 10  # Default to 10 photos per request
+    per_page = params[:num] ? params[:num].to_i : 50  # Default to 50 photos per request
     @stream = FlickrStream.find(params[:id])
     
-    # Set a reasonable maximum for per_page to prevent too many photos
-    per_page = [per_page, 50].min
+    # Set a reasonable maximum for per_page based on settings
+    per_page = [per_page, Settings.max_items_per_page || 100].min
     
-    # Add a page limit to prevent too many pages being requested at once
-    max_page = 3
+    # Allow a higher page limit to ensure we can load enough photos
+    max_page = Settings.max_pages_per_request || 20
     if page > max_page
       Rails.logger.warn("Requested page #{page} exceeds maximum page limit of #{max_page}")
       page = max_page
@@ -27,7 +27,7 @@ class SlideshowController < ApplicationController
     
     Rails.logger.info("Retrieving page #{page} with #{per_page} photos for stream #{@stream.id}")
     
-    # Force real-time mode or check if real-time param is passed
+    # Force real-time mode if the parameter is passed
     real_time = params[:real_time] == 'true'
     
     if real_time
@@ -41,9 +41,9 @@ class SlideshowController < ApplicationController
                        .page(page)
                        .per_page(per_page)
       
-      # Fall back to the API if no pictures are found
-      if pictures.empty? && page <= 2  # Only try API for first two pages
-        Rails.logger.info("No pictures found in database for page #{page}, getting from Flickr API")
+      # Fall back to the API if no pictures are found or we specifically want more pages
+      if pictures.empty? || page > 1  # Always use API for pages beyond the first
+        Rails.logger.info("Getting pictures from Flickr API for page #{page}")
         pictures = @stream.get_pictures(per_page, page)
       end
     end
