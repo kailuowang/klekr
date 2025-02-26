@@ -148,12 +148,19 @@ class window.Gallery extends Events
 
 
   _createPictureRetriever: =>
+    console.log("Creating picture retriever with filter options:", this._filterOpts())
+    
+    # Add cache busting parameter to avoid browser caching API responses
+    opts = this._filterOpts()
+    opts._cacheKey = (new Date()).getTime() 
+    
     if @advanceByProgress
       offsetFn = unless @filters.filterSettings().viewed
         this.advanceOffset
-      new PictureRetrieverByOffset( this._filterOpts, this.pageSize(), __morePicturesPath__, offsetFn)
+      new PictureRetrieverByOffset(opts, this.pageSize(), __morePicturesPath__, offsetFn)
     else
-      new PictureRetrieverByPage( this._filterOpts, this.pageSize(), __morePicturesPath__)
+      # Initialize with a larger page size to reduce API calls
+      new PictureRetrieverByPage(opts, this.pageSize(), __morePicturesPath__)
 
   _updateModeIndicatorInView: =>
     generalView.updateModeIndicator(this.inGrid())
@@ -163,22 +170,34 @@ class window.Gallery extends Events
       # Calculate how many pictures we have ahead of current position
       picturesAhead = @pictures.length - this._currentProgress()
       
-      # Use a more modest cache size to prevent API rate limiting
-      maxCacheSize = Math.min(@cacheSize * this.pageSize(), 200)
+      # Calculate ideal cache size based on grid size
+      gridSize = gridview.size
+      
+      # Use a cache size that's approximately 3 grids worth
+      maxCacheSize = gridSize * 3
       
       # Only fetch more if we have fewer than the max cache size
       needMoreForCache = picturesAhead < maxCacheSize
       
       # Log cache info for debugging
-      console.log("Picture cache status: ahead=#{picturesAhead}, maxCache=#{maxCacheSize}, needMore=#{needMoreForCache}, allRetrieved=#{@allPicturesRetrieved}")
+      console.log("Picture cache status: ahead=#{picturesAhead}, gridSize=#{gridSize}, maxCache=#{maxCacheSize}, needMore=#{needMoreForCache}, allRetrieved=#{@allPicturesRetrieved}")
       
       if needMoreForCache and !@allPicturesRetrieved
         console.log("Retrieving more pictures...")
-        # Load 2 pages at a time to balance between performance and API load
-        numPagesToLoad = 2
-        console.log("Loading #{numPagesToLoad} pages at once")
+        
+        # Calculate the number of pages to load based on how many pictures we need
+        # and how many pictures per page we're requesting
+        picsNeeded = maxCacheSize - picturesAhead
+        picsPerPage = this.pageSize()
+        numPagesToLoad = Math.ceil(picsNeeded / picsPerPage)
+        
+        # Limit to loading at most 2 pages at once
+        numPagesToLoad = Math.min(numPagesToLoad, 2)
+        
+        console.log("Need #{picsNeeded} more pictures, loading #{numPagesToLoad} pages")
         this._retrieveMorePictures(numPagesToLoad)
       else
+        console.log("Cache is sufficiently full, no need to load more pictures")
         this.trigger('idle')
 
   _onRetrieverFinished: (numOfRetrieved)=>

@@ -55,9 +55,16 @@ Rails.application.configure do
   # Suppress logger output for asset requests.
   config.assets.quiet = true
   
-  # Allow precompiled assets in development 
-  config.assets.debug = false
+  # Prevent caching of assets in development
+  config.assets.debug = true
   config.assets.compile = true
+  
+  # Disable asset caching in browser
+  config.public_file_server.headers = {
+    'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+    'Pragma' => 'no-cache',
+    'Expires' => 'Mon, 01 Jan 1990 00:00:00 GMT'
+  }
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true

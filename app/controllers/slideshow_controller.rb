@@ -25,26 +25,43 @@ class SlideshowController < ApplicationController
       page = max_page
     end
     
-    Rails.logger.info("Retrieving page #{page} with #{per_page} photos for stream #{@stream.id}")
+    # Cache key based on parameters
+    cache_key = "stream_#{@stream.id}_page_#{page}_per_#{per_page}_#{params[:real_time]}_#{params[:_cacheKey]}"
     
-    # Force real-time mode if the parameter is passed
-    real_time = params[:real_time] == 'true'
-    
-    if real_time
-      # Always get fresh pictures from Flickr API in real-time
-      Rails.logger.info("Loading pictures in real-time from Flickr API for stream #{@stream.id}")
-      pictures = @stream.get_pictures(per_page, page)
-    else
-      # First try to get pictures from the database - with pagination
-      pictures = @stream.pictures.includes(:flickr_streams, :collector)
-                       .order(created_at: :desc)
-                       .page(page)
-                       .per_page(per_page)
+    # Try to use cached data first, with a 5-minute expiration
+    pictures = Rails.cache.fetch(cache_key, expires_in: 5.minutes) do
+      Rails.logger.info("Cache miss for #{cache_key} - retrieving fresh data")
       
-      # Fall back to the API if no pictures are found or we specifically want more pages
-      if pictures.empty? || page > 1  # Always use API for pages beyond the first
-        Rails.logger.info("Getting pictures from Flickr API for page #{page}")
-        pictures = @stream.get_pictures(per_page, page)
+      # Force real-time mode if the parameter is passed
+      real_time = params[:real_time] == 'true'
+      
+      # Check if the stream needs to be synced
+      needs_sync = @stream.last_sync.nil? || @stream.last_sync < 30.minutes.ago
+      
+      if real_time || needs_sync
+        # Get fresh pictures from Flickr API
+        Rails.logger.info("Loading pictures from Flickr API for stream #{@stream.id} (real-time=#{real_time}, needs_sync=#{needs_sync})")
+        pics = @stream.get_pictures(per_page, page)
+        
+        # Mark stream as synced if we fetch from API
+        @stream.update_attribute(:last_sync, Time.now) if pics.present?
+        
+        pics
+      else
+        # Try to get pictures from the database first with pagination
+        db_pics = @stream.pictures.includes(:flickr_streams, :collector)
+                         .order(created_at: :desc)
+                         .page(page)
+                         .per_page(per_page)
+        
+        # Only fall back to API if we don't have enough pictures
+        if db_pics.empty? || (db_pics.size < per_page && page == 1)
+          Rails.logger.info("Insufficient pictures in DB, getting from Flickr API")
+          @stream.get_pictures(per_page, page)
+        else
+          Rails.logger.info("Using #{db_pics.size} pictures from database")
+          db_pics
+        end
       end
     end
     

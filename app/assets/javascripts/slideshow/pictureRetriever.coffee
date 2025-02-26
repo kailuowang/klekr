@@ -42,7 +42,9 @@ class window.PictureRetriever extends Events
     @_retrievedCount = 0
 
   _retrieveOpts: (pageOpts) =>
-    $.extend(pageOpts, @_filterOptsFn())
+    # Handle either a function or direct object for filter options
+    filterOpts = if typeof @_filterOptsFn is 'function' then @_filterOptsFn() else @_filterOptsFn
+    $.extend(pageOpts, filterOpts)
 
   _proceed: =>
     @_currentPage++
