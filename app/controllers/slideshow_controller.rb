@@ -12,9 +12,44 @@ class SlideshowController < ApplicationController
 
   def flickr_stream_pictures
     page = params[:page] ? params[:page].to_i : 1
-    per_page = params[:num] ? params[:num].to_i : 1
+    per_page = params[:num] ? params[:num].to_i : 10  # Default to 10 photos per request
     @stream = FlickrStream.find(params[:id])
-    render_json_pictures @stream.get_pictures(per_page, page)
+    
+    # Set a reasonable maximum for per_page to prevent too many photos
+    per_page = [per_page, 50].min
+    
+    # Add a page limit to prevent too many pages being requested at once
+    max_page = 3
+    if page > max_page
+      Rails.logger.warn("Requested page #{page} exceeds maximum page limit of #{max_page}")
+      page = max_page
+    end
+    
+    Rails.logger.info("Retrieving page #{page} with #{per_page} photos for stream #{@stream.id}")
+    
+    # Force real-time mode or check if real-time param is passed
+    real_time = params[:real_time] == 'true'
+    
+    if real_time
+      # Always get fresh pictures from Flickr API in real-time
+      Rails.logger.info("Loading pictures in real-time from Flickr API for stream #{@stream.id}")
+      pictures = @stream.get_pictures(per_page, page)
+    else
+      # First try to get pictures from the database - with pagination
+      pictures = @stream.pictures.includes(:flickr_streams, :collector)
+                       .order(created_at: :desc)
+                       .page(page)
+                       .per_page(per_page)
+      
+      # Fall back to the API if no pictures are found
+      if pictures.empty? && page <= 2  # Only try API for first two pages
+        Rails.logger.info("No pictures found in database for page #{page}, getting from Flickr API")
+        pictures = @stream.get_pictures(per_page, page)
+      end
+    end
+    
+    Rails.logger.info("Returning #{pictures.size} pictures for stream #{@stream.id}")
+    render_json_pictures pictures
   end
 
   def show

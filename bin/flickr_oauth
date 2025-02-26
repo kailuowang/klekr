@@ -1,0 +1,190 @@
+#!/usr/bin/env ruby
+
+require 'oauth'
+require 'yaml'
+require 'json'
+
+puts "=== Flickr OAuth Authentication Script ==="
+puts
+
+# Load existing configuration
+config_file = File.join(File.dirname(__FILE__), '..', 'config', 'flickr.yml')
+config_exists = File.exist?(config_file)
+
+if config_exists
+  puts "Loading existing configuration from #{config_file}"
+  begin
+    config = YAML.safe_load(File.read(config_file), aliases: true)
+    api_key = config['development']['api_key'] 
+    shared_secret = config['development']['shared_secret']
+  rescue => e
+    puts "Error reading config file: #{e.message}"
+    api_key = nil
+    shared_secret = nil
+  end
+else
+  api_key = nil
+  shared_secret = nil
+end
+
+# Let user input or confirm API credentials
+puts "\nStep 1: Enter or confirm your Flickr API credentials"
+puts
+
+# API Key
+if api_key && !api_key.empty?
+  puts "Current API Key: #{api_key}"
+  print "Use this key? (y/n): "
+  input = gets
+  use_existing = input && input.chomp.downcase == 'y'
+  api_key = nil unless use_existing
+end
+
+if !api_key || api_key.empty?
+  print "Enter your Flickr API Key: "
+  input = gets
+  api_key = input ? input.chomp : ''
+end
+
+# Shared Secret  
+if shared_secret && !shared_secret.empty?
+  puts "Current Shared Secret: #{shared_secret}"
+  print "Use this secret? (y/n): "
+  input = gets
+  use_existing = input && input.chomp.downcase == 'y'
+  shared_secret = nil unless use_existing
+end
+
+if !shared_secret || shared_secret.empty?
+  print "Enter your Flickr Shared Secret: "
+  input = gets
+  shared_secret = input ? input.chomp : ''
+end
+
+puts 
+puts "Step 2: Obtaining OAuth Tokens"
+puts
+
+# OAuth implementation
+begin
+  # Create OAuth consumer for Flickr
+  consumer = OAuth::Consumer.new(
+    api_key,
+    shared_secret,
+    {
+      site: "https://www.flickr.com",
+      request_token_path: "/services/oauth/request_token",
+      authorize_path: "/services/oauth/authorize",
+      access_token_path: "/services/oauth/access_token",
+      http_method: :get
+    }
+  )
+
+  # Step 1: Get request token
+  puts "Requesting a token from Flickr..."
+  begin
+    request_token = consumer.get_request_token(oauth_callback: "oob")
+    
+    # Step 2: Get user authorization
+    authorize_url = request_token.authorize_url(perms: "write")
+    
+    puts "Please open the following URL in your browser to authorize access:"
+    puts authorize_url
+    puts
+    puts "After authorizing, you will be given a verification code."
+    print "Enter that verification code here: "
+  rescue OAuth::Unauthorized => e
+    puts "\nERROR: Unable to get a request token from Flickr."
+    puts "This usually means your API key or secret is incorrect or inactive."
+    puts "Please verify your credentials at https://www.flickr.com/services/apps/by/me"
+    puts "Error details: #{e.message}"
+    exit 1
+  rescue => e
+    puts "\nERROR: An unexpected error occurred: #{e.message}"
+    puts "Please try again with new API credentials."
+    exit 1
+  end
+  
+  input = gets
+  verifier = input ? input.chomp : ''
+  
+  # Step 3: Exchange the request token for an access token
+  puts "\nExchanging the request token for an access token..."
+  begin
+    access_token = request_token.get_access_token(oauth_verifier: verifier)
+  rescue OAuth::Unauthorized => e
+    puts "\nERROR: Flickr rejected the verification code."
+    puts "Make sure you entered the correct verification code from Flickr."
+    puts "Error details: #{e.message}"
+    exit 1
+  rescue => e
+    puts "\nERROR: An unexpected error occurred during token exchange: #{e.message}"
+    exit 1
+  end
+  
+  puts
+  puts "Success! Authentication completed."
+  puts "Access Token: #{access_token.token}"
+  puts "Access Token Secret: #{access_token.secret}"
+  
+  # Format for YAML file
+  yaml_content = <<~YAML
+defaults: &defaults
+  api_key: #{api_key}
+  shared_secret: #{shared_secret}
+  access_token: #{access_token.token}
+  access_token_secret: #{access_token.secret}
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults
+YAML
+  
+  print "\nUpdate config/flickr.yml with these values? (y/n): "
+  input = gets
+  if input && input.chomp.downcase == 'y'
+    File.write(config_file, yaml_content)
+    puts "Configuration updated in #{config_file}"
+  else
+    puts
+    puts "Please manually update your config file with the following:"
+    puts
+    puts yaml_content
+  end
+  
+  # Test the credentials
+  puts
+  puts "Testing the credentials to verify they work..."
+  
+  begin
+    # Test API call using the new access token
+    response = access_token.get('/services/rest?method=flickr.test.login&format=json&nojsoncallback=1')
+    
+    if response.code == "200"
+      user_info = JSON.parse(response.body) rescue nil
+      if user_info && user_info['stat'] == 'ok' && user_info['user']
+        puts "Authentication successful! Your tokens are working correctly."
+        puts "You are logged in as: #{user_info['user']['username']['_content']}"
+        puts "You can now run your application with these credentials."
+      else
+        puts "Warning: Received a 200 response, but the content was unexpected:"
+        puts response.body
+      end
+    else
+      puts "Warning: There may be an issue with your credentials. Response code: #{response.code}"
+      puts "Response: #{response.body}"
+    end
+  rescue => e
+    puts "Error testing credentials: #{e.message}"
+    puts "This doesn't necessarily mean your tokens won't work. Try running the application."
+  end
+
+rescue => e
+  puts "Error during authentication: #{e.message}"
+  puts e.backtrace.join("\n")
+end

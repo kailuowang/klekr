@@ -16,7 +16,9 @@ class window.PicturePreloader
   rePrioritize: => @q.reorder()
 
   preload: (pictures) =>
-    jobs = _(this._createJobs(pic) for pic in pictures when !pic.noLongerValid).flatten()
+    # Limit to at most 50 pictures to preload at once
+    limited_pictures = if pictures.length > 50 then pictures.slice(0, 50) else pictures
+    jobs = _(this._createJobs(pic) for pic in limited_pictures when !pic.noLongerValid).flatten()
     @q.enqueue(jobs...)
 
   _createWorkers: =>

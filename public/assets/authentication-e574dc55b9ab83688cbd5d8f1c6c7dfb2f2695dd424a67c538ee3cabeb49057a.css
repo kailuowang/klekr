@@ -1,0 +1,545 @@
+/*
+
+
+*/
+/*
+Animate.css - http://daneden.me/animate
+LICENSED UNDER THE  MIT LICENSE (MIT)
+
+Copyright (c) 2011 Dan Eden
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+.animated {
+	-webkit-animation: 1s ease;
+	-moz-animation: 1s ease;
+	-ms-animation: 1s ease;
+	-o-animation: 1s ease;
+	animation: 1s ease;
+}
+
+.animated.hinge {
+	-webkit-animation: 2s ease;
+	-moz-animation: 2s ease;
+	-ms-animation: 2s ease;
+	-o-animation: 2s ease;
+	animation: 2s ease;
+}
+
+/* originally authored by Nick Pettit - https://github.com/nickpettit/glide */
+
+
+@-webkit-keyframes fadeInRight {
+	0% {
+		opacity: 0;
+		padding-left: 20px;
+	}
+	
+	100% {
+		opacity: 1;
+		padding-left: 0px;
+
+	}
+}
+
+@-moz-keyframes fadeInRight {
+	0% {
+		opacity: 0;
+		padding-left: 20px;
+	}
+	
+	100% {
+		opacity: 1;
+		padding-left: 0px;
+	}
+}
+
+@-ms-keyframes fadeInRight {
+	0% {
+		opacity: 0;
+		padding-left: 20px;
+	}
+	
+	100% {
+		opacity: 1;
+		padding-left: 0px;
+	}
+}
+
+@-o-keyframes fadeInRight {
+	0% {
+		opacity: 0;
+		padding-left: 20px;
+	}
+	
+	100% {
+		opacity: 1;
+		padding-left: 0px;
+	}
+}
+
+@keyframes fadeInRight {
+	0% {
+		opacity: 0;
+		padding-left: 20px;
+	}
+	
+	100% {
+		opacity: 1;
+		padding-left: 0px;
+	}
+}
+
+.fadeInRight {
+	-webkit-animation-name: fadeInRight;
+	-moz-animation-name: fadeInRight;
+	-ms-animation-name: fadeInRight;
+	-o-animation-name: fadeInRight;
+	animation-name: fadeInRight;
+}
+/* line 4, app/assets/stylesheets/login/faq.sass */
+#faq #other-links {
+  text-shadow: 0 1px 0 #000;
+  margin-top: 30px;
+  margin-left: 20px;
+  text-align: left;
+  font-family: helvetica;
+  text-transform: uppercase;
+}
+
+/* line 11, app/assets/stylesheets/login/faq.sass */
+#faq #other-links a {
+  color: #707070;
+  text-shadow: 0;
+  font-size: 18px;
+}
+
+/* line 15, app/assets/stylesheets/login/faq.sass */
+#faq #other-links a:hover {
+  color: #505050;
+}
+
+/* line 18, app/assets/stylesheets/login/faq.sass */
+#faq #left-column {
+  float: left;
+  width: 40%;
+  height: 630px;
+  text-align: right;
+}
+
+/* line 23, app/assets/stylesheets/login/faq.sass */
+#faq #left-column .title {
+  text-shadow: 0 1px 0 #222;
+  margin-left: 20px;
+  color: #393939;
+  font-size: 10em;
+}
+
+/* line 28, app/assets/stylesheets/login/faq.sass */
+#faq #left-column .title p {
+  line-height: 100%;
+  margin-bottom: 40px;
+}
+
+/* line 31, app/assets/stylesheets/login/faq.sass */
+#faq #left-column .title p:first-letter {
+  color: #606060;
+  font-size: 1.2em;
+}
+
+/* line 35, app/assets/stylesheets/login/faq.sass */
+#faq #right-column {
+  margin-top: 6px;
+  float: right;
+  width: 55%;
+  padding: 20px;
+  font-family: Georgia;
+  font-weight: normal;
+  line-height: 150%;
+  text-shadow: none;
+  color: #909090;
+  font-size: 1.2em;
+}
+
+/* line 46, app/assets/stylesheets/login/faq.sass */
+#faq #right-column .hasTwipsy {
+  color: #B5987F;
+}
+
+/* line 48, app/assets/stylesheets/login/faq.sass */
+#faq #right-column .item {
+  margin-bottom: 25px;
+}
+
+/* line 50, app/assets/stylesheets/login/faq.sass */
+#faq #right-column .item .question {
+  margin-bottom: 5px;
+  color: #BBB;
+  font-size: 1.3em;
+}
+
+/* line 54, app/assets/stylesheets/login/faq.sass */
+#faq #right-column .item .answer {
+  line-height: 180%;
+}
+
+/* line 57, app/assets/stylesheets/login/faq.sass */
+#faq #right-column #other-links {
+  text-align: right;
+  margin-left: 5px;
+  margin-bottom: -5px;
+}
+/* line 2, app/assets/stylesheets/login/login.sass */
+.login .site-name {
+  color: #AAAAAA;
+  text-transform: lowercase;
+  font-weight: bold;
+}
+
+/* line 7, app/assets/stylesheets/login/login.sass */
+.login .page-name {
+  font-style: italic;
+}
+
+/* line 9, app/assets/stylesheets/login/login.sass */
+.login #top-banner {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+/* line 12, app/assets/stylesheets/login/login.sass */
+.login #top-banner .site-title {
+  margin-bottom: 5px;
+  display: inline;
+  color: #808080;
+}
+
+/* line 16, app/assets/stylesheets/login/login.sass */
+.login #top-banner .site-title .site-name {
+  color: #808080;
+}
+
+/* line 18, app/assets/stylesheets/login/login.sass */
+.login #top-banner .beta-tag {
+  text-tranform: uppercase;
+  font-size: 25px;
+}
+
+/* line 21, app/assets/stylesheets/login/login.sass */
+.login #top-banner .site-subtitle {
+  margin-top: -7px;
+  margin-left: 338px;
+  width: 400px;
+  cursor: help;
+}
+
+/* line 26, app/assets/stylesheets/login/login.sass */
+.login #top-banner .site-subtitle a {
+  font-style: italic;
+  color: #656565;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* line 32, app/assets/stylesheets/login/login.sass */
+.login #top-banner .site-subtitle a:hover {
+  color: #505050;
+}
+
+/* line 35, app/assets/stylesheets/login/login.sass */
+.login #top-banner #editor-choice-link {
+  margin-top: 23px;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: lighter;
+}
+
+/* line 40, app/assets/stylesheets/login/login.sass */
+.login #top-banner #editor-choice-link a {
+  color: #606060;
+  text-decoration: underline;
+}
+
+/* line 43, app/assets/stylesheets/login/login.sass */
+.login #top-banner #editor-choice-link a:hover {
+  color: #505050;
+  text-decoration: none;
+}
+
+/* line 46, app/assets/stylesheets/login/login.sass */
+.login #login-link {
+  font-size: 1.7em;
+}
+
+/* line 48, app/assets/stylesheets/login/login.sass */
+.login #not-sure-guide {
+  margin-left: 10px;
+  color: #666666;
+}
+
+/* line 49, app/assets/stylesheets/login/login.sass */
+.login #not-sure-guide .not-sure {
+  color: #808080;
+}
+
+/* line 54, app/assets/stylesheets/login/login.sass */
+.login #not-sure-guide a {
+  color: #805E4F;
+}
+
+/* line 58, app/assets/stylesheets/login/login.sass */
+.login #more-reasons {
+  background-color: #282828;
+  padding: 5px;
+}
+
+/* line 62, app/assets/stylesheets/login/login.sass */
+.login #get-started {
+  margin-top: 30px;
+}
+
+/* line 65, app/assets/stylesheets/login/login.sass */
+.login #why-login {
+  color: #808080;
+  font-weight: bold;
+  display: inline;
+}
+
+/* line 70, app/assets/stylesheets/login/login.sass */
+.login #remember-me-checkbox {
+  margin-bottom: 40px;
+  margin-top: 3px;
+  margin-left: 3px;
+}
+
+/* line 74, app/assets/stylesheets/login/login.sass */
+.login #remember-me-checkbox #remember-me {
+  opacity: 0.6;
+}
+
+/* line 77, app/assets/stylesheets/login/login.sass */
+.login #flickr-icon {
+  opacity: 0.6;
+}
+
+/* line 80, app/assets/stylesheets/login/login.sass */
+.login #welcome-message {
+  margin-bottom: 70px;
+  margin-top: 5px;
+}
+
+/* line 84, app/assets/stylesheets/login/login.sass */
+.login #welcome-message #want-more-link {
+  margin-top: 110px;
+  margin-bottom: 25px;
+  margin-right: 7px;
+  text-align: right;
+}
+
+/* line 89, app/assets/stylesheets/login/login.sass */
+.login #welcome-message #want-more-link .site-name {
+  font-size: 1.3em;
+}
+
+/* line 91, app/assets/stylesheets/login/login.sass */
+.login #welcome-message #want-more-link a {
+  color: gray;
+}
+
+/* line 93, app/assets/stylesheets/login/login.sass */
+.login #welcome-message #want-more-link a:hover {
+  color: #606060;
+}
+
+/* line 96, app/assets/stylesheets/login/login.sass */
+.login .flickr-login-notes {
+  font-size: 12px;
+  color: #444444;
+}
+
+/* line 99, app/assets/stylesheets/login/login.sass */
+.login .flickr-login-notes .site-name {
+  color: #606060;
+}
+
+/* line 102, app/assets/stylesheets/login/login.sass */
+.login .tweet {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  background-color: #534039;
+  padding: 10px;
+}
+
+/* line 111, app/assets/stylesheets/login/login.sass */
+.login .tweet .time {
+  font-size: 11px;
+  margin-left: 20px;
+}
+
+/* line 114, app/assets/stylesheets/login/login.sass */
+.login .tweet .time a {
+  color: #656565;
+  text-transform: uppercase;
+}
+
+/* line 117, app/assets/stylesheets/login/login.sass */
+.login .tweet a.more {
+  float: right;
+  margin-right: 10px;
+  text-shadow: 0 1px 0 black;
+}
+
+/* line 121, app/assets/stylesheets/login/login.sass */
+.login .tweet a.more:hover {
+  color: #593327;
+}
+/* line 3, app/assets/stylesheets/login/more_about.sass */
+#about #left-column {
+  float: left;
+  width: 40%;
+  height: 630px;
+  text-align: right;
+}
+
+/* line 8, app/assets/stylesheets/login/more_about.sass */
+#about #left-column .title {
+  color: #606060;
+  font-size: 8em;
+  margin-left: 20px;
+}
+
+/* line 12, app/assets/stylesheets/login/more_about.sass */
+#about #left-column #other-links {
+  text-shadow: 0 1px 0 #000;
+  margin-top: 30px;
+  margin-right: 8px;
+}
+
+/* line 16, app/assets/stylesheets/login/more_about.sass */
+#about #left-column #other-links a {
+  color: #707070;
+  text-shadow: 0;
+  font-size: 16px;
+  text-decoration: underline;
+}
+
+/* line 22, app/assets/stylesheets/login/more_about.sass */
+#about #left-column #other-links a:hover {
+  color: #505050;
+}
+
+/* line 27, app/assets/stylesheets/login/more_about.sass */
+#about #right-column {
+  margin-top: 6px;
+  float: right;
+  width: 55%;
+  padding: 20px;
+  font-family: Georgia;
+  font-weight: normal;
+  line-height: 150%;
+  text-shadow: none;
+  color: #909090;
+  font-size: 1.3em;
+}
+
+/* line 38, app/assets/stylesheets/login/more_about.sass */
+#about #right-column .hasTwipsy {
+  color: #B5987F;
+}
+
+/* line 40, app/assets/stylesheets/login/more_about.sass */
+#about #right-column .main-paragraph {
+  line-height: 150%;
+}
+
+/* line 44, app/assets/stylesheets/login/more_about.sass */
+#about #right-column .main-paragraph .site-name {
+  font-size: 2.5em;
+  margin-right: 3px;
+}
+
+/* line 47, app/assets/stylesheets/login/more_about.sass */
+#about #right-column .main-paragraph .taste {
+  text-decoration: underline;
+}
+
+/* line 50, app/assets/stylesheets/login/more_about.sass */
+#about #right-column .main-paragraph #mission {
+  font-style: italic;
+}
+
+/* line 53, app/assets/stylesheets/login/more_about.sass */
+#about #right-column .collection {
+  text-decoration: underline;
+}
+
+/* line 56, app/assets/stylesheets/login/more_about.sass */
+#about #right-column .google-reader {
+  font-style: italic;
+}
+
+/* line 59, app/assets/stylesheets/login/more_about.sass */
+#about #right-column .nav-div {
+  text-align: right;
+  margin-top: 20px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+/* line 65, app/assets/stylesheets/login/more_about.sass */
+#about #right-column .nav-div a {
+  margin-right: 5px;
+  color: #707070;
+  font-family: helvetica;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-shadow: 0 1px black;
+}
+
+/* line 72, app/assets/stylesheets/login/more_about.sass */
+#about #right-column .nav-div a:hover {
+  color: #505050;
+}
+
+/* line 74, app/assets/stylesheets/login/more_about.sass */
+#about #right-column #about-main {
+  padding-top: 10px;
+}
+
+/* line 76, app/assets/stylesheets/login/more_about.sass */
+#about #right-column #about-main p {
+  margin-bottom: 33px;
+}
+
+/* line 79, app/assets/stylesheets/login/more_about.sass */
+#about #right-column #more .features-title {
+  font-size: 1.5em;
+  font-color: #AAAAAA;
+  padding-top: 10px;
+  margin-bottom: 20px;
+}
+
+/* line 84, app/assets/stylesheets/login/more_about.sass */
+#about #right-column #more .features-title .site-name {
+  font-size: 1.7em;
+}
+
+/* line 86, app/assets/stylesheets/login/more_about.sass */
+#about #right-column #more ul {
+  -webkit-padding-start: 22px;
+}
+
+/* line 88, app/assets/stylesheets/login/more_about.sass */
+#about #right-column #more ul li {
+  margin-bottom: 15px;
+  line-height: 140%;
+}

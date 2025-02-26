@@ -1,0 +1,91 @@
+#!/usr/bin/env ruby
+require 'oauth'
+require 'yaml'
+require 'json'
+
+# Configuration
+config_file = File.join(File.dirname(__FILE__), '..', 'config', 'flickr.yml')
+flickr_config = YAML.safe_load(File.read(config_file), aliases: true)['development']
+
+API_KEY = flickr_config['api_key']
+SHARED_SECRET = flickr_config['shared_secret']
+
+REQUEST_TOKEN_URL = 'https://www.flickr.com/services/oauth/request_token'
+AUTHORIZE_URL = 'https://www.flickr.com/services/oauth/authorize'
+ACCESS_TOKEN_URL = 'https://www.flickr.com/services/oauth/access_token'
+
+puts "Using API Key: #{API_KEY}"
+puts "Using Shared Secret: #{SHARED_SECRET}"
+
+# Create OAuth consumer
+consumer = OAuth::Consumer.new(
+  API_KEY,
+  SHARED_SECRET,
+  site: 'https://www.flickr.com',
+  request_token_path: '/services/oauth/request_token',
+  access_token_path: '/services/oauth/access_token',
+  authorize_path: '/services/oauth/authorize'
+)
+
+begin
+  # Get request token
+  request_token = consumer.get_request_token(oauth_callback: 'oob')
+  
+  # Build the authorization URL
+  authorize_url = "#{AUTHORIZE_URL}?oauth_token=#{request_token.token}&perms=write"
+  
+  puts "\nOpen this URL in your browser to authorize the application:"
+  puts authorize_url
+  puts
+  puts "After authorization, you'll receive a verification code (oauth_verifier)."
+  puts "Enter it here:"
+  
+  verifier = gets.strip
+  
+  # Get access token
+  access_token = request_token.get_access_token(oauth_verifier: verifier)
+  
+  puts "\nAuthentication successful!"
+  puts "Access Token: #{access_token.token}"
+  puts "Access Token Secret: #{access_token.secret}"
+  
+  # Update the YAML content
+  config_content = File.read(config_file)
+  updated_content = config_content.gsub(
+    /access_token:.*$/,
+    "access_token: #{access_token.token}"
+  ).gsub(
+    /access_token_secret:.*$/,
+    "access_token_secret: #{access_token.secret}"
+  )
+  
+  # Option to automatically update the config file
+  puts "\nDo you want to automatically update your config/flickr.yml file? (y/n)"
+  answer = gets.strip.downcase
+  
+  if answer == 'y'
+    File.write(config_file, updated_content)
+    puts "Config file updated successfully!"
+  else
+    puts "\nPlease update your config/flickr.yml manually with these values:"
+    puts
+    puts "defaults: &defaults"
+    puts "  api_key: #{API_KEY}"
+    puts "  shared_secret: #{SHARED_SECRET}"
+    puts "  access_token: #{access_token.token}"
+    puts "  access_token_secret: #{access_token.secret}"
+    puts
+    puts "development:"
+    puts "  <<: *defaults"
+    puts
+    puts "test:"
+    puts "  <<: *defaults"
+    puts
+    puts "production:"
+    puts "  <<: *defaults"
+  end
+  
+rescue => e
+  puts "Authentication failed: #{e.message}"
+  puts e.backtrace
+end

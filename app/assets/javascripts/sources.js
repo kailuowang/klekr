@@ -1,3 +1,13 @@
+//= require ./global/init/namespace_init
 //= require ./sources/streamImporterBase
 //= require ./sources/flexibleStreamsImporterBase
-//= require_tree ./sources
+//= require ./sources/addByUserImporter
+//= require ./sources/contactsImporter
+//= require ./sources/editorStreamsImporter
+//= require ./sources/googleReaderImporter
+//= require ./sources/groupStreamsImporter
+//= require ./sources/mySources
+//= require ./sources/mySourcesView
+//= require ./sources/source
+//= require ./sources/sourceCell
+//= require ./sources/sourcesGridview

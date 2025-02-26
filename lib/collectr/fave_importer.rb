@@ -64,13 +64,18 @@ module Collectr
     def find_fave_info_by_page(pic, page = 1)
       faves =
         begin
-          flickr.photos.getFavorites(photo_id: pic.id, secret: pic.secret, per_page: 50, page: page)
-        rescue FlickRaw::FailedResponse => e;
-          Rails.logger.error(e.inspect)
+          # Try to use the flickr-objects API
+          ::Flickr.photos.get_favorites(pic.id, per_page: 50, page: page)
+        rescue => e
+          Rails.logger.error("Error getting photo favorites: #{e.message}")
           nil
         end
-      if faves && faves.person.size > 0
-        faves.person.find{ |p| p.nsid == @collector.user_id } || find_fave_info_by_page(pic, page + 1)
+      # Handle response from flickr-objects which returns a list
+      if faves && faves.respond_to?(:each)
+        faves.find{ |p| p.id == @collector.user_id } || find_fave_info_by_page(pic, page + 1)
+      # Handle nil or empty response
+      else
+        nil
       end
     end
 

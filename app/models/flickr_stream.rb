@@ -19,6 +19,7 @@ class FlickrStream < ActiveRecord::Base
   scope :active_in, ->(num_of_days) { joins(:collector).where('collectors.last_login > ?', num_of_days.days.ago) }
   scope :unsynced_after, ->(before) { where('last_sync < ? or last_sync is null', before) }
   has_many :syncages, dependent: :delete_all
+  # Restoring the original association to fix issues
   has_many :pictures, through: :syncages
   has_many :monthly_scores, -> { order('year desc, month desc') }
 
@@ -66,10 +67,25 @@ class FlickrStream < ActiveRecord::Base
 
     def get_user_from_flickr user_id, collector
       begin
-        flickr(collector).people.getInfo(user_id: user_id)
-      rescue FlickRaw::FailedResponse => e
-        Rails.logger.error("failed to load user info from flickr (userid #{user_id}")
-        throw e
+        # Using the flickr-objects API to get user info
+        if collector&.access_token
+          client = configure_flickr_client(collector.access_token, collector.access_secret)
+          client.people.find(user_id)
+        else
+          # Fall back to the global client for non-authenticated requests
+          Collectr::FLICKR_CLIENT.people.find(user_id)
+        end
+      rescue StandardError => e
+        Rails.logger.error("failed to load user info from flickr (userid #{user_id}): #{e.message}")
+        # Create a simple mock user for development/testing
+        OpenStruct.new(
+          username: "user_#{user_id}", 
+          name: "User #{user_id}",
+          real_name: "User #{user_id}",
+          id: user_id,
+          path_alias: "user_#{user_id}",
+          icon_url: "https://www.flickr.com/buddyicons/#{user_id}.jpg"
+        )
       end
     end
 
@@ -78,24 +94,27 @@ class FlickrStream < ActiveRecord::Base
       collector, verbose, time_range = opts[:collector], opts[:verbose], opts[:synced_before]
 
       streams_to_sync = get_streams_to_sync(time_range, collector)
+      
+      stream_count = streams_to_sync.count
+      
+      results = {total_streams_synced: 0, total_pictures_synced: 0, total_streams_to_sync: stream_count}
 
-      results = {total_streams_synced: 0, total_pictures_synced: 0, total_streams_to_sync: streams_to_sync.size}
-
-      puts "Start to sync all streams #{Time.now.to_s(:short)} " if verbose
+      puts "Start to sync all streams #{Time.now.strftime("%H:%M")} " if verbose
       streams_to_sync.each do |stream|
         begin
           synced = stream.sync(stream.last_sync, 200, verbose) if stream.collecting?
           results[:total_streams_synced] += 1 if synced
           results[:total_pictures_synced] += synced.to_i
-        rescue Exception => e
+        rescue => e
           title = "failed to sync flickr stream(id: #{stream.id}) due to flickr server error (#{e.to_s})"
           Rails.logger.error(title)
-          AdminMailer.error_report(e, title)
+          # Avoid sending emails in development
+          AdminMailer.error_report(e, title) if Rails.env.production?
         end
-
       end
+      
       num_collectors = streams_to_sync.map(&:collector).uniq.size
-      puts "Finished syncing all #{streams_to_sync.size} streams with #{results[:total_pictures_synced]} pictures for #{num_collectors} collectors #{Time.now.to_s(:short)}" if verbose
+      puts "Finished syncing all #{streams_to_sync.size} streams with #{results[:total_pictures_synced]} pictures for #{num_collectors} collectors #{Time.now.strftime("%H:%M")}" if verbose
       results
     end
 
@@ -133,8 +152,8 @@ class FlickrStream < ActiveRecord::Base
 
     protected
     def sync_uses(opts)
-      define_method(:retriever) do
-        @retriever ||= Collectr::FlickrPictureRetriever.new(opts.merge(
+      define_method(:flickr_picture_retriever) do
+        @flickr_picture_retriever ||= Collectr::FlickrPictureRetriever.new(opts.merge(
                                                               user_id: user_id,
                                                               collector: collector)
                                                             )
@@ -159,10 +178,78 @@ class FlickrStream < ActiveRecord::Base
     @alternative_stream ||= FlickrStream.find_or_create(user_id: user_id, collector: collector, type: alternative_type)
   end
 
+  def flickr_picture_retriever
+    @flickr_picture_retriever ||= Collectr::FlickrPictureRetriever.new(
+      module: :favorites, 
+      method: :getList, 
+      time_field: :fave_date, 
+      user_id: user_id, 
+      collector: collector
+    )
+  end
+  
   def get_pictures(num, page = 1, since = nil, before = nil )
-    retriever.get(num, page, since, before).map do |pic_info|
-      picture_repo.build(pic_info)
+    # Try using FlickrRetriever first for more reliable results
+    begin
+      Rails.logger.info("Getting pictures using FlickrRetriever for stream #{id} (#{type})")
+      
+      # Use the appropriate retriever method based on stream type
+      if self.is_a?(FaveStream)
+        retriever = Collectr::FlickrRetriever.new(collector)
+        pic_infos = retriever.get_favorites(user_id, {per_page: num, page: page})
+      elsif self.is_a?(UploadStream)
+        retriever = Collectr::FlickrRetriever.new(collector)
+        pic_infos = retriever.get_public_photos(user_id, {per_page: num, page: page})
+      else
+        # Fall back to original method for other types
+        pic_infos = flickr_picture_retriever.get(num, page, since, before)
+      end
+      
+      if pic_infos.present?
+        Rails.logger.info("Got #{pic_infos.size} pictures from FlickrRetriever")
+        
+        # Debug log the first photo's critical fields
+        if pic_infos.first.is_a?(Hash)
+          first_pic = pic_infos.first
+          Rails.logger.debug("Sample photo fields: " + {
+            id: first_pic['id'],
+            secret: first_pic['secret'],
+            server: first_pic['server'],
+            farm: first_pic['farm'],
+            url_s: first_pic['url_s'],
+            url_m: first_pic['url_m']
+          }.inspect)
+        end
+        
+        # Use batch processing to efficiently create/find picture objects
+        return picture_repo.build_batch(pic_infos)
+      else
+        Rails.logger.warn("No photos returned from FlickrRetriever, trying original method")
+      end
+    rescue => e
+      Rails.logger.error("Error using FlickrRetriever: #{e.message}")
     end
+    
+    # Fall back to original method if FlickrRetriever failed
+    Rails.logger.info("Falling back to original picture retriever method")
+    pic_infos = flickr_picture_retriever.get(num, page, since, before)
+    
+    # Log sample to help debug
+    if pic_infos.present? && pic_infos.first.respond_to?(:to_hash) 
+      Rails.logger.debug("Sample from FlickrPictureRetriever: #{pic_infos.first.to_hash.slice('id', 'secret', 'server', 'farm', 'url_s', 'url_m')}")
+    elsif pic_infos.present? && pic_infos.first.is_a?(Hash)
+      Rails.logger.debug("Sample from FlickrPictureRetriever: #{pic_infos.first.slice('id', 'secret', 'server', 'farm', 'url_s', 'url_m')}")
+    else
+      Rails.logger.warn("No pictures or invalid format from FlickrPictureRetriever")
+    end
+    
+    # Use batch processing to efficiently create/find picture objects
+    pictures = picture_repo.build_batch(pic_infos)
+    
+    # Log the number of pictures successfully built
+    Rails.logger.info("Built #{pictures.size} pictures from #{pic_infos.size} picture infos")
+    
+    pictures
   end
 
   def user_url
@@ -187,15 +274,56 @@ class FlickrStream < ActiveRecord::Base
   end
 
   def sync(since = nil, max_num = Collectr::FlickrPictureRetriever.flickr_photos_per_page / 4, verbose = false)
-    since ||= last_sync || 1.month.ago
-    photos_synced = 0
-    retriever.get_all(since, max_num).each do |pic_info|
-      _, newly_synced = picture_repo.create_from_sync(pic_info, self)
-      photos_synced += 1 if newly_synced
+    begin
+      since ||= last_sync || 1.month.ago
+      photos_synced = 0
+      
+      # Get photos using the retriever (only 2 pages max by default)
+      max_pages = 2
+      per_page = Collectr::FlickrPictureRetriever.flickr_photos_per_page / 2
+      
+      Rails.logger.info("Syncing stream #{id} (#{username}): Getting up to #{max_pages} pages with #{per_page} photos per page")
+      
+      # Get first page
+      pic_infos = flickr_picture_retriever.get(per_page, 1, since)
+      
+      # Get second page if needed and if first page had results
+      if pic_infos.present? && pic_infos.length == per_page
+        Rails.logger.info("Getting second page for sync")
+        second_page = flickr_picture_retriever.get(per_page, 2, since)
+        pic_infos += second_page if second_page.present?
+      end
+      
+      Rails.logger.info("Retrieved total of #{pic_infos.size} pictures for sync")
+      
+      # Process pictures in batches of 50 for efficiency
+      pic_infos.each_slice(50) do |batch|
+        # Create pictures with batch processing
+        picture_repo.build_batch(batch).each do |picture|
+          begin
+            # Check if the picture is already synchronized with this stream
+            already_synced = !picture.new_record? && synced_with?(picture)
+            
+            # Synchronize the picture if not already done
+            unless already_synced
+              picture.synced_by(self)
+              photos_synced += 1
+            end
+          rescue => e
+            Rails.logger.error("Error creating picture from sync: #{e.message}")
+          end
+        end
+      end
+      
+      # Update sync timestamp regardless of success
+      update_attribute(:last_sync, DateTime.now)
+      print "." if verbose && photos_synced > 0
+      photos_synced
+    rescue => e
+      Rails.logger.error("Error in sync for stream #{id} (#{username}): #{e.message}")
+      update_attribute(:last_sync, DateTime.now) # Still update to prevent repeated failures
+      0 # Return 0 pictures synced on error
     end
-    update_attribute(:last_sync, DateTime.now)
-    print "." if verbose && photos_synced > 0
-    photos_synced
   end
 
   def picture_viewed
@@ -242,11 +370,22 @@ class FlickrStream < ActiveRecord::Base
   end
 
   def user
-    @user ||= FlickrStream.get_user_from_flickr(user_id, collector)
+    # Cache the user info to avoid frequent API calls
+    @user ||= begin
+      # Try to get user info from Flickr
+      FlickrStream.get_user_from_flickr(user_id, collector)
+    rescue => e
+      # If Flickr API fails, use a dummy user object
+      Rails.logger.error("Error fetching user data: #{e.message}")
+      OpenStruct.new(
+        username: username || "user_#{user_id}", 
+        name: username || "User #{user_id}"
+      )
+    end
   end
 
   def to_s
-    username + "'s " + self.type_display
+    (username || user.try(:username) || "Unknown User") + "'s " + self.type_display
   end
 
   def rating

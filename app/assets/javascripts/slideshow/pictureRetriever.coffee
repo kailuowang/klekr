@@ -15,7 +15,7 @@ class window.PictureRetriever extends Events
 
   busy: => !@_worker.idle()
 
-  retrieve: (numOfPages = 3) =>
+  retrieve: (numOfPages = 1) =>
     for work in this._createWorks(numOfPages)
       @_q.enQ(work)
 

@@ -251,29 +251,29 @@ describe FlickrStream do
       allow(mock_module).to receive(:getInfo).and_return(mock_info)
     end
 
-    describe "#retriever" do
+    describe "#flickr_picture_retriever" do
       it "return the retriever of the same collector" do
         collector = create(:collector)
         @flickr_stream.collector = collector
-        expect(@flickr_stream.retriever.collector).to eq(collector)
+        expect(@flickr_stream.flickr_picture_retriever.collector).to eq(collector)
       end
     end
 
     describe "#sync" do
       before do
-        @module = stub_flickr(@flickr_stream.retriever, @flickr_module_name)
+        @module = stub_flickr(@flickr_stream.flickr_picture_retriever, @flickr_module_name)
         allow(@module).to receive(@flickr_method).and_return([])
       end
 
       it "should only sync photos faved upto the last sync time by default" do
         @flickr_stream.last_sync = DateTime.new(2010,1,2)
-        expect(@flickr_stream.retriever).to receive(:get_all).with(@flickr_stream.last_sync, anything).and_return([])
+        expect(@flickr_stream.flickr_picture_retriever).to receive(:get_all).with(@flickr_stream.last_sync, anything).and_return([])
         @flickr_stream.sync
       end
 
       it "should only sync photos faved upto the 1 month ago if it's the first time sync" do
         @flickr_stream.last_sync = nil
-        expect(@flickr_stream.retriever).to receive(:get_all) do |since, _|
+        expect(@flickr_stream.flickr_picture_retriever).to receive(:get_all) do |since, _|
           expect(since.to_date).to eq(1.month.ago.to_date)
           []
         end
@@ -325,8 +325,8 @@ describe FlickrStream do
 
     describe "#get_pictures" do
       before do
-        @retriever = double(get: 3.pics)
-        allow(Collectr::FlickrPictureRetriever).to receive(:new).and_return(@retriever)
+        @flickr_picture_retriever = double(get: 3.pics)
+        allow(Collectr::FlickrPictureRetriever).to receive(:new).and_return(@flickr_picture_retriever)
       end
 
       it "does not save pictures to db when not collecting" do
@@ -480,7 +480,7 @@ describe FlickrStream do
         stream1 = create(:fave_stream, collector: create(:collector))
         retriever1 = double("Retriever")
         allow(retriever1).to receive(:get_all).and_return([a_pic_info])
-        allow(stream1).to receive(:retriever).and_return(retriever1)
+        allow(stream1).to receive(:flickr_picture_retriever).and_return(retriever1)
         stream1.sync
         expect(Picture.count).to eq(1)
 
@@ -488,7 +488,7 @@ describe FlickrStream do
         stream2 = create(:fave_stream, collector: collector)
         retriever2 = double("Retriever")
         allow(retriever2).to receive(:get_all).and_return([a_pic_info])
-        allow(stream2).to receive(:retriever).and_return(retriever2)
+        allow(stream2).to receive(:flickr_picture_retriever).and_return(retriever2)
         stream2.sync
 
         expect(Picture.count).to eq(2)

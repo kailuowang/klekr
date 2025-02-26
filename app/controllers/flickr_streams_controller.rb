@@ -11,12 +11,35 @@ class FlickrStreamsController < ApplicationController
   def my_sources
     respond_to do |format|
       format.json do
-        streams = FlickrStream.collected_by(current_collector).includes(:monthly_scores)
-        streams = streams.paginate(params.slice(:page, :per_page)) if params[:page].present?
-        render json: data_for_streams(streams)
+        begin
+          streams = FlickrStream.collected_by(current_collector).includes(:monthly_scores)
+          if params[:page].present?
+            pagination_params = { 
+              page: params[:page].to_i, 
+              per_page: (params[:per_page] || 30).to_i 
+            }
+            streams = streams.paginate(pagination_params)
+          end
+          
+          # Handle case where no streams exist yet
+          if streams.empty?
+            render json: []
+          else
+            data = data_for_streams(streams)
+            render json: data
+          end
+        rescue => e
+          Rails.logger.error("Error in my_sources: #{e.message}\n#{e.backtrace.join("\n")}")
+          render json: { error: e.message }, status: 500
+        end
       end
       format.yaml do
-        render :text => FlickrStream.collected_by(current_collector).map(&:attributes).to_yaml, :content_type => 'text/yaml'
+        begin
+          render plain: FlickrStream.collected_by(current_collector).map(&:attributes).to_yaml, content_type: 'text/yaml'
+        rescue => e
+          Rails.logger.error("Error in my_sources yaml: #{e.message}")
+          render plain: { error: e.message }.to_yaml, status: 500, content_type: 'text/yaml'
+        end
       end
     end
   end

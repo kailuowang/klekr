@@ -153,7 +153,15 @@ class window.Gallery extends Events
 
   _ensurePictureCache: =>
     unless this.isLoading()
-      needMoreForCache = @pictures.length - this._currentProgress() < (@cacheSize * this.pageSize())
+      # Calculate how many pictures we have ahead of current position
+      picturesAhead = @pictures.length - this._currentProgress()
+      
+      # Limit cache to max 50 pictures regardless of page size
+      maxCacheSize = Math.min(@cacheSize * this.pageSize(), 50)
+      
+      # Only fetch more if we have fewer than the max cache size
+      needMoreForCache = picturesAhead < maxCacheSize
+      
       if needMoreForCache and !@allPicturesRetrieved
         this._retrieveMorePictures()
       else
@@ -187,6 +195,8 @@ class window.Gallery extends Events
       opts.faved_date_after = filterSettings.faveDateAfter if filterSettings.faveDateAfter
       opts.type = filterSettings.type if filterSettings.type
       opts.viewed = filterSettings.viewed
+      # Always request real-time mode to get fresh pictures from Flickr API
+      opts.real_time = true
 
 
   _addPictures: (newPictures) =>

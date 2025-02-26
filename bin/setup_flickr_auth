@@ -1,0 +1,61 @@
+#!/usr/bin/env ruby
+require 'yaml'
+require 'flickr-objects'
+
+# Load the Flickr API key and secret from config
+config_file = File.join(File.dirname(__FILE__), '..', 'config', 'flickr.yml')
+flickr_config = YAML.safe_load(File.read(config_file), aliases: true)['development']
+
+api_key = flickr_config['api_key']
+shared_secret = flickr_config['shared_secret']
+
+puts "Using API Key: #{api_key}"
+puts "Using Shared Secret: #{shared_secret}"
+
+# Configure Flickr
+Flickr.configure do |config|
+  config.api_key = api_key
+  config.shared_secret = shared_secret
+end
+
+# Get the request token URL
+begin
+  token = Flickr.get_request_token
+  auth_url = Flickr.get_authorize_url(token, perms: :write)
+
+  puts "\nOpen this URL in your browser to authorize the application:"
+  puts auth_url
+  puts
+  puts "After authorization, you'll receive a verification code (oauth_verifier)."
+  puts "Enter it here:"
+
+  verifier = gets.strip
+
+  # Exchange request token for access token
+  oauth_response = Flickr.get_access_token(token['oauth_token'], token['oauth_token_secret'], verifier)
+  
+  # Save the access token and secret
+  puts "\nAuthentication successful!"
+  puts "Access Token: #{oauth_response['oauth_token']}"
+  puts "Access Token Secret: #{oauth_response['oauth_token_secret']}"
+  puts
+  puts "Update your config/flickr.yml with these values:"
+  puts
+  puts "defaults: &defaults"
+  puts "  api_key: #{api_key}"
+  puts "  shared_secret: #{shared_secret}"
+  puts "  access_token: #{oauth_response['oauth_token']}"
+  puts "  access_token_secret: #{oauth_response['oauth_token_secret']}"
+  puts ""
+  puts "development:"
+  puts "  <<: *defaults"
+  puts ""
+  puts "test:"
+  puts "  <<: *defaults"
+  puts ""
+  puts "production:"
+  puts "  <<: *defaults"
+rescue => e
+  puts "Authentication failed: #{e.message}"
+  puts e.backtrace
+end

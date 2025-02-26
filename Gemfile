@@ -6,7 +6,9 @@ gem 'puma'
 
 # Standard Rails components
 gem 'haml'
-gem 'flickraw'
+# gem 'flickraw'
+gem 'flickr-objects', '~> 0.6.3'
+gem 'oauth'
 
 gem 'jquery-rails'
 gem 'capistrano'
@@ -21,9 +23,11 @@ gem 'sprockets-rails'
 gem 'importmap-rails'
 gem 'turbo-rails'
 gem 'stimulus-rails'
-gem 'jsbundling-rails'
-gem 'cssbundling-rails'
+# Temporarily commented out to avoid precompilation issues
+# gem 'jsbundling-rails'
+# gem 'cssbundling-rails'
 gem 'uglifier'
+gem 'sassc-rails'
 
 group :development, :test do
   gem 'sqlite3'

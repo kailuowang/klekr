@@ -1,0 +1,128 @@
+#!/usr/bin/env ruby
+
+require 'yaml'
+
+# Manual Flickr Authentication Setup
+puts "=== Manual Flickr Authentication Setup ==="
+puts
+
+# Load existing configuration if available
+config_file = File.join(File.dirname(__FILE__), '..', 'config', 'flickr.yml')
+config_exists = File.exist?(config_file)
+
+if config_exists
+  puts "Loading existing configuration from #{config_file}"
+  begin
+    config = YAML.safe_load(File.read(config_file), aliases: true)
+    api_key = config['development']['api_key'] 
+    shared_secret = config['development']['shared_secret']
+  rescue => e
+    puts "Error reading config file: #{e.message}"
+    api_key = nil
+    shared_secret = nil
+  end
+else
+  api_key = nil
+  shared_secret = nil
+end
+
+# Let user input or confirm API credentials
+puts
+puts "1. First, you need a Flickr API key and secret."
+puts "   If you don't have them, register at: https://www.flickr.com/services/apps/create/"
+puts
+
+# API Key
+if api_key && !api_key.empty?
+  puts "Current API Key: #{api_key}"
+  print "Use this key? (y/n): "
+  use_existing = gets.chomp.downcase == 'y'
+  api_key = nil unless use_existing
+end
+
+if !api_key || api_key.empty?
+  print "Enter your Flickr API Key: "
+  api_key = gets.chomp
+end
+
+# Shared Secret  
+if shared_secret && !shared_secret.empty?
+  puts "Current Shared Secret: #{shared_secret}"
+  print "Use this secret? (y/n): "
+  use_existing = gets.chomp.downcase == 'y'
+  shared_secret = nil unless use_existing
+end
+
+if !shared_secret || shared_secret.empty?
+  print "Enter your Flickr Shared Secret: "
+  shared_secret = gets.chomp
+end
+
+puts
+puts "2. Now you need to authorize the application with these credentials."
+puts "   Follow these manual steps:"
+puts
+puts "   a. Visit this URL in your browser:"
+puts "      https://www.flickr.com/services/oauth/authorize?oauth_consumer_key=#{api_key}&perms=write"
+puts
+puts "   b. Sign in to your Flickr account and authorize the application"
+puts "   c. After authorization, Flickr will provide you with:"
+puts "      - oauth_token"
+puts "      - oauth_token_secret"
+puts
+puts "   If you're not getting these directly, you may need to implement the full OAuth flow."
+puts "   See: https://www.flickr.com/services/api/auth.oauth.html"
+puts
+
+# Get the tokens
+print "Enter the OAuth Token: "
+oauth_token = gets.chomp
+
+print "Enter the OAuth Token Secret: "
+oauth_token_secret = gets.chomp
+
+# Create or update the config file
+config = {
+  'defaults' => {
+    'api_key' => api_key,
+    'shared_secret' => shared_secret,
+    'access_token' => oauth_token,
+    'access_token_secret' => oauth_token_secret
+  }
+}
+
+config['development'] = { '<<' => '*defaults' }
+config['test'] = { '<<' => '*defaults' }
+config['production'] = { '<<' => '*defaults' }
+
+# Format for YAML file
+yaml_content = <<~YAML
+defaults: &defaults
+  api_key: #{api_key}
+  shared_secret: #{shared_secret}
+  access_token: #{oauth_token}
+  access_token_secret: #{oauth_token_secret}
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults
+YAML
+
+print "Update config/flickr.yml with these values? (y/n): "
+if gets.chomp.downcase == 'y'
+  File.write(config_file, yaml_content)
+  puts "Configuration updated in #{config_file}"
+else
+  puts
+  puts "Please manually update your config file with the following:"
+  puts
+  puts yaml_content
+end
+
+puts
+puts "Authentication setup complete!"

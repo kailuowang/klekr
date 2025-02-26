@@ -13,9 +13,9 @@ describe Collectr::FaveImporter do
   end
 
   before do
-    @retriever = double(:retriever)
-    allow(@retriever).to receive(:get).and_return(2.times.map { create(:picture) })
-    allow(Collectr::FlickrPictureRetriever).to receive(:new).and_return(@retriever)
+    @flickr_picture_retriever = double(:retriever)
+    allow(@flickr_picture_retriever).to receive(:get).and_return(2.times.map { create(:picture) })
+    allow(Collectr::FlickrPictureRetriever).to receive(:new).and_return(@flickr_picture_retriever)
     @importer = Collectr::FaveImporter.new(create(:collector), 1.week.ago)
 
     @flickr = stub_flickr(@importer, :photos)
@@ -27,7 +27,7 @@ describe Collectr::FaveImporter do
     it "creates pictures in DB retrieved from flickr" do
       initial_count = Picture.count
       test_pics = 2.times.map { create(:picture) }
-      expect(@retriever).to receive(:get).and_return(test_pics)
+      expect(@flickr_picture_retriever).to receive(:get).and_return(test_pics)
       @importer.import(3)
       expect(Picture.count).to eq(initial_count + 2)
     end
@@ -38,19 +38,19 @@ describe Collectr::FaveImporter do
     end
 
     it "does not set stream to newly retrieved pictures " do
-      allow(@retriever).to receive(:get).and_return([create(:picture)])
+      allow(@flickr_picture_retriever).to receive(:get).and_return([create(:picture)])
       results = @importer.import(1)
       expect(results.first.flickr_streams).to be_blank
     end
 
     it "sets the newly retrieved pictures rating to 1" do
-      allow(@retriever).to receive(:get).and_return([create(:picture)])
+      allow(@flickr_picture_retriever).to receive(:get).and_return([create(:picture)])
       results = @importer.import(1)
       expect(results.first.rating).to eq(1)
     end
 
     it "retrieve pictures from flickr with faved_date earlier than the before date" do
-      expect(@retriever).to receive(:get).with(1, 1, nil, @importer.faved_before)
+      expect(@flickr_picture_retriever).to receive(:get).with(1, 1, nil, @importer.faved_before)
       @importer.import(1)
     end
 
@@ -63,7 +63,7 @@ describe Collectr::FaveImporter do
     context "faved_at" do
       it "use flickr to get the earliest faved date from the result" do
         pics = 2.times.map { create(:picture) }
-        allow(@retriever).to receive(:get).and_return(pics)
+        allow(@flickr_picture_retriever).to receive(:get).and_return(pics)
         earlest_faved = 3.days.ago
         
         # Don't check for specific parameters, just allow the call and return a mock response
@@ -103,14 +103,14 @@ describe Collectr::FaveImporter do
 
       it "retains the fave_date sequence" do
         pics = 3.times.map { create(:picture, collector: @importer.collector) }
-        allow(@retriever).to receive(:get).and_return(pics)
+        allow(@flickr_picture_retriever).to receive(:get).and_return(pics)
         result_pics = @importer.import(3)
         # Verify the returned pictures are in the right order
         expect(result_pics.map(&:title)).to eq(pics.map(&:title))
       end
 
       it 'does not do anything if no pic faved' do
-        allow(@retriever).to receive(:get).and_return([])
+        allow(@flickr_picture_retriever).to receive(:get).and_return([])
         before_count = Picture.count
         @importer.import(3)
         expect(Picture.count).to eq(before_count)
