@@ -1,3 +1,4 @@
+public/assets
 Gemfile.lock
 chromedriver.log
 .bundle

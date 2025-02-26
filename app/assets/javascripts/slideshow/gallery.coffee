@@ -33,9 +33,9 @@ class window.Gallery extends Events
     this._reset(requestedPicId)
     @grid.init(this)
     
-    # Force a large initial cache size increase to load many pictures immediately
-    console.log("Gallery: Initializing with increased cache size to enable navigation and fill the grid")
-    this.increaseCacheSize(5)  # Load 5 pages worth of pictures immediately
+    # Start with a more reasonable initial load to avoid rate limiting
+    console.log("Gallery: Initializing with moderate cache size to enable navigation")
+    this.increaseCacheSize(2)  # Load just 2 pages worth of pictures initially
 
   size: => if @pictures? then @pictures.length else 0
 
@@ -163,8 +163,8 @@ class window.Gallery extends Events
       # Calculate how many pictures we have ahead of current position
       picturesAhead = @pictures.length - this._currentProgress()
       
-      # Allow a much larger cache size to ensure we load enough pictures
-      maxCacheSize = Math.min(@cacheSize * this.pageSize(), 500)
+      # Use a more modest cache size to prevent API rate limiting
+      maxCacheSize = Math.min(@cacheSize * this.pageSize(), 200)
       
       # Only fetch more if we have fewer than the max cache size
       needMoreForCache = picturesAhead < maxCacheSize
@@ -174,9 +174,8 @@ class window.Gallery extends Events
       
       if needMoreForCache and !@allPicturesRetrieved
         console.log("Retrieving more pictures...")
-        # Retrieve multiple pages at once to fill the screen faster
-        numPagesToLoad = Math.ceil((maxCacheSize - picturesAhead) / this.pageSize())
-        numPagesToLoad = Math.min(numPagesToLoad, 5)  # Limit to 5 pages at once to avoid overwhelming the API
+        # Load 2 pages at a time to balance between performance and API load
+        numPagesToLoad = 2
         console.log("Loading #{numPagesToLoad} pages at once")
         this._retrieveMorePictures(numPagesToLoad)
       else

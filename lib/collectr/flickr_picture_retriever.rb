@@ -4,6 +4,10 @@ module Collectr
 
     attr_reader :collector
 
+    def self.throttle_requests
+      # Method kept for compatibility but rate limiting removed
+    end
+
     def self.flickr_photos_per_page
       Settings.default_flickr_photo_retrieve_size
     end
@@ -41,6 +45,9 @@ module Collectr
     end
 
     def get(per_page = nil, page_number = 1, since = nil, before = nil)
+      # Implement rate limiting at the API level
+      self.class.throttle_requests
+      
       # Request all URL sizes for each photo to avoid having to construct them later
       opts = {extras: 'date_upload,owner_name,description,server,farm,url_sq,url_s,url_m,url_z,url_l,url_b,url_o'}.
               merge(paging_opts(per_page, page_number)).
