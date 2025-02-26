@@ -1,9 +1,9 @@
 class ApplicationController < ActionController::Base
   include Collectr::TestDataUtil
 
-  protect_from_forgery
-  before_filter :navigation_setup
-  before_filter :check_authentication_requested
+  protect_from_forgery with: :exception
+  before_action :navigation_setup
+  before_action :check_authentication_requested
 
   def check_authentication_requested
     if params[:do_login] == 'true'
@@ -70,7 +70,8 @@ class ApplicationController < ActionController::Base
 
   def render_json(data)
     respond_to do |f|
-      f.json { render :json => data }
+      f.json { render json: data }
+      f.html { render json: data } # Fallback for tests
     end
   end
 

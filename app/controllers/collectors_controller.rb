@@ -1,5 +1,5 @@
 class CollectorsController < ApplicationController
-  before_filter :authenticate
+  before_action :authenticate
 
   def info
     render_json( sources: @current_collector.flickr_streams.collecting.count,

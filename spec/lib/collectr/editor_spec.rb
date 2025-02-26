@@ -32,7 +32,7 @@ describe Collectr::Editor do
     end
 
     it 'creates streams that are not collecting' do
-      @editor.recommendation_streams_for(@collector).all?(&:collecting).should be_false
+      expect(@editor.recommendation_streams_for(@collector).all?(&:collecting)).to be_falsey
     end
 
     it 'create the same streams with 4+ star rating streams of the editor collector' do

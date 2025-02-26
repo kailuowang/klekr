@@ -1,61 +1,58 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
-gem 'rails', '~> 3.2.0'
+gem 'rails', '~> 7.1.0'
+gem 'propshaft'
+gem 'puma'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
-
+# Standard Rails components
 gem 'haml'
-gem 'flickraw', '~> 0.9.8'
+gem 'flickraw'
 
-gem "jquery-rails", "~> 2.0.1"
+gem 'jquery-rails'
 gem 'capistrano'
-gem 'will_paginate', '~> 3.0.0'
-gem "rails_config"
-gem 'delayed_job'
-gem 'whenever', :require => false
+gem 'will_paginate'
+gem 'config' # replaces rails_config
+gem 'delayed_job_active_record'
+gem 'whenever', require: false
 gem 'json'
 
-group :assets do
-  gem 'sass-rails', '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
-  gem 'uglifier', '>= 1.0.3'
+# Assets
+gem 'sprockets-rails'
+gem 'importmap-rails'
+gem 'turbo-rails'
+gem 'stimulus-rails'
+gem 'jsbundling-rails'
+gem 'cssbundling-rails'
+gem 'uglifier'
+
+group :development, :test do
+  gem 'sqlite3'
+  gem 'rspec-rails'
+  gem 'factory_bot_rails'
+  gem 'debug', platforms: %i[mri mingw x64_mingw]
+  gem 'selenium-webdriver'
+  gem 'coffee-rails' # For CoffeeScript support
 end
 
-group :test, :development do
-  gem 'sqlite3-ruby', :require => 'sqlite3'
-  gem "rspec-rails", "~> 2.9.0"
-  gem 'factory_girl'
-  gem 'spork', '~> 0.9.0.rc9'
-  gem 'jasminerice'
-  gem "selenium-webdriver", "~> 2.22.0"
+group :development do
+  gem 'web-console'
+  gem 'error_highlight', '>= 0.4.0', platforms: [:ruby]
+end
+
+group :test do
+  gem 'capybara'
 end
 
 group :production do
-  gem 'mysql2', '= 0.3.10'
+  # Temporarily commented out to allow local testing
+  # gem 'mysql2'
   gem 'execjs'
-  gem 'therubyracer'
+  gem 'mini_racer'
   gem 'newrelic_rpm'
 end
 
-# Use unicorn as the web server
-# gem 'unicorn'
+# For compatibility with test framework
+gem "rexml"
+gem "spork", "~> 0.9.2"
 
-# Deploy with Capistrano
-
-# To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
-# gem 'ruby-debug'
-# gem 'ruby-debug19'
-
-# Bundle the extra gems:
-# gem 'bj'
-# gem 'nokogiri'
-# gem 'sqlite3-ruby', :require => 'sqlite3'
-# gem 'aws-s3', :require => 'aws/s3'
-
-# Bundle gems for the local environment. Make sure to
-# put test-only gems in this group so their generators
-# and rake tasks are available in development mode:
-# group :development, :test do
-#   gem 'webrat'
-# end
+gem "bootsnap", "~> 1.18"

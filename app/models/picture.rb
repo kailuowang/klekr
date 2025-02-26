@@ -1,19 +1,19 @@
 class Picture < ActiveRecord::Base
   include Collectr::Flickr
-  scope :desc, order('stream_rating DESC, date_upload DESC')
-  scope :asc, order('stream_rating ASC, date_upload ASC')
-  scope :old, lambda { |num_of_days| where('updated_at < ?', num_of_days.days.ago)}
-  scope :after, lambda { |pic| where('date_upload > ?', pic.date_upload) }
-  scope :before, lambda { |pic| where('date_upload <= ? and id <> ? ', pic.date_upload, pic.id) }
-  scope :collected_by, lambda { |collector| where(collector_id: collector) if collector }
-  scope :unfaved, where(rating:  0)
-  scope :valid, where(:no_longer_valid => nil)
-  scope :faved, where('rating > 0')
-  scope :unviewed, where(viewed: false)
-  scope :viewed, where(viewed: true)
-  scope :syned_from, lambda { |stream| joins(:syncages).where(syncages: {flickr_stream_id: stream.id}) }
-  serialize :pic_info_dump
-  has_many :syncages, :dependent => :delete_all
+  scope :desc, -> { order('stream_rating DESC, date_upload DESC') }
+  scope :asc, -> { order('stream_rating ASC, date_upload ASC') }
+  scope :old, ->(num_of_days) { where('updated_at < ?', num_of_days.days.ago) }
+  scope :after, ->(pic) { where('date_upload > ?', pic.date_upload) }
+  scope :before, ->(pic) { where('date_upload <= ? and id <> ? ', pic.date_upload, pic.id) }
+  scope :collected_by, ->(collector) { where(collector_id: collector) if collector }
+  scope :unfaved, -> { where(rating: 0) }
+  scope :valid, -> { where(no_longer_valid: nil) }
+  scope :faved, -> { where('rating > 0') }
+  scope :unviewed, -> { where(viewed: false) }
+  scope :viewed, -> { where(viewed: true) }
+  scope :syned_from, ->(stream) { joins(:syncages).where(syncages: {flickr_stream_id: stream.id}) }
+  serialize :pic_info_dump, coder: YAML
+  has_many :syncages, dependent: :delete_all
   has_many :flickr_streams, through: :syncages
   belongs_to :collector
 
@@ -76,13 +76,31 @@ class Picture < ActiveRecord::Base
 
   def fave(new_rating = 1)
     if (old_rating = rating) != new_rating
-      update_attributes(rating: new_rating)
+      update(rating: new_rating)
       newly_faved if old_rating == 0
     end
   end
 
   def owner_id
-    pic_info.owner.is_a?(String) ? pic_info.owner : pic_info.owner['nsid']
+    if pic_info.owner.is_a?(String)
+      pic_info.owner
+    elsif pic_info.owner.respond_to?(:[]) && pic_info.owner['nsid']
+      pic_info.owner['nsid']
+    elsif pic_info_dump.is_a?(Array) && pic_info_dump.first.is_a?(Hash) && pic_info_dump.first['owner']
+      pic_info_dump.first['owner']
+    else
+      nil
+    end
+  end
+  
+  def secret
+    if pic_info.respond_to?(:secret)
+      pic_info.secret
+    elsif pic_info_dump.is_a?(Array) && pic_info_dump.first.is_a?(Hash) && pic_info_dump.first['secret']
+      pic_info_dump.first['secret']
+    else
+      nil
+    end
   end
 
   def unfave
@@ -100,7 +118,7 @@ class Picture < ActiveRecord::Base
 
   def pic_info
     begin
-      @pic_info ||= FlickRaw::Response.new *pic_info_dump
+      @pic_info ||= FlickRaw::Response.new(*pic_info_dump)
     rescue
       Rails.logger.error("Picture #{self.id} failed to dehydrate pic_info")
       Rails.logger.error(pic_info_dump)
@@ -112,7 +130,20 @@ class Picture < ActiveRecord::Base
   def pic_info= pi
     self.title = pi.title
     self.date_upload = get_upload_date(pi)
-    self.owner_name = pi['ownername'] || pi['owner']['username']
+    
+    # Handle different owner name formats
+    if pi.respond_to?(:[])
+      self.owner_name = if pi['ownername']
+        pi['ownername']
+      elsif pi['owner'] && pi['owner'].respond_to?(:[]) && pi['owner']['username']
+        pi['owner']['username']
+      else
+        "Unknown"
+      end
+    else
+      self.owner_name = "Unknown"
+    end
+    
     self.pic_info_dump = pi.marshal_dump
     @pic_info = pi
   end
@@ -156,7 +187,7 @@ class Picture < ActiveRecord::Base
   end
 
   def mark_as_invalid
-    update_attributes(no_longer_valid: true)
+    update(no_longer_valid: true)
   end
 
 

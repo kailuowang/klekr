@@ -1,7 +1,7 @@
 class GroupStreamsController < ApplicationController
   include Collectr::FlickrStreamsControllerHelper
 
-  before_filter :authenticate
+  before_action :authenticate
 
 
   def index

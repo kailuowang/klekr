@@ -33,5 +33,5 @@ spec_files:
 
 src_dir: spec/javascripts/src
 src_files:
-  - **/*.js
+  - '**/*.js'
 

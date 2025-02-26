@@ -44,12 +44,30 @@ module Collectr
       end
 
       if opts[:type].present?
+        scope = scope.joins(:flickr_streams)
         scope.where("#{::FlickrStream.table_name}.type = ?", opts[:type])
       else
         scope
       end
     end
 
+    # Make method public for testing
+    def find_or_initialize_from_pic_info(pic_info)
+      url = get_photopage_url(pic_info)
+      Picture.where(collector_id: @collector, url: url).includes(:flickr_streams).first ||
+        Picture.new.tap do |picture|
+          picture.url = url
+          picture.pic_info = pic_info
+          # Handle description differently based on pic_info type
+          if pic_info.respond_to?(:to_hash)
+            picture.description = pic_info.to_hash.delete('description')
+          elsif pic_info.respond_to?(:pic_info_dump) && pic_info.pic_info_dump.is_a?(Array) && pic_info.pic_info_dump.first.is_a?(Hash)
+            picture.description = pic_info.pic_info_dump.first['description']
+          end
+          picture.collector = @collector
+        end
+    end
+    
     private
 
     def find_by_db_id(string_id)
@@ -61,22 +79,19 @@ module Collectr
       end
     end
 
-    def find_or_initialize_from_pic_info(pic_info)
-      url = get_photopage_url(pic_info)
-      Picture.where(collector_id: @collector, url: url).includes(:flickr_streams).first ||
-        Picture.new.tap do |picture|
-          picture.url = url
-          picture.pic_info = pic_info
-          picture.description = pic_info.to_hash.delete('description')
-          picture.collector = @collector
-        end
-    end
-
     def get_photopage_url(pic_info)
       begin
         FlickRaw.url_photopage(pic_info)
-      rescue #todo fix this after upgrading flickraw
-        pic_info.urls[0]["_content"].to_s
+      rescue NoMethodError
+        # Use pic_info hash to construct URL if it's a Picture object with pic_info_dump
+        if pic_info.respond_to?(:pic_info_dump) && pic_info.pic_info_dump.is_a?(Array) && pic_info.pic_info_dump.first.is_a?(Hash)
+          info = pic_info.pic_info_dump.first
+          "https://www.flickr.com/photos/#{info['owner']}/#{info['id']}"
+        elsif pic_info.respond_to?(:urls) && pic_info.urls.is_a?(Array) && pic_info.urls[0].is_a?(Hash)
+          pic_info.urls[0]["_content"].to_s
+        else
+          raise "Unable to determine photopage URL for #{pic_info.inspect}"
+        end
       end
     end
 

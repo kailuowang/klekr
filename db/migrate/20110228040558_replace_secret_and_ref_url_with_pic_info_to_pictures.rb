@@ -1,11 +1,11 @@
-class ReplaceSecretAndRefUrlWithPicInfoToPictures < ActiveRecord::Migration
-  def self.up
+class ReplaceSecretAndRefUrlWithPicInfoToPictures < ActiveRecord::Migration[7.1]
+  def up
     remove_column :pictures, :secret
     remove_column :pictures, :ref_url
     add_column :pictures, :pic_info_dump, :text
   end
 
-  def self.down
+  def down
     remove_column :pictures, :pic_info_dump
     add_column :pictures, :secret, :string
     add_column :pictures, :ref_url, :string

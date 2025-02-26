@@ -50,36 +50,36 @@ describe Picture do
   describe "#fave" do
     it "should add the picture to fave" do
       picture = FactoryGirl.create(:picture, date_upload: DateTime.new(2010, 1, 3))
-      stub_flickr(picture, :favorites).should_receive(:add).with(photo_id: picture.pic_info.id)
+      expect(stub_flickr(picture, :favorites)).to receive(:add).with(photo_id: picture.pic_info.id)
       picture.fave
     end
 
     it "should add score to the streams it comes from" do
       picture = FactoryGirl.create(:picture)
       picture.synced_by(FactoryGirl.create(:fave_stream))
-      stub_flickr(picture, :favorites).stub!(:add)
-      picture.flickr_streams[0].should_receive(:add_score).with(picture.created_at)
+      allow(stub_flickr(picture, :favorites)).to receive(:add)
+      expect(picture.flickr_streams[0]).to receive(:add_score).with(picture.created_at)
       picture.fave
     end
 
     it "should set rating to 1 when successfully added" do
       picture = FactoryGirl.create(:picture)
-      stub_flickr(picture, :favorites).stub!(:add)
+      allow(stub_flickr(picture, :favorites)).to receive(:add)
       picture.fave
-      picture.rating.should == 1
+      expect(picture.rating).to eq(1)
     end
 
     it "should only try fave it if its not faved already" do
       picture = FactoryGirl.create(:picture, rating: 1)
-      stub_flickr(picture, :favorites).should_not_receive(:add)
+      expect(stub_flickr(picture, :favorites)).not_to receive(:add)
       picture.fave
     end
 
     it "update ratings if already faved" do
       picture = FactoryGirl.create(:picture, rating: 1)
-      stub_flickr(picture, :favorites).should_not_receive(:add)
+      expect(stub_flickr(picture, :favorites)).not_to receive(:add)
       picture.fave(2)
-      picture.rating.should == 2
+      expect(picture.rating).to eq(2)
     end
   end
 
@@ -96,7 +96,7 @@ describe Picture do
     it "should add the stream's ratings to the stream_rating if it not synced with the stream before" do
       picture = FactoryGirl.create(:picture)
       stream = FactoryGirl.create(:fave_stream)
-      stream.stub!(:star_rating).and_return(0.2)
+      allow(stream).to receive(:star_rating).and_return(0.2)
       picture.synced_by(stream)
       picture.stream_rating.should == 0.2
     end
