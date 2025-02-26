@@ -1,5 +1,6 @@
-class window.MySources
+window.MySources = class MySources
   constructor: ()->
+    console.log("MySources constructor called")
     @contactImporter = new klekr.ContactsImporter
     @editorStreamsImporter = new EditorStreamsImporter
     @groupStreamsImporter = new klekr.GroupStreamsImporter
@@ -9,19 +10,17 @@ class window.MySources
     this._bindImporterEvents([@addByUserImporter, @contactImporter, @editorStreamsImporter, @googleReaderImporter, @groupStreamsImporter])
 
   init: (onInit)=>
+    console.log("MySources init")
     @view.clear()
-    this._loadSource 1, (hasSources) =>
+    # Only load the first page on initial load
+    klekr.Global.server.get my_sources_flickr_streams_path(), {page: 1, per_page: 50}, (data) =>
+      console.log("First page loaded, items:", data.length)
+      sources = (new Source(d) for d in data)
+      hasSources = sources.length > 0
+      
+      this._display(sources)
       @view.onAllSourcesLoaded(!hasSources)
       onInit?()
-
-  _loadSource: (page, onFinish) =>
-    klekr.Global.server.get my_sources_flickr_streams_path(), {page: page, per_page: 50}, (data) =>
-      sources = (new Source(d) for d in data)
-      this._display(sources)
-      if sources.length > 0
-        this._loadSource(page + 1, onFinish)
-      else
-        onFinish?(page > 1)
 
   _sourcesImportDone: =>
     this.init =>
@@ -41,5 +40,8 @@ class window.MySources
       importer.bind 'import-finished', this._sourcesImportDone
 #      importer.bind 'sources-imported', this._sourcesImported #temporarily disabled due to scroll bar bug
 
+# Initialize the application when document is ready
 $ ->
-  new MySources().init()
+  console.log("Document ready, initializing MySources")
+  window.mySources = new MySources()
+  window.mySources.init()

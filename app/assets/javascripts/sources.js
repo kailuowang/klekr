@@ -6,8 +6,8 @@
 //= require ./sources/editorStreamsImporter
 //= require ./sources/googleReaderImporter
 //= require ./sources/groupStreamsImporter
-//= require ./sources/mySources
-//= require ./sources/mySourcesView
 //= require ./sources/source
 //= require ./sources/sourceCell
 //= require ./sources/sourcesGridview
+//= require ./sources/mySourcesView
+//= require ./sources/mySources

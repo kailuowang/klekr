@@ -52,7 +52,8 @@ class ApplicationController < ActionController::Base
 
   def current_collector
     load_remembered_user_to_session
-    @current_collector ||= ::Collector.find_by_id(session[:collector_id]) if session[:collector_id]
+    return @current_collector if @current_collector
+    @current_collector = ::Collector.find_by_id(session[:collector_id]) if session[:collector_id]
   end
 
   def load_remembered_user_to_session

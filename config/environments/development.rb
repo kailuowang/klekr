@@ -73,6 +73,11 @@ Rails.application.configure do
 
   # Custom config
   config.logger = ActiveSupport::Logger.new(STDOUT)
+  
+  # Reduce SQL query logging noise
+  config.after_initialize do
+    ActiveRecord::Base.logger.level = Logger::INFO
+  end
 
 end
 
