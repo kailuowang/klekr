@@ -1,9 +1,9 @@
-class AddViewedIndexToPictures < ActiveRecord::Migration
-  def self.up
+class AddViewedIndexToPictures < ActiveRecord::Migration[7.1]
+  def up
     add_index :pictures, :viewed
   end
 
-  def self.down
+  def down
     remove_index :pictures, :viewed
   end
 end

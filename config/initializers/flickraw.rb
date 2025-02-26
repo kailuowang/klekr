@@ -1,6 +1,6 @@
 module Collectr
 
-  FlickrConfig = YAML.load_file("#{Rails.root}/config/flickr.yml")[Rails.env]
+  FlickrConfig = YAML.safe_load(File.read("#{Rails.root}/config/flickr.yml"), aliases: true)[Rails.env]
 
   FlickRaw.api_key        = FlickrConfig['api_key']
   FlickRaw.shared_secret  = FlickrConfig['shared_secret']

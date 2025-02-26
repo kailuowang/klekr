@@ -1,5 +1,5 @@
-class AddMonthlyScores < ActiveRecord::Migration
-  def self.up
+class AddMonthlyScores < ActiveRecord::Migration[7.1]
+  def up
      create_table :monthly_scores do |t|
        t.integer :month
        t.integer :year
@@ -11,7 +11,7 @@ class AddMonthlyScores < ActiveRecord::Migration
      end
    end
 
-   def self.down
+   def down
      drop_table :monthly_scores
    end
 

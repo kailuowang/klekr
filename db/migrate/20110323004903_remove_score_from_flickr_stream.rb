@@ -1,10 +1,10 @@
-class RemoveScoreFromFlickrStream < ActiveRecord::Migration
+class RemoveScoreFromFlickrStream < ActiveRecord::Migration[7.1]
 
-  def self.up
+  def up
     remove_column :flickr_streams, :score
   end
 
-  def self.down
+  def down
     add_column :flickr_streams, :score, :float
   end
 

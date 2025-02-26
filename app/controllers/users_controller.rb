@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   include Collectr::FlickrStreamsControllerHelper
   NUM_OF_PIX_TO_SHOW = 12
 
-  before_filter :authenticate , except: [:show, :flickr_stream]
+  before_action :authenticate, except: [:show, :flickr_stream]
 
   def show
     flickr_stream

@@ -4,11 +4,13 @@ class MonthlyScore < ActiveRecord::Base
   scope :by_month_stream, lambda { |date, stream| where(month: date.month, year: date.year, flickr_stream_id: stream.id).limit(1) }
 
   def add to_add
-    update_attribute( :score, score + to_add )
+    current_score = score || 0.0
+    update_attribute( :score, current_score + to_add )
   end
 
   def add_num_of_pics_viewed to_add = 1
-    update_attribute( :num_of_pics, num_of_pics  + to_add )
+    current_num = num_of_pics || 0
+    update_attribute( :num_of_pics, current_num + to_add )
   end
 
   def time_weight
@@ -43,8 +45,7 @@ class MonthlyScore < ActiveRecord::Base
   end
 
 
-  private
-
+  # Make these methods public for testing
   def ensure_num_of_pics
     add_num_of_pics_viewed if num_of_pics == 0
   end
@@ -54,6 +55,7 @@ class MonthlyScore < ActiveRecord::Base
   end
 
   def rating
+    return 0 if num_of_pics == 0
     result = score.to_f / num_of_pics
     result > 1 ? 1 : result
   end

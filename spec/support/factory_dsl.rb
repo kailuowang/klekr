@@ -1,13 +1,14 @@
-class Fixnum
+# Ruby >= 2.4 uses Integer instead of Fixnum
+class Integer
   def pics
     self.times.map do
-       FactoryGirl.generate(:pic_info)
+       FactoryBot.generate(:pic_info)
     end
   end
 
   def pictures(opts = {})
     self.times.map do
-      FactoryGirl.create(:picture, opts)
+      FactoryBot.create(:picture, opts)
     end
   end
   alias :pic :pics

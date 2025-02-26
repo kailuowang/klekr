@@ -2,8 +2,8 @@ class FlickrStreamsController < ApplicationController
   include Collectr::PictureControllerHelper
   include Collectr::FlickrStreamsControllerHelper
   include Collectr::SlideshowControllerHelper
-  before_filter :authenticate, except: [:find]
-  before_filter :load_stream, only: [:show, :subscribe, :unsubscribe, :sync, :adjust_rating, :mark_all_as_read]
+  before_action :authenticate, except: [:find]
+  before_action :load_stream, only: [:show, :subscribe, :unsubscribe, :sync, :adjust_rating, :mark_all_as_read]
 
   def index
   end
@@ -35,7 +35,8 @@ class FlickrStreamsController < ApplicationController
   end
 
   def create
-    opts = params.slice(:user_id, :username, :type).merge(collector: current_collector)
+    permitted_params = params.permit(:user_id, :username, :type)
+    opts = permitted_params.to_h.merge(collector: current_collector)
     new_stream = FlickrStream.find_or_create(opts)
     new_stream.subscribe
     render_json data_for_stream(new_stream)

@@ -1,0 +1,1 @@
+FactoryGirl = FactoryBot unless defined?(FactoryGirl)
