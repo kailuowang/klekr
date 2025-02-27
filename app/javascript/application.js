@@ -47,23 +47,8 @@ window.namespace = function(target, name, block) {
   return current;
 };
 
-// Import base events class
-import "./src/global/events"
-
-// Import our global modules
-import "./src/global/backboneHelper"
-import "./src/global/server"
-import "./src/global/viewBase"
-
-// Import other global modules
-import "./src/global/analytics"
-import "./src/global/bootstrapExt"
-import "./src/global/broadcaster"
-import "./src/global/collapsiblePanel"
-import "./src/global/jsErrorMonitor"
-import "./src/global/rails_routes"
-import "./src/global/updater"
-import "./src/global/userInfo"
+// Import global module
+import "./src/global"
 
 // Import application-specific modules
 import "./slideshow"
