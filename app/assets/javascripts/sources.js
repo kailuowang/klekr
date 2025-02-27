@@ -1,3 +1,2 @@
-//= require ./sources/streamImporterBase
-//= require ./sources/flexibleStreamsImporterBase
-//= require_tree ./sources
+// Import the main MySources class which will initialize everything
+import MySources from './sources/mySources';
