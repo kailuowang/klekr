@@ -15,3 +15,18 @@ db/bkp
 compiled
 .rspec
 db/schema.rb
+
+# Node.js files
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity
+
+# Asset builds
+/app/assets/builds/*
+!/app/assets/builds/.keep
+
+# Other generated files
+public/assets
+/public/packs
+/public/packs-test

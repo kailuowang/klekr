@@ -32,6 +32,7 @@ group :development, :test do
   gem 'debug', platforms: %i[mri mingw x64_mingw]
   gem 'selenium-webdriver'
   gem 'coffee-rails' # For CoffeeScript support
+  gem 'jasmine'
 end
 
 group :development do

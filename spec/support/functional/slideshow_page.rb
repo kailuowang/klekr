@@ -13,30 +13,30 @@ module Functional
     end
 
     def fave_button
-      @d['faveLink']
+      @d.find_element(id: 'faveLink')
     end
 
     def unfave_button
-      @d['removeFaveLink']
+      @d.find_element(id: 'removeFaveLink')
     end
 
     def fave_rating_star rating = 1
-      @d["faveRating-#{rating}"]
+      @d.find_element(id: "faveRating-#{rating}")
     end
 
     def set_fave_rating rating
-      @d["ratingDisplay-#{rating}"].click
+      @d.find_element(id: "ratingDisplay-#{rating}").click
     end
 
     def set_option options
-      @d["option-button"].click
+      @d.find_element(id: "option-button").click
       set_form_in_gallery_option(options)
-      @d['close-options-button'].click
+      @d.find_element(id: 'close-options-button').click
       wait_until_grid_shows
     end
 
     def slide_picture
-      @d["picture"]
+      @d.find_element(id: "picture")
     end
 
     def slide_picture_id
@@ -85,7 +85,7 @@ module Functional
     end
 
     def highlighted_grid_picture
-      s ".grid-picture.highlighted"
+      @d.find_element(css: ".grid-picture.highlighted")
     end
 
     def highlighted_grid_picture_id
@@ -93,12 +93,12 @@ module Functional
     end
 
     def grid_pictures
-      @d.find_elements css: ".grid-picture"
+      @d.find_elements(css: ".grid-picture")
     end
 
     def last_grid_picture
       last_index = grid_pictures_ids.count - 1
-      s ".grid-picture.grid-index-#{last_index}"
+      @d.find_element(css: ".grid-picture.grid-index-#{last_index}")
     end
 
     def grid_pictures_ids
@@ -118,11 +118,11 @@ module Functional
     end
 
     def slide_picture_ready?
-      slide_picture.displayed? and slide_picture.size.height.to_i > 10
+      slide_picture.displayed? and slide_picture.size.height > 10
     end
 
     def enter_slide_mode
-      wait_until { highlighted_grid_picture.present? }
+      wait_until { begin highlighted_grid_picture.displayed? rescue Selenium::WebDriver::Error::NoSuchElementError; false; end }
       highlighted_grid_picture.click
       wait_until_slide_shows
     end
@@ -139,7 +139,7 @@ module Functional
 
     def wait_until_grid_shows
       wait_until do
-        @d['gridPictures'].displayed? || empty_message_shows
+        @d.find_element(id: 'gridPictures').displayed? || empty_message_shows
       end
     end
 
@@ -150,11 +150,13 @@ module Functional
     end
 
     def loading_slide_picture?
-      slide_picture['src'].include?('loading')
+      slide_picture.attribute('src').include?('loading')
     end
 
     def empty_message_shows
-      s('#empty-gallery-message').displayed?
+      @d.find_element(css: '#empty-gallery-message').displayed?
+    rescue Selenium::WebDriver::Error::NoSuchElementError
+      false
     end
 
     def wait_until_fave_ready
@@ -164,7 +166,7 @@ module Functional
     end
 
     def fave_login_link
-      s '#fave-login'
+      @d.find_element(css: '#fave-login')
     end
 
     def click_fave_login
@@ -176,17 +178,17 @@ module Functional
 
     def set_form_in_gallery_option(options)
       if (options[:rating].present?)
-        select = Selenium::WebDriver::Support::Select.new(@d['rating-filter-select'])
+        select = Selenium::WebDriver::Support::Select.new(@d.find_element(id: 'rating-filter-select'))
         select.select_by(:index, options[:rating] - 1)
       end
       if options[:faved_at_max].present?
-        @d['fave-at-date'].send_keys(options[:faved_at_max])
+        @d.find_element(id: 'fave-at-date').send_keys(options[:faved_at_max])
       end
       if options[:faved_at_min].present?
-        @d['fave-at-date-after'].send_keys(options[:faved_at_min])
+        @d.find_element(id: 'fave-at-date-after').send_keys(options[:faved_at_min])
       end
-      @d['viewed-filter-checkbox'].click if options[:viewed_filter]
-      @d['type-filter-checkbox'].click if options[:type_filter]
+      @d.find_element(id: 'viewed-filter-checkbox').click if options[:viewed_filter]
+      @d.find_element(id: 'type-filter-checkbox').click if options[:type_filter]
     end
 
     def grid_pic_id grid_picture_element

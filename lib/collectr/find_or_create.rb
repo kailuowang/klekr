@@ -2,7 +2,8 @@ module Collectr
   module FindOrCreate
     def find_or_create(params)
       if (found = where(params).first)
-        found.update_attributes!(params)
+        # Rails 7 uses update! instead of update_attributes!
+        found.update!(params)
         found
       else
         create(params)

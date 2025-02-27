@@ -3,17 +3,11 @@ module Functional
     INTERVAL = 0.01
 
     def initialize
-      @d = Selenium::WebDriver.for :chrome, profile: chrome_size_profile
+      options = Selenium::WebDriver::Chrome::Options.new
+      options.add_argument('--window-size=1024,800')
+      options.add_argument('--window-position=0,0')
+      @d = Selenium::WebDriver.for :chrome, options: options
       @w = Selenium::WebDriver::Wait.new(timeout: 10, interval: INTERVAL)
-    end
-
-    def chrome_size_profile
-      profile = Selenium::WebDriver::Chrome::Profile.new
-      profile['browser.window_placement.top'] = 0
-      profile['browser.window_placement.left'] = 0
-      profile['browser.window_placement.right'] = 1024
-      profile['browser.window_placement.bottom'] = 800
-      profile
     end
 
     def capture_screen filename
@@ -81,7 +75,7 @@ module Functional
     end
 
     def total_new_pictures
-      @d['user-name'].click
+      @d.find_element(id: 'user-name').click
       count_identifier = '#user-dropdown #new-pictures-count'
       wait_until do
         count_text = s(count_identifier).text
@@ -106,7 +100,9 @@ module Functional
     end
 
     def js_error
-      s("body")["data-JSError"];
+      @d.find_element(css: "body").attribute("data-JSError")
+    rescue Selenium::WebDriver::Error::NoSuchElementError
+      nil
     end
 
     protected
