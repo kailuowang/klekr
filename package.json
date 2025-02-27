@@ -27,9 +27,12 @@
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.0-beta.2",
+    "backbone": "^1.6.0",
     "esbuild": "^0.19.11",
     "jquery": "^3.7.1",
-    "sass": "^1.70.0"
+    "jquery-ui": "^1.14.1",
+    "sass": "^1.70.0",
+    "underscore": "^1.13.7"
   },
   "devDependencies": {
     "esbuild-sass-plugin": "^2.9.0",

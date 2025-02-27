@@ -57,3 +57,5 @@ gem "rexml"
 gem "spork", "~> 0.9.2"
 
 gem "bootsnap", "~> 1.18"
+
+gem "sassc", "~> 2.4"
