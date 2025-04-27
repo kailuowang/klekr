@@ -14,7 +14,7 @@ describe MonthlyScore do
     end
 
     it "should be partial for the current month" do
-      Date.stub!(:today).and_return(Date.new(2011, 4, 15))
+      allow(Date).to receive(:today).and_return(Date.new(2011, 4, 15))
       MonthlyScore.new(month: Date.today.month, year: Date.today.year).time_weight.should == 0.5
     end
   end

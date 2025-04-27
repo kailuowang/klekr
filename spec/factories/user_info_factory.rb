@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence :user_info do |n|
     FlickRaw::Response.new({"nsid"    =>  "#{n}",
                             "username" => "aTestUser",

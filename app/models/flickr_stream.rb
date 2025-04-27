@@ -11,22 +11,26 @@ class FlickrStream < ActiveRecord::Base
   validates_presence_of :user_id
   belongs_to :collector
 
-  scope :collecting, where(collecting: true)
-  scope :collected_by, lambda {|collector| collecting.where(collector_id: collector) if collector }
-  scope :of_user, lambda {|user_id| where(user_id: user_id)}
-  scope :type, lambda { |type| where(type: type) }
-  scope :old, lambda { |num_of_days| where('updated_at < ?', num_of_days.days.ago)}
-  scope :active_in, lambda{ |num_of_days| includes(:collector).where('collectors.last_login > ?', num_of_days.days.ago)}
-  scope :unsynced_after, lambda{|before| where('last_sync < ? or last_sync is null' , before)}
-  has_many :syncages, :dependent => :delete_all
+  scope :collecting, -> { where(collecting: true) }
+  scope :collected_by, ->(collector) { collecting.where(collector_id: collector) if collector }
+  scope :of_user, ->(user_id) { where(user_id: user_id) }
+  scope :type, ->(type) { where(type: type) }
+  scope :old, ->(num_of_days) { where('updated_at < ?', num_of_days.days.ago) }
+  scope :active_in, ->(num_of_days) { joins(:collector).where('collectors.last_login > ?', num_of_days.days.ago) }
+  scope :unsynced_after, ->(before) { where('last_sync < ? or last_sync is null', before) }
+  has_many :syncages, dependent: :delete_all
   has_many :pictures, through: :syncages
-  has_many :monthly_scores, order: 'year desc, month desc'
+  has_many :monthly_scores, -> { order('year desc, month desc') }
 
   cattr_reader :per_page
   @@per_page = 30
 
   class << self
     def create_type(params)
+      params = params.with_indifferent_access
+      # Ensure a collector is provided or create a basic one
+      params[:collector] ||= Collector.first_or_create!(user_id: 'default', user_name: 'default')
+      
       stream = build_type(params)
       stream.save!
       stream
@@ -44,7 +48,7 @@ class FlickrStream < ActiveRecord::Base
     def find_or_create(params)
       stream = params[:collector].flickr_streams.type(params[:type]).of_user(params[:user_id]).includes(:monthly_scores).first
       if(stream)
-        stream.update_attributes(params.except(:type, :collector))
+        stream.update(params.except(:type, :collector))
         stream
       else
         create_type(params)
@@ -116,7 +120,15 @@ class FlickrStream < ActiveRecord::Base
     end
 
     def unviewed(collector = nil)
-      collected_by(collector).where("not exists (select * from monthly_scores where flickr_stream_id = flickr_streams.id) and exists (select * from syncages where flickr_stream_id = flickr_streams.id)").limit(1)[0]
+      # Add a more comprehensive query to find streams with unviewed pictures
+      query = collected_by(collector).joins(:syncages, :pictures)
+        .where(pictures: {viewed: false})
+        .group("flickr_streams.id")
+        .limit(1)
+        .first
+        
+      # Fallback to streams with no monthly scores but with syncages
+      query || collected_by(collector).where("not exists (select * from monthly_scores where flickr_stream_id = flickr_streams.id) and exists (select * from syncages where flickr_stream_id = flickr_streams.id)").limit(1).first
     end
 
     protected

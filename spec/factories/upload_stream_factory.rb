@@ -1,8 +1,9 @@
-FactoryGirl.define do
-  factory :upload_stream, :class => UploadStream do |fs|
-    fs.user_id {  FactoryGirl.generate(:user_id) }
-    fs.username "Stephen Shore"
-    fs.collecting true
+FactoryBot.define do
+  factory :upload_stream, :class => UploadStream do
+    user_id { FactoryBot.generate(:user_id) }
+    username { "Stephen Shore" }
+    collecting { true }
+    association :collector, factory: :collector, last_login: Date.today
   end
 end
 

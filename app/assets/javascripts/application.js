@@ -9,6 +9,10 @@
 //= require ./global/lib/bootstrap-twipsy
 //= require_tree ./global/lib
 //= require ./global/backboneHelper
-//= require ./global/server
+// Load core modules first
 //= require ./global/viewBase
+//= require ./global/server
+//= require ./global/broadcaster
+//= require ./global/userInfo
+// Load remaining modules
 //= require_directory ./global

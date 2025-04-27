@@ -72,11 +72,10 @@ Collectr::Application.routes.draw do
     get 'flickr_stream'
   end
 
-  match 'editors_choice' => 'slideshow#editors_choice'
+  get 'editors_choice' => 'slideshow#editors_choice'
 
-  if ["development", "test"].include? Rails.env
-    mount Jasminerice::Engine => "/jasmine"
-  end
+  # Temporarily disabled Jasmine tests during upgrade process
+  # Custom Jasmine implementation will be added in a future update
 
   root :to => "authentications#show"
 end

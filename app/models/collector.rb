@@ -4,7 +4,7 @@ class Collector < ActiveRecord::Base
 
   has_many :flickr_streams
   has_many :pictures
-  scope :report, order: 'last_login asc'
+  scope :report, -> { order('last_login asc') }
   def self.from_new_user(auth)
     puts auth[:user].inspect
     user = auth[:user]
@@ -51,22 +51,31 @@ class Collector < ActiveRecord::Base
     Collectr::Editor.new.is_editor self
   end
 
+  def collection_opts(opts_params)
+    opts_params = opts_params.to_h if opts_params.respond_to?(:to_h)
+    
+    # Handle both string and symbol keys
+    {}.tap do |h|
+      min_rating = opts_params[:min_rating] || opts_params['min_rating']
+      h[:min_rating] = min_rating.to_i if min_rating.present?
+      
+      faved_date = opts_params[:faved_date] || opts_params['faved_date']
+      before_date = parse_date(faved_date)
+      h[:max_faved_at] = before_date + 1 if before_date
+      
+      faved_date_after = opts_params[:faved_date_after] || opts_params['faved_date_after']
+      after_date = parse_date(faved_date_after)
+      h[:min_faved_at] = after_date if after_date
+      
+      order = opts_params[:order] || opts_params['order']
+      h[:order] = order if order
+    end
+  end
+
   private
 
   def parse_date(date_string)
     Date.strptime(date_string, '%m/%d/%Y') if date_string.present?
-  end
-
-  def collection_opts(opts_params)
-    opts_params.to_options!
-    {}.tap do |h|
-      h[:min_rating] = opts_params[:min_rating].to_i if opts_params[:min_rating].present?
-      before_date = parse_date(opts_params[:faved_date])
-      h[:max_faved_at] = before_date + 1 if before_date
-      after_date = parse_date(opts_params[:faved_date_after])
-      h[:min_faved_at] = after_date if after_date
-      h[:order] = opts_params[:order] if opts_params[:order]
-    end
   end
 
   def earlest_faved_in_db

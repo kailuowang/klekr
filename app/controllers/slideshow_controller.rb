@@ -2,8 +2,8 @@ class SlideshowController < ApplicationController
   include Collectr::PictureControllerHelper
   include Collectr::SlideshowControllerHelper
 
-  before_filter :authenticate, except: [:exhibit, :exhibit_pictures, :editors_choice, :flickr_stream, :flickr_stream_pictures]
-  before_filter :set_navigation_links, only: [:exhibit, :show, :flickr_stream, :faves, :editors_choice]
+  before_action :authenticate, except: [:exhibit, :exhibit_pictures, :editors_choice, :flickr_stream, :flickr_stream_pictures]
+  before_action :set_navigation_links, only: [:exhibit, :show, :flickr_stream, :faves, :editors_choice]
 
   def flickr_stream
     id = params[:id].to_i
@@ -64,8 +64,9 @@ class SlideshowController < ApplicationController
   end
 
   def new_pictures
-    opts = params.to_hash.to_options.slice(:offset, :limit, :type, :viewed)
-    new_pictures = Collectr::PictureRepo.new(current_collector).new_pictures(opts)
+    # Convert to permitted parameters for Rails 7.1
+    permitted_params = params.permit(:offset, :limit, :type, :viewed)
+    new_pictures = Collectr::PictureRepo.new(current_collector).new_pictures(permitted_params)
     render_json_pictures(new_pictures)
   end
 

@@ -1,9 +1,9 @@
-class AddOwnerNameToPictures < ActiveRecord::Migration
-  def self.up
+class AddOwnerNameToPictures < ActiveRecord::Migration[7.1]
+  def up
     add_column :pictures, :owner_name, :string
   end
 
-  def self.down
+  def down
     remove_column :pictures, :owner_name
   end
 end

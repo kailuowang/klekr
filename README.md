@@ -46,3 +46,8 @@ Unlike many of the third party flickr websites, when the klekr slide show displa
 
 You can share/backup your collections by exporting them into a backup file so that later
 you or other klekr users can import it.
+
+## Development
+
+### Ruby version
+This application requires Ruby 3.0.0 or later and Rails 6.1.

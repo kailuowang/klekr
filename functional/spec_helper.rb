@@ -7,7 +7,7 @@ ActiveRecord::Base.logger = Rails.logger
 RSpec.configure do |config|
   def assert_no_js_error page
     if page
-      page.js_error.should == nil
+      expect(page.js_error).to be_nil
     end
   end
 
@@ -21,7 +21,7 @@ RSpec.configure do |config|
     example.description.gsub(/'/, "").gsub(/\s/, '_')
   end
 
-  config.after(:each) do
+  config.after(:each) do |example|
     assert_no_js_error @page
     capture_screen_when_fails(example, @page)
   end
